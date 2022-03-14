@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
@@ -13,7 +14,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  PageController _pageController = new PageController(initialPage: 0);
+  PageController pageController =  PageController(initialPage: 0);
   var acresInInt = 0.0;
   var checkBoxStates = [true, false, false, false, false, false];
   var checkBoxStatesText = [
@@ -27,7 +28,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
-        controller: _pageController,
+        controller: pageController,
         itemCount: 2,
         itemBuilder: (context, page) {
           return Scaffold(
@@ -36,7 +37,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Positioned(
                 top: -(height(context) * 0.03),
                 left: width(context) * 0.48,
-                child: Image(
+                child: const Image(
                   image: AssetImage("assets/images/ic_farmer.png"),
                 ),
               ),
@@ -52,7 +53,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       child: Text(
                         "Nandikrushi",
                         style: TextStyle(
-                            color: Color(0xFF006838),
+                            color: const Color(0xFF006838),
                             fontFamily: 'Samarkan',
                             fontSize: height(context) * 0.034),
                       ),
@@ -72,7 +73,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       weight: FontWeight.w900,
                       size: height(context) * 0.02,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
@@ -97,7 +98,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       iconSize: height(context) * 0.1,
                                       color: const Color(0xFF006838),
                                       onPressed: () {
-                                        print("Hello");
+                                        log("Hello");
                                       },
                                       splashRadius: height(context) * 0.05,
                                       icon:
@@ -248,7 +249,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     )
                                   ],
                                 )
-                              : Container(
+                              : SizedBox(
                                   width: double.infinity,
                                   child: Column(
                                     children: [
@@ -277,6 +278,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                 inactiveColor:
                                                     const Color(0x16006838),
                                                 value: acresInInt,
+                                                // ignore: avoid_types_as_parameter_names
                                                 onChanged: (num) {
                                                   setState(() {
                                                     acresInInt = num;
@@ -295,7 +297,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           ],
                                         ),
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: double.infinity,
                                         height: height(context) * 0.5,
                                         child: ListView.builder(
@@ -380,20 +382,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             child: ElevatedButtonWidget(
                               onClick: () {
                                 if (page == 1) {
-                                  //Navigate to next screen
-                                  //TODO navigate to login screen
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: ((context) =>
-                                  //         const RegistrationScreen()),
-                                  //   ),
-                                  // );
+                                 
                                 } else {
-                                  _pageController.animateToPage(page + 1,
-                                      duration: Duration(milliseconds: 400),
+                                  pageController.animateToPage(page + 1,
+                                      duration: const Duration(milliseconds: 400),
                                       curve: Curves.easeInOut);
-                                  //onboardProvider?.increseStep(1);
                                 }
                               },
                               minWidth: width(context) * 0.9,

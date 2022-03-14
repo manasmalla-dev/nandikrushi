@@ -11,11 +11,11 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFFDD8),
+      backgroundColor: const Color(0xFFFFFDD8),
       body: Stack(
-        children: [
-          const Image(
-            image: AssetImage("assets/images/nandikrushi_background.png"),
+        children: const [
+          Image(
+            image: AssetImage("assets/png/logo.png"),
             fit: BoxFit.fill,
             height: double.infinity,
             width: double.infinity,

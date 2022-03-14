@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/provider/onboard_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
-import 'package:nandikrushifarmer/view/login/login.dart';
 import 'package:nandikrushifarmer/view/login/registration.dart';
 import 'package:provider/provider.dart';
 
@@ -84,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   return Column(
                                     children: [
                                       Divider(
-                                        thickness: 2,
+                                        thickness: index == 0 ? 2 : 1,
                                         color: Colors.green[900],
                                         indent: width(context) * 0.04,
                                         endIndent: width(context) * 0.04,
@@ -119,9 +120,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: EdgeInsets.only(bottom: height(context) * 0.015),
                   child: ElevatedButtonWidget(
                     onClick: () {
+                      log('message');
                       if (onboardProvider?.step == 1) {
-                        //Navigate to next screen
-                        //TODO navigate to login screen
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -130,14 +130,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       } else {
                         _pageController.animateToPage(1,
-                            duration: Duration(milliseconds: 400),
+                            duration: const Duration(milliseconds: 400),
                             curve: Curves.easeInOut);
-                        //onboardProvider?.increseStep(1);
                       }
                     },
                     minWidth: width(context) * 0.9,
-                    height: height(context) * 0.075,
-                    borderRadius: 16,
+                    height: height(context) * 0.06,
+                    // borderRadius: 16,
                     bgColor: Colors.green[900],
                     textColor: Colors.white,
                     buttonName: data["button_name"],
