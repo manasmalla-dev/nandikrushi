@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 
-class TextFieldWidget extends StatelessWidget {
+class FilledTextFieldWidget extends StatelessWidget {
   final String? text;
   final String? hint;
   final String? validateMsg;
@@ -28,14 +28,13 @@ class TextFieldWidget extends StatelessWidget {
   final Function? functionValidate;
   final String? parametersValidate;
   final int? maxLength;
-  final int maxLines;
+  final int? maxLines;
   final String? label;
   final bool? focus;
   final List<TextInputFormatter>? formatter;
   final TextStyle? style;
-  final TextInputAction textInputAction;
 
-  const TextFieldWidget(
+  const FilledTextFieldWidget(
       {Key? key,
       this.text,
       this.validateMsg,
@@ -58,15 +57,14 @@ class TextFieldWidget extends StatelessWidget {
       this.functionValidate,
       this.parametersValidate,
       this.maxLength,
-      this.maxLines = 1,
+      this.maxLines,
       this.errorBorderRadius,
       this.focusErrorRadius,
       this.prefixColor,
       this.prefix,
       this.label,
       this.formatter,
-      this.style,
-      this.textInputAction = TextInputAction.next})
+      this.style})
       : super(key: key);
 
   @override
@@ -75,22 +73,26 @@ class TextFieldWidget extends StatelessWidget {
       inputFormatters: formatter,
       controller: controller,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: height(context) * 0.01),
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: EdgeInsets.all(height(context) * 0.01),
         counterText: '',
         isDense: true,
-        border: UnderlineInputBorder(
-            borderSide: BorderSide(color: bordercolor ?? Colors.white),
-            borderRadius: BorderRadius.circular(borderRadius ?? 0)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
+          borderSide: const BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
         hintStyle: fonts(hintSize ?? 15.0, hintWeight ?? FontWeight.w500,
             hintColor ?? Colors.grey),
         hintText: hint ?? '',
-        labelText: "$label*",
-        labelStyle: fonts(hintSize ?? 15.0, hintWeight ?? FontWeight.w500,
-            hintColor ?? Colors.grey),
       ),
-      style: style,
+      style: style?.copyWith(fontFamily: 'Quicksand') ??
+          const TextStyle(fontFamily: 'Quicksand'),
       autofocus: focus ?? false,
-      maxLines: maxLines,
+      maxLines: 1,
       maxLength: maxLength,
       validator: (value) {
         if (label == "Alternative Number") {
@@ -112,7 +114,6 @@ class TextFieldWidget extends StatelessWidget {
         }
         return null;
       },
-      textInputAction: textInputAction,
       onFieldSubmitted: (value) {
         if (onSubmitField != null) onSubmitField!();
       },
