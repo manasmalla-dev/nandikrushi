@@ -48,7 +48,7 @@ class ElevatedButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius ?? 0),
-      child: Container(
+      child: SizedBox(
         width: minWidth ?? double.infinity,
         height: height ?? 50.0,
         child: ElevatedButton(

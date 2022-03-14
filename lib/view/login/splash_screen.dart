@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
-import 'package:nandikrushifarmer/view/login/navbar.dart';
+import 'package:nandikrushifarmer/view/login/nav_bar.dart';
 import 'package:nandikrushifarmer/view/login/onboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {

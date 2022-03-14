@@ -3,7 +3,6 @@ import 'package:nandikrushifarmer/provider/onboard_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
-import 'package:nandikrushifarmer/view/login/login.dart';
 import 'package:nandikrushifarmer/view/login/registration.dart';
 import 'package:provider/provider.dart';
 
@@ -120,8 +119,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: ElevatedButtonWidget(
                     onClick: () {
                       if (onboardProvider?.step == 1) {
-                        //Navigate to next screen
-                        //TODO navigate to login screen
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -130,9 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       } else {
                         _pageController.animateToPage(1,
-                            duration: Duration(milliseconds: 400),
+                            duration: const Duration(milliseconds: 400),
                             curve: Curves.easeInOut);
-                        //onboardProvider?.increseStep(1);
                       }
                     },
                     minWidth: width(context) * 0.9,
