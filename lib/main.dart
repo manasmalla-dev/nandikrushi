@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/provider/onboard_provider.dart';
-import 'package:nandikrushifarmer/view/onboarding/onboard_screen.dart';
+import 'package:nandikrushifarmer/view/login/onboard_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
