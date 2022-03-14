@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 
 class TextFieldWidget extends StatelessWidget {
@@ -31,6 +32,7 @@ class TextFieldWidget extends StatelessWidget {
   final String? label;
   final bool? focus;
   final List<TextInputFormatter>? formatter;
+  final TextStyle? style;
 
   const TextFieldWidget(
       {Key? key,
@@ -61,7 +63,8 @@ class TextFieldWidget extends StatelessWidget {
       this.prefixColor,
       this.prefix,
       this.label,
-      this.formatter})
+      this.formatter,
+      this.style})
       : super(key: key);
 
   @override
@@ -70,42 +73,20 @@ class TextFieldWidget extends StatelessWidget {
       inputFormatters: formatter,
       controller: controller,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: height(context) * 0.01),
         counterText: '',
-        border: OutlineInputBorder(
+        isDense: true,
+        border: UnderlineInputBorder(
             borderSide: BorderSide(color: bordercolor ?? Colors.white),
             borderRadius: BorderRadius.circular(borderRadius ?? 0)),
-        suffixIcon: IconButton(
-          onPressed: () {
-            controller!.clear();
-          },
-          icon: postIcon ?? const Icon(Icons.android),
-          color: postIconColor ?? Colors.white,
-        ),
-        focusedBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.all(Radius.circular(focusBorderRadius ?? 0)),
-            borderSide:
-                BorderSide(width: 1, color: focusBorderColor ?? Colors.white)),
-        enabledBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.all(Radius.circular(enableBorderRadius ?? 0)),
-            borderSide:
-                BorderSide(width: 1, color: enableBorderColor ?? Colors.white)),
-        errorBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.all(Radius.circular(errorBorderRadius ?? 0)),
-            borderSide: const BorderSide(width: 1, color: Colors.red)),
-        focusedErrorBorder: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.all(Radius.circular(focusErrorRadius ?? 0)),
-            borderSide: const BorderSide(width: 1, color: Colors.red)),
         hintStyle: fonts(hintSize ?? 15.0, hintWeight ?? FontWeight.w500,
             hintColor ?? Colors.grey),
         hintText: hint ?? '',
-        labelText: label,
+        labelText: "$label*",
         labelStyle: fonts(hintSize ?? 15.0, hintWeight ?? FontWeight.w500,
             hintColor ?? Colors.grey),
       ),
+      style: style,
       autofocus: focus ?? false,
       maxLines: maxLines,
       maxLength: maxLength,

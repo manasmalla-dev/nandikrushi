@@ -26,7 +26,7 @@ class TextWidget extends StatelessWidget {
     return Text(text!,
         overflow: flow ?? TextOverflow.ellipsis,
         textAlign: align ?? TextAlign.start,
-        style: GoogleFonts.nunitoSans(
+        style: GoogleFonts.quicksand(
           letterSpacing: lSpace ?? 0,
           fontSize: size ?? 14,
           color: color ?? Colors.grey[900],
@@ -36,6 +36,6 @@ class TextWidget extends StatelessWidget {
 }
 
 fonts(size, bold, color) {
-  return GoogleFonts.josefinSans(
+  return GoogleFonts.quicksand(
       color: color, fontSize: size, fontWeight: bold, letterSpacing: 1.0);
 }
