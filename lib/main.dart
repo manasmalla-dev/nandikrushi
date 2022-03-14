@@ -1,9 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nandikrushifarmer/provider/onboard_provider.dart';
 import 'package:nandikrushifarmer/view/login/user_type.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  if (Platform.isAndroid) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark));
+  }
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<OnboardProvider>(
       create: (context) => OnboardProvider(),
