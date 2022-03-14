@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
@@ -80,7 +79,7 @@ class FilledTextFieldWidget extends StatelessWidget {
         counterText: '',
         isDense: true,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
           borderSide: const BorderSide(
             width: 0,
             style: BorderStyle.none,

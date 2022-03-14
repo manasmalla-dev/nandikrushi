@@ -6,14 +6,14 @@ import 'package:nandikrushifarmer/reusable_widgets/login_bg.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:provider/provider.dart';
 
-class UserType extends StatefulWidget {
-  const UserType({Key? key}) : super(key: key);
+class LangType extends StatefulWidget {
+  const LangType({Key? key}) : super(key: key);
 
   @override
-  State<UserType> createState() => _UserTypeState();
+  State<LangType> createState() => _LangTypeState();
 }
 
-class _UserTypeState extends State<UserType> {
+class _LangTypeState extends State<LangType> {
   RegistrationProvider? registrationProvider;
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _UserTypeState extends State<UserType> {
     return LoginBG(
       bottomWidget:
           Consumer<RegistrationProvider>(builder: (context, value, child) {
-        dynamic type = value.userAccountType;
+        dynamic type = value.langType;
         return Container(
           padding: EdgeInsets.only(
               top: width(context) * 0.04, bottom: width(context) * 0.06),
@@ -56,16 +56,16 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('farmer');
+                      value.languegeType('english');
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     bgColor:
-                        type == 'farmer' ? Colors.green[900] : Colors.white,
+                        type == 'english' ? Colors.green[900] : Colors.white,
                     borderSideColor: Colors.green[900],
                     textColor:
-                        type == 'farmer' ? Colors.white : Colors.green[900],
-                    buttonName: "FARMER",
+                        type == 'english' ? Colors.white : Colors.green[900],
+                    buttonName: "ENGLISH",
                     center: true,
                     allRadius: true,
                     borderRadius: 15,
@@ -76,16 +76,16 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('store');
+                      value.languegeType('telugu');
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor: type == 'store' ? Colors.green[900] : Colors.white,
+                    bgColor: type == 'telugu' ? Colors.green[900] : Colors.white,
                     borderSideColor: Colors.green[900],
                     textColor:
-                        type == 'store' ? Colors.white : Colors.green[900],
-                    buttonName: "ORGANIC STORE",
+                        type == 'telugu' ? Colors.white : Colors.green[900],
+                    buttonName: "తెలుగు",
                     center: true,
                     borderRadius: 15,
                     textSize: width(context) * 0.03,
@@ -95,17 +95,17 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('restaurant');
+                      value.languegeType('hindi');
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
                     bgColor:
-                        type == 'restaurant' ? Colors.green[900] : Colors.white,
+                        type == 'hindi' ? Colors.green[900] : Colors.white,
                     borderSideColor: Colors.green[900],
                     textColor:
-                        type == 'restaurant' ? Colors.white : Colors.green[900],
-                    buttonName: "ORGANIC RESTAURANT",
+                        type == 'hindi' ? Colors.white : Colors.green[900],
+                    buttonName: "हिन्दी",
                     center: true,
                     borderRadius: 15,
                     textSize: width(context) * 0.03,
@@ -115,15 +115,15 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('ads');
+                      value.languegeType('kannada');
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor: type == 'ads' ? Colors.green[900] : Colors.white,
+                    bgColor: type == 'kannada' ? Colors.green[900] : Colors.white,
                     borderSideColor: Colors.green[900],
-                    textColor: type == 'ads' ? Colors.white : Colors.green[900],
-                    buttonName: "SPONSORED ADS",
+                    textColor: type == 'kannada' ? Colors.white : Colors.green[900],
+                    buttonName: "ಕನ್ನಡ",
                     center: true,
                     borderRadius: 15,
                     textSize: width(context) * 0.03,
@@ -132,7 +132,7 @@ class _UserTypeState extends State<UserType> {
               ),
               ElevatedButtonWidget(
                 onClick: () {
-                  value.userType(context);
+                  value.lanType(context);
                 },
                 minWidth: width(context) * 0.8,
                 height: height(context) * 0.06,

@@ -36,7 +36,8 @@ class _LoginBGState extends State<LoginBG> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const RegistrationScreen()));
+                                builder: (context) =>
+                                    const RegistrationScreen()));
                       },
                       child: SizedBox(
                         width: width(context),
@@ -73,6 +74,7 @@ class _LoginBGState extends State<LoginBG> {
                         weight: FontWeight.w600,
                         color: Colors.grey[900],
                         align: TextAlign.start,
+                        lSpace: 1.2,
                       ),
                     ),
                     SizedBox(
