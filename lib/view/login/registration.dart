@@ -15,7 +15,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  PageController pageController =  PageController(initialPage: 0);
+  PageController pageController = PageController(initialPage: 0);
   var acresInInt = 0.0;
   var checkBoxStates = [true, false, false, false, false, false];
   var checkBoxStatesText = [
@@ -39,7 +39,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 top: -(height(context) * 0.03),
                 left: width(context) * 0.48,
                 child: const Image(
-                  image: AssetImage("assets/images/ic_farmer.png"),
+                  image: AssetImage("assets/png/ic_farmer.png"),
                 ),
               ),
               SizedBox(
@@ -453,10 +453,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             child: ElevatedButtonWidget(
                               onClick: () {
                                 if (page == 1) {
-                                 
                                 } else {
                                   pageController.animateToPage(page + 1,
-                                      duration: const Duration(milliseconds: 400),
+                                      duration:
+                                          const Duration(milliseconds: 400),
                                       curve: Curves.easeInOut);
                                 }
                               },

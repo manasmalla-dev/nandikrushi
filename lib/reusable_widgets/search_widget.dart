@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SearchWidget extends StatefulWidget {
   final String? text;
@@ -24,11 +23,13 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final styleActive = GoogleFonts.josefinSans(
+    final styleActive = TextStyle(
+        fontFamily: 'Quicksand',
         color: Colors.grey[700],
         fontWeight: FontWeight.w600,
         letterSpacing: 1.0);
-    final styleHint = GoogleFonts.josefinSans(
+    final styleHint = TextStyle(
+        fontFamily: 'Quicksand',
         color: Colors.grey[700],
         fontWeight: FontWeight.w600,
         fontSize: 17,
