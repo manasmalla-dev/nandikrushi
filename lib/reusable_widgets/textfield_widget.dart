@@ -28,11 +28,12 @@ class TextFieldWidget extends StatelessWidget {
   final Function? functionValidate;
   final String? parametersValidate;
   final int? maxLength;
-  final int? maxLines;
+  final int maxLines;
   final String? label;
   final bool? focus;
   final List<TextInputFormatter>? formatter;
   final TextStyle? style;
+  final TextInputAction textInputAction;
 
   const TextFieldWidget(
       {Key? key,
@@ -57,14 +58,15 @@ class TextFieldWidget extends StatelessWidget {
       this.functionValidate,
       this.parametersValidate,
       this.maxLength,
-      this.maxLines,
+      this.maxLines = 1,
       this.errorBorderRadius,
       this.focusErrorRadius,
       this.prefixColor,
       this.prefix,
       this.label,
       this.formatter,
-      this.style})
+      this.style,
+      this.textInputAction = TextInputAction.next})
       : super(key: key);
 
   @override
@@ -110,6 +112,7 @@ class TextFieldWidget extends StatelessWidget {
         }
         return null;
       },
+      textInputAction: textInputAction,
       onFieldSubmitted: (value) {
         if (onSubmitField != null) onSubmitField!();
       },

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/model/user.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/filled_textfield_widget.dart';
@@ -18,6 +19,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   PageController pageController = PageController(initialPage: 0);
   var acresInInt = 0.0;
   var checkBoxStates = [true, false, false, false, false, false];
+  var user = User();
+  var formControllers = {
+    'farmer_name': TextEditingController(),
+    'house_number': TextEditingController(),
+    'city': TextEditingController(),
+    'mandal': TextEditingController(),
+    'district': TextEditingController(),
+    'state': TextEditingController(),
+    'pincode': TextEditingController()
+  };
   var checkBoxStatesText = [
     'Self Declared Natural Farmer',
     'PGS India Green',
@@ -126,6 +137,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             size: height(context) * 0.02,
                                           ),
                                           TextFieldWidget(
+                                            controller:
+                                                formControllers['farmer_name'],
                                             label: 'Farmer Name',
                                             hintSize: 20,
                                             style: fonts(20.0, FontWeight.w500,
@@ -150,6 +163,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                   children: [
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        controller:
+                                                            formControllers[
+                                                                'house_number'],
                                                         label: 'H.No.',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -166,6 +182,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                     ),
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        controller:
+                                                            formControllers[
+                                                                'mandal'],
                                                         label: 'Mandal',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -182,6 +201,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                   children: [
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        controller:
+                                                            formControllers[
+                                                                'city'],
                                                         label: 'City/Vilage',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -198,6 +220,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                     ),
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        controller:
+                                                            formControllers[
+                                                                'district'],
                                                         label: 'District',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -214,6 +239,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                   children: [
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        controller:
+                                                            formControllers[
+                                                                'state'],
                                                         label: 'State',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -230,6 +258,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                     ),
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        textInputAction:
+                                                            TextInputAction
+                                                                .done,
+                                                        controller:
+                                                            formControllers[
+                                                                'pincode'],
                                                         label: 'Pincode',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -454,6 +488,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               onClick: () {
                                 if (page == 1) {
                                 } else {
+                                  var farmerName =
+                                      formControllers['farmer_name']?.text ??
+                                          "";
+                                  var houseNumber =
+                                      formControllers['house_number']?.text ??
+                                          "";
+                                  var mandal =
+                                      formControllers['mandal']?.text ?? "";
+                                  var city =
+                                      formControllers['city']?.text ?? "";
+                                  var district =
+                                      formControllers['district']?.text ?? "";
+                                  var state =
+                                      formControllers['state']?.text ?? "";
+                                  var pincode =
+                                      formControllers['pincode']?.text ?? "";
+                                  user = User.registerPartA(
+                                      farmerName: farmerName,
+                                      city: city,
+                                      houseNumber: houseNumber,
+                                      district: district,
+                                      mandal: mandal,
+                                      farmerImage: "IMAGE",
+                                      pincode: pincode,
+                                      state: state);
+
+                                  print(user);
+
                                   pageController.animateToPage(page + 1,
                                       duration:
                                           const Duration(milliseconds: 400),

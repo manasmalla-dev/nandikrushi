@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
+import 'package:nandikrushifarmer/view/login/registration.dart';
 
 class LoginBG extends StatefulWidget {
   final Widget? bottomWidget;
@@ -30,14 +31,22 @@ class _LoginBGState extends State<LoginBG> {
                 padding: EdgeInsets.all(width(context) * 0.05),
                 child: Column(
                   children: [
-                    SizedBox(
-                      width: width(context),
-                      child: TextWidget(
-                        text: 'SKIP LOGIN',
-                        size: width(context) * 0.035,
-                        weight: FontWeight.w600,
-                        color: Colors.grey[900],
-                        align: TextAlign.end,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegistrationScreen()));
+                      },
+                      child: SizedBox(
+                        width: width(context),
+                        child: TextWidget(
+                          text: 'SKIP LOGIN',
+                          size: width(context) * 0.035,
+                          weight: FontWeight.w600,
+                          color: Colors.grey[900],
+                          align: TextAlign.end,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -45,12 +54,15 @@ class _LoginBGState extends State<LoginBG> {
                     ),
                     SizedBox(
                       width: width(context),
-                      child: TextWidget(
-                        text: 'Nandikrushi',
-                        size: width(context) * 0.08,
-                        weight: FontWeight.w600,
-                        color: Colors.green[900],
-                        align: TextAlign.start,
+                      child: Text(
+                        'Nandikrushi',
+                        style: TextStyle(
+                          fontFamily: 'Samarkan',
+                          fontSize: width(context) * 0.08,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.green[900],
+                        ),
+                        textAlign: TextAlign.start,
                       ),
                     ),
                     SizedBox(
