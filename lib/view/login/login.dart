@@ -48,6 +48,7 @@ class _LoginState extends State<Login> {
                     color: Colors.white,
                     child: const FilledTextFieldWidget(
                       keyBoardType: TextInputType.number,
+                      maxLength: 10,
                       borderRadius: 0,
                       label: "",
                     ),
