@@ -21,28 +21,34 @@ class ElevatedButtonWidget extends StatelessWidget {
   final double? leftRadius;
   final double? rightRadius;
   final double? innerPadding;
+  final double? bottomLeftRadius;
+  final double? bottomRightRadius;
+  final bool? center;
 
-  const ElevatedButtonWidget({
-    Key? key,
-    this.bgColor,
-    this.textColor,
-    this.buttonName,
-    this.borderRadius,
-    this.leftRadius,
-    this.rightRadius,
-    this.minWidth,
-    this.height,
-    this.allRadius,
-    this.borderSideColor,
-    this.style,
-    this.leadingIcon,
-    this.trailingIcon,
-    this.textSize,
-    this.textStyle,
-    this.onClick,
-    this.elevation,
-    this.innerPadding,
-  }) : super(key: key);
+  const ElevatedButtonWidget(
+      {Key? key,
+      this.bgColor,
+      this.textColor,
+      this.buttonName,
+      this.borderRadius,
+      this.leftRadius,
+      this.rightRadius,
+      this.minWidth,
+      this.height,
+      this.allRadius,
+      this.borderSideColor,
+      this.style,
+      this.leadingIcon,
+      this.trailingIcon,
+      this.textSize,
+      this.textStyle,
+      this.onClick,
+      this.elevation,
+      this.innerPadding,
+      this.bottomLeftRadius,
+      this.bottomRightRadius,
+      this.center})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +62,23 @@ class ElevatedButtonWidget extends StatelessWidget {
               return onClick!();
             },
             style: ButtonStyle(
-              elevation: MaterialStateProperty.all(elevation ?? 0),
-              backgroundColor: MaterialStateProperty.all(
-                bgColor ?? Colors.blue,
-              ),
-            ),
+                elevation: MaterialStateProperty.all(elevation ?? 0),
+                backgroundColor: MaterialStateProperty.all(
+                  bgColor ?? Colors.blue,
+                ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: allRadius == true
+                            ? BorderRadius.circular(borderRadius ?? 0)
+                            : BorderRadius.only(
+                                topLeft: Radius.circular(leftRadius ?? 0),
+                                topRight: Radius.circular(rightRadius ?? 0),
+                                bottomLeft:
+                                    Radius.circular(bottomLeftRadius ?? 0),
+                                bottomRight:
+                                    Radius.circular(bottomRightRadius ?? 0)),
+                        side: BorderSide(
+                            color: borderSideColor ?? Colors.white)))),
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: width(context) * (innerPadding ?? 0.01)),
@@ -69,12 +87,14 @@ class ElevatedButtonWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if (leadingIcon != null) buildLeadingIcon(leadingIcon),
+                  if (center == true) buildLeadingIcon(leadingIcon),
                   Text(
                     buttonName ?? 'Button',
                     style: fonts(textSize ?? 10.0, textStyle ?? FontWeight.w500,
                         textColor ?? Colors.black),
                   ),
                   if (trailingIcon != null) buildTrailingIcon(trailingIcon),
+                  if (center == true) buildLeadingIcon(leadingIcon),
                 ],
               ),
             )),

@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nandikrushifarmer/provider/onboard_provider.dart';
-import 'package:nandikrushifarmer/view/login/onboard_screen.dart';
+import 'package:nandikrushifarmer/provider/registration_provider.dart';
+import 'package:nandikrushifarmer/view/login/user_type.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -15,6 +16,9 @@ void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<OnboardProvider>(
       create: (context) => OnboardProvider(),
+    ),
+    ChangeNotifierProvider<RegistrationProvider>(
+      create: (context) => RegistrationProvider(),
     ),
   ], child: const MyApp()));
 }
@@ -29,7 +33,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: const UserType(),
     );
   }
 }

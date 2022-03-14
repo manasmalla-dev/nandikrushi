@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/model/onnboard_model.dart';
 import 'package:nandikrushifarmer/provider/onboard_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
@@ -42,75 +43,78 @@ class _MyHomePageState extends State<MyHomePage> {
             itemBuilder: (context, index) {
               return Scaffold(
                 body: SafeArea(
-                  child: SizedBox(
-                    width: width(context),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: height(context) * 0.05,
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                            data['imageLink'],
-                            fit: BoxFit.fill,
-                            height: height(context) * 0.25,
-                            width: width(context) * 0.9,
+                  child: SingleChildScrollView(
+                    child: SizedBox(
+                      width: width(context),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: height(context) * 0.05,
                           ),
-                        ),
-                        SizedBox(
-                          height: height(context) * 0.05,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: width(context) * 0.03),
-                          width: width(context),
-                          child: TextWidget(
-                            text: data["title"],
-                            size: width(context) * 0.10,
-                            align: TextAlign.start,
-                            color: Colors.green[900],
-                            weight: FontWeight.w700,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.network(
+                              data['imageLink'],
+                              fit: BoxFit.fill,
+                              height: height(context) * 0.25,
+                              width: width(context) * 0.9,
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: height(context) * 0.01),
-                          child: SizedBox(
-                            height: height(context) - 300,
+                          SizedBox(
+                            height: height(context) * 0.05,
+                          ),
+                          Container(
+                            padding:
+                                EdgeInsets.only(left: width(context) * 0.03),
                             width: width(context),
-                            child: ListView.builder(
-                                itemCount: data['content'].length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      Divider(
-                                        thickness: index == 0 ? 2 : 1,
-                                        color: Colors.green[900],
-                                        indent: width(context) * 0.04,
-                                        endIndent: width(context) * 0.04,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: width(context) * 0.05,
-                                            right: width(context) * 0.05,
-                                            top: height(context) * 0.01,
-                                            bottom: height(context) * 0.01),
-                                        child: TextWidget(
-                                          text: data['content'][index],
-                                          size: width(context) * 0.04,
-                                          align: TextAlign.start,
-                                          color: Colors.grey[900],
-                                          weight: FontWeight.w400,
-                                          flow: TextOverflow.visible,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }),
+                            child: TextWidget(
+                              text: data["title"],
+                              size: width(context) * 0.10,
+                              align: TextAlign.start,
+                              color: Colors.green[900],
+                              weight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: height(context) * 0.01),
+                            child: SizedBox(
+                              height: height(context) - 300,
+                              width: width(context),
+                              child: ListView.builder(
+                                  itemCount: data['content'].length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Divider(
+                                          thickness: index == 0 ? 2 : 1,
+                                          color: Colors.green[900],
+                                          indent: width(context) * 0.04,
+                                          endIndent: width(context) * 0.04,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: width(context) * 0.05,
+                                              right: width(context) * 0.05,
+                                              top: height(context) * 0.01,
+                                              bottom: height(context) * 0.01),
+                                          child: TextWidget(
+                                            text: data['content'][index],
+                                            size: width(context) * 0.04,
+                                            align: TextAlign.start,
+                                            color: Colors.grey[900],
+                                            weight: FontWeight.w400,
+                                            flow: TextOverflow.visible,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
