@@ -6,7 +6,7 @@ import 'package:nandikrushifarmer/provider/onboard_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
-import 'package:nandikrushifarmer/view/login/registration.dart';
+import 'package:nandikrushifarmer/view/login/user_type.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -43,23 +43,30 @@ class _MyHomePageState extends State<MyHomePage> {
             itemBuilder: (context, index) {
               return Scaffold(
                 body: SafeArea(
-                  child: SingleChildScrollView(
-                    child: SizedBox(
-                      width: width(context),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: height(context) * 0.05,
+                  child: SizedBox(
+                    width: width(context),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: height(context) * 0.05,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image(
+                            image: AssetImage(data['imageLink']),
+                            fit: BoxFit.fill,
+                            height: height(context) * 0.25,
+                            width: width(context) * 0.9,
                           ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.network(
-                              data['imageLink'],
-                              fit: BoxFit.fill,
-                              height: height(context) * 0.25,
-                              width: width(context) * 0.9,
-                            ),
+                          // ClipRRect(
+                          //   borderRadius: BorderRadius.circular(15),
+                          //   child: Image.network(
+                          //     data['imageLink'],
+                          //     fit: BoxFit.fill,
+                          //     height: height(context) * 0.25,
+                          //     width: width(context) * 0.9,
+                          //   ),
                           ),
                           SizedBox(
                             height: height(context) * 0.05,
@@ -117,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-                ),
+                
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerFloat,
                 floatingActionButton: Padding(
@@ -129,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: ((context) => const RegistrationScreen()),
+                            builder: ((context) => const UserType()),
                           ),
                         );
                       } else {
@@ -156,6 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               );
             });
+            
       },
     );
   }

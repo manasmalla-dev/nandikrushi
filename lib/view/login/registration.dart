@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/model/user.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
+import 'package:nandikrushifarmer/reusable_widgets/filled_textfield_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
 
@@ -14,16 +16,26 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  PageController pageController =  PageController(initialPage: 0);
+  PageController pageController = PageController(initialPage: 0);
   var acresInInt = 0.0;
   var checkBoxStates = [true, false, false, false, false, false];
+  var user = User();
+  var formControllers = {
+    'farmer_name': TextEditingController(),
+    'house_number': TextEditingController(),
+    'city': TextEditingController(),
+    'mandal': TextEditingController(),
+    'district': TextEditingController(),
+    'state': TextEditingController(),
+    'pincode': TextEditingController()
+  };
   var checkBoxStatesText = [
     'Self Declared Natural Farmer',
     'PGS India Green',
     'PGS India Organic',
     'Organic FPO',
     'Organic FPC',
-    'Other Certification'
+    'Other Certification +'
   ];
   @override
   Widget build(BuildContext context) {
@@ -38,7 +50,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 top: -(height(context) * 0.03),
                 left: width(context) * 0.48,
                 child: const Image(
-                  image: AssetImage("assets/images/ic_farmer.png"),
+                  image: AssetImage("assets/png/ic_farmer.png"),
                 ),
               ),
               SizedBox(
@@ -125,6 +137,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             size: height(context) * 0.02,
                                           ),
                                           TextFieldWidget(
+                                            controller:
+                                                formControllers['farmer_name'],
                                             label: 'Farmer Name',
                                             hintSize: 20,
                                             style: fonts(20.0, FontWeight.w500,
@@ -149,6 +163,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                   children: [
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        controller:
+                                                            formControllers[
+                                                                'house_number'],
                                                         label: 'H.No.',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -165,6 +182,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                     ),
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        controller:
+                                                            formControllers[
+                                                                'mandal'],
                                                         label: 'Mandal',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -181,6 +201,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                   children: [
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        controller:
+                                                            formControllers[
+                                                                'city'],
                                                         label: 'City/Vilage',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -197,6 +220,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                     ),
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        controller:
+                                                            formControllers[
+                                                                'district'],
                                                         label: 'District',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -213,6 +239,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                   children: [
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        controller:
+                                                            formControllers[
+                                                                'state'],
                                                         label: 'State',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -229,6 +258,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                     ),
                                                     Expanded(
                                                       child: TextFieldWidget(
+                                                        textInputAction:
+                                                            TextInputAction
+                                                                .done,
+                                                        controller:
+                                                            formControllers[
+                                                                'pincode'],
                                                         label: 'Pincode',
                                                         hintSize: 20,
                                                         hintColor: Colors
@@ -319,56 +354,126 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                   color: checkBoxStates[index]
                                                       ? const Color(0xFF006838)
                                                       : Colors.transparent,
-                                                  child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Checkbox(
-                                                            activeColor:
-                                                                Colors.white,
-                                                            checkColor:
-                                                                const Color(
-                                                                    0xFF006838),
-                                                            value:
-                                                                checkBoxStates[
-                                                                    index],
-                                                            onChanged:
-                                                                (boolean) {
-                                                              setState(() {
-                                                                for (int i = 0;
-                                                                    i <= 5;
-                                                                    i++) {
-                                                                  checkBoxStates[
-                                                                          i] =
-                                                                      false;
-                                                                }
-                                                                checkBoxStates[
-                                                                        index] =
-                                                                    boolean ??
-                                                                        false;
-                                                              });
-                                                            }),
-                                                        SizedBox(
-                                                          width:
-                                                              width(context) *
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Checkbox(
+                                                                activeColor:
+                                                                    Colors
+                                                                        .white,
+                                                                checkColor:
+                                                                    const Color(
+                                                                        0xFF006838),
+                                                                value:
+                                                                    checkBoxStates[
+                                                                        index],
+                                                                onChanged:
+                                                                    (boolean) {
+                                                                  setState(() {
+                                                                    for (int i =
+                                                                            0;
+                                                                        i <= 5;
+                                                                        i++) {
+                                                                      checkBoxStates[
+                                                                              i] =
+                                                                          false;
+                                                                    }
+                                                                    checkBoxStates[
+                                                                            index] =
+                                                                        boolean ??
+                                                                            false;
+                                                                  });
+                                                                }),
+                                                            SizedBox(
+                                                              width: width(
+                                                                      context) *
                                                                   0.6,
-                                                          child: TextWidget(
-                                                            text:
-                                                                checkBoxStatesText[
-                                                                    index],
-                                                            weight:
-                                                                FontWeight.w600,
-                                                            color:
-                                                                checkBoxStates[
+                                                              child: TextWidget(
+                                                                text:
+                                                                    checkBoxStatesText[
+                                                                        index],
+                                                                weight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: checkBoxStates[
                                                                         index]
                                                                     ? Colors
                                                                         .white
                                                                     : Colors
                                                                         .black,
-                                                          ),
-                                                        )
-                                                      ]),
+                                                              ),
+                                                            )
+                                                          ]),
+                                                      index != 0 &&
+                                                              index != 5 &&
+                                                              checkBoxStates[
+                                                                  index]
+                                                          ? Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                  SizedBox(
+                                                                    width: width(
+                                                                            context) *
+                                                                        0.1,
+                                                                  ),
+                                                                  Column(
+                                                                    children: [
+                                                                      TextWidget(
+                                                                        text:
+                                                                            "Reference Number",
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: width(context) *
+                                                                            0.32,
+                                                                        height: height(context) *
+                                                                            0.05,
+                                                                        child:
+                                                                            FilledTextFieldWidget(
+                                                                          label:
+                                                                              "",
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  Column(
+                                                                    children: [
+                                                                      TextWidget(
+                                                                        text:
+                                                                            "Upload Certificate",
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          MaterialButton(
+                                                                              padding: EdgeInsets.all(0),
+                                                                              color: Colors.white,
+                                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                                              onPressed: () {},
+                                                                              child: TextWidget(
+                                                                                text: "Choose File",
+                                                                              )),
+                                                                          Icon(
+                                                                            Icons.archive_rounded,
+                                                                            color:
+                                                                                Colors.white.withAlpha(150),
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    ],
+                                                                  )
+                                                                ])
+                                                          : const SizedBox()
+                                                    ],
+                                                  ),
                                                 ),
                                               );
                                             }),
@@ -382,10 +487,38 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             child: ElevatedButtonWidget(
                               onClick: () {
                                 if (page == 1) {
-                                 
                                 } else {
+                                  var farmerName =
+                                      formControllers['farmer_name']?.text ??
+                                          "";
+                                  var houseNumber =
+                                      formControllers['house_number']?.text ??
+                                          "";
+                                  var mandal =
+                                      formControllers['mandal']?.text ?? "";
+                                  var city =
+                                      formControllers['city']?.text ?? "";
+                                  var district =
+                                      formControllers['district']?.text ?? "";
+                                  var state =
+                                      formControllers['state']?.text ?? "";
+                                  var pincode =
+                                      formControllers['pincode']?.text ?? "";
+                                  user = User.registerPartA(
+                                      farmerName: farmerName,
+                                      city: city,
+                                      houseNumber: houseNumber,
+                                      district: district,
+                                      mandal: mandal,
+                                      farmerImage: "IMAGE",
+                                      pincode: pincode,
+                                      state: state);
+
+                                  print(user);
+
                                   pageController.animateToPage(page + 1,
-                                      duration: const Duration(milliseconds: 400),
+                                      duration:
+                                          const Duration(milliseconds: 400),
                                       curve: Curves.easeInOut);
                                 }
                               },

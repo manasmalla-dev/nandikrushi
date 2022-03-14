@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nandikrushifarmer/provider/onboard_provider.dart';
 import 'package:nandikrushifarmer/provider/registration_provider.dart';
-import 'package:nandikrushifarmer/view/login/user_type.dart';
+import 'package:nandikrushifarmer/view/login/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const UserType(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -58,7 +58,8 @@ class Server {
     var uri = Uri.https(API.host, api);
 
     try {
-      var response = await http.delete(uri).timeout(const Duration(seconds: 30));
+      var response =
+          await http.delete(uri).timeout(const Duration(seconds: 30));
       return processResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection', uri.toString());
