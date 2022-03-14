@@ -33,7 +33,6 @@ class User {
   User();
   @override
   String toString() {
-    // TODO: implement toString
     return "User: Farmer Name - $farmerName, H.No - $houseNumber, City - $city, Mandal - $mandal, District - $district, State - $state, Pincode - $pincode";
   }
 }

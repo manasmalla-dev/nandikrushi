@@ -424,7 +424,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                                   ),
                                                                   Column(
                                                                     children: [
-                                                                      TextWidget(
+                                                                      const TextWidget(
                                                                         text:
                                                                             "Reference Number",
                                                                         color: Colors
@@ -436,7 +436,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                                         height: height(context) *
                                                                             0.05,
                                                                         child:
-                                                                            FilledTextFieldWidget(
+                                                                            const FilledTextFieldWidget(
                                                                           label:
                                                                               "",
                                                                         ),
@@ -445,7 +445,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                                   ),
                                                                   Column(
                                                                     children: [
-                                                                      TextWidget(
+                                                                      const TextWidget(
                                                                         text:
                                                                             "Upload Certificate",
                                                                         color: Colors
@@ -454,11 +454,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                                       Row(
                                                                         children: [
                                                                           MaterialButton(
-                                                                              padding: EdgeInsets.all(0),
+                                                                              padding: const EdgeInsets.all(0),
                                                                               color: Colors.white,
                                                                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                                               onPressed: () {},
-                                                                              child: TextWidget(
+                                                                              child: const TextWidget(
                                                                                 text: "Choose File",
                                                                               )),
                                                                           Icon(
@@ -514,7 +514,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       pincode: pincode,
                                       state: state);
 
-                                  print(user);
+                                  log(user.toString());
 
                                   pageController.animateToPage(page + 1,
                                       duration:

@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,7 +81,7 @@ class FilledTextFieldWidget extends StatelessWidget {
         isDense: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             width: 0,
             style: BorderStyle.none,
           ),
@@ -92,7 +91,7 @@ class FilledTextFieldWidget extends StatelessWidget {
         hintText: hint ?? '',
       ),
       style: style?.copyWith(fontFamily: 'Quicksand') ??
-          TextStyle(fontFamily: 'Quicksand'),
+          const TextStyle(fontFamily: 'Quicksand'),
       autofocus: focus ?? false,
       maxLines: 1,
       maxLength: maxLength,
