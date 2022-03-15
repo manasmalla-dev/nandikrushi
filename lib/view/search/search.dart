@@ -62,7 +62,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
         'units': '1 kg',
         'place': 'Paravada, Visakhapatnam.',
         'url':
-            'https://www.collinsdictionary.com/images/full/tomato_281240360.jpg'
+            'https://dtgxwmigmg3gc.cloudfront.net/imagery/assets/derivations/icon/256/256/true/eyJpZCI6IjYyODZjZmMzNTNiOGRmMGIyNmY3NWUwZWUyZmM4MzAyIiwic3RvcmFnZSI6InB1YmxpY19zdG9yZSJ9?signature=c4d219eadabc82e33ea702d131d4ade62f664fbfe6510461a1542c306d771d43'
       }
     ]
   };
