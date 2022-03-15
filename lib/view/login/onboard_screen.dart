@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(15),
                           child: Image(
-                            image: NetworkImage(data['imageLink']),
+                            image: AssetImage(data['imageLink']),
                             fit: BoxFit.fill,
                             height: height(context) * 0.25,
                             width: width(context) * 0.9,
