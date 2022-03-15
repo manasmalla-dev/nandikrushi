@@ -13,11 +13,13 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
   late TabController _controller;
 
+  late TextEditingController searchController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _controller = TabController(length: 6, vsync: this, initialIndex: 1);
+    searchController = TextEditingController();
   }
 
   Color getTabBarTextColor(int i) {
@@ -159,7 +161,12 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextFieldWidget(
-                        hint: "Search",
+                        textInputAction: TextInputAction.search,
+                        onSubmitField: () {
+                          setState(() {});
+                        },
+                        controller: searchController,
+                        label: "Search",
                         style: fonts(height(context) * 0.022, FontWeight.w500,
                             Colors.black),
                         suffix: Container(
@@ -184,7 +191,13 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                           list: [],
                         ),
                         ProductList(
-                          list: products['vegetables'] ?? [],
+                          list: (products['vegetables']?.where((element) =>
+                                      element['name']?.toLowerCase()?.contains(
+                                          searchController.text
+                                              .toLowerCase()) ??
+                                      true) as Iterable<Map<String, String>>?)
+                                  ?.toList() ??
+                              [],
                         ),
                         ProductList(
                           list: [],
