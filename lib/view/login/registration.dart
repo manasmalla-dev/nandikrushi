@@ -7,7 +7,9 @@ import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/filled_textfield_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
+import 'package:nandikrushifarmer/view/home/home.dart';
 import 'package:nandikrushifarmer/view/login/nav_bar.dart';
+import 'package:nandikrushifarmer/view/product/add_product.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -142,8 +144,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                 formControllers['farmer_name'],
                                             label: 'Farmer Name',
                                             hintSize: 20,
-                                            // style: fonts(20.0, FontWeight.w500,
-                                            //     Colors.black),
+                                            style: fonts(20.0, FontWeight.w500,
+                                                Colors.black),
                                           ),
                                           SizedBox(
                                             height: height(context) * 0.03,
@@ -171,10 +173,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                         hintSize: 20,
                                                         hintColor: Colors
                                                             .grey.shade600,
-                                                        // style: fonts(
-                                                        //     20.0,
-                                                        //     FontWeight.w500,
-                                                        //     Colors.black),
+                                                        style: fonts(
+                                                            20.0,
+                                                            FontWeight.w500,
+                                                            Colors.black),
                                                       ),
                                                     ),
                                                     SizedBox(
@@ -190,10 +192,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                         hintSize: 20,
                                                         hintColor: Colors
                                                             .grey.shade600,
-                                                        // style: fonts(
-                                                        //     15.0,
-                                                        //     FontWeight.w500,
-                                                        //     Colors.black),
+                                                        style: fonts(
+                                                            15.0,
+                                                            FontWeight.w500,
+                                                            Colors.black),
                                                       ),
                                                     )
                                                   ],
@@ -209,10 +211,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                         hintSize: 20,
                                                         hintColor: Colors
                                                             .grey.shade600,
-                                                        // style: fonts(
-                                                        //     15.0,
-                                                        //     FontWeight.w500,
-                                                        //     Colors.black),
+                                                        style: fonts(
+                                                            15.0,
+                                                            FontWeight.w500,
+                                                            Colors.black),
                                                       ),
                                                     ),
                                                     SizedBox(
@@ -228,10 +230,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                         hintSize: 20,
                                                         hintColor: Colors
                                                             .grey.shade600,
-                                                        // style: fonts(
-                                                        //     15.0,
-                                                        //     FontWeight.w500,
-                                                        //     Colors.black),
+                                                        style: fonts(
+                                                            15.0,
+                                                            FontWeight.w500,
+                                                            Colors.black),
                                                       ),
                                                     ),
                                                   ],
@@ -247,10 +249,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                         hintSize: 20,
                                                         hintColor: Colors
                                                             .grey.shade600,
-                                                        // style: fonts(
-                                                        //     15.0,
-                                                        //     FontWeight.w500,
-                                                        //     Colors.black),
+                                                        style: fonts(
+                                                            15.0,
+                                                            FontWeight.w500,
+                                                            Colors.black),
                                                       ),
                                                     ),
                                                     SizedBox(
@@ -259,9 +261,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                     ),
                                                     Expanded(
                                                       child: TextFieldWidget(
-                                                        // textInputAction:
-                                                        //     TextInputAction
-                                                        //         .done,
+                                                        textInputAction:
+                                                            TextInputAction
+                                                                .done,
                                                         controller:
                                                             formControllers[
                                                                 'pincode'],
@@ -269,10 +271,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                         hintSize: 20,
                                                         hintColor: Colors
                                                             .grey.shade600,
-                                                        // style: fonts(
-                                                        //     20.0,
-                                                        //     FontWeight.w500,
-                                                        //     Colors.black),
+                                                        style: fonts(
+                                                            20.0,
+                                                            FontWeight.w500,
+                                                            Colors.black),
                                                       ),
                                                     )
                                                   ],
@@ -488,6 +490,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             child: ElevatedButtonWidget(
                               onClick: () {
                                 if (page == 1) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => NavBar()));
                                 } else {
                                   var farmerName =
                                       formControllers['farmer_name']?.text ??

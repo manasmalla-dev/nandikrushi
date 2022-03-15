@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
+import 'package:nandikrushifarmer/view/product/add_product.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -69,33 +70,43 @@ class _HomeState extends State<Home> {
               childAspectRatio: (2.5 / 3),
               shrinkWrap: true,
               children: List.generate(6, (index) {
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(homeAseets[index]['icon']),
-                        SizedBox(
-                          height: height(context) * 0.02,
-                        ),
-                        TextWidget(
-                          text: homeAseets[index]['title'],
-                          size: width(context) * 0.05,
-                          weight: FontWeight.w600,
-                        ),
-                        SizedBox(
-                          height: height(context) * 0.01,
-                        ),
-                        TextWidget(
-                          text: homeAseets[index]['sub_title'],
-                          size: width(context) * 0.025,
-                          weight: FontWeight.w400,
-                        )
-                      ],
+                return InkWell(
+                  onTap: () {
+                    if (index == 1) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AddProductScreen()));
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(homeAseets[index]['icon']),
+                          SizedBox(
+                            height: height(context) * 0.02,
+                          ),
+                          TextWidget(
+                            text: homeAseets[index]['title'],
+                            size: width(context) * 0.05,
+                            weight: FontWeight.w600,
+                          ),
+                          SizedBox(
+                            height: height(context) * 0.01,
+                          ),
+                          TextWidget(
+                            text: homeAseets[index]['sub_title'],
+                            size: width(context) * 0.025,
+                            weight: FontWeight.w400,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );

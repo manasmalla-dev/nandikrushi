@@ -92,7 +92,7 @@ class FilledTextFieldWidget extends StatelessWidget {
       style: style?.copyWith(fontFamily: 'Quicksand') ??
           const TextStyle(fontFamily: 'Quicksand'),
       autofocus: focus ?? false,
-      maxLines: 1,
+      maxLines: maxLines,
       maxLength: maxLength,
       validator: (value) {
         if (label == "Alternative Number") {
