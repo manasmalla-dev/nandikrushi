@@ -243,13 +243,13 @@ class ProductList extends StatelessWidget {
                 TextWidget(
                   text: list[index]['name'],
                   weight: FontWeight.w800,
-                  size: 24,
+                  size: height(context) * 0.024,
                 ),
                 TextWidget(
                   text: list[index]['description'],
                 ),
                 SizedBox(
-                  height: 16,
+                  height: height(context) * 0.018,
                 ),
                 Flexible(
                   child: Row(
@@ -276,12 +276,12 @@ class ProductList extends StatelessWidget {
                                 children: [
                                   TextWidget(
                                     text: "Rs.",
-                                    size: 16,
+                                    size: height(context) * 0.019,
                                     weight: FontWeight.bold,
                                   ),
                                   TextWidget(
                                     text: "${list[index]['price']}",
-                                    size: 20,
+                                    size: height(context) * 0.024,
                                     weight: FontWeight.w800,
                                   ),
                                 ],
@@ -331,9 +331,9 @@ class ProductList extends StatelessWidget {
                                     width: 6,
                                   ),
                                   TextWidget(
-                                    text: "Add".toUpperCase(),
-                                    weight: FontWeight.bold,
-                                  ),
+                                      text: "Add".toUpperCase(),
+                                      weight: FontWeight.bold,
+                                      size: height(context) * 0.014),
                                 ],
                               ),
                             ),
@@ -357,6 +357,7 @@ class ProductList extends StatelessWidget {
                                   horizontal: 8.0, vertical: 2),
                               child: TextWidget(
                                 text: "Contact".toUpperCase(),
+                                size: height(context) * 0.014,
                                 weight: FontWeight.bold,
                                 color: Theme.of(context).primaryColor,
                               ),
