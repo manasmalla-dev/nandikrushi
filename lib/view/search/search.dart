@@ -166,7 +166,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                           setState(() {});
                         },
                         controller: searchController,
-                        hint: "Search",
+                        label: "Search",
                         style: fonts(height(context) * 0.022, FontWeight.w500,
                             Colors.black),
                         suffix: Container(
@@ -192,8 +192,9 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                         ),
                         ProductList(
                           list: (products['vegetables']?.where((element) =>
-                                      element['name']
-                                          ?.contains(searchController.text) ??
+                                      element['name']?.toLowerCase()?.contains(
+                                          searchController.text
+                                              .toLowerCase()) ??
                                       true) as Iterable<Map<String, String>>?)
                                   ?.toList() ??
                               [],
