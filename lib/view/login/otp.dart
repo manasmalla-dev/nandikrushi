@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
-import 'package:nandikrushifarmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/view/login/registration.dart';
 import 'package:pinput/pinput.dart';

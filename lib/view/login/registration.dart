@@ -7,6 +7,7 @@ import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/filled_textfield_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
+import 'package:nandikrushifarmer/view/login/nav_bar.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -520,6 +521,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       duration:
                                           const Duration(milliseconds: 400),
                                       curve: Curves.easeInOut);
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => const NavBar()),
+                                      (route) => false);
                                 }
                               },
                               minWidth: width(context) * 0.85,
