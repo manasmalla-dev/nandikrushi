@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
       title: 'Nandikrushi',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Color(0xFF006838),
-        textSelectionTheme: TextSelectionThemeData(
-          selectionHandleColor: Color(0xFF006838),
+        primaryColor: const Color(0xFF006838),
+        textSelectionTheme: const TextSelectionThemeData(
+          selectionHandleColor:  Color(0xFF006838),
         ),
       ),
       home: const SplashScreen(),

@@ -7,9 +7,7 @@ import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/filled_textfield_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
-import 'package:nandikrushifarmer/view/home/home.dart';
 import 'package:nandikrushifarmer/view/login/nav_bar.dart';
-import 'package:nandikrushifarmer/view/product/add_product.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -493,7 +491,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => NavBar()));
+                                          builder: (context) => const NavBar()));
                                 } else {
                                   var farmerName =
                                       formControllers['farmer_name']?.text ??
