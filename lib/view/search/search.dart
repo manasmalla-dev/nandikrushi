@@ -16,7 +16,6 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
   late TextEditingController searchController;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller = TabController(length: 6, vsync: this, initialIndex: 1);
     searchController = TextEditingController();
@@ -159,7 +158,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                     width: double.infinity,
                     height: height(context) * 0.08,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextFieldWidget(
                         textInputAction: TextInputAction.search,
                         onSubmitField: () {
@@ -174,8 +173,8 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                           child: ClipOval(
                               child: Container(
                                   color: Theme.of(context).primaryColor,
-                                  padding: EdgeInsets.all(0),
-                                  child: Icon(
+                                  padding: const EdgeInsets.all(0),
+                                  child: const Icon(
                                     Icons.search_rounded,
                                     color: Colors.white,
                                   ))),
@@ -187,28 +186,29 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                     child: TabBarView(
                       controller: _controller,
                       children: [
-                        ProductList(
+                        const ProductList(
                           list: [],
                         ),
                         ProductList(
                           list: (products['vegetables']?.where((element) =>
-                                      element['name']?.toLowerCase()?.contains(
+                                      element['name']?.toLowerCase().contains(
                                           searchController.text
                                               .toLowerCase()) ??
-                                      true) as Iterable<Map<String, String>>?)
-                                  ?.toList() ??
+                                      true)
+                                  // as Iterable<Map<String, String>>?
+                                  )?.toList() ??
                               [],
                         ),
-                        ProductList(
+                        const ProductList(
                           list: [],
                         ),
-                        ProductList(
+                        const ProductList(
                           list: [],
                         ),
-                        ProductList(
+                        const ProductList(
                           list: [],
                         ),
-                        ProductList(
+                        const ProductList(
                           list: [],
                         ),
                       ],
@@ -264,7 +264,7 @@ class ProductList extends StatelessWidget {
                       ),
                       Expanded(
                           child: Padding(
-                        padding: EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.only(bottom: 8),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Column(
@@ -291,7 +291,7 @@ class ProductList extends StatelessWidget {
                               ),
                               Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.location_on,
                                     size: 8,
                                   ),
@@ -313,7 +313,7 @@ class ProductList extends StatelessWidget {
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 minimumSize: Size.zero, // Set this
                                 padding: EdgeInsets.zero, // and this
-                                side: BorderSide(width: 1),
+                                side: const BorderSide(width: 1),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100))),
                             onPressed: () {},
@@ -322,12 +322,12 @@ class ProductList extends StatelessWidget {
                                   horizontal: 8.0, vertical: 2),
                               child: Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.add,
                                     size: 14,
                                     color: Colors.black,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 6,
                                   ),
                                   TextWidget(
@@ -338,7 +338,7 @@ class ProductList extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 12,
                           ),
                           OutlinedButton(

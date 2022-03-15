@@ -78,7 +78,7 @@ class TextFieldWidget extends StatelessWidget {
     return TextFormField(
       inputFormatters: formatter,
       controller: controller,
-      cursorColor: Color(0xFF006838),
+      cursorColor: const Color(0xFF006838),
       decoration: InputDecoration(
         suffixIcon: suffix,
         prefixIcon: shouldShowCurreny
@@ -87,7 +87,7 @@ class TextFieldWidget extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("₹"),
+                    const Text("₹"),
                     SizedBox(
                       height: height(context) * 0.005,
                     )
@@ -98,8 +98,8 @@ class TextFieldWidget extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(vertical: height(context) * 0.01),
         counterText: '',
         isDense: true,
-        focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF006838))),
+        focusedBorder: const UnderlineInputBorder(
+            borderSide:  BorderSide(color: Color(0xFF006838))),
         border: UnderlineInputBorder(
             borderSide: BorderSide(
               color: bordercolor ?? Colors.grey.shade500,

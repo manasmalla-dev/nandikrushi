@@ -4,7 +4,6 @@ import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/filled_textfield_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/login_bg.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
-import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
 import 'package:nandikrushifarmer/view/login/otp.dart';
 
 class Login extends StatefulWidget {

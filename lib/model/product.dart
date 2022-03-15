@@ -16,7 +16,6 @@ class Product {
       required this.productImage});
   @override
   String toString() {
-    // TODO: implement toString
     return "$category > $subcategory - $quantity $units - ₹$price : $description : $productImage";
   }
 }

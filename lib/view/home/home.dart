@@ -11,38 +11,106 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List homeAseets = [
+    {
+      "title": "My Products",
+      "sub_title": "View your Posted Products",
+      "icon": "assets/png/myproduct_home.png",
+    },
+    {
+      "title": "Add Product",
+      "sub_title": "List your Product",
+      "icon": "assets/png/addproduct_home.png",
+    },
+    {
+      "title": "Orders",
+      "sub_title": "View your order from Buyers",
+      "icon": "assets/png/orders_home.png",
+    },
+    {
+      "title": "My Purchases",
+      "sub_title": "products from Farmer",
+      "icon": "assets/png/wallet_home.png",
+    },
+    {
+      "title": "Videos",
+      "sub_title": "Restaurant Video request",
+      "icon": "assets/png/videos_home.png",
+    },
+    {
+      "title": "My Account",
+      "sub_title": "Your Profile",
+      "icon": "assets/png/account_home.png",
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text('Home'),
-            SizedBox(
-              height: height(context) * 0.05,
-            ),
-            MaterialButton(
-              color: Theme.of(context).primaryColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(28)),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddProductScreen()));
-              },
-              child: TextWidget(
-                text: "Add Product",
-                weight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ],
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: TextWidget(
+            text: "Nandikrushi",
+            color: Colors.green[900],
+            size: width(context) * 0.07,
+            weight: FontWeight.w600,
+          ),
         ),
-      ),
-    );
+        body: Container(
+            decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50))),
+            height: height(context) * 1.5,
+            width: width(context),
+            child: GridView.count(
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
+              crossAxisCount: 2,
+              childAspectRatio: (2.5 / 3),
+              shrinkWrap: true,
+              children: List.generate(6, (index) {
+                return InkWell(
+                  onTap: () {
+                    if (index == 1) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AddProductScreen()));
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(homeAseets[index]['icon']),
+                          SizedBox(
+                            height: height(context) * 0.02,
+                          ),
+                          TextWidget(
+                            text: homeAseets[index]['title'],
+                            size: width(context) * 0.05,
+                            weight: FontWeight.w600,
+                          ),
+                          SizedBox(
+                            height: height(context) * 0.01,
+                          ),
+                          TextWidget(
+                            text: homeAseets[index]['sub_title'],
+                            size: width(context) * 0.025,
+                            weight: FontWeight.w400,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            )));
   }
 }

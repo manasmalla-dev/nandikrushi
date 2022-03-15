@@ -1,16 +1,13 @@
 import 'dart:developer';
 
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/model/product.dart';
-import 'package:nandikrushifarmer/model/user.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/filled_textfield_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/success_screen.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
-import 'package:nandikrushifarmer/view/login/nav_bar.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({Key? key}) : super(key: key);
@@ -238,7 +235,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SuccessScreen()));
+                                  builder: (context) => const SuccessScreen()));
                         },
                         minWidth: width(context) * 0.85,
                         height: height(context) * 0.06,
