@@ -49,11 +49,12 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title: TextWidget(
-            text: "Nandikrushi",
-            color: Colors.green[900],
-            size: width(context) * 0.07,
-            weight: FontWeight.w600,
+          title: Text(
+            "Nandikrushi",
+            style: TextStyle(
+                color: const Color(0xFF006838),
+                fontFamily: 'Samarkan',
+                fontSize: height(context) * 0.034),
           ),
         ),
         body: Container(
