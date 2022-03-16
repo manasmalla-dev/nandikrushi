@@ -43,11 +43,12 @@ class _LoginState extends State<Login> {
                     text: "Enter your Mobile number to login",
                     color: Colors.grey[900],
                     weight: FontWeight.w800,
-                    align: TextAlign.left,
+                    align: TextAlign.center,
+                    size: height(context) * 0.02,
                   ),
                 ),
                 SizedBox(
-                  height: height(context) * 0.02,
+                  height: height(context) * 0.012,
                 ),
                 Container(
                   width: width(context) * 0.85,
@@ -66,7 +67,7 @@ class _LoginState extends State<Login> {
                         child: numberController.text.isNotEmpty
                             ? TextWidget(
                                 text: '+91',
-                                size: height(context) * 0.03,
+                                size: height(context) * 0.025,
                                 weight: FontWeight.bold,
                                 color: Colors.grey,
                               )
@@ -79,12 +80,15 @@ class _LoginState extends State<Login> {
                           maxLength: 10,
                           borderRadius: 0,
                           label: "",
-                          style: fonts(height(context) * 0.03, FontWeight.bold,
+                          style: fonts(height(context) * 0.025, FontWeight.bold,
                               Colors.black),
                         ),
                       ),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: height(context) * 0.005,
                 ),
                 SizedBox(
                   width: width(context) * 0.85,

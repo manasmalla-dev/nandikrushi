@@ -8,16 +8,29 @@ class AppColors {
   static var grey = Colors.grey;
 }
 
- height(context) {
-  return MediaQuery.of(context).size.height -
-      MediaQuery.of(context).padding.top -
-      kToolbarHeight;
+height(context) {
+  return MediaQuery.of(context).size.height;
 }
- width(context) {
+
+width(context) {
   return MediaQuery.of(context).size.width;
 }
 
+space({height, width}) {
+  return SizedBox(
+    height: height,
+    width: width,
+  );
+}
 
+div(BuildContext context,double thick) {
+  return Divider(
+    thickness: thick,
+    color: Colors.grey,
+    indent: width(context) * 0.1,
+    endIndent: width(context) * 0.1,
+  );
+}
 
 class SizeConfig {
   static MediaQueryData? _mediaQueryData;
