@@ -34,14 +34,14 @@ class _OTPPageState extends State<OTPPage> {
                   color: Colors.grey[900],
                 ))),
         body: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
             height: height(context),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image(
+                const Image(
                   image: AssetImage("assets/png/otp_image.png"),
                 ),
                 SizedBox(
@@ -101,7 +101,8 @@ class _OTPPageState extends State<OTPPage> {
                         decoration: BoxDecoration(
                           border:
                               Border.all(width: 2, color: Colors.grey.shade600),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
                         ),
                       ),
                       controller: pinController,
@@ -147,7 +148,7 @@ class _OTPPageState extends State<OTPPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      TextWidget(
+                      const TextWidget(
                         text: "Didn't Recieve OTP?",
                         weight: FontWeight.w600,
                         color: Colors.grey,

@@ -54,23 +54,23 @@ class _LoginState extends State<Login> {
                   height: height(context) * 0.06,
                   color: Colors.white,
                   alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       AnimatedContainer(
-                        width: numberController.text.length != 0
+                        width: numberController.text.isNotEmpty
                             ? width(context) * 0.09
                             : 0,
-                        duration: Duration(milliseconds: 250),
-                        child: numberController.text.length != 0
+                        duration: const Duration(milliseconds: 250),
+                        child: numberController.text.isNotEmpty
                             ? TextWidget(
                                 text: '+91',
                                 size: height(context) * 0.03,
                                 weight: FontWeight.bold,
                                 color: Colors.grey,
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                       ),
                       Expanded(
                         child: FilledTextFieldWidget(
@@ -131,10 +131,10 @@ class _LoginState extends State<Login> {
                         flow: TextOverflow.visible,
                         size: width(context) * 0.045,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
-                      NandiKrushiTitle(
+                      const NandiKrushiTitle(
                         textColor: Colors.white,
                       )
                     ],

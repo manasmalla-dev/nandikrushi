@@ -24,7 +24,7 @@ class _LoginBGState extends State<LoginBG> {
             fit: BoxFit.cover,
             image: AssetImage('assets/png/login_BG.png'),
           )),
-          child: Container(
+          child: SizedBox(
             width: width(context),
             height: height(context) * 1.1,
             child: SafeArea(
