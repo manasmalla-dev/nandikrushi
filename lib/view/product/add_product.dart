@@ -5,6 +5,7 @@ import 'package:nandikrushifarmer/model/product.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/filled_textfield_widget.dart';
+import 'package:nandikrushifarmer/reusable_widgets/nandi_krushi_title.dart';
 import 'package:nandikrushifarmer/reusable_widgets/success_screen.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
@@ -45,15 +46,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: width(context) * 0.1),
-                child: Text(
-                  "Nandikrushi",
-                  style: TextStyle(
-                      color: const Color(0xFF006838),
-                      fontFamily: 'Samarkan',
-                      fontSize: height(context) * 0.034),
-                ),
-              ),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: width(context) * 0.1),
+                  child: const NandiKrushiTitle()),
             ],
           ),
         ),
