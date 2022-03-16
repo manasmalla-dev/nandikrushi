@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           selectionHandleColor:  Color(0xFF006838),
         ),
       ),
-      home: const SplashScreen(),
+      home: const SplashScreen(), 
     );
   }
 }
