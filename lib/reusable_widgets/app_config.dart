@@ -8,16 +8,13 @@ class AppColors {
   static var grey = Colors.grey;
 }
 
- height(context) {
-  return MediaQuery.of(context).size.height -
-      MediaQuery.of(context).padding.top -
-      kToolbarHeight;
+height(context) {
+  return MediaQuery.of(context).size.height;
 }
- width(context) {
+
+width(context) {
   return MediaQuery.of(context).size.width;
 }
-
-
 
 class SizeConfig {
   static MediaQueryData? _mediaQueryData;

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
+import 'package:nandikrushifarmer/videos/videos.dart';
+import 'package:nandikrushifarmer/view/order/orders.dart';
+import 'package:nandikrushifarmer/view/order/purchases.dart';
 import 'package:nandikrushifarmer/view/product/add_product.dart';
+import 'package:nandikrushifarmer/view/product/my_products.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -78,6 +82,26 @@ class _HomeState extends State<Home> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const AddProductScreen()));
+                    } else if (index == 0) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MyProductsScreen()));
+                    } else if (index == 2) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const OrdersScreen()));
+                    } else if (index == 3) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const PurchasesScreen()));
+                    } else if (index == 4) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const VideosScreen()));
                     }
                   },
                   child: Padding(

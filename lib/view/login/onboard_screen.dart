@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                         SizedBox(
-                          height: height(context) * 0.05,
+                          height: height(context) * 0.04,
                         ),
                         Container(
                           padding: EdgeInsets.only(left: width(context) * 0.03),
@@ -74,41 +74,42 @@ class _MyHomePageState extends State<MyHomePage> {
                             weight: FontWeight.w700,
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: height(context) * 0.01),
-                          child: SizedBox(
-                            height: height(context) - 300,
-                            width: width(context),
-                            child: ListView.builder(
-                                itemCount: data['content'].length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      Divider(
-                                        thickness: index == 0 ? 2 : 1,
-                                        color: Colors.green[900],
-                                        indent: width(context) * 0.04,
-                                        endIndent: width(context) * 0.04,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: width(context) * 0.05,
-                                            right: width(context) * 0.05,
-                                            top: height(context) * 0.01,
-                                            bottom: height(context) * 0.01),
-                                        child: TextWidget(
-                                          text: data['content'][index],
-                                          size: width(context) * 0.04,
-                                          align: TextAlign.start,
-                                          color: Colors.grey[900],
-                                          weight: FontWeight.w400,
-                                          flow: TextOverflow.visible,
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: height(context) * 0.01),
+                            child: SizedBox(
+                              width: width(context),
+                              child: ListView.builder(
+                                  itemCount: data['content'].length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Divider(
+                                          thickness: index == 0 ? 2 : 1,
+                                          color: Colors.green[900],
+                                          indent: width(context) * 0.04,
+                                          endIndent: width(context) * 0.04,
                                         ),
-                                      ),
-                                    ],
-                                  );
-                                }),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: width(context) * 0.05,
+                                              right: width(context) * 0.05,
+                                              top: height(context) * 0.01,
+                                              bottom: height(context) * 0.01),
+                                          child: TextWidget(
+                                            text: data['content'][index],
+                                            size: width(context) * 0.04,
+                                            align: TextAlign.start,
+                                            color: Colors.grey[900],
+                                            weight: FontWeight.w400,
+                                            flow: TextOverflow.visible,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                            ),
                           ),
                         ),
                       ],

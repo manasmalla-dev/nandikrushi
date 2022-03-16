@@ -9,7 +9,7 @@ appbar(
     backgroundColor: Colors.white,
     elevation: 0,
     centerTitle: true,
-    iconTheme: IconThemeData(color: Colors.grey[900]),   
+    iconTheme: IconThemeData(color: Colors.grey[900]),
     title: Image.asset(
       'assets/pngs/vihaan_app_logo.png',
       height: height(context) * 0.1,
@@ -32,9 +32,9 @@ appBarWithTitle(BuildContext context, {String? title, Color? color}) {
         )),
     title: TextWidget(
       text: title,
-      size: width(context) * 0.06,
+      size: width(context) * 0.045,
       color: Colors.grey[900],
-      weight: FontWeight.w600,
+      weight: FontWeight.w700,
     ),
   );
 }
