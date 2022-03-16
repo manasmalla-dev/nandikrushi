@@ -93,7 +93,11 @@ class _NavBarState extends State<NavBar> {
           gapLocation: GapLocation.none,
           // leftCornerRadius: 32,
           // rightCornerRadius: 32,
-          onTap: (index) => setState(() => _selectedIndex = index),
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
         ),
       ),
     );

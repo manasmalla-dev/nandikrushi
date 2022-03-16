@@ -22,6 +22,7 @@ class TextFieldWidget extends StatelessWidget {
   final double? hintSize;
   final FontWeight? hintWeight;
   final Icon? prefix;
+  final Widget? suffix;
   final Color? prefixColor;
   final TextEditingController? controller;
   final Function? onSubmitField;
@@ -34,6 +35,7 @@ class TextFieldWidget extends StatelessWidget {
   final List<TextInputFormatter>? formatter;
   final TextStyle? style;
   final TextInputAction textInputAction;
+  final bool shouldShowCurreny;
 
   const TextFieldWidget(
       {Key? key,
@@ -59,6 +61,7 @@ class TextFieldWidget extends StatelessWidget {
       this.parametersValidate,
       this.maxLength,
       this.maxLines = 1,
+      this.suffix,
       this.errorBorderRadius,
       this.focusErrorRadius,
       this.prefixColor,
@@ -66,6 +69,7 @@ class TextFieldWidget extends StatelessWidget {
       this.label,
       this.formatter,
       this.style,
+      this.shouldShowCurreny = false,
       this.textInputAction = TextInputAction.next})
       : super(key: key);
 
@@ -74,24 +78,40 @@ class TextFieldWidget extends StatelessWidget {
     return TextFormField(
       inputFormatters: formatter,
       controller: controller,
+      cursorColor: const Color(0xFF006838),
       decoration: InputDecoration(
+        suffixIcon: suffix,
+        prefixIcon: shouldShowCurreny
+            ? SizedBox(
+                height: hintSize,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text("₹"),
+                    SizedBox(
+                      height: height(context) * 0.005,
+                    )
+                  ],
+                ),
+              )
+            : null,
         contentPadding: EdgeInsets.symmetric(vertical: height(context) * 0.01),
         counterText: '',
         isDense: true,
+        focusedBorder: const UnderlineInputBorder(
+            borderSide:  BorderSide(color: Color(0xFF006838))),
         border: UnderlineInputBorder(
-            borderSide: BorderSide(color: bordercolor ?? Colors.white),
+            borderSide: BorderSide(
+              color: bordercolor ?? Colors.grey.shade500,
+            ),
             borderRadius: BorderRadius.circular(borderRadius ?? 0)),
         hintStyle: fonts(hintSize ?? 15.0, hintWeight ?? FontWeight.w500,
             hintColor ?? Colors.grey),
         hintText: hint ?? '',
-        labelText: "$label*",
+        labelText: label != null ? "$label*" : "",
         labelStyle: fonts(hintSize ?? 15.0, hintWeight ?? FontWeight.w500,
             hintColor ?? Colors.grey),
       ),
-      style: style,
-      autofocus: focus ?? false,
-      maxLines: maxLines,
-      maxLength: maxLength,
       validator: (value) {
         if (label == "Alternative Number") {
           if (value!.length == 10 && int.parse(value) < 5000000000) {
@@ -112,9 +132,15 @@ class TextFieldWidget extends StatelessWidget {
         }
         return null;
       },
+      style: style,
+      autofocus: focus ?? false,
+      maxLines: maxLines,
+      maxLength: maxLength,
       textInputAction: textInputAction,
       onFieldSubmitted: (value) {
-        if (onSubmitField != null) onSubmitField!();
+        if (onSubmitField != null) {
+          onSubmitField!();
+        }
       },
       keyboardType: keyBoardType,
     );
