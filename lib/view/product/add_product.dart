@@ -59,7 +59,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 height: height(context) * 0.15,
               ),
               Container(
-                height: height(context) * 0.95,
+                height: height(context) * 0.85,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.grey[300],

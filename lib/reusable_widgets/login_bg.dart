@@ -19,6 +19,7 @@ class _LoginBGState extends State<LoginBG> {
       body: SingleChildScrollView(
         child: Container(
           width: width(context),
+          height: height(context),
           decoration: const BoxDecoration(
               image: DecorationImage(
             fit: BoxFit.cover,
@@ -26,7 +27,6 @@ class _LoginBGState extends State<LoginBG> {
           )),
           child: Container(
             width: width(context),
-            height: height(context) * 1.1,
             child: SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
