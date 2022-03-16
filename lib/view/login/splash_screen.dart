@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Timer(const Duration(milliseconds: 2000), () async {
       // ignore: unnecessary_null_comparison
-      if (a == null) {
+      if (a != null) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (_) => const NavBar()),
