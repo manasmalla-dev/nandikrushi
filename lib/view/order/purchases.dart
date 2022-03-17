@@ -276,6 +276,9 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                       color: Colors.blue,
                                     ),
                                     IconButton(
+                                      padding: EdgeInsets.all(
+                                          height(context) * 0.005),
+                                      splashRadius: height(context) * 0.01,
                                       iconSize: height(context) * 0.02,
                                       onPressed: () {
                                         log("SHOW MENU");
