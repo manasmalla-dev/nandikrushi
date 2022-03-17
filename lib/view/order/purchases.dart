@@ -272,7 +272,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                       text:
                                           "Order placed on: ${list[index]['date']}",
                                       weight: FontWeight.w500,
-                                      size: height(context) * 0.01,
+                                      size: height(context) * 0.0085,
                                       color: Colors.blue,
                                     ),
                                     IconButton(
