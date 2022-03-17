@@ -61,152 +61,154 @@ class _VideosScreenState extends State<VideosScreen> {
             top: Radius.circular(32),
           ),
         ),
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: height(context) * 0.08,
-              child: TextFieldWidget(
-                textInputAction: TextInputAction.search,
-                onSubmitField: () {
-                  setState(() {});
-                },
-                controller: searchController,
-                label: "Search",
-                style: fonts(
-                    height(context) * 0.022, FontWeight.w500, Colors.black),
-                suffix: Container(
-                  margin: EdgeInsets.all(height(context) * 0.01),
-                  child: ClipOval(
-                      child: Container(
-                          color: Theme.of(context).primaryColor,
-                          padding: const EdgeInsets.all(0),
-                          child: const Icon(
-                            Icons.search_rounded,
-                            color: Colors.white,
-                          ))),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: height(context) * 0.02,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextWidget(
-                  text: 'Recommended for Farmers',
-                  size: height(context) * 0.02,
-                  weight: FontWeight.w800,
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: TextWidget(
-                    text: 'View All',
-                    size: height(context) * 0.02,
-                    weight: FontWeight.w500,
-                    color: Colors.grey.shade500,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: height(context) * 0.08,
+                child: TextFieldWidget(
+                  textInputAction: TextInputAction.search,
+                  onSubmitField: () {
+                    setState(() {});
+                  },
+                  controller: searchController,
+                  label: "Search",
+                  style: fonts(
+                      height(context) * 0.022, FontWeight.w500, Colors.black),
+                  suffix: Container(
+                    margin: EdgeInsets.all(height(context) * 0.01),
+                    child: ClipOval(
+                        child: Container(
+                            color: Theme.of(context).primaryColor,
+                            padding: const EdgeInsets.all(0),
+                            child: const Icon(
+                              Icons.search_rounded,
+                              color: Colors.white,
+                            ))),
                   ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: height(context) * 0.13,
-              child: ListView.builder(
-                itemCount: videoRecommendations.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: ((context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(
-                        left: index != 0 ? width(context) * 0.03 : 0,
-                        right: index != videos.length - 1
-                            ? width(context) * 0.03
-                            : 0),
-                    child: Image.network(
-                      "https://img.youtube.com/vi/${getChannelId(videoRecommendations[index]['url'])}/maxresdefault.jpg",
-                      height: height(context) * 0.13,
-                    ),
-                  );
-                }),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextWidget(
-                  text: 'Nandi Krushi Farm Visit',
-                  size: height(context) * 0.02,
-                  weight: FontWeight.w800,
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: TextWidget(
-                    text: 'View All',
-                    size: height(context) * 0.02,
-                    weight: FontWeight.w500,
-                    color: Colors.grey.shade500,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: height(context) * 0.13,
-              child: ListView.builder(
-                itemCount: videos.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: ((context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(
-                        left: index != 0 ? width(context) * 0.03 : 0,
-                        right: index != videos.length - 1
-                            ? width(context) * 0.03
-                            : 0),
-                    child: Image.network(
-                      "https://img.youtube.com/vi/${getChannelId(videos[index]['url'])}/maxresdefault.jpg",
-                      height: height(context) * 0.13,
-                    ),
-                  );
-                }),
               ),
-            ),
-            SizedBox(
-              height: height(context) * 0.02,
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: TextWidget(
-                text: 'Request for your farm video',
-                size: height(context) * 0.02,
-                weight: FontWeight.w800,
-                color: Theme.of(context).primaryColor,
+              SizedBox(
+                height: height(context) * 0.02,
               ),
-            ),
-            SizedBox(
-              height: height(context) * 0.02,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Theme.of(context).primaryColor)),
-              child: Stack(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  FilledTextFieldWidget(),
-                  Positioned(
-                    child: Icon(
-                      Icons.near_me_rounded,
-                      color: Theme.of(context).primaryColor,
+                  TextWidget(
+                    text: 'Recommended for Farmers',
+                    size: height(context) * 0.02,
+                    weight: FontWeight.w800,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: TextWidget(
+                      text: 'View All',
+                      size: height(context) * 0.02,
+                      weight: FontWeight.w500,
+                      color: Colors.grey.shade500,
                     ),
-                    bottom: 4,
-                    right: 4,
                   )
                 ],
               ),
-              width: double.infinity,
-              height: height(context) * 0.2,
-            ),
-          ],
+              SizedBox(
+                height: height(context) * 0.13,
+                child: ListView.builder(
+                  itemCount: videoRecommendations.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: ((context, index) {
+                    return Container(
+                      margin: EdgeInsets.only(
+                          left: index != 0 ? width(context) * 0.03 : 0,
+                          right: index != videos.length - 1
+                              ? width(context) * 0.03
+                              : 0),
+                      child: Image.network(
+                        "https://img.youtube.com/vi/${getChannelId(videoRecommendations[index]['url'])}/maxresdefault.jpg",
+                        height: height(context) * 0.13,
+                      ),
+                    );
+                  }),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextWidget(
+                    text: 'Nandi Krushi Farm Visit',
+                    size: height(context) * 0.02,
+                    weight: FontWeight.w800,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: TextWidget(
+                      text: 'View All',
+                      size: height(context) * 0.02,
+                      weight: FontWeight.w500,
+                      color: Colors.grey.shade500,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: height(context) * 0.13,
+                child: ListView.builder(
+                  itemCount: videos.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: ((context, index) {
+                    return Container(
+                      margin: EdgeInsets.only(
+                          left: index != 0 ? width(context) * 0.03 : 0,
+                          right: index != videos.length - 1
+                              ? width(context) * 0.03
+                              : 0),
+                      child: Image.network(
+                        "https://img.youtube.com/vi/${getChannelId(videos[index]['url'])}/maxresdefault.jpg",
+                        height: height(context) * 0.13,
+                      ),
+                    );
+                  }),
+                ),
+              ),
+              SizedBox(
+                height: height(context) * 0.02,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: TextWidget(
+                  text: 'Request for your farm video',
+                  size: height(context) * 0.02,
+                  weight: FontWeight.w800,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              SizedBox(
+                height: height(context) * 0.02,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Theme.of(context).primaryColor)),
+                child: Stack(
+                  children: [
+                    FilledTextFieldWidget(),
+                    Positioned(
+                      child: Icon(
+                        Icons.near_me_rounded,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      bottom: 4,
+                      right: 4,
+                    )
+                  ],
+                ),
+                width: double.infinity,
+                height: height(context) * 0.2,
+              ),
+            ],
+          ),
         ),
       ),
     );

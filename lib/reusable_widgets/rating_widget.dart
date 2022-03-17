@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 
 class RatingWidget extends StatefulWidget {
   const RatingWidget({Key? key}) : super(key: key);
@@ -104,6 +105,7 @@ class _RatingStarState extends State<RatingStar> {
           firstChild: Icon(
             Icons.star_outline_rounded,
             color: Colors.grey,
+            size: height(context) * 0.03,
           ),
           secondChild: Icon(
             Icons.star_rounded,

@@ -250,7 +250,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 6),
                       child: SizedBox(
-                        height: height(context) * 0.17,
+                        height: height(context) * 0.19,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -269,7 +269,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                       text:
                                           "Recieved order on: ${list[index]['date']}",
                                       weight: FontWeight.w500,
-                                      size: height(context) * 0.015,
+                                      size: height(context) * 0.013,
                                       color: Colors.blue,
                                     ),
                                     IconButton(
@@ -340,7 +340,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                               ),
                                               TextWidget(
                                                 text: list[index]['place'],
-                                                size: 10,
+                                                size: height(context) * 0.01,
                                               ),
                                             ],
                                           ),
