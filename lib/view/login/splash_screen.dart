@@ -1,6 +1,9 @@
 import 'dart:async';
-
+import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushifarmer/controller/login_controller.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/view/login/nav_bar.dart';
 import 'package:nandikrushifarmer/view/login/onboard_screen.dart';
@@ -11,23 +14,16 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  var a = [];
+class _SplashScreenState extends StateMVC<SplashScreen> {
+  LoginPageController? loginPageController;
+  _SplashScreenState() : super(LoginPageController()) {
+    loginPageController = controller as LoginPageController;
+  }
   @override
   void initState() {
     Timer(const Duration(milliseconds: 2000), () async {
-      // ignore: unnecessary_null_comparison
-      if (a != null && a.isNotEmpty) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => const NavBar()),
-            (route) => false);
-      } else {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => const MyHomePage()),
-            (route) => false);
-      }
+      log(FirebaseAuth.instance.currentUser!.uid.toString());
+      loginPageController!.checkUser(context);
     });
     super.initState();
   }
