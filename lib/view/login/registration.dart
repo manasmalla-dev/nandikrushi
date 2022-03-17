@@ -302,12 +302,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                               duration: const Duration(
                                                   milliseconds: 400),
                                               curve: Curves.easeInOut);
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      const NavBar()),
-                                              (route) => false);
                                         },
                                         minWidth: width(context) * 0.85,
                                         height: height(context) * 0.06,
