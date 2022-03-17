@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 
 class RatingWidget extends StatefulWidget {
   const RatingWidget({Key? key}) : super(key: key);
@@ -101,13 +102,15 @@ class _RatingStarState extends State<RatingStar> {
         widget.onTap();
       },
       child: AnimatedCrossFade(
-          firstChild: const Icon(
+          firstChild: Icon(
             Icons.star_outline_rounded,
             color: Colors.grey,
+            size: height(context) * 0.03,
           ),
-          secondChild: const Icon(
+          secondChild: Icon(
             Icons.star_rounded,
             color: Colors.amber,
+            size: height(context) * 0.03,
           ),
           crossFadeState: widget.state
               ? CrossFadeState.showSecond

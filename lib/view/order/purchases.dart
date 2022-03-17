@@ -253,7 +253,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 6),
                       child: SizedBox(
-                        height: height(context) * 0.17,
+                        height: height(context) * 0.19,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -342,8 +342,9 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                                 size: 8,
                                               ),
                                               TextWidget(
+                                                flow: TextOverflow.clip,
                                                 text: list[index]['place'],
-                                                size: 10,
+                                                size: height(context) * 0.01,
                                               ),
                                             ],
                                           ),
