@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
@@ -24,7 +26,6 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
             'https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg',
         'stock': 'true',
         'date': '12-01-2022',
-        'date': '12-01-2022'
       },
       {
         'name': 'Buffallo Milk',
@@ -37,7 +38,6 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
             'https://5.imimg.com/data5/BS/VQ/WG/SELLER-66548153/fresh-raw-buffalo-milk-500x500.jpeg',
         'stock': 'true',
         'date': '12-01-2022',
-        'date': '12-01-2022'
       },
     ],
     'vegetables': [
@@ -52,7 +52,6 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
             'https://resources.commerceup.io/?key=https%3A%2F%2Fprod-admin-images.s3.ap-south-1.amazonaws.com%2FpWVdUiFHtKGqyJxESltt%2Fproduct%2F30571001191.jpg&width=800&resourceKey=pWVdUiFHtKGqyJxESltt',
         'stock': 'true',
         'date': '12-01-2022',
-        'date': '12-01-2022'
       },
       {
         'name': 'Lady Finger',
@@ -77,7 +76,6 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
             'https://dtgxwmigmg3gc.cloudfront.net/imagery/assets/derivations/icon/256/256/true/eyJpZCI6IjYyODZjZmMzNTNiOGRmMGIyNmY3NWUwZWUyZmM4MzAyIiwic3RvcmFnZSI6InB1YmxpY19zdG9yZSJ9?signature=c4d219eadabc82e33ea702d131d4ade62f664fbfe6510461a1542c306d771d43',
         'stock': 'true',
         'date': '12-01-2022',
-        'date': '12-01-2022'
       }
     ],
     'fruits': [
@@ -226,13 +224,13 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appBarWithTitle(context, title: "My Products".toUpperCase()),
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             IconButton(
-              icon: Icon(Icons.sort_rounded),
+              icon: const Icon(Icons.sort_rounded),
               onPressed: () {},
               splashRadius: 12,
             ),
@@ -243,8 +241,8 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                 padding: EdgeInsets.all(height(context) * 0.01),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(32),
+                  borderRadius: const BorderRadius.vertical(
+                    top:  Radius.circular(32),
                   ),
                 ),
                 child: ListView.separated(
@@ -282,9 +280,9 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                       IconButton(
                                         iconSize: height(context) * 0.02,
                                         onPressed: () {
-                                          print("SHOW MENU");
+                                          log("SHOW MENU");
                                         },
-                                        icon: Icon(Icons.more_vert),
+                                        icon: const Icon(Icons.more_vert),
                                       ),
                                     ],
                                   ),
@@ -398,7 +396,7 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                     );
                   }),
                   separatorBuilder: (BuildContext context, int index) {
-                    return Divider(
+                    return const Divider(
                       thickness: 1.5,
                     );
                   },

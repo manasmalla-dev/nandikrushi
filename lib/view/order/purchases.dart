@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
@@ -223,13 +225,13 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appBarWithTitle(context, title: "My Purchases".toUpperCase()),
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             IconButton(
-              icon: Icon(Icons.sort_rounded),
+              icon: const Icon(Icons.sort_rounded),
               onPressed: () {},
               splashRadius: 12,
             ),
@@ -240,7 +242,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                 padding: EdgeInsets.all(height(context) * 0.01),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.vertical(
+                  borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(32),
                   ),
                 ),
@@ -276,9 +278,9 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                     IconButton(
                                       iconSize: height(context) * 0.02,
                                       onPressed: () {
-                                        print("SHOW MENU");
+                                        log("SHOW MENU");
                                       },
-                                      icon: Icon(Icons.more_vert),
+                                      icon: const Icon(Icons.more_vert),
                                     ),
                                   ],
                                 ),
@@ -359,7 +361,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                         size: height(context) * 0.014,
                                         weight: FontWeight.bold,
                                       ),
-                                      RatingWidget(),
+                                      const RatingWidget(),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                             tapTargetSize: MaterialTapTargetSize
@@ -398,7 +400,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                     );
                   }),
                   separatorBuilder: (BuildContext context, int index) {
-                    return Divider(
+                    return const Divider(
                       thickness: 1.5,
                     );
                   },

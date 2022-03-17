@@ -16,6 +16,22 @@ width(context) {
   return MediaQuery.of(context).size.width;
 }
 
+space({height, width}) {
+  return SizedBox(
+    height: height,
+    width: width,
+  );
+}
+
+div(BuildContext context,double thick) {
+  return Divider(
+    thickness: thick,
+    color: Colors.grey,
+    indent: width(context) * 0.1,
+    endIndent: width(context) * 0.1,
+  );
+}
+
 class SizeConfig {
   static MediaQueryData? _mediaQueryData;
   static double? screenWidth;

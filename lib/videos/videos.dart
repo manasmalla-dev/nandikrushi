@@ -53,11 +53,11 @@ class _VideosScreenState extends State<VideosScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        margin: EdgeInsets.only(top: 32),
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        margin: const EdgeInsets.only(top: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         decoration: BoxDecoration(
           color: Colors.grey.shade200,
-          borderRadius: BorderRadius.vertical(
+          borderRadius: const BorderRadius.vertical(
             top: Radius.circular(32),
           ),
         ),

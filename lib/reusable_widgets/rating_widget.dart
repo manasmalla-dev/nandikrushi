@@ -110,11 +110,12 @@ class _RatingStarState extends State<RatingStar> {
           secondChild: Icon(
             Icons.star_rounded,
             color: Colors.amber,
+            size: height(context) * 0.03,
           ),
           crossFadeState: widget.state
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
-          duration: Duration(seconds: 1)),
+          duration: const Duration(seconds: 1)),
     );
   }
 }
