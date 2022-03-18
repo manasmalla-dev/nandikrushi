@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
+import 'package:nandikrushifarmer/view/product/product_details.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -399,150 +400,163 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
 
 class ProductList extends StatelessWidget {
   final List list;
-  const ProductList({Key? key, required this.list}) : super(key: key);
+  final double padding;
+  const ProductList({Key? key, required this.list, this.padding = 16})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: ((context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6),
-          child: SizedBox(
-            height: height(context) * 0.16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextWidget(
-                  text: list[index]['name'],
-                  weight: FontWeight.w800,
-                  size: height(context) * 0.024,
-                ),
-                TextWidget(
-                  text: list[index]['description'],
-                ),
-                SizedBox(
-                  height: height(context) * 0.018,
-                ),
-                Flexible(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: height(context) * 0.08,
-                        width: height(context) * 0.08,
-                        child: Image.network(
-                          list[index]['url'],
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Expanded(
-                          child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  TextWidget(
-                                    text: "Rs.",
-                                    size: height(context) * 0.019,
-                                    weight: FontWeight.bold,
-                                  ),
-                                  TextWidget(
-                                    text: "${list[index]['price']}",
-                                    size: height(context) * 0.024,
-                                    weight: FontWeight.w800,
-                                  ),
-                                ],
-                              ),
-                              TextWidget(
-                                text: list[index]['units'],
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.location_on,
-                                    size: 8,
-                                  ),
-                                  TextWidget(
-                                    text: list[index]['place'],
-                                    size: 10,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      )),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                minimumSize: Size.zero, // Set this
-                                padding: EdgeInsets.zero, // and this
-                                side: const BorderSide(width: 1),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100))),
-                            onPressed: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 2),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.add,
-                                    size: 14,
-                                    color: Colors.black,
-                                  ),
-                                  const SizedBox(
-                                    width: 6,
-                                  ),
-                                  TextWidget(
-                                      text: "Add".toUpperCase(),
-                                      weight: FontWeight.bold,
-                                      size: height(context) * 0.014),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                minimumSize: Size.zero, // Set this
-                                padding: EdgeInsets.zero, // and this
-                                side: BorderSide(
-                                    width: 1,
-                                    color: Theme.of(context).primaryColor),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100))),
-                            onPressed: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 2),
-                              child: TextWidget(
-                                text: "Contact".toUpperCase(),
-                                size: height(context) * 0.014,
-                                weight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+        return InkWell(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProductDetails()));
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: padding, vertical: 6),
+            child: SizedBox(
+              height: height(context) * 0.16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    text: list[index]['name'],
+                    weight: FontWeight.w800,
+                    size: height(context) * 0.024,
                   ),
-                )
-              ],
+                  TextWidget(
+                    text: list[index]['description'],
+                  ),
+                  SizedBox(
+                    height: height(context) * 0.018,
+                  ),
+                  Flexible(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: height(context) * 0.08,
+                          width: height(context) * 0.08,
+                          child: Image.network(
+                            list[index]['url'],
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        Expanded(
+                            child: Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    TextWidget(
+                                      text: "Rs.",
+                                      size: height(context) * 0.019,
+                                      weight: FontWeight.bold,
+                                    ),
+                                    TextWidget(
+                                      text: "${list[index]['price']}",
+                                      size: height(context) * 0.024,
+                                      weight: FontWeight.w800,
+                                    ),
+                                  ],
+                                ),
+                                TextWidget(
+                                  text: list[index]['units'],
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.location_on,
+                                      size: 8,
+                                    ),
+                                    TextWidget(
+                                      text: list[index]['place'],
+                                      size: 10,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        )),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  minimumSize: Size.zero, // Set this
+                                  padding: EdgeInsets.zero, // and this
+                                  side: const BorderSide(width: 1),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(100))),
+                              onPressed: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 2),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.add,
+                                      size: 14,
+                                      color: Colors.black,
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    TextWidget(
+                                        text: "Add".toUpperCase(),
+                                        weight: FontWeight.bold,
+                                        size: height(context) * 0.014),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  minimumSize: Size.zero, // Set this
+                                  padding: EdgeInsets.zero, // and this
+                                  side: BorderSide(
+                                      width: 1,
+                                      color: Theme.of(context).primaryColor),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(100))),
+                              onPressed: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 2),
+                                child: TextWidget(
+                                  text: "Contact".toUpperCase(),
+                                  size: height(context) * 0.014,
+                                  weight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );

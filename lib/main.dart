@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nandikrushifarmer/provider/onboard_provider.dart';
@@ -8,10 +9,12 @@ import 'package:nandikrushifarmer/view/login/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark));
+  if (!kIsWeb) {
+    if (Platform.isAndroid) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark));
+    }
   }
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<OnboardProvider>(
@@ -33,10 +36,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFF006838),
         textSelectionTheme: const TextSelectionThemeData(
-          selectionHandleColor:  Color(0xFF006838),
+          selectionHandleColor: Color(0xFF006838),
         ),
       ),
-      home: const SplashScreen(), 
+      home: const SplashScreen(),
     );
   }
 }
