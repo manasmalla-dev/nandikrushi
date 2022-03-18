@@ -1,11 +1,14 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/list_tile.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/utilities/launcher.dart';
+import 'package:nandikrushifarmer/view/login/login.dart';
+import 'package:nandikrushifarmer/view/my_account/signoutBS.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MyAccount extends StatefulWidget {
@@ -85,7 +88,7 @@ class _MyAccountState extends State<MyAccount> {
                     listTileWithouTI(context,
                         title: "Logout",
                         leading: Icons.power_settings_new, ontap: () {
-                      log('Logout');
+                      signOut(context);
                     }),
                   ],
                 ),
