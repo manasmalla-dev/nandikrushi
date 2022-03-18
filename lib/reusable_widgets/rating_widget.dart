@@ -105,12 +105,12 @@ class _RatingStarState extends State<RatingStar> {
           firstChild: Icon(
             Icons.star_outline_rounded,
             color: Colors.grey,
-            size: height(context) * 0.03,
+            size: height(context) * 0.025,
           ),
           secondChild: Icon(
             Icons.star_rounded,
             color: Colors.amber,
-            size: height(context) * 0.03,
+            size: height(context) * 0.025,
           ),
           crossFadeState: widget.state
               ? CrossFadeState.showSecond
