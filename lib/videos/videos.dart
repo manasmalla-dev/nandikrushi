@@ -186,14 +186,14 @@ class _VideosScreenState extends State<VideosScreen> {
                 height: height(context) * 0.02,
               ),
               Container(
-                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: Theme.of(context).primaryColor)),
                 child: Stack(
                   children: [
-                    FilledTextFieldWidget(),
+                    const FilledTextFieldWidget(),
                     Positioned(
                       child: Icon(
                         Icons.near_me_rounded,

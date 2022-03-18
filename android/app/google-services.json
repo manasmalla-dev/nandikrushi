@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "250225425929",
+    "project_id": "nandikrushi-35ddb",
+    "storage_bucket": "nandikrushi-35ddb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250225425929:android:4dda15b06aba32fa3a02d8",
+        "android_client_info": {
+          "package_name": "farm.nandikrushi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "250225425929-p1nhjut1vf1r28b4otbv559jaue0j3hg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5eidVV2rDAml4j-h0h8yZYu1yZJXxcf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "250225425929-p1nhjut1vf1r28b4otbv559jaue0j3hg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

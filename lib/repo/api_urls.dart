@@ -2,7 +2,7 @@
 
 class API {
   // static var uid = FirebaseAuth.instance.currentUser!.uid; //user id
-  static var host = 'vihaanserver.herokuapp.com'; //server path
+  static var host = 'farm.nandikrushi'; //server path
 
   static var path1 = "/api";
 
