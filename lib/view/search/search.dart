@@ -439,7 +439,7 @@ class ProductList extends StatelessWidget {
         return InkWell(
           onTap: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProductDetails()));
+                MaterialPageRoute(builder: (context) => const ProductDetails()));
           },
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: padding, vertical: 6),

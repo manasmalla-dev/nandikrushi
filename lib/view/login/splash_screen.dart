@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushifarmer/controller/login_controller.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
-import 'package:nandikrushifarmer/view/login/nav_bar.dart';
-import 'package:nandikrushifarmer/view/login/onboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

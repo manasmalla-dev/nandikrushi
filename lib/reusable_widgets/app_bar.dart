@@ -31,7 +31,7 @@ appBarWithTitle(BuildContext context,
           Icons.arrow_back,
           color: Colors.grey[900],
         )),
-    actions: [suffix ?? SizedBox()],
+    actions: [suffix ?? const SizedBox()],
     title: TextWidget(
       text: title,
       size: width(context) * 0.045,

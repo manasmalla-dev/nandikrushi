@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
-import 'package:nandikrushifarmer/reusable_widgets/rating_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/view/search/search.dart';
 
