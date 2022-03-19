@@ -345,12 +345,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           height: height(context) * 0.02,
                                         ),
                                         Slider(
+                                            divisions: 100,
                                             thumbColor: const Color(0xFF006838),
                                             activeColor:
                                                 const Color(0xFF006838),
                                             inactiveColor:
                                                 const Color(0x16006838),
                                             value: acresInInt,
+                                            max: 30,
+                                            min: 1,
+                                            label:
+                                                (acresInInt).round().toString(),
                                             // ignore: avoid_types_as_parameter_names
                                             onChanged: (num) {
                                               setState(() {
