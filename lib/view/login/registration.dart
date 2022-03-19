@@ -345,7 +345,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           height: height(context) * 0.02,
                                         ),
                                         Slider(
-                                            divisions: 100,
+                                            divisions: 30,
                                             thumbColor: const Color(0xFF006838),
                                             activeColor:
                                                 const Color(0xFF006838),
