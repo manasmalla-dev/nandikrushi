@@ -212,188 +212,210 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
         setState(() {});
       },
     );
-    return Column(
-      children: [
-        SizedBox(
-          height: height(context) * 0.3,
-          child: Image.network(
-            "https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg",
-            fit: BoxFit.cover,
-          ),
-        ),
-        Container(
-          color: Colors.grey,
-          height: 2,
-        ),
-        Expanded(
-          child: Row(
-            children: [
-              Container(
-                height: height(context) * 0.71,
-                color: Colors.grey.shade200,
-                alignment: Alignment.center,
-                width: width(context) * 0.05,
-                child: RotatedBox(
-                  quarterTurns: -1,
-                  child: TextWidget(
-                    text: tabs[_controller.index].toUpperCase(),
-                    weight: FontWeight.bold,
-                  ),
-                ),
+    return SafeArea(
+      child: CustomScrollView(
+        slivers: [
+          SliverList(
+              delegate: SliverChildListDelegate([
+            SizedBox(
+              height: height(context) * 0.3,
+              child: Image.network(
+                "https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg",
+                fit: BoxFit.cover,
               ),
-              Expanded(
-                  child: Column(
-                children: [
-                  TabBar(
-                    indicatorColor: Theme.of(context).primaryColor,
-                    controller: _controller,
-                    isScrollable: true,
-                    tabs: [
-                      Tab(
-                        child: TextWidget(
-                          text: tabs[0].toUpperCase(),
-                          weight: getTabBarTextFontWeight(0),
-                          color: getTabBarTextColor(0),
-                        ),
-                      ),
-                      Tab(
-                        child: TextWidget(
-                          text: tabs[1].toUpperCase(),
-                          weight: getTabBarTextFontWeight(1),
-                          color: getTabBarTextColor(1),
-                        ),
-                      ),
-                      Tab(
-                        child: TextWidget(
-                          text: tabs[2].toUpperCase(),
-                          weight: getTabBarTextFontWeight(2),
-                          color: getTabBarTextColor(2),
-                        ),
-                      ),
-                      Tab(
-                        child: TextWidget(
-                          text: tabs[3].toUpperCase(),
-                          weight: getTabBarTextFontWeight(3),
-                          color: getTabBarTextColor(3),
-                        ),
-                      ),
-                      Tab(
-                        child: TextWidget(
-                          text: tabs[4].toUpperCase(),
-                          weight: getTabBarTextFontWeight(4),
-                          color: getTabBarTextColor(4),
-                        ),
-                      ),
-                      Tab(
-                        child: TextWidget(
-                          text: tabs[5].toUpperCase(),
-                          weight: getTabBarTextFontWeight(5),
-                          color: getTabBarTextColor(5),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: height(context) * 0.08,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: TextFieldWidget(
-                        textInputAction: TextInputAction.search,
-                        onSubmitField: () {
-                          setState(() {});
-                        },
-                        controller: searchController,
-                        label: "Search",
-                        style: fonts(height(context) * 0.022, FontWeight.w500,
-                            Colors.black),
-                        suffix: Container(
-                          margin: EdgeInsets.all(height(context) * 0.01),
-                          child: ClipOval(
-                              child: Container(
-                                  color: Theme.of(context).primaryColor,
-                                  padding: const EdgeInsets.all(0),
-                                  child: const Icon(
-                                    Icons.search_rounded,
-                                    color: Colors.white,
-                                  ))),
-                        ),
-                      ),
+            ),
+            Container(
+              color: Colors.grey,
+              height: 2,
+            ),
+          ])),
+          SliverAppBar(
+            toolbarHeight: height(context) * 0.03,
+            backgroundColor: Colors.white,
+            flexibleSpace: Center(
+              child: TabBar(
+                indicatorColor: Theme.of(context).primaryColor,
+                controller: _controller,
+                isScrollable: true,
+                tabs: [
+                  Tab(
+                    child: TextWidget(
+                      text: tabs[0].toUpperCase(),
+                      weight: getTabBarTextFontWeight(0),
+                      color: getTabBarTextColor(0),
                     ),
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _controller,
-                      children: [
-                        ProductList(
-                          list: (products['a2-milk']?.where((element) =>
-                                      element['name']?.toLowerCase().contains(
-                                          searchController.text
-                                              .toLowerCase()) ??
-                                      true)
-                                  // as Iterable<Map<String, String>>?
-                                  )?.toList() ??
-                              [],
-                        ),
-                        ProductList(
-                          list: (products['vegetables']?.where((element) =>
-                                      element['name']?.toLowerCase().contains(
-                                          searchController.text
-                                              .toLowerCase()) ??
-                                      true)
-                                  // as Iterable<Map<String, String>>?
-                                  )?.toList() ??
-                              [],
-                        ),
-                        ProductList(
-                          list: (products['fruits']?.where((element) =>
-                                      element['name']?.toLowerCase().contains(
-                                          searchController.text
-                                              .toLowerCase()) ??
-                                      true)
-                                  // as Iterable<Map<String, String>>?
-                                  )?.toList() ??
-                              [],
-                        ),
-                        ProductList(
-                          list: (products['ghee']?.where((element) =>
-                                      element['name']?.toLowerCase().contains(
-                                          searchController.text
-                                              .toLowerCase()) ??
-                                      true)
-                                  // as Iterable<Map<String, String>>?
-                                  )?.toList() ??
-                              [],
-                        ),
-                        ProductList(
-                          list: (products['oil']?.where((element) =>
-                                      element['name']?.toLowerCase().contains(
-                                          searchController.text
-                                              .toLowerCase()) ??
-                                      true)
-                                  // as Iterable<Map<String, String>>?
-                                  )?.toList() ??
-                              [],
-                        ),
-                        ProductList(
-                          list: (products['millets']?.where((element) =>
-                                      element['name']?.toLowerCase().contains(
-                                          searchController.text
-                                              .toLowerCase()) ??
-                                      true)
-                                  // as Iterable<Map<String, String>>?
-                                  )?.toList() ??
-                              [],
-                        ),
-                      ],
+                  Tab(
+                    child: TextWidget(
+                      text: tabs[1].toUpperCase(),
+                      weight: getTabBarTextFontWeight(1),
+                      color: getTabBarTextColor(1),
+                    ),
+                  ),
+                  Tab(
+                    child: TextWidget(
+                      text: tabs[2].toUpperCase(),
+                      weight: getTabBarTextFontWeight(2),
+                      color: getTabBarTextColor(2),
+                    ),
+                  ),
+                  Tab(
+                    child: TextWidget(
+                      text: tabs[3].toUpperCase(),
+                      weight: getTabBarTextFontWeight(3),
+                      color: getTabBarTextColor(3),
+                    ),
+                  ),
+                  Tab(
+                    child: TextWidget(
+                      text: tabs[4].toUpperCase(),
+                      weight: getTabBarTextFontWeight(4),
+                      color: getTabBarTextColor(4),
+                    ),
+                  ),
+                  Tab(
+                    child: TextWidget(
+                      text: tabs[5].toUpperCase(),
+                      weight: getTabBarTextFontWeight(5),
+                      color: getTabBarTextColor(5),
                     ),
                   ),
                 ],
-              )),
-            ],
+              ),
+            ),
+            floating: false,
+            pinned: true,
           ),
-        )
-      ],
+          SliverFillRemaining(
+            child: Row(
+              children: [
+                Container(
+                  height: double.infinity,
+                  color: Colors.grey.shade200,
+                  alignment: Alignment.center,
+                  width: width(context) * 0.05,
+                  child: RotatedBox(
+                    quarterTurns: -1,
+                    child: TextWidget(
+                      text: tabs[_controller.index].toUpperCase(),
+                      weight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                    child: Column(
+                  children: [
+                    SizedBox(
+                      height: height(context) * 0.01,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: height(context) * 0.08,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: TextFieldWidget(
+                          textInputAction: TextInputAction.search,
+                          onSubmitField: () {
+                            setState(() {});
+                          },
+                          controller: searchController,
+                          label: "Search",
+                          style: fonts(height(context) * 0.022, FontWeight.w500,
+                              Colors.black),
+                          suffix: Container(
+                            margin: EdgeInsets.all(height(context) * 0.01),
+                            child: ClipOval(
+                                child: Container(
+                                    color: Theme.of(context).primaryColor,
+                                    padding: const EdgeInsets.all(0),
+                                    child: const Icon(
+                                      Icons.search_rounded,
+                                      color: Colors.white,
+                                    ))),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _controller,
+                        children: [
+                          ProductList(
+                            shouldDisableScroll: true,
+                            list: (products['a2-milk']?.where((element) =>
+                                        element['name']?.toLowerCase().contains(
+                                            searchController.text
+                                                .toLowerCase()) ??
+                                        true)
+                                    // as Iterable<Map<String, String>>?
+                                    )?.toList() ??
+                                [],
+                          ),
+                          ProductList(
+                            shouldDisableScroll: true,
+                            list: (products['vegetables']?.where((element) =>
+                                        element['name']?.toLowerCase().contains(
+                                            searchController.text
+                                                .toLowerCase()) ??
+                                        true)
+                                    // as Iterable<Map<String, String>>?
+                                    )?.toList() ??
+                                [],
+                          ),
+                          ProductList(
+                            shouldDisableScroll: true,
+                            list: (products['fruits']?.where((element) =>
+                                        element['name']?.toLowerCase().contains(
+                                            searchController.text
+                                                .toLowerCase()) ??
+                                        true)
+                                    // as Iterable<Map<String, String>>?
+                                    )?.toList() ??
+                                [],
+                          ),
+                          ProductList(
+                            shouldDisableScroll: true,
+                            list: (products['ghee']?.where((element) =>
+                                        element['name']?.toLowerCase().contains(
+                                            searchController.text
+                                                .toLowerCase()) ??
+                                        true)
+                                    // as Iterable<Map<String, String>>?
+                                    )?.toList() ??
+                                [],
+                          ),
+                          ProductList(
+                            shouldDisableScroll: true,
+                            list: (products['oil']?.where((element) =>
+                                        element['name']?.toLowerCase().contains(
+                                            searchController.text
+                                                .toLowerCase()) ??
+                                        true)
+                                    // as Iterable<Map<String, String>>?
+                                    )?.toList() ??
+                                [],
+                          ),
+                          ProductList(
+                            shouldDisableScroll: true,
+                            list: (products['millets']?.where((element) =>
+                                        element['name']?.toLowerCase().contains(
+                                            searchController.text
+                                                .toLowerCase()) ??
+                                        true)
+                                    // as Iterable<Map<String, String>>?
+                                    )?.toList() ??
+                                [],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -401,18 +423,27 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
 class ProductList extends StatelessWidget {
   final List list;
   final double padding;
-  const ProductList({Key? key, required this.list, this.padding = 16})
+  final bool shouldDisableScroll;
+  const ProductList(
+      {Key? key,
+      required this.list,
+      this.padding = 16,
+      this.shouldDisableScroll = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: list.length,
+      physics:
+          shouldDisableScroll ? const NeverScrollableScrollPhysics() : null,
       itemBuilder: ((context, index) {
         return InkWell(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ProductDetails()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ProductDetails()));
           },
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: padding, vertical: 6),

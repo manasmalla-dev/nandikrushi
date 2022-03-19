@@ -20,7 +20,7 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
   @override
   void initState() {
     Timer(const Duration(milliseconds: 2000), () async {
-      log(FirebaseAuth.instance.currentUser!.uid.toString());
+      log(FirebaseAuth.instance.currentUser?.uid.toString() ?? "");
       loginPageController!.checkUser(context);
     });
     super.initState();

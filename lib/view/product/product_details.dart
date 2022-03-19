@@ -230,7 +230,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             children: [
               const Positioned(
                 top: 12,
-                child:  Icon(
+                child: Icon(
                   Icons.shopping_basket_outlined,
                   color: Colors.black,
                   size: 32,
@@ -325,8 +325,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                         style: OutlinedButton.styleFrom(
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           minimumSize: Size.zero,
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 24, vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 5),
                           side: const BorderSide(width: 1),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
