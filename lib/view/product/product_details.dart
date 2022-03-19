@@ -222,288 +222,306 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: appBarWithTitle(
-        context,
-        title: 'Brinjal',
-        suffix: Container(
-          width: 50,
-          child: Stack(
-            children: [
-              Positioned(
-                top: 12,
-                child: Icon(
-                  Icons.shopping_basket_outlined,
-                  color: Colors.black,
-                  size: 32,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            appBarWithTitle(
+              context,
+              title: 'Brinjal',
+              suffix: Container(
+                width: 50,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 12,
+                      child: Icon(
+                        Icons.shopping_basket_outlined,
+                        color: Colors.black,
+                        size: 32,
+                      ),
+                    ),
+                    Positioned(
+                      top: 4,
+                      right: 12,
+                      child: ClipOval(
+                        child: Container(
+                          width: 16,
+                          height: 16,
+                          color: Colors.red,
+                          child: Center(
+                            child: TextWidget(
+                              text: '1',
+                              color: Colors.white,
+                              size: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              Positioned(
-                top: 4,
-                right: 12,
-                child: ClipOval(
-                  child: Container(
-                    width: 16,
-                    height: 16,
-                    color: Colors.red,
-                    child: Center(
-                      child: TextWidget(
-                        text: '1',
-                        color: Colors.white,
-                        size: 12,
-                      ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: width(context) * 0.05),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: height(context) * 0.2,
+                      alignment: Alignment.center,
+                      child: Image.network(
+                          'https://resources.commerceup.io/?key=https%3A%2F%2Fprod-admin-images.s3.ap-south-1.amazonaws.com%2FpWVdUiFHtKGqyJxESltt%2Fproduct%2F30571001191.jpg&width=800&resourceKey=pWVdUiFHtKGqyJxESltt'),
                     ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: width(context) * 0.05),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: height(context) * 0.2,
-              alignment: Alignment.center,
-              child: Image.network(
-                  'https://resources.commerceup.io/?key=https%3A%2F%2Fprod-admin-images.s3.ap-south-1.amazonaws.com%2FpWVdUiFHtKGqyJxESltt%2Fproduct%2F30571001191.jpg&width=800&resourceKey=pWVdUiFHtKGqyJxESltt'),
-            ),
-            TextWidget(
-              text: 'Brinjal',
-              weight: FontWeight.w800,
-              size: height(context) * 0.035,
-            ),
-            TextWidget(
-              text: 'Vegetables',
-            ),
-            TextWidget(
-              text: '1 Kg',
-              weight: FontWeight.w700,
-              color: Colors.grey,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                TextWidget(
-                  text: "Rs.",
-                  size: height(context) * 0.027,
-                  weight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
-                ),
-                TextWidget(
-                  text: "34",
-                  size: height(context) * 0.03,
-                  weight: FontWeight.w800,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: height(context) * 0.01,
-            ),
-            Row(
-              children: [
-                FixedRatingStar(),
-                FixedRatingStar(),
-                FixedRatingStar(),
-                FixedRatingStar(
-                  value: 0.5,
-                ),
-                FixedRatingStar(
-                  value: 0,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: height(context) * 0.01,
-            ),
-            Row(
-              children: [
-                addedProductQuantity == 0
-                    ? OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          minimumSize: Size.zero,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 24, vertical: 5),
-                          side: const BorderSide(width: 1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
+                    TextWidget(
+                      text: 'Brinjal',
+                      weight: FontWeight.w800,
+                      size: height(context) * 0.035,
+                    ),
+                    TextWidget(
+                      text: 'Vegetables',
+                    ),
+                    TextWidget(
+                      text: '1 Kg',
+                      weight: FontWeight.w700,
+                      color: Colors.grey,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TextWidget(
+                          text: "Rs.",
+                          size: height(context) * 0.027,
+                          weight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            addedProductQuantity += 1;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 2),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.add,
-                                size: 14,
-                                color: Colors.black,
-                              ),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              TextWidget(
-                                  text: "Add".toUpperCase(),
-                                  weight: FontWeight.bold,
-                                  size: height(context) * 0.014),
-                            ],
-                          ),
+                        TextWidget(
+                          text: "34",
+                          size: height(context) * 0.03,
+                          weight: FontWeight.w800,
+                          color: Theme.of(context).primaryColor,
                         ),
-                      )
-                    : Row(
-                        children: [
-                          OutlinedButton(
-                            style: OutlinedButton.styleFrom(
+                      ],
+                    ),
+                    SizedBox(
+                      height: height(context) * 0.01,
+                    ),
+                    Row(
+                      children: [
+                        FixedRatingStar(),
+                        FixedRatingStar(),
+                        FixedRatingStar(),
+                        FixedRatingStar(
+                          value: 0.5,
+                        ),
+                        FixedRatingStar(
+                          value: 0,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: height(context) * 0.01,
+                    ),
+                    Row(
+                      children: [
+                        addedProductQuantity == 0
+                            ? OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 5),
+                                  side: const BorderSide(width: 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    addedProductQuantity += 1;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 2),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.add,
+                                        size: 14,
+                                        color: Colors.black,
+                                      ),
+                                      const SizedBox(
+                                        width: 6,
+                                      ),
+                                      TextWidget(
+                                          text: "Add".toUpperCase(),
+                                          weight: FontWeight.bold,
+                                          size: height(context) * 0.014),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Row(
+                                children: [
+                                  OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      minimumSize: Size.zero,
+                                      padding: EdgeInsets.all(5),
+                                      side: const BorderSide(width: 1),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        addedProductQuantity += 1;
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(2),
+                                      child: const Icon(
+                                        Icons.add,
+                                        size: 14,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width(context) * 0.05,
+                                  ),
+                                  TextWidget(
+                                      text: "$addedProductQuantity",
+                                      weight: FontWeight.bold,
+                                      size: height(context) * 0.02),
+                                  SizedBox(
+                                    width: width(context) * 0.05,
+                                  ),
+                                  OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      minimumSize: Size.zero,
+                                      padding: EdgeInsets.all(5),
+                                      side: const BorderSide(width: 1),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        addedProductQuantity -= 1;
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(2),
+                                      child: const Icon(
+                                        Icons.remove_rounded,
+                                        size: 14,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                        SizedBox(
+                          width: width(context) * 0.05,
+                        ),
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              minimumSize: Size.zero,
-                              padding: EdgeInsets.all(5),
-                              side: const BorderSide(width: 1),
+                              minimumSize: Size.zero, // Set this
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 5), // and this
+                              side: BorderSide(
+                                  width: 1,
+                                  color: Theme.of(context).primaryColor),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                addedProductQuantity += 1;
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: const Icon(
-                                Icons.add,
-                                size: 14,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: width(context) * 0.05,
-                          ),
-                          TextWidget(
-                              text: "$addedProductQuantity",
+                                  borderRadius: BorderRadius.circular(100))),
+                          onPressed: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 2),
+                            child: TextWidget(
+                              text: "Contact".toUpperCase(),
+                              size: height(context) * 0.014,
                               weight: FontWeight.bold,
-                              size: height(context) * 0.02),
-                          SizedBox(
-                            width: width(context) * 0.05,
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
-                          OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              minimumSize: Size.zero,
-                              padding: EdgeInsets.all(5),
-                              side: const BorderSide(width: 1),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                addedProductQuantity -= 1;
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: const Icon(
-                                Icons.remove_rounded,
-                                size: 14,
-                                color: Colors.black,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                SizedBox(
-                  width: width(context) * 0.05,
-                ),
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      minimumSize: Size.zero, // Set this
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 5), // and this
-                      side: BorderSide(
-                          width: 1, color: Theme.of(context).primaryColor),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100))),
-                  onPressed: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 2),
-                    child: TextWidget(
-                      text: "Contact".toUpperCase(),
-                      size: height(context) * 0.014,
-                      weight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
+                        ),
+                      ],
                     ),
-                  ),
+                    SizedBox(
+                      height: height(context) * 0.01,
+                    ),
+                    TextWidget(
+                      text: 'Product Description',
+                      weight: FontWeight.w800,
+                    ),
+                    TextWidget(
+                        text:
+                            'Deep purple and oval shaped bottle brinjals are glossy skinned vegetables with a white and ....',
+                        flow: TextOverflow.visible),
+                    SizedBox(
+                      height: height(context) * 0.01,
+                    ),
+                    TextWidget(
+                      text: 'Farmer Details',
+                      weight: FontWeight.w800,
+                      size: 18,
+                    ),
+                    TextWidget(
+                      text: 'Farmer Name: Rahul Varma',
+                      weight: FontWeight.w500,
+                    ),
+                    TextWidget(
+                      text: 'Location : Paravada, Visakhapatnam. ',
+                      weight: FontWeight.w500,
+                    ),
+                    Row(
+                      children: [
+                        TextWidget(
+                          text: 'Certification : ',
+                          weight: FontWeight.w500,
+                        ),
+                        TextWidget(
+                          text: 'Self Declared National Farmer.',
+                          weight: FontWeight.w500,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: height(context) * 0.01,
+                    ),
+                    Divider(
+                      thickness: 1,
+                    ),
+                    TextWidget(
+                      text: 'More Farmer Products'.toUpperCase(),
+                      weight: FontWeight.w800,
+                      size: 16,
+                    ),
+                    SizedBox(
+                      height: (height(context) * 0.16 + 24) *
+                          (products['fruits']?.length ?? 0),
+                      child: ProductList(
+                        shouldDisableScroll: true,
+                        list: products['fruits'] ?? [],
+                        padding: 0,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            SizedBox(
-              height: height(context) * 0.01,
-            ),
-            TextWidget(
-              text: 'Product Description',
-              weight: FontWeight.w800,
-            ),
-            TextWidget(
-                text:
-                    'Deep purple and oval shaped bottle brinjals are glossy skinned vegetables with a white and ....',
-                flow: TextOverflow.visible),
-            SizedBox(
-              height: height(context) * 0.01,
-            ),
-            TextWidget(
-              text: 'Farmer Details',
-              weight: FontWeight.w800,
-              size: 18,
-            ),
-            TextWidget(
-              text: 'Farmer Name: Rahul Varma',
-              weight: FontWeight.w500,
-            ),
-            TextWidget(
-              text: 'Location : Paravada, Visakhapatnam. ',
-              weight: FontWeight.w500,
-            ),
-            Row(
-              children: [
-                TextWidget(
-                  text: 'Certification : ',
-                  weight: FontWeight.w500,
-                ),
-                TextWidget(
-                  text: 'Self Declared National Farmer.',
-                  weight: FontWeight.w500,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: height(context) * 0.01,
-            ),
-            Divider(
-              thickness: 1,
-            ),
-            TextWidget(
-              text: 'More Farmer Products'.toUpperCase(),
-              weight: FontWeight.w800,
-              size: 16,
-            ),
-            Expanded(
-              child: ProductList(
-                list: products['fruits'] ?? [],
-                padding: 0,
               ),
             ),
           ],
