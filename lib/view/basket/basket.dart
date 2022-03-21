@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
+import 'package:nandikrushifarmer/view/basket/confirm_order.dart';
 
 class Basket extends StatefulWidget {
   const Basket({Key? key}) : super(key: key);
@@ -13,19 +15,17 @@ class _BasketState extends State<Basket> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: TextWidget(
-          text: "Basket",
-          color: Colors.grey[900],
-          size: width(context) * 0.065,
-          weight: FontWeight.w600,
-        ),
-        leading: Icon(
-          Icons.shopping_basket,
-          color: Colors.grey[900],
-        ),
+      appBar: appBarWithTitle(context,
+          title: 'Basket', prefix: Icons.shopping_basket_rounded),
+      body: Center(
+        child: FlatButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ConfirmOrderScreen()));
+            },
+            child: Text("ConfirmOrder")),
       ),
     );
   }

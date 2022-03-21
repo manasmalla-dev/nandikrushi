@@ -19,7 +19,7 @@ appbar(
 }
 
 appBarWithTitle(BuildContext context,
-    {String? title, Color? color, Widget? suffix}) {
+    {String? title, Color? color, Widget? suffix, IconData? prefix}) {
   return AppBar(
     backgroundColor: color ?? Colors.white,
     elevation: 0,
@@ -28,7 +28,7 @@ appBarWithTitle(BuildContext context,
           Navigator.pop(context);
         },
         icon: Icon(
-          Icons.arrow_back,
+          prefix ?? Icons.arrow_back,
           color: Colors.grey[900],
         )),
     actions: [suffix ?? const SizedBox()],
