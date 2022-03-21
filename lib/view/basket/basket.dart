@@ -40,7 +40,7 @@ class _BasketState extends State<Basket> {
             bgColor: Colors.grey.shade200,
             textColor: Colors.grey.shade700,
             textStyle: FontWeight.bold,
-            buttonName: "Confirm Order",
+            buttonName: "Confirm Order".toUpperCase(),
             textSize: width(context) * 0.04,
             trailingIcon: Icon(
               Icons.arrow_forward,

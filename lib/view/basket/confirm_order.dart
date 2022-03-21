@@ -86,14 +86,15 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                       text:
                           'Rs. ${(items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                 (value, element) => value + element,
-                              ))?.toStringAsFixed(2)}',
+                              ) + 100)?.toStringAsFixed(2)}',
                       size: height(context) * 0.035,
                       color: Theme.of(context).primaryColor,
                       weight: FontWeight.w700,
                     ),
                     TextWidget(
                       text:
-                          'You have chosen to pay for this \norder on Delivery',
+                          'You have chosen to pay for this order ${radioState ? 'online' : 'on delivery'}',
+                      flow: TextOverflow.visible,
                     ),
                     SizedBox(
                       height: 8,
@@ -307,7 +308,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                         size: height(context) * 0.022,
                       ),
                       TextWidget(
-                        text: 'Rs. 00.00',
+                        text: 'Rs. 100.00',
                         weight: FontWeight.w700,
                         size: height(context) * 0.022,
                       ),
@@ -315,9 +316,10 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                   ),
                   TextWidget(
                     text:
-                        '!  Add items for Rs.300.00 or more to avoide Delivery Charges',
+                        '!  Add items for Rs.300.00 or more to avoid Delivery Charges',
                     color: Colors.red,
                     size: height(context) * 0.012,
+                    weight: FontWeight.bold,
                   ),
                   Divider(),
                   SizedBox(
@@ -335,7 +337,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                         text:
                             'Rs. ${(items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                   (value, element) => value + element,
-                                ))?.toStringAsFixed(2)}',
+                                ) + 100.00)?.toStringAsFixed(2)}',
                         weight: FontWeight.w700,
                         size: height(context) * 0.022,
                       ),
@@ -460,7 +462,10 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                                     .primaryColor
                                     .withOpacity(0.7)),
                         TextWidget(
-                          text: '15',
+                          text: DateTime.now()
+                              .add(Duration(days: (index / 2).toInt()))
+                              .day
+                              .toString(),
                           color: index == selectedIndex
                               ? Colors.white
                               : Theme.of(context).primaryColor.withOpacity(0.7),
@@ -468,7 +473,9 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                           weight: FontWeight.w800,
                         ),
                         TextWidget(
-                            text: '7 AM - 11 AM',
+                            text: index % 2 == 0
+                                ? '7 AM - 11 AM'
+                                : '11 AM - 3 PM',
                             color: index == selectedIndex
                                 ? Colors.white
                                 : Theme.of(context)
