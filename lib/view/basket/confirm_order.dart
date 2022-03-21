@@ -380,7 +380,10 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                     bgColor: Theme.of(context).primaryColor,
                     allRadius: true,
                     leadingIcon: Icon(Icons.arrow_forward_rounded),
-                    buttonName: 'PAY Rs. 4500 ON DELIVERY',
+                    buttonName:
+                        'PAY Rs. ${(items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                              (value, element) => value + element,
+                            ) + 100.00)?.toStringAsFixed(0)} ON DELIVERY',
                     textColor: Colors.white,
                     textSize: height(context) * 0.02,
                     textStyle: FontWeight.w800,
