@@ -19,7 +19,7 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   PageController pageController = PageController(initialPage: 0);
-  var acresInInt = 0.0;
+  var acresInInt = 1.0;
   var checkBoxStates = [true, false, false, false, false, false];
   var user = User();
   var formControllers = {
@@ -344,24 +344,33 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         SizedBox(
                                           height: height(context) * 0.02,
                                         ),
-                                        Slider(
-                                            divisions: 100,
-                                            thumbColor: const Color(0xFF006838),
-                                            activeColor:
-                                                const Color(0xFF006838),
-                                            inactiveColor:
-                                                const Color(0x16006838),
-                                            value: acresInInt,
-                                            max: 30,
-                                            min: 1,
-                                            label:
-                                                (acresInInt).round().toString(),
-                                            // ignore: avoid_types_as_parameter_names
-                                            onChanged: (num) {
-                                              setState(() {
-                                                acresInInt = num;
-                                              });
-                                            }),
+                                        SliderTheme(
+                                          data: const SliderThemeData(
+                                              activeTickMarkColor: Colors.white,
+                                              inactiveTickMarkColor:
+                                                  Colors.white),
+                                          child: Slider(
+                                              divisions: 30,
+                                              thumbColor:
+                                                  const Color(0xFF006838),
+                                              activeColor:
+                                                  const Color(0xFF006838),
+                                              inactiveColor:
+                                                  const Color(0x16006838),
+                                              value: acresInInt,
+                                              max: 30,
+                                              min: 1,
+                                              label: (acresInInt)
+                                                  .round()
+                                                  .toString(),
+                                              // ignore: avoid_types_as_parameter_names
+                                              onChanged: (num) {
+                                                log("$num");
+                                                setState(() {
+                                                  acresInInt = num;
+                                                });
+                                              }),
+                                        ),
                                         SizedBox(
                                           height: height(context) * 0.02,
                                         ),
