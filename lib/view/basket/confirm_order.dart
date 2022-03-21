@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
@@ -458,7 +459,15 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         TextWidget(
-                            text: 'WED, SEP',
+                            text: DateFormat('EEE, MMM')
+                                .format(
+                                  DateTime.now().add(
+                                    Duration(
+                                      days: (index / 2).toInt(),
+                                    ),
+                                  ),
+                                )
+                                .toUpperCase(),
                             color: index == selectedIndex
                                 ? Colors.white
                                 : Theme.of(context)
