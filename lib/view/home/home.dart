@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/videos/videos.dart';
+import 'package:nandikrushifarmer/view/basket/confirm_order.dart';
 import 'package:nandikrushifarmer/view/order/orders.dart';
 import 'package:nandikrushifarmer/view/order/purchases.dart';
 import 'package:nandikrushifarmer/view/product/add_product.dart';

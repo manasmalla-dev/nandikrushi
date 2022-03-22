@@ -88,10 +88,11 @@ class ElevatedButtonWidget extends StatelessWidget {
                 children: [
                   if (leadingIcon != null) buildLeadingIcon(leadingIcon),
                   if (center == true) buildLeadingIcon(leadingIcon),
-                  Text(
-                    buttonName ?? 'Button',
-                    style: fonts(textSize ?? 10.0, textStyle ?? FontWeight.w600,
-                        textColor ?? Colors.black),
+                  TextWidget(
+                    text: buttonName ?? 'Button',
+                    size: textSize ?? 10.0,
+                    weight: textStyle ?? FontWeight.w600,
+                    color: textColor ?? Colors.black,
                   ),
                   if (trailingIcon != null) buildTrailingIcon(trailingIcon),
                   if (center == true) buildLeadingIcon(leadingIcon),
