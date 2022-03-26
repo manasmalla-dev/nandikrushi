@@ -43,6 +43,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         itemCount: 2,
         itemBuilder: (context, pageIndex) {

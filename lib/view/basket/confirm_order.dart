@@ -87,7 +87,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                       text:
                           'Rs. ${(items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                 (value, element) => value + element,
-                              ) + 100)?.toStringAsFixed(2)}',
+                              ) + 100).toStringAsFixed(2)}',
                       size: height(context) * 0.035,
                       color: Theme.of(context).primaryColor,
                       weight: FontWeight.w700,
