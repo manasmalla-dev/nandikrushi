@@ -44,7 +44,8 @@ class _BasketState extends State<Basket> {
               '${items.map((e) => int.tryParse(e['quantity'] ?? "0") ?? 0).reduce((value, element) => value + element)} items'),
       body: Column(
         children: [
-          Expanded(
+          Container(
+            height: items.length * height(context) * 0.15,
             child: CartItems(
               items: items,
               onRemoveItem: (index) {
@@ -61,6 +62,93 @@ class _BasketState extends State<Basket> {
                           .toString();
                 });
               },
+            ),
+          ),
+          Divider(),
+          Padding(
+            padding: EdgeInsets.only(
+                bottom: height(context) * 0.015,
+                left: width(context) * 0.05,
+                right: width(context) * 0.05),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextWidget(
+                  text: 'Delivery Charge',
+                  weight: FontWeight.w700,
+                  size: height(context) * 0.022,
+                ),
+                TextWidget(
+                  text: (4000 -
+                              (items
+                                  .map((e) =>
+                                      (double.tryParse(e['price'] ?? "0") ??
+                                          0) *
+                                      (double.tryParse(e['quantity'] ?? "0") ??
+                                          0))
+                                  .reduce(
+                                    (value, element) => value + element,
+                                  ))) <=
+                          0
+                      ? 'N/A'
+                      : 'Rs. 100.00',
+                  weight: FontWeight.w700,
+                  size: height(context) * 0.022,
+                ),
+              ],
+            ),
+          ),
+          (4000 -
+                      (items
+                          .map((e) =>
+                              (double.tryParse(e['price'] ?? "0") ?? 0) *
+                              (double.tryParse(e['quantity'] ?? "0") ?? 0))
+                          .reduce(
+                            (value, element) => value + element,
+                          ))) <=
+                  0
+              ? SizedBox()
+              : SizedBox(
+                  width: width(context) * 0.9,
+                  height: height(context) * 0.02,
+                  child: TextWidget(
+                    text: '!  Add items for Rs.${(4000 - (items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                          (value, element) => value + element,
+                        ) + 100.00))?.toStringAsFixed(2)} or more to avoid Delivery Charges',
+                    color: Colors.red,
+                    size: height(context) * 0.012,
+                    weight: FontWeight.bold,
+                  ),
+                ),
+          Divider(),
+          SizedBox(
+            height: height(context) * 0.01,
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(
+                  bottom: height(context) * 0.015,
+                  left: width(context) * 0.05,
+                  right: width(context) * 0.05),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    text: 'Total'.toUpperCase(),
+                    weight: FontWeight.w800,
+                    size: height(context) * 0.022,
+                  ),
+                  TextWidget(
+                    text:
+                        'Rs. ${(items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                              (value, element) => value + element,
+                            ) + 100.00)?.toStringAsFixed(2)}',
+                    weight: FontWeight.w700,
+                    size: height(context) * 0.022,
+                  ),
+                ],
+              ),
             ),
           ),
           Padding(
