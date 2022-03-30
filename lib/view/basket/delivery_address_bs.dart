@@ -6,11 +6,10 @@ import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/view/basket/add_address.dart';
+import 'package:nandikrushifarmer/view/basket/confirm_order.dart';
 import 'package:nandikrushifarmer/view/product/product_details.dart';
 
-Future orderPlacementFlowBS(
-  BuildContext context,
-) {
+Future orderPlacementFlowBS(BuildContext context, {int userInitialPage = 0}) {
   return showModalBottomSheet(
     context: context,
     elevation: 22,
@@ -23,7 +22,7 @@ Future orderPlacementFlowBS(
     ),
     builder: (context) {
       var pageController = PageController(
-        initialPage: 0,
+        initialPage: userInitialPage,
       );
       var items = [
         {
@@ -72,9 +71,11 @@ Future orderPlacementFlowBS(
                             onPrefixClicked: () {
                           pageIndex == 0
                               ? Navigator.of(context).pop()
-                              : pageController.animateToPage(0,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut);
+                              : userInitialPage == 1
+                                  ? Navigator.of(context).pop()
+                                  : pageController.animateToPage(0,
+                                      duration: const Duration(milliseconds: 300),
+                                      curve: Curves.easeInOut);
                         },
                             subtitle: pageIndex == 0
                                 ? '${items.map((e) => int.tryParse(e['quantity'] ?? "0") ?? 0).reduce((value, element) => value + element)} items'
@@ -167,9 +168,19 @@ Future orderPlacementFlowBS(
                         ElevatedButtonWidget(
                           borderRadius: 8,
                           onClick: () {
-                            pageController.animateToPage(1,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut);
+                            if (pageIndex == 0) {
+                              pageController.animateToPage(1,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut);
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: ((context) =>
+                                      const ConfirmOrderScreen()),
+                                ),
+                              );
+                            }
                           },
                           minWidth: width(context),
                           height: height(context) * 0.06,
