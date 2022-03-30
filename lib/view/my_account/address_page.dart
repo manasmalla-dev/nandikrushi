@@ -27,10 +27,8 @@ class _AddressScreenState extends State<AddressScreen> {
                   builder: (context) => AddAddressScreen(
                     onSaveAddress: (list) {
                       setState(() {
-                        print('Helo');
                         addresses.add(list);
                         Navigator.of(context).pop();
-                        print(addresses);
                       });
                     },
                   ),
@@ -47,7 +45,7 @@ class _AddressScreenState extends State<AddressScreen> {
                     Icons.add_rounded,
                     color: Colors.blue.shade700,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   TextWidget(
@@ -68,7 +66,6 @@ class _AddressScreenState extends State<AddressScreen> {
                 addresses: addresses,
                 onAddAddress: (list) {
                   setState(() {
-                    print('Helo');
                     addresses.add(list);
                     Navigator.of(context).pop();
                   });

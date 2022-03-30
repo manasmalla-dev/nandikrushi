@@ -216,13 +216,13 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                   child: ElevatedButtonWidget(
                     onClick: () {
                       var checkingControllersNull = true;
-                      List<String> address_list = [];
+                      List<String> addressList = [];
                       for (var controller in formControllers.values) {
                         log('CHECKING: ${controller.text.isEmpty}');
                         if (controller.text.isEmpty) {
                           checkingControllersNull = false;
                         } else {
-                          address_list.add(controller.text);
+                          addressList.add(controller.text);
                         }
                       }
                       log(checkingControllersNull.toString());
@@ -232,16 +232,15 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       log(shouldCheckOtherController.toString());
                       if (checkingControllersNull &&
                           shouldCheckOtherController) {
-                        print("NO NULL");
-                        address_list.insert(4, "1234567890");
-                        address_list.insert(
+                        addressList.insert(4, "1234567890");
+                        addressList.insert(
                             0,
                             chipSelection == 0
                                 ? "Home"
                                 : chipSelection == 1
                                     ? "Store"
                                     : otherController.text.toString());
-                        widget.onSaveAddress(address_list);
+                        widget.onSaveAddress(addressList);
                       }
                     },
                     minWidth: width(context) * 0.9,

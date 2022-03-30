@@ -50,7 +50,7 @@ Future orderPlacementFlowBS(BuildContext context, {int userInitialPage = 0}) {
         builder: (context, setState) {
           return ClipRRect(
             borderRadius: const BorderRadius.vertical(
-              top:  Radius.circular(20),
+              top: Radius.circular(20),
             ),
             child: SizedBox(
               height: height(context) * 0.7,
@@ -74,7 +74,8 @@ Future orderPlacementFlowBS(BuildContext context, {int userInitialPage = 0}) {
                               : userInitialPage == 1
                                   ? Navigator.of(context).pop()
                                   : pageController.animateToPage(0,
-                                      duration: const Duration(milliseconds: 300),
+                                      duration:
+                                          const Duration(milliseconds: 300),
                                       curve: Curves.easeInOut);
                         },
                             subtitle: pageIndex == 0
@@ -427,7 +428,8 @@ class DeliveryAddressesList extends StatelessWidget {
       child: addresses.isEmpty
           ? Column(
               children: [
-                const Image(image:  AssetImage('assets/png/delivery_address.png')),
+                const Image(
+                    image: AssetImage('assets/png/delivery_address.png')),
                 SizedBox(
                   height: height(context) * 0.02,
                 ),
@@ -480,7 +482,7 @@ class DeliveryAddressesList extends StatelessWidget {
             )
           : ListView.separated(
               separatorBuilder: (context, _) {
-                return Divider();
+                return const Divider();
               },
               itemCount: addresses.length,
               itemBuilder: (context, item) {
@@ -504,7 +506,7 @@ class DeliveryAddressesList extends StatelessWidget {
                                       size: height(context) * 0.03,
                                     ),
                                   )
-                                : AddressRow(index - 1, addresses[item][index],
+                                : addressRow(index - 1, addresses[item][index],
                                     height(context) * 0.017);
                           }),
                           itemCount: addresses[item].length,
@@ -515,7 +517,7 @@ class DeliveryAddressesList extends StatelessWidget {
                             vertical: height(context) * 0.01),
                         child: IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.edit_rounded),
+                          icon: const Icon(Icons.edit_rounded),
                         ),
                       ),
                       Padding(
@@ -526,7 +528,7 @@ class DeliveryAddressesList extends StatelessWidget {
                             onDeleteAddress(item);
                           },
                           color: Colors.red.shade300,
-                          icon: Icon(Icons.delete_rounded),
+                          icon: const Icon(Icons.delete_rounded),
                         ),
                       ),
                     ],
@@ -538,7 +540,7 @@ class DeliveryAddressesList extends StatelessWidget {
   }
 }
 
-Widget AddressRow(int index, String addres, double size) {
+Widget addressRow(int index, String addres, double size) {
   var title = '';
   switch (index) {
     case 0:

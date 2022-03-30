@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               IconButton(
                 iconSize: height(context) * 0.1,
-                color: Color(0xFF3da894),
+                color: const Color(0xFF3da894),
                 onPressed: () {
                   log("Hello");
                 },
@@ -235,7 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 width: double.infinity,
                 child: ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: 6,
                     itemBuilder: (context, index) {
                       return InkWell(
@@ -376,7 +376,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: height(context) * 0.06,
                   borderRadius: 8,
                   allRadius: true,
-                  bgColor: Color(0xFF368b86),
+                  bgColor: const Color(0xFF368b86),
                   textColor: Colors.white,
                   buttonName: "Update".toUpperCase(),
                   innerPadding: 0.02,
