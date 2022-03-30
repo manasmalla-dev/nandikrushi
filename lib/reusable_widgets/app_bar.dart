@@ -55,7 +55,7 @@ appBarWithTitle(BuildContext context,
                 color: Colors.grey[900],
                 weight: FontWeight.w500,
               )
-            : SizedBox(),
+            : const SizedBox(),
       ],
     ),
   );

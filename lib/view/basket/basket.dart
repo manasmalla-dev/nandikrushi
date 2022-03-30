@@ -3,7 +3,6 @@ import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
-import 'package:nandikrushifarmer/view/basket/confirm_order.dart';
 import 'package:nandikrushifarmer/view/basket/delivery_address_bs.dart';
 
 class Basket extends StatefulWidget {
@@ -44,7 +43,7 @@ class _BasketState extends State<Basket> {
               '${items.map((e) => int.tryParse(e['quantity'] ?? "0") ?? 0).reduce((value, element) => value + element)} items'),
       body: Column(
         children: [
-          Container(
+          SizedBox(
             height: items.length * height(context) * 0.15,
             child: CartItems(
               items: items,
@@ -64,7 +63,7 @@ class _BasketState extends State<Basket> {
               },
             ),
           ),
-          Divider(),
+          const Divider(),
           Padding(
             padding: EdgeInsets.only(
                 bottom: height(context) * 0.015,
@@ -107,20 +106,20 @@ class _BasketState extends State<Basket> {
                             (value, element) => value + element,
                           ))) <=
                   0
-              ? SizedBox()
+              ? const SizedBox()
               : SizedBox(
                   width: width(context) * 0.9,
                   height: height(context) * 0.02,
                   child: TextWidget(
                     text: '!  Add items for Rs.${(4000 - (items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                           (value, element) => value + element,
-                        ) + 100.00))?.toStringAsFixed(2)} or more to avoid Delivery Charges',
+                        ) + 100.00)).toStringAsFixed(2)} or more to avoid Delivery Charges',
                     color: Colors.red,
                     size: height(context) * 0.012,
                     weight: FontWeight.bold,
                   ),
                 ),
-          Divider(),
+          const Divider(),
           SizedBox(
             height: height(context) * 0.01,
           ),
@@ -143,7 +142,7 @@ class _BasketState extends State<Basket> {
                     text:
                         'Rs. ${(items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                               (value, element) => value + element,
-                            ) + 100.00)?.toStringAsFixed(2)}',
+                            ) + 100.00).toStringAsFixed(2)}',
                     weight: FontWeight.w700,
                     size: height(context) * 0.022,
                   ),

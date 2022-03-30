@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
-import 'package:nandikrushifarmer/view/home/home.dart';
 import 'package:nandikrushifarmer/view/login/nav_bar.dart';
 
 class OrderSuccessfulScreen extends StatefulWidget {
@@ -18,16 +17,16 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
     return Scaffold(
       body: Column(
         children: [
-          Expanded(
+          const Expanded(
             flex: 3,
-            child: Image(
+            child:  Image(
               image: AssetImage('assets/png/order_success.png'),
             ),
           ),
           Container(
             width: double.infinity,
-            color: Color(0xFFEFE8CC),
-            padding: EdgeInsets.all(16),
+            color: const Color(0xFFEFE8CC),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -58,7 +57,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                   weight: FontWeight.w800,
                   size: height(context) * 0.02,
                 ),
-                Divider(),
+                const Divider(),
                 TextWidget(
                   text:
                       'Order Number: xxxxxxxxxx\nDelivery Slot : Thu, 16 Sep(07:00AM - 11:00AM)',
@@ -103,7 +102,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
               ],
             ),
           ),
-          Expanded(
+          const Expanded(
             flex: 2,
             child: SizedBox(),
           )

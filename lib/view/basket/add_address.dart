@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
@@ -136,11 +138,11 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       backgroundColor: chipSelection == 0
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).primaryColor.withOpacity(0.5),
-                      avatar: Icon(
+                      avatar: const Icon(
                         Icons.home_rounded,
                         color: Colors.white,
                       ),
-                      label: TextWidget(
+                      label: const TextWidget(
                         text: 'Home',
                         color: Colors.white,
                       ),
@@ -156,11 +158,11 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       backgroundColor: chipSelection == 1
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).primaryColor.withOpacity(0.5),
-                      avatar: Icon(
+                      avatar: const Icon(
                         Icons.home_rounded,
                         color: Colors.white,
                       ),
-                      label: TextWidget(
+                      label: const TextWidget(
                         text: 'Office',
                         color: Colors.white,
                       ),
@@ -178,17 +180,17 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                           backgroundColor: chipSelection == 2
                               ? Theme.of(context).primaryColor
                               : Theme.of(context).primaryColor.withOpacity(0.5),
-                          avatar: Icon(
+                          avatar: const Icon(
                             Icons.home_rounded,
                             color: Colors.white,
                           ),
-                          label: TextWidget(
+                          label: const TextWidget(
                             text: 'Other',
                             color: Colors.white,
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       ),
                       AnimatedContainer(
@@ -216,18 +218,18 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       var checkingControllersNull = true;
                       List<String> address_list = [];
                       for (var controller in formControllers.values) {
-                        print('CHECKING: ${controller.text.isEmpty}');
+                        log('CHECKING: ${controller.text.isEmpty}');
                         if (controller.text.isEmpty) {
                           checkingControllersNull = false;
                         } else {
                           address_list.add(controller.text);
                         }
                       }
-                      print(checkingControllersNull.toString());
+                      log(checkingControllersNull.toString());
                       var shouldCheckOtherController = chipSelection == 2
                           ? otherController.text.isNotEmpty
                           : true;
-                      print(shouldCheckOtherController.toString());
+                      log(shouldCheckOtherController.toString());
                       if (checkingControllersNull &&
                           shouldCheckOtherController) {
                         print("NO NULL");
