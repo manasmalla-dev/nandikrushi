@@ -1,11 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/view/basket/add_address.dart';
-import 'package:nandikrushifarmer/view/basket/confirm_order.dart';
-import 'package:nandikrushifarmer/view/product/add_product.dart';
 import 'package:nandikrushifarmer/view/product/product_details.dart';
 
 Future orderPlacementFlowBS(
@@ -50,14 +50,14 @@ Future orderPlacementFlowBS(
       return StatefulBuilder(
         builder: (context, setState) {
           return ClipRRect(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(20),
+            borderRadius: const BorderRadius.vertical(
+              top:  Radius.circular(20),
             ),
             child: SizedBox(
               height: height(context) * 0.7,
               child: PageView.builder(
                   controller: pageController,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: 2,
                   itemBuilder: (context, pageIndex) {
                     return Column(
@@ -73,7 +73,7 @@ Future orderPlacementFlowBS(
                           pageIndex == 0
                               ? Navigator.of(context).pop()
                               : pageController.animateToPage(0,
-                                  duration: Duration(milliseconds: 300),
+                                  duration: const Duration(milliseconds: 300),
                                   curve: Curves.easeInOut);
                         },
                             subtitle: pageIndex == 0
@@ -90,10 +90,10 @@ Future orderPlacementFlowBS(
                                               AddAddressScreen(
                                             onSaveAddress: (list) {
                                               setState(() {
-                                                print('Helo');
+                                                log('Helo');
                                                 addresses.add(list);
                                                 Navigator.of(context).pop();
-                                                print(addresses);
+                                                log(addresses.toString());
                                               });
                                             },
                                           ),
@@ -111,7 +111,7 @@ Future orderPlacementFlowBS(
                                             Icons.add_rounded,
                                             color: Colors.blue.shade700,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 8,
                                           ),
                                           TextWidget(
@@ -125,7 +125,7 @@ Future orderPlacementFlowBS(
                                     ),
                                   )
                                 : null),
-                        Divider(),
+                        const Divider(),
                         Expanded(
                           child: pageIndex == 0
                               ? CartItems(
@@ -157,7 +157,7 @@ Future orderPlacementFlowBS(
                                   addresses: addresses,
                                   onAddAddress: (list) {
                                     setState(() {
-                                      print('Helo');
+                                      log('Helo');
                                       addresses.add(list);
                                       Navigator.of(context).pop();
                                     });
@@ -168,7 +168,7 @@ Future orderPlacementFlowBS(
                           borderRadius: 8,
                           onClick: () {
                             pageController.animateToPage(1,
-                                duration: Duration(milliseconds: 300),
+                                duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOut);
                           },
                           minWidth: width(context),
@@ -232,7 +232,7 @@ class CartItems extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: ((context, index) {
-        return Divider();
+        return const Divider();
       }),
       itemCount: items.length,
       physics: const NeverScrollableScrollPhysics(),
@@ -245,7 +245,7 @@ class CartItems extends StatelessWidget {
                     builder: (context) => const ProductDetails()));
           },
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             child: SizedBox(
               height: height(context) * 0.12,
               child: Column(
@@ -401,13 +401,13 @@ class DeliveryAddressesList extends StatelessWidget {
   final Function(List<String>) onAddAddress;
   @override
   Widget build(BuildContext context) {
-    print('redrawn');
-    print(addresses);
+    log('redrawn');
+    log(addresses.toString());
     return Container(
       child: addresses.isEmpty
           ? Column(
               children: [
-                Image(image: AssetImage('assets/png/delivery_address.png')),
+                const Image(image:  AssetImage('assets/png/delivery_address.png')),
                 SizedBox(
                   height: height(context) * 0.02,
                 ),
@@ -438,7 +438,7 @@ class DeliveryAddressesList extends StatelessWidget {
                   child: ElevatedButtonWidget(
                     bgColor: Theme.of(context).primaryColor,
                     allRadius: true,
-                    trailingIcon: Icon(Icons.add_rounded),
+                    trailingIcon: const Icon(Icons.add_rounded),
                     buttonName: 'Add Address'.toUpperCase(),
                     textColor: Colors.white,
                     textSize: height(context) * 0.02,
