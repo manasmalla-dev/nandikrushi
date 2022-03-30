@@ -7,6 +7,7 @@ class TextFieldWidget extends StatelessWidget {
   final String? text;
   final String? hint;
   final String? validateMsg;
+  final bool showCounter;
   final TextInputType? keyBoardType;
   final double? borderRadius;
   final Color? bordercolor;
@@ -48,6 +49,7 @@ class TextFieldWidget extends StatelessWidget {
       this.postIcon,
       this.postIconColor,
       this.focus,
+      this.showCounter = false,
       this.focusBorderColor,
       this.focusBorderRadius,
       this.enableBorderColor,
@@ -96,10 +98,10 @@ class TextFieldWidget extends StatelessWidget {
               )
             : null,
         contentPadding: EdgeInsets.symmetric(vertical: height(context) * 0.01),
-        counterText: '',
+        counterText: showCounter ? null : '',
         isDense: true,
         focusedBorder: const UnderlineInputBorder(
-            borderSide:  BorderSide(color: Color(0xFF006838))),
+            borderSide: BorderSide(color: Color(0xFF006838))),
         border: UnderlineInputBorder(
             borderSide: BorderSide(
               color: bordercolor ?? Colors.grey.shade500,
