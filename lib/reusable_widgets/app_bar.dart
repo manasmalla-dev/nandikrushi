@@ -19,24 +19,44 @@ appbar(
 }
 
 appBarWithTitle(BuildContext context,
-    {String? title, Color? color, Widget? suffix, IconData? prefix}) {
+    {String? title,
+    String? subtitle,
+    double? toolbarHeight,
+    Color? color,
+    Widget? suffix,
+    IconData? prefix,
+    Function? onPrefixClicked}) {
   return AppBar(
+    toolbarHeight: toolbarHeight ?? kToolbarHeight,
     backgroundColor: color ?? Colors.white,
     elevation: 0,
     leading: IconButton(
         onPressed: () {
-          Navigator.pop(context);
+          onPrefixClicked != null ? onPrefixClicked() : Navigator.pop(context);
         },
         icon: Icon(
           prefix ?? Icons.arrow_back,
           color: Colors.grey[900],
         )),
     actions: [suffix ?? const SizedBox()],
-    title: TextWidget(
-      text: title,
-      size: width(context) * 0.045,
-      color: Colors.grey[900],
-      weight: FontWeight.w700,
+    title: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextWidget(
+          text: title,
+          size: width(context) * 0.045,
+          color: Colors.grey[900],
+          weight: FontWeight.w700,
+        ),
+        subtitle != null
+            ? TextWidget(
+                text: subtitle,
+                size: width(context) * 0.04,
+                color: Colors.grey[900],
+                weight: FontWeight.w500,
+              )
+            : const SizedBox(),
+      ],
     ),
   );
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
+import 'package:nandikrushifarmer/view/basket/delivery_address_bs.dart';
 import 'package:nandikrushifarmer/view/search/search.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -224,37 +225,42 @@ class _ProductDetailsState extends State<ProductDetails> {
       appBar: appBarWithTitle(
         context,
         title: 'Brinjal',
-        suffix: SizedBox(
-          width: 50,
-          child: Stack(
-            children: [
-              const Positioned(
-                top: 12,
-                child: Icon(
-                  Icons.shopping_basket_outlined,
-                  color: Colors.black,
-                  size: 32,
+        suffix: InkWell(
+          onTap: () {
+            orderPlacementFlowBS(context);
+          },
+          child: SizedBox(
+            width: 50,
+            child: Stack(
+              children: [
+                const Positioned(
+                  top: 12,
+                  child: Icon(
+                    Icons.shopping_basket_outlined,
+                    color: Colors.black,
+                    size: 32,
+                  ),
                 ),
-              ),
-              Positioned(
-                top: 4,
-                right: 12,
-                child: ClipOval(
-                  child: Container(
-                    width: 16,
-                    height: 16,
-                    color: Colors.red,
-                    child: const Center(
-                      child: TextWidget(
-                        text: '1',
-                        color: Colors.white,
-                        size: 12,
+                Positioned(
+                  top: 4,
+                  right: 12,
+                  child: ClipOval(
+                    child: Container(
+                      width: 16,
+                      height: 16,
+                      color: Colors.red,
+                      child: const Center(
+                        child: TextWidget(
+                          text: '1',
+                          color: Colors.white,
+                          size: 12,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
