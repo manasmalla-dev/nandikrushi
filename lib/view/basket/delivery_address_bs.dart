@@ -162,6 +162,11 @@ Future orderPlacementFlowBS(BuildContext context, {int userInitialPage = 0}) {
                                       Navigator.of(context).pop();
                                     });
                                   },
+                                  onDeleteAddress: (index) {
+                                    setState(() {
+                                      addresses.removeAt(index);
+                                    });
+                                  },
                                 ),
                         ),
                         ElevatedButtonWidget(
@@ -405,9 +410,13 @@ class CartItems extends StatelessWidget {
 
 class DeliveryAddressesList extends StatelessWidget {
   const DeliveryAddressesList(
-      {Key? key, required this.addresses, required this.onAddAddress})
+      {Key? key,
+      required this.addresses,
+      required this.onAddAddress,
+      required this.onDeleteAddress})
       : super(key: key);
   final List<List<String>> addresses;
+  final Function(int item) onDeleteAddress;
   final Function(List<String>) onAddAddress;
   @override
   Widget build(BuildContext context) {
@@ -468,12 +477,100 @@ class DeliveryAddressesList extends StatelessWidget {
                 )
               ],
             )
-          : ListView.builder(
+          : ListView.separated(
+              separatorBuilder: (context, _) {
+                return Divider();
+              },
               itemCount: addresses.length,
               itemBuilder: (context, item) {
-                return Container();
+                return Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: width(context) * 0.06),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemBuilder: ((context, index) {
+                            return index == 0
+                                ? Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: height(context) * 0.01),
+                                    child: TextWidget(
+                                      text: addresses[item][index],
+                                      weight: FontWeight.w800,
+                                      size: height(context) * 0.03,
+                                    ),
+                                  )
+                                : AddressRow(index - 1, addresses[item][index],
+                                    height(context) * 0.017);
+                          }),
+                          itemCount: addresses[item].length,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: height(context) * 0.01),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.edit_rounded),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: height(context) * 0.01),
+                        child: IconButton(
+                          onPressed: () {
+                            onDeleteAddress(item);
+                          },
+                          color: Colors.red.shade300,
+                          icon: Icon(Icons.delete_rounded),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
     );
   }
+}
+
+Widget AddressRow(int index, String addres, double size) {
+  var title = '';
+  switch (index) {
+    case 0:
+      title = 'House/Flat No.';
+      break;
+    case 1:
+      title = 'Landmark';
+      break;
+    case 2:
+      title = 'Address';
+      break;
+    case 3:
+      title = 'Pincode';
+      break;
+    case 4:
+      title = 'Contact';
+      break;
+    case 5:
+      title = 'A. Contact';
+      break;
+    default:
+  }
+  return Row(
+    children: [
+      TextWidget(
+        text: '$title:',
+        weight: FontWeight.bold,
+        size: size,
+      ),
+      TextWidget(
+        text: addres,
+        size: size,
+      )
+    ],
+  );
 }

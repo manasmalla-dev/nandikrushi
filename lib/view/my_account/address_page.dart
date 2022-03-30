@@ -63,17 +63,21 @@ class _AddressScreenState extends State<AddressScreen> {
         ),
         body: Center(
           child: SizedBox(
-            height: height(context) * 0.4,
+            height: double.infinity,
             child: DeliveryAddressesList(
-              addresses: addresses,
-              onAddAddress: (list) {
-                setState(() {
-                  print('Helo');
-                  addresses.add(list);
-                  Navigator.of(context).pop();
-                });
-              },
-            ),
+                addresses: addresses,
+                onAddAddress: (list) {
+                  setState(() {
+                    print('Helo');
+                    addresses.add(list);
+                    Navigator.of(context).pop();
+                  });
+                },
+                onDeleteAddress: (item) {
+                  setState(() {
+                    addresses.removeAt(item);
+                  });
+                }),
           ),
         ));
   }

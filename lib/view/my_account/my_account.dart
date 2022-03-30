@@ -7,6 +7,7 @@ import 'package:nandikrushifarmer/reusable_widgets/list_tile.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/utilities/launcher.dart';
 import 'package:nandikrushifarmer/view/my_account/address_page.dart';
+import 'package:nandikrushifarmer/view/my_account/profile.dart';
 import 'package:nandikrushifarmer/view/my_account/signout_bs.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -41,6 +42,8 @@ class _MyAccountState extends State<MyAccount> {
                     div(context, 1.0),
                     listTileWithouST(context,
                         title: "Profile", leading: Icons.person, ontap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ProfileScreen()));
                       log('Profile');
                     }),
                     listTileWithouST(context,

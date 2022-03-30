@@ -16,11 +16,11 @@ class AddAddressScreen extends StatefulWidget {
 
 class _AddAddressScreenState extends State<AddAddressScreen> {
   var formControllers = {
-    'full_address': TextEditingController(),
     'house_number': TextEditingController(),
     'landmark': TextEditingController(),
-    'alternate_mobile_number': TextEditingController(),
+    'full_address': TextEditingController(),
     'pincode': TextEditingController(),
+    'alternate_mobile_number': TextEditingController(),
   };
   var chipSelection = 0;
   var otherController = TextEditingController();
@@ -231,6 +231,14 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       if (checkingControllersNull &&
                           shouldCheckOtherController) {
                         print("NO NULL");
+                        address_list.insert(4, "1234567890");
+                        address_list.insert(
+                            0,
+                            chipSelection == 0
+                                ? "Home"
+                                : chipSelection == 1
+                                    ? "Store"
+                                    : otherController.text.toString());
                         widget.onSaveAddress(address_list);
                       }
                     },
