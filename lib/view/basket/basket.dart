@@ -71,12 +71,7 @@ class _BasketState extends State<Basket> {
             child: ElevatedButtonWidget(
               borderRadius: 8,
               onClick: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => const ConfirmOrderScreen()),
-                  ),
-                );
+                orderPlacementFlowBS(context, userInitialPage: 1);
               },
               minWidth: width(context) * 0.9,
               height: height(context) * 0.06,
