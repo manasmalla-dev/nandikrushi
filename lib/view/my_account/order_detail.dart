@@ -24,7 +24,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         subtitle: widget.order['date'],
         suffix: IconButton(
           onPressed: () {},
-          icon: Icon(
+          icon: const Icon(
             Icons.download_rounded,
             color: Colors.black,
           ),
@@ -41,58 +41,58 @@ class _OrderDetailsState extends State<OrderDetails> {
           children: [
             Container(
               width: double.infinity,
-              color: Color(0xFFEFE8CC),
+              color: const Color(0xFFEFE8CC),
               child: Stepper(
                 steps: [
                   Step(
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextWidget(
+                          const TextWidget(
                             text: 'Order Placed',
                             weight: FontWeight.bold,
                           ),
                           TextWidget(text: widget.order['date']),
                         ],
                       ),
-                      content: SizedBox(),
+                      content: const SizedBox(),
                       isActive: currentStep > 0,
                       state: currentStep > 0
                           ? StepState.complete
                           : StepState.indexed),
                   Step(
-                      title: TextWidget(
+                      title: const TextWidget(
                         text: 'Order In Preparation',
                         weight: FontWeight.bold,
                       ),
-                      content: SizedBox(),
+                      content: const SizedBox(),
                       isActive: currentStep > 1,
                       state: currentStep > 1
                           ? StepState.complete
                           : StepState.indexed),
                   Step(
-                      title: TextWidget(
+                      title: const TextWidget(
                         text: 'Order Shipped',
                         weight: FontWeight.bold,
                       ),
-                      content: SizedBox(),
+                      content: const SizedBox(),
                       isActive: currentStep > 2,
                       state: currentStep > 2
                           ? StepState.complete
                           : StepState.indexed),
                   Step(
-                      title: TextWidget(
+                      title: const TextWidget(
                         text: 'Order Delivered',
                         weight: FontWeight.bold,
                       ),
-                      content: SizedBox(),
+                      content: const SizedBox(),
                       isActive: currentStep > 3,
                       state: currentStep > 3
                           ? StepState.complete
                           : StepState.indexed),
                 ],
                 controlsBuilder: (context, _) {
-                  return SizedBox();
+                  return const SizedBox();
                 },
                 currentStep: 3,
               ),
@@ -107,7 +107,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     weight: FontWeight.bold,
                     size: 18,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 4,
                   ),
                   TextWidget(
@@ -115,10 +115,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                     weight: FontWeight.bold,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     height: height(context) * 0.06 * items.length,
                     child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: items.length,
                         itemBuilder: (context, index) {
                           return Row(
@@ -149,7 +150,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                           );
                         }),
                   ),
-                  Divider(),
+                  const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -169,7 +170,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Row(
@@ -186,7 +187,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -205,14 +206,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   TextWidget(
                     text: 'Payment Information'.toUpperCase(),
                     color: Colors.grey.shade800,
                     weight: FontWeight.w700,
                     size: height(context) * 0.022,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   TextWidget(
@@ -221,7 +222,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     weight: FontWeight.w700,
                     size: height(context) * 0.02,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Row(
@@ -241,10 +242,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
-                  Divider(),
+                  const Divider(),
                   TextWidget(
                     text: 'Deliver to',
                     color: Colors.grey.shade800,
@@ -263,7 +264,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     color: Colors.grey.shade600,
                     size: height(context) * 0.017,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Row(
@@ -290,12 +291,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                     color: Colors.grey,
                     size: height(context) * 0.02,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.red, width: 2),
+                        side: const BorderSide(color: Colors.red, width: 2),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8))),
                     onPressed: () {},

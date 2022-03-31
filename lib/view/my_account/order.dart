@@ -95,18 +95,19 @@ class _OrderScreenState extends State<OrderScreen> {
               return Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 8),
+                    margin: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
                         color: Colors.grey.shade300,
                         borderRadius: BorderRadius.circular(8)),
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child: TextWidget(text: uniqueDates[index]),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: ListView.separated(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: ((context, index) {
                           return SizedBox(
                             height: height(context) * 0.12,
@@ -128,7 +129,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                           '',
                                       weight: FontWeight.w500,
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     TextWidget(
                                       text: (uniqueOrders[index]['amount']
                                               as String?) ??
@@ -136,22 +137,22 @@ class _OrderScreenState extends State<OrderScreen> {
                                       weight: FontWeight.bold,
                                       color: Colors.grey,
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           Icons.rotate_right_rounded,
                                           color: Colors.red,
                                         ),
-                                        TextWidget(
+                                        const TextWidget(
                                           text: 'Repeat Order',
                                           color: Colors.red,
                                           weight: FontWeight.bold,
                                         ),
                                       ],
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                   ],
                                 ),
                                 Expanded(
@@ -159,7 +160,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     IconButton(
-                                      icon: Icon(Icons.chevron_right_rounded),
+                                      icon: const Icon(
+                                          Icons.chevron_right_rounded),
                                       onPressed: () {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
@@ -170,7 +172,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                                     )));
                                       },
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -188,7 +190,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                               ? Colors.red
                                               : Colors.green,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 8,
                                         ),
                                         Icon(
@@ -209,8 +211,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                                 ['substatus'] as String?),
                                             size: 8,
                                           )
-                                        : SizedBox(),
-                                    Spacer()
+                                        : const SizedBox(),
+                                    const Spacer()
                                   ],
                                 ))
                               ],
@@ -218,7 +220,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           );
                         }),
                         separatorBuilder: (context, index) {
-                          return Divider();
+                          return const Divider();
                         },
                         itemCount: uniqueOrders.length),
                   )
@@ -226,7 +228,7 @@ class _OrderScreenState extends State<OrderScreen> {
               );
             },
             separatorBuilder: (context, index) {
-              return Divider();
+              return const Divider();
             },
             itemCount: Set.from(orders.map((e) => dateFormatter.format(
                 simpleDateFormatter.parse((e['date'] as String?) ??

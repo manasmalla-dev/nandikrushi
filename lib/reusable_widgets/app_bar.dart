@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 
-appbar(
-  BuildContext context,
-) {
+appbar(BuildContext context, {List<Widget>? actions}) {
   return AppBar(
     backgroundColor: Colors.white,
     elevation: 0,
-    centerTitle: true,
+    centerTitle: actions == null,
     iconTheme: IconThemeData(color: Colors.grey[900]),
     title: Image.asset(
-      'assets/pngs/vihaan_app_logo.png',
-      height: height(context) * 0.1,
-      width: width(context) * 0.4,
+      'assets/png/logo.png',
+      height: height(context) * 0.06,
     ),
+    actions: actions,
   );
 }
 
