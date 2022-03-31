@@ -2,6 +2,10 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
+import 'package:nandikrushi/view/basket/basket.dart';
+import 'package:nandikrushi/view/dashboard/dashboard.dart';
+import 'package:nandikrushi/view/my_account/my_account.dart';
+import 'package:nandikrushi/view/search/search.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -29,16 +33,14 @@ class _NavBarState extends State<NavBar> {
   List text = ['Home', 'Search', 'My account', 'Basket'];
 
   static List<Widget> widgetOptions = <Widget>[
-    // const Center(
-    //   child: Home(),
-    // ),
-    // const Center(child: Search()),
-    // const Center(
-    //   child: MyAccount(),
-    // ),
-    // const Center(
-    //   child: Basket(),
-    // ),
+    const Center(child: Dashboard()),
+    const Center(child: Search()),
+    const Center(
+      child: MyAccount(),
+    ),
+    const Center(
+      child: Basket(),
+    ),
   ];
 
   @override

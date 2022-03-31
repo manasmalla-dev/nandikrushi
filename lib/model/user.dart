@@ -1,38 +1,18 @@
 class User {
-  late String farmerImage;
-  late String farmerName;
-  late String houseNumber;
-  late String city;
-  late String mandal;
-  late String district;
-  late String state;
-  late String pincode;
-  late int landAreaInAcres;
-  late String certificationType;
+  late String firstName;
+  late String lastName;
+  late String email;
+  late String location;
+
   User.registerUser(
-      {required this.farmerImage,
-      required this.farmerName,
-      required this.houseNumber,
-      required this.city,
-      required this.mandal,
-      required this.district,
-      required this.state,
-      required this.pincode,
-      required this.certificationType,
-      required this.landAreaInAcres});
-  User.registerPartA({
-    required this.farmerImage,
-    required this.farmerName,
-    required this.houseNumber,
-    required this.city,
-    required this.mandal,
-    required this.district,
-    required this.state,
-    required this.pincode,
-  });
+      {required this.firstName,
+      required this.lastName,
+      required this.email,
+      required this.location});
+
   User();
   @override
   String toString() {
-    return "User: Farmer Name - $farmerName, H.No - $houseNumber, City - $city, Mandal - $mandal, District - $district, State - $state, Pincode - $pincode";
+    return "User: Name - $firstName $lastName, Email - $email, Location - $location";
   }
 }

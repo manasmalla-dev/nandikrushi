@@ -6,6 +6,7 @@ import 'package:nandikrushi/provider/onboard_provider.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
+import 'package:nandikrushi/view/login/lang_type.dart';
 import 'package:nandikrushi/view/login/user_type.dart';
 import 'package:provider/provider.dart';
 
@@ -124,11 +125,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     onClick: () {
                       log('message');
                       if (onboardProvider?.step == 1) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => const UserType()),
-                          ),
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const LangType()),
                         );
                       } else {
                         _pageController.animateToPage(1,
