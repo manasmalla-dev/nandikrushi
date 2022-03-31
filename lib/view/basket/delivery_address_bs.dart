@@ -8,7 +8,6 @@ import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 import 'package:nandikrushi/view/basket/add_address.dart';
 import 'package:nandikrushi/view/basket/confirm_order.dart';
 import 'package:nandikrushi/view/product/product_details.dart';
-import 'package:nandikrushi/view/search/search.dart';
 
 Future orderPlacementFlowBS(BuildContext context, {int userInitialPage = 0}) {
   return showModalBottomSheet(
@@ -226,7 +225,7 @@ Future orderPlacementFlowBS(BuildContext context, {int userInitialPage = 0}) {
                                     ),
                                   ],
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                         ),
                       ],
                     );
@@ -253,7 +252,7 @@ class CartItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return items.length <= 0
+    return items.isEmpty
         ? Column(
             children: [
               const Image(image: AssetImage('assets/png/empty_basket.png')),

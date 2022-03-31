@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:nandikrushi/model/user.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/elevated_widget.dart';
-import 'package:nandikrushi/reusable_widgets/filled_textfield_widget.dart';
 import 'package:nandikrushi/reusable_widgets/nandi_krushi_title.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 import 'package:nandikrushi/reusable_widgets/textfield_widget.dart';
+import 'package:nandikrushi/view/basket/add_address.dart';
 import 'package:nandikrushi/view/login/nav_bar.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -51,9 +51,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     text: "Welcome to",
                     size: height(context) * 0.03,
                     weight: FontWeight.w500,
-                  ),
-                  SizedBox(
-                    width: 8,
                   ),
                   const NandiKrushiTitle(),
                 ],
@@ -141,7 +138,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             Expanded(
                               child: TextFieldWidget(
                                 controller: formControllers['location'],
-                                prefix: Icon(Icons.location_on_rounded),
+                                prefix: const Icon(Icons.location_on_rounded),
                                 suffix: TextWidget(
                                   text: "Apply",
                                   weight: FontWeight.bold,
@@ -158,7 +155,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           height: height(context) * 0.03,
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) =>
+                                    AddAddressScreen(onSaveAddress: (_) {})));
+                          },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -167,7 +168,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 size: height(context) * 0.02,
                                 color: Colors.blue.shade800,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 16,
                               ),
                               TextWidget(
