@@ -1,7 +1,37 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-void main() {
-  runApp(const MyApp());
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:nandikrushi/provider/login_provider.dart';
+import 'package:nandikrushi/provider/onboard_provider.dart';
+import 'package:nandikrushi/provider/registration_provider.dart';
+import 'package:nandikrushi/view/login/splash_screen.dart';
+import 'package:provider/provider.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  if (!kIsWeb) {
+    if (Platform.isAndroid) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark));
+    }
+  }
+
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<OnboardProvider>(
+      create: (context) => OnboardProvider(),
+    ),
+    ChangeNotifierProvider<RegistrationProvider>(
+      create: (context) => RegistrationProvider(),
+    ),
+    ChangeNotifierProvider<LoginProvider>(
+      create: (context) => LoginProvider(),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -9,27 +39,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Nandikrushi',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: const Color(0xFF006838),
+        textSelectionTheme: const TextSelectionThemeData(
+          selectionHandleColor: Color(0xFF006838),
+        ),
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key); 
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
+      home: const SplashScreen(),
     );
   }
 }
