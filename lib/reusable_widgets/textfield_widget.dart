@@ -96,7 +96,7 @@ class TextFieldWidget extends StatelessWidget {
                   ],
                 ),
               )
-            : null,
+            : prefix,
         contentPadding: EdgeInsets.symmetric(vertical: height(context) * 0.01),
         counterText: showCounter ? null : '',
         isDense: true,
