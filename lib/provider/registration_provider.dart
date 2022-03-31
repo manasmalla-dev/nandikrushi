@@ -11,6 +11,7 @@ class RegistrationProvider extends ChangeNotifier {
     userAccountType = type;
     notifyListeners();
   }
+
   languegeType(String type) {
     langType = type;
     notifyListeners();
@@ -27,7 +28,7 @@ class RegistrationProvider extends ChangeNotifier {
   }
 
   lanType(BuildContext context) {
-    if (userAccountType == "") {
+    if (langType == "") {
       return snackbar(context, 'Please select any one of above');
     }
 
