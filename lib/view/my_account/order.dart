@@ -65,7 +65,6 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -140,12 +139,12 @@ class _OrderScreenState extends State<OrderScreen> {
                                     const Spacer(),
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(
+                                      children: const [
+                                        Icon(
                                           Icons.rotate_right_rounded,
                                           color: Colors.red,
                                         ),
-                                        const TextWidget(
+                                        TextWidget(
                                           text: 'Repeat Order',
                                           color: Colors.red,
                                           weight: FontWeight.bold,

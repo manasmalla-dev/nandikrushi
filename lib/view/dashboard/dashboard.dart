@@ -14,7 +14,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   var carouselController = CarouselController();
   var currentPos = 0;
-  var fresh_farms = [
+  var freshFarms = [
     {
       'name': 'Brinjal',
       'description':
@@ -46,7 +46,7 @@ class _DashboardState extends State<Dashboard> {
           'https://dtgxwmigmg3gc.cloudfront.net/imagery/assets/derivations/icon/256/256/true/eyJpZCI6IjYyODZjZmMzNTNiOGRmMGIyNmY3NWUwZWUyZmM4MzAyIiwic3RvcmFnZSI6InB1YmxpY19zdG9yZSJ9?signature=c4d219eadabc82e33ea702d131d4ade62f664fbfe6510461a1542c306d771d43'
     }
   ];
-  var natural_farms = [
+  var naturalFarms = [
     {
       'name': 'Cow Milk',
       'description':
@@ -241,7 +241,7 @@ class _DashboardState extends State<Dashboard> {
                                     width: double.infinity,
                                     height: height(context) * 0.1,
                                     child: const Center(
-                                        child: const TextWidget(
+                                        child: TextWidget(
                                       text: 'Vegetables',
                                       weight: FontWeight.bold,
                                       color: Colors.white,
@@ -279,8 +279,8 @@ class _DashboardState extends State<Dashboard> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Container(
-                  width: width(context) * 0.3 * (fresh_farms.length + 1),
+                child: SizedBox(
+                  width: width(context) * 0.3 * (freshFarms.length + 1),
                   height: height(context) * 0.3,
                   child: Row(
                     children: [
@@ -317,7 +317,7 @@ class _DashboardState extends State<Dashboard> {
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           physics: const NeverScrollableScrollPhysics(),
-                          children: fresh_farms.map((e) {
+                          children: freshFarms.map((e) {
                             return Row(
                               children: [
                                 Column(
@@ -335,7 +335,7 @@ class _DashboardState extends State<Dashboard> {
                                       weight: FontWeight.bold,
                                       size: 18,
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     TextWidget(
                                       text: e['units'],
                                       weight: FontWeight.bold,
@@ -350,7 +350,7 @@ class _DashboardState extends State<Dashboard> {
                                       weight: FontWeight.bold,
                                       size: 18,
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     OutlinedButton(
                                       style: OutlinedButton.styleFrom(
                                           tapTargetSize:
@@ -383,7 +383,7 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                       ),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                   ],
                                 ),
                                 const VerticalDivider(),
@@ -402,13 +402,13 @@ class _DashboardState extends State<Dashboard> {
               width: double.infinity,
               padding: const EdgeInsets.all(8),
               child: Column(
-                children: [
-                  const TextWidget(
+                children: const [
+                  TextWidget(
                     text: 'Do You Know?',
                     weight: FontWeight.w700,
                     color: Colors.white,
                   ),
-                  const TextWidget(
+                  TextWidget(
                     text:
                         'A2 Milk got its name from the rich amount of A2 beta-casein protein present in the milk. It is one of the most nutritional form of milk available today. The Gir Cow breed from India is specifically known for producing high quality A2 Milk.',
                     color: Colors.white,
@@ -425,8 +425,8 @@ class _DashboardState extends State<Dashboard> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Container(
-                  width: width(context) * 0.37 * (fresh_farms.length + 1),
+                child: SizedBox(
+                  width: width(context) * 0.37 * (freshFarms.length + 1),
                   height: height(context) * 0.3,
                   child: Row(
                     children: [
@@ -439,7 +439,7 @@ class _DashboardState extends State<Dashboard> {
                                 text: 'Natural Store',
                                 size: height(context) * 0.03,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               TextWidget(
@@ -447,7 +447,7 @@ class _DashboardState extends State<Dashboard> {
                                     'Subscribe for daily needs\nat your door step',
                                 size: height(context) * 0.015,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               TextWidget(
@@ -476,7 +476,7 @@ class _DashboardState extends State<Dashboard> {
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           physics: const NeverScrollableScrollPhysics(),
-                          children: natural_farms.map((e) {
+                          children: naturalFarms.map((e) {
                             return Row(
                               children: [
                                 Column(
@@ -499,7 +499,7 @@ class _DashboardState extends State<Dashboard> {
                                       size: height(context) * 0.012,
                                       color: Colors.grey.shade600,
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     TextWidget(
                                       text: e['units'],
                                       weight: FontWeight.bold,
@@ -514,7 +514,7 @@ class _DashboardState extends State<Dashboard> {
                                       weight: FontWeight.bold,
                                       size: 18,
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Row(
                                       children: [
                                         OutlinedButton(
@@ -554,10 +554,10 @@ class _DashboardState extends State<Dashboard> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 8,
                                         ),
-                                        FlatButton(
+                                        MaterialButton(
                                           color: Colors.tealAccent,
                                           materialTapTargetSize:
                                               MaterialTapTargetSize.shrinkWrap,
@@ -570,10 +570,10 @@ class _DashboardState extends State<Dashboard> {
                                                 BorderRadius.circular(100),
                                           ),
                                           onPressed: () {},
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(
                                                 horizontal: 8.0, vertical: 2),
-                                            child: const Icon(
+                                            child: Icon(
                                               Icons.cached_rounded,
                                               size: 14,
                                               color: Colors.black,
@@ -582,7 +582,7 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                       ],
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                   ],
                                 ),
                                 const VerticalDivider(),

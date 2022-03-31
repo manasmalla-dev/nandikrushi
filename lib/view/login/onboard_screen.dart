@@ -7,7 +7,6 @@ import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 import 'package:nandikrushi/view/login/lang_type.dart';
-import 'package:nandikrushi/view/login/user_type.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
