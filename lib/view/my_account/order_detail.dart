@@ -118,6 +118,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     height: height(context) * 0.06 * items.length,
                     child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: items.length,
                         itemBuilder: (context, index) {
                           return Row(

@@ -35,13 +35,31 @@ class _OrderScreenState extends State<OrderScreen> {
       'date': '15 Sep 2021 04:15 PM',
       'amount': 'Rs.108.00',
       'status': 'Order Placed',
-      'substatus': 'Approval pending from Farmer'
+      'substatus': 'Approval pending from Farmer',
+      'items': [
+        {'name': 'Tomato', 'unit': '1 kg', 'price': '50', 'quantity': '10'},
+        {
+          'name': 'Foxtail Millet',
+          'unit': '1 kg',
+          'price': '140',
+          'quantity': '25'
+        }
+      ]
     },
     {
       'id': 'XXXXXXXXXXXX',
       'date': '14 Sep 2021 10:55 AM',
       'amount': 'Rs.108.00',
       'status': 'Order Cancelled',
+      'items': [
+        {'name': 'Tomato', 'unit': '1 kg', 'price': '50', 'quantity': '10'},
+        {
+          'name': 'Foxtail Millet',
+          'unit': '1 kg',
+          'price': '140',
+          'quantity': '25'
+        }
+      ]
     }
   ];
 
