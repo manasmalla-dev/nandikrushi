@@ -455,7 +455,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                                 .format(
                                   DateTime.now().add(
                                     Duration(
-                                      days: (index / 2).toInt(),
+                                      days: index ~/ 2,
                                     ),
                                   ),
                                 )
@@ -467,7 +467,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                                     .withOpacity(0.7)),
                         TextWidget(
                           text: DateTime.now()
-                              .add(Duration(days: (index / 2).toInt()))
+                              .add(Duration(days: index ~/ 2))
                               .day
                               .toString(),
                           color: index == selectedIndex
