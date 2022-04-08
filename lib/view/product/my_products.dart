@@ -5,6 +5,8 @@ import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 
+import '../../provider/theme_provider.dart';
+
 class MyProductsScreen extends StatefulWidget {
   const MyProductsScreen({Key? key}) : super(key: key);
 
@@ -242,7 +244,7 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
                   borderRadius: const BorderRadius.vertical(
-                    top:  Radius.circular(32),
+                    top: Radius.circular(32),
                   ),
                 ),
                 child: ListView.separated(
@@ -381,7 +383,7 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                           size: height(context) * 0.014,
                                           weight: FontWeight.bold,
                                           color: list[index]['stock'] == "true"
-                                              ? Theme.of(context).primaryColor
+                                              ? SpotmiesTheme.primaryColor
                                               : Colors.red,
                                         ),
                                       ),

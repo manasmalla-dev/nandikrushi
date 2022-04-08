@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushifarmer/view/login/lang_type.dart';
 import 'package:nandikrushifarmer/view/login/login.dart';
+import 'package:provider/provider.dart';
 
 class RegistrationProvider extends ChangeNotifier {
   String userAccountType = "";
   String langType = "";
 
-  updateUserType(String type) {
+  updateUserType(context, String type) {
     userAccountType = type;
+    var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    themeProvider.setUserType(type == 'farmer'
+        ? UserAppTheme.FARMER
+        : type == 'store'
+            ? UserAppTheme.STORE
+            : UserAppTheme.RESTERAUNT);
     notifyListeners();
   }
 

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
@@ -458,7 +459,7 @@ class DeliveryAddressesList extends StatelessWidget {
                   padding:
                       EdgeInsets.symmetric(horizontal: width(context) * 0.1),
                   child: ElevatedButtonWidget(
-                    bgColor: Theme.of(context).primaryColor,
+                    bgColor: SpotmiesTheme.primaryColor,
                     allRadius: true,
                     trailingIcon: const Icon(Icons.add_rounded),
                     buttonName: 'Add Address'.toUpperCase(),

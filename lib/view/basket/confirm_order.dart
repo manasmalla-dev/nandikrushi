@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
@@ -58,7 +59,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                   },
                   height: height(context) * 0.05,
                   minWidth: width(context) * 0.35,
-                  bgColor: Colors.green[900],
+                  bgColor: SpotmiesTheme.primaryColor,
                   buttonName: "Continue".toUpperCase(),
                   allRadius: true,
                   borderRadius: 10,
@@ -83,7 +84,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                 (value, element) => value + element,
                               ) + 100).toStringAsFixed(2)}',
                       size: height(context) * 0.035,
-                      color: Theme.of(context).primaryColor,
+                      color: SpotmiesTheme.primaryColor,
                       weight: FontWeight.w700,
                     ),
                     TextWidget(
@@ -130,7 +131,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                 onClick: () {},
                 height: height(context) * 0.06,
                 minWidth: width(context),
-                bgColor: Theme.of(context).primaryColor,
+                bgColor: SpotmiesTheme.primaryColor,
                 buttonName: "Apply Coupon",
                 textSize: height(context) * 0.022,
                 textColor: Colors.white,
@@ -344,7 +345,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                     ListTile(
                       title: const Text('Pay Online'),
                       leading: Radio(
-                          activeColor: Theme.of(context).primaryColor,
+                          activeColor: SpotmiesTheme.primaryColor,
                           value: true,
                           groupValue: radioState,
                           onChanged: (bool? value) {
@@ -356,7 +357,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                     ListTile(
                       title: const Text('Pay on Delivery'),
                       leading: Radio(
-                          activeColor: Theme.of(context).primaryColor,
+                          activeColor: SpotmiesTheme.primaryColor,
                           value: false,
                           groupValue: radioState,
                           onChanged: (bool? value) {
@@ -366,14 +367,22 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                           }),
                     ),
                     ElevatedButtonWidget(
-                      bgColor: Theme.of(context).primaryColor,
+                      bgColor: SpotmiesTheme.primaryColor,
                       allRadius: true,
-                      leadingIcon: const Icon(Icons.arrow_forward_rounded),
+                      leadingIcon: Icon(
+                        Icons.arrow_forward_rounded,
+                        color: SpotmiesTheme.appTheme == UserAppTheme.RESTERAUNT
+                            ? Colors.black
+                            : Colors.white,
+                      ),
                       buttonName:
                           'PAY Rs. ${(items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                 (value, element) => value + element,
                               ) + 100.00).toStringAsFixed(0)} ON DELIVERY',
-                      textColor: Colors.white,
+                      textColor:
+                          SpotmiesTheme.appTheme == UserAppTheme.RESTERAUNT
+                              ? Colors.black
+                              : Colors.white,
                       textSize: height(context) * 0.02,
                       textStyle: FontWeight.w800,
                       borderRadius: 12,
@@ -438,12 +447,12 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                     duration: const Duration(milliseconds: 300),
                     decoration: BoxDecoration(
                         color: index == selectedIndex
-                            ? Theme.of(context).primaryColor
+                            ? SpotmiesTheme.primaryColor
                             : Colors.transparent,
                         border: Border.all(
                           color: index == selectedIndex
                               ? Colors.transparent
-                              : Theme.of(context).primaryColor,
+                              : SpotmiesTheme.primaryColor,
                         ),
                         borderRadius: BorderRadius.circular(16)),
                     child: Column(
@@ -461,18 +470,22 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                                 )
                                 .toUpperCase(),
                             color: index == selectedIndex
-                                ? Colors.white
-                                : Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(0.7)),
+                                ? SpotmiesTheme.appTheme ==
+                                        UserAppTheme.RESTERAUNT
+                                    ? Colors.black
+                                    : Colors.white
+                                : SpotmiesTheme.primaryColor.withOpacity(0.7)),
                         TextWidget(
                           text: DateTime.now()
                               .add(Duration(days: index ~/ 2))
                               .day
                               .toString(),
                           color: index == selectedIndex
-                              ? Colors.white
-                              : Theme.of(context).primaryColor.withOpacity(0.7),
+                              ? SpotmiesTheme.appTheme ==
+                                      UserAppTheme.RESTERAUNT
+                                  ? Colors.black
+                                  : Colors.white
+                              : SpotmiesTheme.primaryColor.withOpacity(0.7),
                           size: height(context) * 0.05,
                           weight: FontWeight.w800,
                         ),
@@ -481,10 +494,11 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                                 ? '7 AM - 11 AM'
                                 : '11 AM - 3 PM',
                             color: index == selectedIndex
-                                ? Colors.white
-                                : Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(0.7)),
+                                ? SpotmiesTheme.appTheme ==
+                                        UserAppTheme.RESTERAUNT
+                                    ? Colors.black
+                                    : Colors.white
+                                : SpotmiesTheme.primaryColor.withOpacity(0.7)),
                       ],
                     ),
                   ),

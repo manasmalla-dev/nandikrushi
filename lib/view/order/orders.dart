@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
@@ -426,7 +427,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
                                             primary: list[index]['status'] ==
                                                     "accepted"
-                                                ? Theme.of(context).primaryColor
+                                                ? SpotmiesTheme.primaryColor
                                                 : list[index]['status'] ==
                                                         "cancelled"
                                                     ? Colors.red

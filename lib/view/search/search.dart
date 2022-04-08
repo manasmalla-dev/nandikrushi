@@ -4,6 +4,8 @@ import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
 import 'package:nandikrushifarmer/view/product/product_details.dart';
 
+import '../../provider/theme_provider.dart';
+
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
 
@@ -23,9 +25,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
   }
 
   Color getTabBarTextColor(int i) {
-    return _controller.index == i
-        ? Theme.of(context).primaryColor
-        : Colors.black;
+    return _controller.index == i ? SpotmiesTheme.primaryColor : Colors.black;
   }
 
   FontWeight getTabBarTextFontWeight(int i) {
@@ -234,7 +234,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
             backgroundColor: Colors.white,
             flexibleSpace: Center(
               child: TabBar(
-                indicatorColor: Theme.of(context).primaryColor,
+                indicatorColor: SpotmiesTheme.primaryColor,
                 controller: _controller,
                 isScrollable: true,
                 tabs: [
@@ -326,7 +326,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                             margin: EdgeInsets.all(height(context) * 0.01),
                             child: ClipOval(
                                 child: Container(
-                                    color: Theme.of(context).primaryColor,
+                                    color: SpotmiesTheme.primaryColor,
                                     padding: const EdgeInsets.all(0),
                                     child: const Icon(
                                       Icons.search_rounded,
@@ -565,7 +565,7 @@ class ProductList extends StatelessWidget {
                                   padding: EdgeInsets.zero, // and this
                                   side: BorderSide(
                                       width: 1,
-                                      color: Theme.of(context).primaryColor),
+                                      color: SpotmiesTheme.primaryColor),
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(100))),
@@ -577,7 +577,7 @@ class ProductList extends StatelessWidget {
                                   text: "Contact".toUpperCase(),
                                   size: height(context) * 0.014,
                                   weight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColor,
+                                  color: SpotmiesTheme.primaryColor,
                                 ),
                               ),
                             ),

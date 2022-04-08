@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
@@ -136,8 +137,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                     },
                     child: Chip(
                       backgroundColor: chipSelection == 0
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).primaryColor.withOpacity(0.5),
+                          ? SpotmiesTheme.primaryColor
+                          : SpotmiesTheme.primaryColor.withOpacity(0.5),
                       avatar: const Icon(
                         Icons.home_rounded,
                         color: Colors.white,
@@ -156,8 +157,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                     },
                     child: Chip(
                       backgroundColor: chipSelection == 1
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).primaryColor.withOpacity(0.5),
+                          ? SpotmiesTheme.primaryColor
+                          : SpotmiesTheme.primaryColor.withOpacity(0.5),
                       avatar: const Icon(
                         Icons.home_rounded,
                         color: Colors.white,
@@ -178,8 +179,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                         },
                         child: Chip(
                           backgroundColor: chipSelection == 2
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).primaryColor.withOpacity(0.5),
+                              ? SpotmiesTheme.primaryColor
+                              : SpotmiesTheme.primaryColor.withOpacity(0.5),
                           avatar: const Icon(
                             Icons.home_rounded,
                             color: Colors.white,
@@ -246,7 +247,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                     minWidth: width(context) * 0.9,
                     height: height(context) * 0.06,
                     // borderRadius: 16,
-                    bgColor: Colors.green[900],
+                    bgColor: SpotmiesTheme.primaryColor,
                     textColor: Colors.white,
                     buttonName: 'Save'.toUpperCase(),
                     textSize: width(context) * 0.04,

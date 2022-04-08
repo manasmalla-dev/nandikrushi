@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
@@ -46,7 +47,7 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
                 margin: EdgeInsets.all(height(context) * 0.01),
                 child: ClipOval(
                     child: Container(
-                        color: Theme.of(context).primaryColor,
+                        color: SpotmiesTheme.primaryColor,
                         padding: const EdgeInsets.all(0),
                         child: const Icon(
                           Icons.search_rounded,

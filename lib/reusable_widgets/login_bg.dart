@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/view/login/registration.dart';
@@ -65,7 +66,7 @@ class _LoginBGState extends State<LoginBG> {
                               fontFamily: 'Samarkan',
                               fontSize: width(context) * 0.08,
                               fontWeight: FontWeight.w500,
-                              color: Colors.green[900],
+                              color: SpotmiesTheme.primaryColor,
                             ),
                             textAlign: TextAlign.start,
                           ),

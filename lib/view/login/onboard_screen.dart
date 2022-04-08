@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/model/onnboard_model.dart';
 import 'package:nandikrushifarmer/provider/onboard_provider.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
@@ -70,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             text: data["title"],
                             size: width(context) * 0.10,
                             align: TextAlign.start,
-                            color: Colors.green[900],
+                            color: SpotmiesTheme.primaryColor,
                             weight: FontWeight.w700,
                           ),
                         ),
@@ -87,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       children: [
                                         Divider(
                                           thickness: index == 0 ? 2 : 1,
-                                          color: Colors.green[900],
+                                          color: SpotmiesTheme.primaryColor,
                                           indent: width(context) * 0.04,
                                           endIndent: width(context) * 0.04,
                                         ),
@@ -139,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     minWidth: width(context) * 0.9,
                     height: height(context) * 0.06,
                     // borderRadius: 16,
-                    bgColor: Colors.green[900],
+                    bgColor: SpotmiesTheme.primaryColor,
                     textColor: Colors.white,
                     buttonName: data["button_name"],
                     textSize: width(context) * 0.04,

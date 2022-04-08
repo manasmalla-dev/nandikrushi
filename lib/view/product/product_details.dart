@@ -5,6 +5,8 @@ import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/view/basket/delivery_address_bs.dart';
 import 'package:nandikrushifarmer/view/search/search.dart';
 
+import '../../provider/theme_provider.dart';
+
 class ProductDetails extends StatefulWidget {
   const ProductDetails({Key? key}) : super(key: key);
 
@@ -300,13 +302,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                           text: "Rs.",
                           size: height(context) * 0.027,
                           weight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
+                          color: SpotmiesTheme.primaryColor,
                         ),
                         TextWidget(
                           text: "34",
                           size: height(context) * 0.03,
                           weight: FontWeight.w800,
-                          color: Theme.of(context).primaryColor,
+                          color: SpotmiesTheme.primaryColor,
                         ),
                       ],
                     ),
@@ -447,8 +449,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 5), // and this
                               side: BorderSide(
-                                  width: 1,
-                                  color: Theme.of(context).primaryColor),
+                                  width: 1, color: SpotmiesTheme.primaryColor),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100))),
                           onPressed: () {},
@@ -459,7 +460,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               text: "Contact".toUpperCase(),
                               size: height(context) * 0.014,
                               weight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
+                              color: SpotmiesTheme.primaryColor,
                             ),
                           ),
                         ),
@@ -501,7 +502,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         TextWidget(
                           text: 'Self Declared National Farmer.',
                           weight: FontWeight.w500,
-                          color: Theme.of(context).primaryColor,
+                          color: SpotmiesTheme.primaryColor,
                         ),
                       ],
                     ),
