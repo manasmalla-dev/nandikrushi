@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart' as GMW;
+import 'package:location/location.dart';
+import 'package:nandikrushifarmer/provider/places_provider.dart';
 import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
 
 class AddressSearchScreen extends StatefulWidget {
-  const AddressSearchScreen({Key? key}) : super(key: key);
+  final Function(List<String>) onSaveAddress;
+  const AddressSearchScreen({Key? key, required this.onSaveAddress})
+      : super(key: key);
 
   @override
   State<AddressSearchScreen> createState() => _AddressSearchScreenState();
@@ -14,6 +20,51 @@ class AddressSearchScreen extends StatefulWidget {
 class _AddressSearchScreenState extends State<AddressSearchScreen> {
   var searchController = TextEditingController();
   var addresses = [];
+  var userLocation;
+
+  Future<LocationData?> getLocationAndPermission() async {
+    Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return null;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return null;
+      }
+    }
+
+    userLocation = await location.getLocation();
+
+    GMW.GoogleMapsPlaces _places =
+        GMW.GoogleMapsPlaces(apiKey: PlacesProvider.apiKey);
+    GMW.PlacesSearchResponse results =
+        await _places.searchNearbyWithRadius(userLocation, 2500);
+    addresses = results.results;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      getLocationAndPermission();
+      print(userLocation);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,14 +109,23 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
           ),
         ),
       ),
-      body: ListView.separated(
-        itemBuilder: ((context, index) {
-          return Container();
-        }),
-        separatorBuilder: (context, index) {
-          return const Divider();
-        },
-        itemCount: addresses.where((element) => true).length,
+      body: Column(
+        children: [
+          ListView.separated(
+            shrinkWrap: true,
+            itemBuilder: ((context, index) {
+              return Container(
+                child: TextWidget(
+                  text: addresses[index].name,
+                ),
+              );
+            }),
+            separatorBuilder: (context, index) {
+              return const Divider();
+            },
+            itemCount: addresses.length,
+          ),
+        ],
       ),
     );
   }

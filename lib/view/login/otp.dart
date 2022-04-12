@@ -29,7 +29,17 @@ class _OTPPageState extends StateMVC<OTPPage> {
     loginPageController = controller as LoginPageController;
   }
   final formKey = GlobalKey<FormState>();
+  var canResendSMS = false;
   var pinController = TextEditingController();
+
+  Future<void> startResendCounter() async {
+    Future.delayed(Duration(minutes: 2), () {
+      setState(() {
+        canResendSMS = true;
+      });
+    });
+  }
+
   @override
   void initState() {
     loginProvider = Provider.of<LoginProvider>(context, listen: false);
@@ -41,6 +51,7 @@ class _OTPPageState extends StateMVC<OTPPage> {
     pinController.addListener(() {
       setState(() {});
     });
+    startResendCounter();
     return Consumer<LoginProvider>(builder: (context, data, child) {
       return Scaffold(
           backgroundColor: Colors.white,
@@ -182,11 +193,20 @@ class _OTPPageState extends StateMVC<OTPPage> {
                           color: Colors.grey,
                         ),
                         TextButton(
-                            onPressed: () {},
-                            child: TextWidget(
-                              text: "Resend".toUpperCase(),
-                              weight: FontWeight.w800,
-                            ))
+                          onPressed: () {
+                            if (canResendSMS) {
+                              canResendSMS = false;
+                              //RESEND OTP
+                            }
+                          },
+                          child: TextWidget(
+                            text: "Resend".toUpperCase(),
+                            weight: FontWeight.w800,
+                            color: canResendSMS
+                                ? Colors.grey.shade900
+                                : Colors.grey,
+                          ),
+                        ),
                       ],
                     ),
                   )

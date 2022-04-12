@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum UserAppTheme { FARMER, RESTERAUNT, STORE }
+enum UserAppTheme { farmer, restaurant, store }
 
 class ThemeProvider extends ChangeNotifier {
   bool isDarkThemeEnabled = false;
-  UserAppTheme userAppTheme = UserAppTheme.FARMER;
+  UserAppTheme userAppTheme = UserAppTheme.farmer;
   setThemeMode(ThemeMode? themeMode) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (themeMode == ThemeMode.dark) {
@@ -21,11 +21,11 @@ class ThemeProvider extends ChangeNotifier {
   updateInitData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var appTheme = sharedPreferences.getString('user_app_theme');
-    userAppTheme = appTheme == UserAppTheme.FARMER.toString()
-        ? UserAppTheme.FARMER
-        : appTheme == UserAppTheme.RESTERAUNT.toString()
-            ? UserAppTheme.RESTERAUNT
-            : UserAppTheme.STORE;
+    userAppTheme = appTheme == UserAppTheme.farmer.toString()
+        ? UserAppTheme.farmer
+        : appTheme == UserAppTheme.restaurant.toString()
+            ? UserAppTheme.restaurant
+            : UserAppTheme.store;
     notifyListeners();
   }
 
@@ -34,60 +34,38 @@ class ThemeProvider extends ChangeNotifier {
     userAppTheme = appTheme;
     await sharedPreferences.setString(
         "user_app_theme", userAppTheme.toString());
-    print(appTheme);
     notifyListeners();
   }
+}
+
+dynamic dualParamTheme(var state1, var state2, int condition) {
+  //Condition 1 - Farmer
+  //Contion 2 - Restaurant
+  //Condition 3 - Store
+  dynamic param1 = 0;
+  dynamic param2 = 0;
+  if (condition == 1) {}
+  return [param1, param2];
 }
 
 class SpotmiesTheme {
   static bool isDarkMode = false;
 
   static Color primaryColor = const Color(0xFF006838);
-  static UserAppTheme appTheme = UserAppTheme.FARMER;
+  static UserAppTheme appTheme = UserAppTheme.farmer;
 
   init(context) {
     var themeProvider = Provider.of<ThemeProvider>(context, listen: true);
-    var themeMode = false;
-    var userAppTheme = UserAppTheme.FARMER;
-    themeProvider.addListener(() {
-      themeMode = themeProvider.isDarkThemeEnabled;
-      userAppTheme = themeProvider.userAppTheme;
-      appTheme = themeProvider.userAppTheme;
-      print("Theme Changed: $themeMode");
-      print(userAppTheme);
-      isDarkMode = themeMode;
 
-      primaryColor = (userAppTheme == UserAppTheme.FARMER
+    themeProvider.addListener(() {
+      isDarkMode = themeProvider.isDarkThemeEnabled;
+      appTheme = themeProvider.userAppTheme;
+
+      primaryColor = (appTheme == UserAppTheme.farmer
           ? const Color(0xFF006838)
-          : userAppTheme == UserAppTheme.RESTERAUNT
+          : appTheme == UserAppTheme.restaurant
               ? const Color(0xFFffd500)
               : const Color(0xFF00bba8));
-      print(primaryColor);
     });
   }
-}
-
-enum colorScheme {
-  background,
-  onBackground,
-  primary,
-  primaryVariant,
-  secondary,
-  tertiary,
-  tertiaryVariant,
-  secondaryVariant,
-  surface,
-  onSurface,
-  surfaceVariant,
-  surfaceVariant2,
-  title,
-  titleVariant,
-  shadow,
-  light1,
-  light2,
-  light3,
-  light4,
-  chatBubble,
-  chatButton,
-  dull
 }

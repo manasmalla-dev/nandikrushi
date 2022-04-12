@@ -371,7 +371,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                       allRadius: true,
                       leadingIcon: Icon(
                         Icons.arrow_forward_rounded,
-                        color: SpotmiesTheme.appTheme == UserAppTheme.RESTERAUNT
+                        color: SpotmiesTheme.appTheme == UserAppTheme.restaurant
                             ? Colors.black
                             : Colors.white,
                       ),
@@ -380,7 +380,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                 (value, element) => value + element,
                               ) + 100.00).toStringAsFixed(0)} ON DELIVERY',
                       textColor:
-                          SpotmiesTheme.appTheme == UserAppTheme.RESTERAUNT
+                          SpotmiesTheme.appTheme == UserAppTheme.restaurant
                               ? Colors.black
                               : Colors.white,
                       textSize: height(context) * 0.02,
@@ -471,7 +471,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                                 .toUpperCase(),
                             color: index == selectedIndex
                                 ? SpotmiesTheme.appTheme ==
-                                        UserAppTheme.RESTERAUNT
+                                        UserAppTheme.restaurant
                                     ? Colors.black
                                     : Colors.white
                                 : SpotmiesTheme.primaryColor.withOpacity(0.7)),
@@ -482,7 +482,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                               .toString(),
                           color: index == selectedIndex
                               ? SpotmiesTheme.appTheme ==
-                                      UserAppTheme.RESTERAUNT
+                                      UserAppTheme.restaurant
                                   ? Colors.black
                                   : Colors.white
                               : SpotmiesTheme.primaryColor.withOpacity(0.7),
@@ -495,7 +495,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                                 : '11 AM - 3 PM',
                             color: index == selectedIndex
                                 ? SpotmiesTheme.appTheme ==
-                                        UserAppTheme.RESTERAUNT
+                                        UserAppTheme.restaurant
                                     ? Colors.black
                                     : Colors.white
                                 : SpotmiesTheme.primaryColor.withOpacity(0.7)),

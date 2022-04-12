@@ -230,10 +230,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            IconButton(
-              icon: const Icon(Icons.sort_rounded),
-              onPressed: () {},
-              splashRadius: 12,
+            SizedBox(
+              height: height(context) * 0.02,
+              child: IconButton(
+                iconSize: height(context) * 0.02,
+                icon: const Icon(Icons.sort_rounded),
+                onPressed: () {},
+                splashRadius: 12,
+                padding: EdgeInsets.zero,
+                alignment: Alignment.topCenter,
+              ),
             ),
             Expanded(
               child: Container(

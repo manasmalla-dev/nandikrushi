@@ -13,10 +13,10 @@ class RegistrationProvider extends ChangeNotifier {
     userAccountType = type;
     var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     themeProvider.setUserType(type == 'farmer'
-        ? UserAppTheme.FARMER
+        ? UserAppTheme.farmer
         : type == 'store'
-            ? UserAppTheme.STORE
-            : UserAppTheme.RESTERAUNT);
+            ? UserAppTheme.store
+            : UserAppTheme.restaurant);
     notifyListeners();
   }
 

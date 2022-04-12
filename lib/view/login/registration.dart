@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:alt_sms_autofill/alt_sms_autofill.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nandikrushifarmer/model/user.dart';
 import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
@@ -23,6 +25,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   var acresInInt = 1.0;
   var checkBoxStates = [true, false, false, false, false, false];
   var user = User();
+  String _comingSms = '';
+  Future<void> initSmsListener() async {
+    String? comingSms;
+    try {
+      comingSms = await AltSmsAutofill().listenForSms;
+    } on PlatformException {
+      comingSms = 'Failed to get Sms.';
+    }
+    if (!mounted) return;
+    setState(() {
+      _comingSms = comingSms ?? '';
+      print("====>Message: ${_comingSms}");
+    });
+  }
+
   var formControllers = {
     'farmer_name': TextEditingController(),
     'house_number': TextEditingController(),
@@ -42,7 +59,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    checkBoxStatesText = SpotmiesTheme.appTheme == UserAppTheme.RESTERAUNT
+    initSmsListener();
+    checkBoxStatesText = SpotmiesTheme.appTheme == UserAppTheme.restaurant
         ? [
             'FSSAI',
             'Eating House License',
@@ -50,12 +68,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             'Certificate of Environmental Clearance',
             'Other Certification +'
           ]
-        : [
-            'FSSAI',
-            'Fire Safety License',
-            'Certificate of Environmental Clearance',
-            'Other Certification +'
-          ];
+        : SpotmiesTheme.appTheme == UserAppTheme.store
+            ? [
+                'FSSAI',
+                'Fire Safety License',
+                'Certificate of Environmental Clearance',
+                'Other Certification +'
+              ]
+            : [
+                'Self Declared Natural Farmer',
+                'PGS India Green',
+                'PGS India Organic',
+                'Organic FPO',
+                'Organic FPC',
+                'Other Certification +'
+              ];
     return Scaffold(
       body: PageView.builder(
         physics: const NeverScrollableScrollPhysics(),
@@ -120,7 +147,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   ),
                                   TextWidget(
                                     text:
-                                        "Add ${SpotmiesTheme.appTheme == UserAppTheme.FARMER ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.STORE ? "Store" : "Restaurant"} Image",
+                                        "Add ${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"} Image",
                                     color: Colors.grey,
                                     weight: FontWeight.bold,
                                     size: height(context) * 0.02,
@@ -136,7 +163,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       children: [
                                         TextWidget(
                                           text:
-                                              "${SpotmiesTheme.appTheme == UserAppTheme.FARMER ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.STORE ? "Store" : "Restaurant"} Information",
+                                              "${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"} Information",
                                           color: Colors.grey.shade800,
                                           weight: FontWeight.bold,
                                           size: height(context) * 0.02,
@@ -145,7 +172,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           controller:
                                               formControllers['farmer_name'],
                                           label:
-                                              '${SpotmiesTheme.appTheme == UserAppTheme.FARMER ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.STORE ? "Store" : "Restaurant"} Name',
+                                              '${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"} Name',
                                           hintSize: 20,
                                           style: fonts(20.0, FontWeight.w500,
                                               Colors.black),
@@ -163,45 +190,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           children: [
                                             Expanded(
                                               child: TextFieldWidget(
-                                                controller: formControllers[
-                                                    'house_number'],
-                                                label: 'H.No.',
-                                                hintSize: 20,
-                                                hintColor: Colors.grey.shade600,
-                                                style: fonts(
-                                                    20.0,
-                                                    FontWeight.w500,
-                                                    Colors.black),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: width(context) * 0.05,
-                                            ),
-                                            Expanded(
-                                              child: TextFieldWidget(
                                                 controller:
-                                                    formControllers['mandal'],
-                                                label: 'Mandal',
-                                                hintSize: 20,
-                                                hintColor: Colors.grey.shade600,
-                                                style: fonts(
-                                                    15.0,
-                                                    FontWeight.w500,
-                                                    Colors.black),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: height(context) * 0.03,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: TextFieldWidget(
-                                                controller:
-                                                    formControllers['city'],
-                                                label: 'City/Vilage',
+                                                    formControllers['state'],
+                                                label: 'State',
                                                 hintSize: 20,
                                                 hintColor: Colors.grey.shade600,
                                                 style: fonts(
@@ -236,12 +227,48 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             Expanded(
                                               child: TextFieldWidget(
                                                 controller:
-                                                    formControllers['state'],
-                                                label: 'State',
+                                                    formControllers['mandal'],
+                                                label: 'Mandal',
                                                 hintSize: 20,
                                                 hintColor: Colors.grey.shade600,
                                                 style: fonts(
                                                     15.0,
+                                                    FontWeight.w500,
+                                                    Colors.black),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: width(context) * 0.05,
+                                            ),
+                                            Expanded(
+                                              child: TextFieldWidget(
+                                                controller:
+                                                    formControllers['city'],
+                                                label: 'City/Vilage',
+                                                hintSize: 20,
+                                                hintColor: Colors.grey.shade600,
+                                                style: fonts(
+                                                    15.0,
+                                                    FontWeight.w500,
+                                                    Colors.black),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: height(context) * 0.03,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: TextFieldWidget(
+                                                controller: formControllers[
+                                                    'house_number'],
+                                                label: 'H.No.',
+                                                hintSize: 20,
+                                                hintColor: Colors.grey.shade600,
+                                                style: fonts(
+                                                    20.0,
                                                     FontWeight.w500,
                                                     Colors.black),
                                               ),
@@ -328,7 +355,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         allRadius: true,
                                         bgColor: SpotmiesTheme.primaryColor,
                                         textColor: SpotmiesTheme.appTheme ==
-                                                UserAppTheme.RESTERAUNT
+                                                UserAppTheme.restaurant
                                             ? Colors.black
                                             : Colors.white,
                                         buttonName:
@@ -342,7 +369,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                               ? Icons.arrow_forward
                                               : Icons.check_rounded,
                                           color: SpotmiesTheme.appTheme ==
-                                                  UserAppTheme.RESTERAUNT
+                                                  UserAppTheme.restaurant
                                               ? Colors.black
                                               : Colors.white,
                                           size: width(context) * 0.045,
@@ -360,7 +387,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         SpotmiesTheme.appTheme ==
-                                                UserAppTheme.FARMER
+                                                UserAppTheme.farmer
                                             ? TextWidget(
                                                 text:
                                                     "Cultivated Land Area (in acres)",
@@ -368,29 +395,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                 weight: FontWeight.bold,
                                                 size: height(context) * 0.02,
                                               )
-                                            : SizedBox(),
+                                            : const SizedBox(),
                                         SizedBox(
                                           height: SpotmiesTheme.appTheme ==
-                                                  UserAppTheme.FARMER
+                                                  UserAppTheme.farmer
                                               ? height(context) * 0.02
                                               : 0,
                                         ),
                                         SpotmiesTheme.appTheme ==
-                                                UserAppTheme.FARMER
+                                                UserAppTheme.farmer
                                             ? SliderTheme(
                                                 data: SliderThemeData(
                                                     activeTickMarkColor:
                                                         SpotmiesTheme
                                                                     .appTheme ==
                                                                 UserAppTheme
-                                                                    .RESTERAUNT
+                                                                    .restaurant
                                                             ? Colors.black
                                                             : Colors.white,
                                                     inactiveTickMarkColor:
                                                         SpotmiesTheme
                                                                     .appTheme ==
                                                                 UserAppTheme
-                                                                    .RESTERAUNT
+                                                                    .restaurant
                                                             ? Colors.black
                                                             : Colors.white),
                                                 child: Slider(
@@ -415,7 +442,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                       });
                                                     }),
                                               )
-                                            : SizedBox(),
+                                            : const SizedBox(),
                                         SizedBox(
                                           height: height(context) * 0.02,
                                         ),
@@ -463,7 +490,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                               activeColor: SpotmiesTheme
                                                                           .appTheme ==
                                                                       UserAppTheme
-                                                                          .RESTERAUNT
+                                                                          .restaurant
                                                                   ? Colors.green[
                                                                       900]
                                                                   : Colors
@@ -506,7 +533,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                                   ? SpotmiesTheme
                                                                               .appTheme ==
                                                                           UserAppTheme
-                                                                              .RESTERAUNT
+                                                                              .restaurant
                                                                       ? Colors.green[
                                                                           900]
                                                                       : Colors
@@ -518,7 +545,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                         ]),
                                                     (SpotmiesTheme.appTheme ==
                                                                     UserAppTheme
-                                                                        .FARMER
+                                                                        .farmer
                                                                 ? index != 0
                                                                 : true) &&
                                                             index != 5 &&
@@ -664,7 +691,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       allRadius: true,
                                       bgColor: SpotmiesTheme.primaryColor,
                                       textColor: SpotmiesTheme.appTheme ==
-                                              UserAppTheme.RESTERAUNT
+                                              UserAppTheme.restaurant
                                           ? Colors.black
                                           : Colors.white,
                                       buttonName:
@@ -678,7 +705,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             ? Icons.arrow_forward
                                             : Icons.check_rounded,
                                         color: SpotmiesTheme.appTheme ==
-                                                UserAppTheme.RESTERAUNT
+                                                UserAppTheme.restaurant
                                             ? Colors.black
                                             : Colors.white,
                                         size: width(context) * 0.045,

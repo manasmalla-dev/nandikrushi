@@ -23,9 +23,9 @@ class _HomeState extends State<Home> {
       "icon": "assets/png/myproduct_home.png",
     },
     {
-      "title": SpotmiesTheme.appTheme == UserAppTheme.FARMER
+      "title": SpotmiesTheme.appTheme == UserAppTheme.farmer
           ? "Add Product"
-          : SpotmiesTheme.appTheme == UserAppTheme.RESTERAUNT
+          : SpotmiesTheme.appTheme == UserAppTheme.restaurant
               ? "Sell Food"
               : "Sell Grocery",
       "sub_title": "List your Product",

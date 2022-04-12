@@ -85,7 +85,7 @@ expListTile(BuildContext context, {title, leading, List<Widget>? widget}) {
           collapsedTextColor: Colors.grey[900],
           title: Text(title,
               style: TextStyle(
-                fontFamily: 'Quicksand',
+                fontFamily: 'Roboto',
                 fontWeight: FontWeight.w600,
                 fontSize: width(context) * 0.04,
               )),

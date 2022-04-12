@@ -89,8 +89,8 @@ class FilledTextFieldWidget extends StatelessWidget {
             hintColor ?? Colors.grey),
         hintText: hint ?? '',
       ),
-      style: style?.copyWith(fontFamily: 'Quicksand') ??
-          const TextStyle(fontFamily: 'Quicksand'),
+      style: style?.copyWith(fontFamily: 'Roboto') ??
+          const TextStyle(fontFamily: 'Roboto'),
       autofocus: focus ?? false,
       maxLines: maxLines,
       maxLength: maxLength,
