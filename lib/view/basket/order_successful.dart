@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
@@ -19,7 +20,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
         children: [
           const Expanded(
             flex: 3,
-            child:  Image(
+            child: Image(
               image: AssetImage('assets/png/order_success.png'),
             ),
           ),
@@ -85,7 +86,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                     minWidth: width(context) * 0.9,
                     height: height(context) * 0.06,
                     // borderRadius: 16,
-                    bgColor: Colors.green[900],
+                    bgColor: SpotmiesTheme.primaryColor,
                     textColor: Colors.white,
                     buttonName: "Home",
                     textSize: width(context) * 0.04,

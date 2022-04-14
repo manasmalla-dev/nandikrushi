@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/model/product.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/filled_textfield_widget.dart';
@@ -77,7 +78,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         ),
                         IconButton(
                           iconSize: height(context) * 0.1,
-                          color: const Color(0xFF006838),
+                          color: SpotmiesTheme.primaryColor,
                           onPressed: () {
                             log("Hello");
                           },
@@ -236,7 +237,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         height: height(context) * 0.06,
                         borderRadius: 0,
                         allRadius: true,
-                        bgColor: Colors.green[900],
+                        bgColor: SpotmiesTheme.primaryColor,
                         textColor: Colors.white,
                         buttonName: "Submit".toUpperCase(),
                         innerPadding: 0.02,

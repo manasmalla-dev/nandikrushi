@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/provider/registration_provider.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/login_bg.dart';
@@ -47,7 +48,7 @@ class _UserTypeState extends State<UserType> {
                     text: "REGISTER AS",
                     size: width(context) * 0.04,
                     weight: FontWeight.w800,
-                    color: Colors.green[900],
+                    color: SpotmiesTheme.primaryColor,
                     align: TextAlign.start,
                     lSpace: 2.5,
                   ),
@@ -56,15 +57,17 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('farmer');
+                      value.updateUserType(context, 'farmer');
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
-                    bgColor:
-                        type == 'farmer' ? Colors.green[900] : Colors.white,
-                    borderSideColor: Colors.green[900],
-                    textColor:
-                        type == 'farmer' ? Colors.white : Colors.green[900],
+                    bgColor: type == 'farmer'
+                        ? SpotmiesTheme.primaryColor
+                        : Colors.white,
+                    borderSideColor: SpotmiesTheme.primaryColor,
+                    textColor: type == 'farmer'
+                        ? Colors.white
+                        : SpotmiesTheme.primaryColor,
                     buttonName: "FARMER",
                     center: true,
                     allRadius: true,
@@ -76,15 +79,18 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('store');
+                      value.updateUserType(context, 'store');
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor: type == 'store' ? Colors.green[900] : Colors.white,
-                    borderSideColor: Colors.green[900],
-                    textColor:
-                        type == 'store' ? Colors.white : Colors.green[900],
+                    bgColor: type == 'store'
+                        ? SpotmiesTheme.primaryColor
+                        : Colors.white,
+                    borderSideColor: SpotmiesTheme.primaryColor,
+                    textColor: type == 'store'
+                        ? Colors.white
+                        : SpotmiesTheme.primaryColor,
                     buttonName: "ORGANIC STORE",
                     center: true,
                     borderRadius: 15,
@@ -95,16 +101,18 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('restaurant');
+                      value.updateUserType(context, 'restaurant');
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor:
-                        type == 'restaurant' ? Colors.green[900] : Colors.white,
-                    borderSideColor: Colors.green[900],
-                    textColor:
-                        type == 'restaurant' ? Colors.white : Colors.green[900],
+                    bgColor: type == 'restaurant'
+                        ? SpotmiesTheme.primaryColor
+                        : Colors.white,
+                    borderSideColor: SpotmiesTheme.primaryColor,
+                    textColor: type == 'restaurant'
+                        ? Colors.white
+                        : SpotmiesTheme.primaryColor,
                     buttonName: "ORGANIC RESTAURANT",
                     center: true,
                     borderRadius: 15,
@@ -115,14 +123,18 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('ads');
+                      value.updateUserType(context, 'ads');
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor: type == 'ads' ? Colors.green[900] : Colors.white,
-                    borderSideColor: Colors.green[900],
-                    textColor: type == 'ads' ? Colors.white : Colors.green[900],
+                    bgColor: type == 'ads'
+                        ? SpotmiesTheme.primaryColor
+                        : Colors.white,
+                    borderSideColor: SpotmiesTheme.primaryColor,
+                    textColor: type == 'ads'
+                        ? Colors.white
+                        : SpotmiesTheme.primaryColor,
                     buttonName: "SPONSORED ADS",
                     center: true,
                     borderRadius: 15,
@@ -136,7 +148,7 @@ class _UserTypeState extends State<UserType> {
                 },
                 minWidth: width(context) * 0.8,
                 height: height(context) * 0.06,
-                bgColor: Colors.green[900],
+                bgColor: SpotmiesTheme.primaryColor,
                 textColor: Colors.white,
                 buttonName: "NEXT",
                 textSize: width(context) * 0.04,

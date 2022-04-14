@@ -26,7 +26,7 @@ class TextWidget extends StatelessWidget {
         overflow: flow ?? TextOverflow.ellipsis,
         textAlign: align ?? TextAlign.start,
         style: TextStyle(
-          fontFamily: 'Quicksand',
+          fontFamily: 'Roboto',
           letterSpacing: lSpace ?? 0,
           fontSize: size ?? 14,
           color: color ?? Colors.grey[900],
@@ -37,7 +37,7 @@ class TextWidget extends StatelessWidget {
 
 fonts(size, bold, color) {
   return TextStyle(
-      fontFamily: 'Quicksand',
+      fontFamily: 'Roboto',
       color: color,
       fontSize: size,
       fontWeight: bold,

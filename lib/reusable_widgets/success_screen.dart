@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
@@ -50,13 +51,13 @@ class _SuccessScreenState extends State<SuccessScreen> {
                 text: "SUCCESS",
                 size: height(context) * 0.05,
                 weight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
+                color: SpotmiesTheme.primaryColor,
               ),
               TextWidget(
                 text: "Added your product: Brinjal",
                 size: height(context) * 0.02,
                 weight: FontWeight.w500,
-                color: Theme.of(context).primaryColor,
+                color: SpotmiesTheme.primaryColor,
               ),
               SizedBox(
                 height: height(context) * 0.15,
@@ -69,7 +70,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                 height: height(context) * 0.06,
                 borderRadius: 0,
                 allRadius: true,
-                bgColor: Colors.green[900],
+                bgColor: SpotmiesTheme.primaryColor,
                 textColor: Colors.white,
                 buttonName: "Sell Another Product".toUpperCase(),
                 innerPadding: 0.02,

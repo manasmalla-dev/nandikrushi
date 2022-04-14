@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/filled_textfield_widget.dart';
@@ -80,7 +81,7 @@ class _VideosScreenState extends State<VideosScreen> {
                     margin: EdgeInsets.all(height(context) * 0.01),
                     child: ClipOval(
                         child: Container(
-                            color: Theme.of(context).primaryColor,
+                            color: SpotmiesTheme.primaryColor,
                             padding: const EdgeInsets.all(0),
                             child: const Icon(
                               Icons.search_rounded,
@@ -179,7 +180,7 @@ class _VideosScreenState extends State<VideosScreen> {
                   text: 'Request for your farm video',
                   size: height(context) * 0.02,
                   weight: FontWeight.w800,
-                  color: Theme.of(context).primaryColor,
+                  color: SpotmiesTheme.primaryColor,
                 ),
               ),
               SizedBox(
@@ -190,14 +191,14 @@ class _VideosScreenState extends State<VideosScreen> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Theme.of(context).primaryColor)),
+                    border: Border.all(color: SpotmiesTheme.primaryColor)),
                 child: Stack(
                   children: [
                     const FilledTextFieldWidget(),
                     Positioned(
                       child: Icon(
                         Icons.near_me_rounded,
-                        color: Theme.of(context).primaryColor,
+                        color: SpotmiesTheme.primaryColor,
                       ),
                       bottom: 4,
                       right: 4,

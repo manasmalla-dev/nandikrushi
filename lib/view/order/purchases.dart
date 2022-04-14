@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/model/purchases.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/rating_widget.dart';
@@ -15,7 +16,6 @@ class PurchasesScreen extends StatefulWidget {
 }
 
 class _PurchasesScreenState extends State<PurchasesScreen> {
-  
   List list = [];
   @override
   Widget build(BuildContext context) {
@@ -171,8 +171,7 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                                             padding:
                                                 EdgeInsets.zero, // and this
 
-                                            primary:
-                                                Theme.of(context).primaryColor,
+                                            primary: SpotmiesTheme.primaryColor,
                                             onPrimary: Colors.white,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:

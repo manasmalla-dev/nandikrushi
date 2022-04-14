@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushifarmer/controller/login_controller.dart';
 import 'package:nandikrushifarmer/provider/login_provider.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/login_bg.dart';
@@ -179,8 +179,8 @@ class _LoginState extends StateMVC<Login> {
                       },
                       minWidth: width(context) * 0.85,
                       height: height(context) * 0.06,
-                      bgColor: Colors.green[900],
-                      borderSideColor: Colors.green[900],
+                      bgColor: SpotmiesTheme.primaryColor,
+                      borderSideColor: SpotmiesTheme.primaryColor,
                       textColor: Colors.white,
                       buttonName: "GET OTP",
                       textSize: width(context) * 0.04,
