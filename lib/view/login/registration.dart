@@ -1,8 +1,12 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:alt_sms_autofill/alt_sms_autofill.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nandikrushifarmer/model/user.dart';
 import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
@@ -57,6 +61,60 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     'Organic FPC',
     'Other Certification +'
   ];
+  Position? location = null;
+  List<Placemark>? locationGeoCoded;
+
+  Future<void> checkLocationPermissionAndGetLocation() async {
+    var permissionGranted = await Geolocator.checkPermission();
+    if (permissionGranted == LocationPermission.always ||
+        permissionGranted == LocationPermission.whileInUse) {
+      location = await Geolocator.getLastKnownPosition();
+      var isLocationServiceEnabled =
+          await Geolocator.isLocationServiceEnabled();
+      if (isLocationServiceEnabled) {
+        location = await Geolocator.getCurrentPosition();
+        geocodeLocation();
+      } else {
+        Geolocator.openLocationSettings();
+      }
+    } else {
+      var locationPermission = await Geolocator.requestPermission();
+      checkLocationPermissionAndGetLocation();
+    }
+  }
+
+  Future<void> geocodeLocation() async {
+    locationGeoCoded =
+        await placemarkFromCoordinates(location!.latitude, location!.longitude);
+    print(locationGeoCoded);
+    formControllers["pincode"]?.text = locationGeoCoded?.first.postalCode ?? "";
+    formControllers["state"]?.text =
+        locationGeoCoded?.first.administrativeArea ?? "";
+    formControllers["district"]?.text =
+        locationGeoCoded?.first.subAdministrativeArea ?? "";
+    formControllers["city"]?.text = locationGeoCoded?.first.locality ?? "";
+    formControllers["house_number"]?.text =
+        locationGeoCoded?.first.street ?? "";
+    formControllers["mandal"]?.text = locationGeoCoded?.first.subLocality ?? "";
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkLocationPermissionAndGetLocation();
+  }
+
+  XFile? image;
+
+  Future<void> getImages(ImageSource imageSource) async {
+    ImagePicker _picker = ImagePicker();
+
+    image = await _picker.pickImage(source: imageSource);
+    Navigator.of(context).pop();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     initSmsListener();
@@ -134,29 +192,65 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           children: pageIndex == 0
                               ? [
                                   SizedBox(
-                                    height: height(context) * 0.02,
+                                    height: height(context) *
+                                        (image == null ? 0.02 : 0.04),
                                   ),
-                                  IconButton(
-                                    iconSize: height(context) * 0.1,
-                                    color: SpotmiesTheme.primaryColor,
-                                    onPressed: () {
-                                      log("Hello");
-                                    },
-                                    splashRadius: height(context) * 0.05,
-                                    icon: const Icon(Icons.add_a_photo_rounded),
-                                  ),
-                                  TextWidget(
-                                    text:
-                                        "Add ${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"} Image",
-                                    color: Colors.grey,
-                                    weight: FontWeight.bold,
-                                    size: height(context) * 0.02,
-                                  ),
+                                  image == null
+                                      ? IconButton(
+                                          iconSize: height(context) * 0.1,
+                                          color: SpotmiesTheme.primaryColor,
+                                          onPressed: () {
+                                            showImagePickerSheet();
+                                          },
+                                          splashRadius: height(context) * 0.05,
+                                          icon: const Icon(
+                                              Icons.add_a_photo_rounded),
+                                        )
+                                      : Stack(
+                                          children: [
+                                            ClipOval(
+                                                child: Image.file(
+                                              File(image?.path ?? ""),
+                                              height: height(context) * 0.17,
+                                              width: height(context) * 0.17,
+                                              fit: BoxFit.cover,
+                                            )),
+                                            Positioned(
+                                              bottom: 0,
+                                              right: 0,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: SpotmiesTheme
+                                                        .primaryColor,
+                                                    shape: BoxShape.circle),
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    showImagePickerSheet();
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.edit_rounded,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                  image == null
+                                      ? TextWidget(
+                                          text:
+                                              "Add ${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"} Image",
+                                          color: Colors.grey,
+                                          weight: FontWeight.bold,
+                                          size: height(context) * 0.02,
+                                        )
+                                      : SizedBox(),
                                   Container(
                                     width: double.infinity,
                                     margin: EdgeInsets.symmetric(
                                         horizontal: width(context) * 0.075,
-                                        vertical: width(context) * 0.05),
+                                        vertical: width(context) *
+                                            (image == null ? 0.05 : 0.08)),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -724,5 +818,64 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         },
       ),
     );
+  }
+
+  void showImagePickerSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: height(context) * 0.2,
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextWidget(
+                  text: "Choose Profile Picture",
+                  size: height(context) * 0.03,
+                ),
+                TextWidget(
+                  text:
+                      "Choose an image as a profile picture from one of the following sources",
+                  flow: TextOverflow.visible,
+                  color: Colors.grey,
+                ),
+                Spacer(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: SpotmiesTheme.primaryColor,
+                            onPrimary: Colors.white),
+                        onPressed: () {
+                          getImages(ImageSource.gallery);
+                        },
+                        child: TextWidget(
+                          text: "Gallery",
+                          color: Colors.white,
+                        ),
+                      ),
+                      flex: 3,
+                    ),
+                    Spacer(),
+                    Expanded(
+                      flex: 3,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: SpotmiesTheme.primaryColor,
+                            onPrimary: Colors.white),
+                        onPressed: () {
+                          getImages(ImageSource.camera);
+                        },
+                        child: TextWidget(text: "Camera", color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

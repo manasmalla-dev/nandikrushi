@@ -14,10 +14,15 @@ import 'package:nandikrushifarmer/view/login/registration.dart';
 class LoginPageController extends ControllerMVC {
   String _verificationCode = "";
   var loginFormKey = GlobalKey<FormState>();
+  var emailFormKey = GlobalKey<FormState>();
+  var emailScaffoldKey = GlobalKey<ScaffoldState>();
   var loginscaffoldKey = GlobalKey<ScaffoldState>();
   // TextEditingController numberController = TextEditingController();
 
   TextEditingController loginnum = TextEditingController();
+
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   late LoginModel loginModel;
 
@@ -34,6 +39,21 @@ class LoginPageController extends ControllerMVC {
       } else {
         log('Invalid');
       }
+    }
+  }
+
+  dataToEmail(BuildContext context) async {
+    if (emailFormKey.currentState != null) {
+      if (emailFormKey.currentState!.validate()) {
+        emailFormKey.currentState!.save();
+        //login
+        print("email: ${emailController.text}");
+        print("password: ${passwordController.text}");
+      } else {
+        log('Invalid');
+      }
+    } else {
+      print("empty");
     }
   }
 
