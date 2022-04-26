@@ -350,7 +350,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                               child: TextFieldWidget(
                                                 controller:
                                                     formControllers['mandal'],
-                                                label: 'Mandal',
+                                                label: 'Locality',
                                                 hintSize: 20,
                                                 hintColor: Colors.grey.shade600,
                                                 style: fonts(
