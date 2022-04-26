@@ -51,7 +51,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     'mandal': TextEditingController(),
     'district': TextEditingController(),
     'state': TextEditingController(),
-    'pincode': TextEditingController()
+    'pincode': TextEditingController(),
+    'email': TextEditingController(),
+    'password': TextEditingController(),
+    'c_password': TextEditingController(),
   };
   var checkBoxStatesText = [
     'Self Declared Natural Farmer',
@@ -149,7 +152,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         itemBuilder: (context, pageIndex) {
           return SingleChildScrollView(
             child: SizedBox(
-              height: height(context),
+              height: height(context) * 1.2,
               width: width(context),
               child: Stack(
                 children: [
@@ -269,6 +272,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                               '${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"} Name',
                                           hintSize: 20,
                                           style: fonts(20.0, FontWeight.w500,
+                                              Colors.black),
+                                        ),
+                                        TextFieldWidget(
+                                          controller: formControllers['email'],
+                                          label: 'Email Address',
+                                          hintSize: 20,
+                                          style: fonts(20.0, FontWeight.w400,
+                                              Colors.black),
+                                        ),
+                                        TextFieldWidget(
+                                          controller:
+                                              formControllers['password'],
+                                          label: 'Create Password',
+                                          obscureText: true,
+                                          hintSize: 20,
+                                          style: fonts(20.0, FontWeight.w400,
+                                              Colors.black),
+                                        ),
+                                        TextFieldWidget(
+                                          controller:
+                                              formControllers['c_password'],
+                                          label: 'Confirm Password',
+                                          hintSize: 20,
+                                          obscureText: true,
+                                          style: fonts(20.0, FontWeight.w400,
                                               Colors.black),
                                         ),
                                         SizedBox(
