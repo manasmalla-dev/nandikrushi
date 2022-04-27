@@ -180,6 +180,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                                       as String?)
                                                   ?.toUpperCase() ??
                                               '',
+                                          size: 13,
                                           weight: FontWeight.bold,
                                           color: ((uniqueOrders[index]['status']
                                                           as String?) ??

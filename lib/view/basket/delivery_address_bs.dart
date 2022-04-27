@@ -376,7 +376,7 @@ class CartItems extends StatelessWidget {
                                             ),
                                             TextWidget(
                                               text: items[index]['place'],
-                                              size: 10,
+                                              size: 5,
                                             ),
                                           ],
                                         ),
