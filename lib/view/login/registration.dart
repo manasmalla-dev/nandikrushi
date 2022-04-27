@@ -5,6 +5,7 @@ import 'package:nandikrushi/model/user.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushi/reusable_widgets/nandi_krushi_title.dart';
+import 'package:nandikrushi/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 import 'package:nandikrushi/reusable_widgets/textfield_widget.dart';
 import 'package:nandikrushi/view/basket/add_address.dart';
@@ -24,6 +25,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     'last_name': TextEditingController(),
     'email': TextEditingController(),
     'location': TextEditingController(),
+    'password': TextEditingController(),
+    'c_password': TextEditingController(),
   };
 
   @override
@@ -109,6 +112,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           label: 'Email Address',
                           hintSize: 20,
                           style: fonts(20.0, FontWeight.w500, Colors.black),
+                        ),
+                        TextFieldWidget(
+                          controller: formControllers['password'],
+                          label: 'Create Password',
+                          obscureText: true,
+                          hintSize: 20,
+                          style: fonts(20.0, FontWeight.w400, Colors.black),
+                        ),
+                        TextFieldWidget(
+                          controller: formControllers['c_password'],
+                          label: 'Confirm Password',
+                          hintSize: 20,
+                          obscureText: true,
+                          style: fonts(20.0, FontWeight.w400, Colors.black),
                         ),
                         SizedBox(
                           height: height(context) * 0.01,
@@ -196,11 +213,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         var lastName = formControllers['last_name']?.text ?? "";
                         var email = formControllers['email']?.text ?? "";
                         var location = formControllers['location']?.text ?? "";
+                        var password = formControllers["password"]?.text ?? "";
+                        var c_password =
+                            formControllers["c_password"]?.text ?? "";
+                        if (c_password != password) {
+                          return snackbar(context, "Passwords not the same!");
+                        }
                         user = User.registerUser(
                             firstName: firstName,
                             lastName: lastName,
                             location: location,
-                            email: email);
+                            email: email,
+                            password: password);
 
                         log(user.toString());
                         Navigator.of(context).push(MaterialPageRoute(

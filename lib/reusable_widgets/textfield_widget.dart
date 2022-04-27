@@ -37,6 +37,7 @@ class TextFieldWidget extends StatelessWidget {
   final TextStyle? style;
   final TextInputAction textInputAction;
   final bool shouldShowCurreny;
+  final bool obscureText;
 
   const TextFieldWidget(
       {Key? key,
@@ -47,6 +48,7 @@ class TextFieldWidget extends StatelessWidget {
       this.borderRadius,
       this.bordercolor,
       this.postIcon,
+      this.obscureText = false,
       this.postIconColor,
       this.focus,
       this.showCounter = false,
@@ -81,6 +83,7 @@ class TextFieldWidget extends StatelessWidget {
       inputFormatters: formatter,
       controller: controller,
       cursorColor: const Color(0xFF006838),
+      obscureText: obscureText,
       decoration: InputDecoration(
         suffixIcon: suffix,
         prefixIcon: shouldShowCurreny
