@@ -417,11 +417,13 @@ class DeliveryAddressesList extends StatelessWidget {
       {Key? key,
       required this.addresses,
       required this.onAddAddress,
-      required this.onDeleteAddress})
+      required this.onDeleteAddress,
+      required this.locationCity})
       : super(key: key);
   final List<List<String>> addresses;
   final Function(int item) onDeleteAddress;
   final Function(List<String>) onAddAddress;
+  final String locationCity;
   @override
   Widget build(BuildContext context) {
     log('redrawn');
@@ -446,7 +448,7 @@ class DeliveryAddressesList extends StatelessWidget {
                 ),
                 TextWidget(
                   text:
-                      'Your selected city is Hyderabad. Please add an address by tapping below.',
+                      'Your selected city is ${locationCity} Hyderabad. Please add an address by tapping below.',
                   weight: FontWeight.w600,
                   color: Colors.grey,
                   flow: TextOverflow.visible,
