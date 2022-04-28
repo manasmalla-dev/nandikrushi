@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
@@ -33,6 +35,22 @@ class _BasketState extends State<Basket> {
           'https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg'
     }
   ];
+  Placemark? placemark;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPlacemark();
+  }
+
+  Future<void> getPlacemark() async {
+    var location = await Geolocator.getLastKnownPosition();
+    var placemarks = await placemarkFromCoordinates(
+        location?.latitude ?? 0, location?.longitude ?? 0);
+    placemark = placemarks.first;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,7 +176,7 @@ class _BasketState extends State<Basket> {
             child: ElevatedButtonWidget(
               borderRadius: 8,
               onClick: () {
-                orderPlacementFlowBS(context, userInitialPage: 1);
+                orderPlacementFlowBS(context, placemark, userInitialPage: 1);
               },
               minWidth: width(context) * 0.9,
               height: height(context) * 0.06,
