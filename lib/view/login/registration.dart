@@ -152,7 +152,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         itemBuilder: (context, pageIndex) {
           return SingleChildScrollView(
             child: SizedBox(
-              height: height(context) * 1.2,
+              height: height(context) * (pageIndex == 0 ? 1.2 : 1),
               width: width(context),
               child: Stack(
                 children: [

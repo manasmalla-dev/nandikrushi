@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
@@ -219,10 +220,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
               delegate: SliverChildListDelegate([
             SizedBox(
               height: height(context) * 0.3,
-              child: Image.network(
-                "https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg",
-                fit: BoxFit.cover,
-              ),
+              child: MapsContainer(),
             ),
             Container(
               color: Colors.grey,
@@ -592,6 +590,55 @@ class ProductList extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+}
+
+class MapsContainer extends StatefulWidget {
+  const MapsContainer({Key? key}) : super(key: key);
+
+  @override
+  State<MapsContainer> createState() => _MapsContainerState();
+}
+
+class _MapsContainerState extends State<MapsContainer> {
+  late GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(17.7410624, 83.3071737);
+  final Map<String, LatLng> markerLocations = {
+    "Spotmies": const LatLng(17.7654845, 83.3210725),
+    "Manas's Residence": const LatLng(17.7410624, 83.3071737)
+  };
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    setState(() {
+      _markers.clear();
+      for (final office in markerLocations.entries) {
+        final marker = Marker(
+          markerId: MarkerId(office.key),
+          position: LatLng(office.value.latitude, office.value.longitude),
+          infoWindow: InfoWindow(
+            title: office.key,
+            snippet: "${office.value.latitude},${office.value.longitude}",
+          ),
+        );
+        _markers[office.key] = marker;
+      }
+    });
+  }
+
+  final Map<String, Marker> _markers = {};
+
+  @override
+  Widget build(BuildContext context) {
+    return GoogleMap(
+      onMapCreated: _onMapCreated,
+      initialCameraPosition: CameraPosition(
+        target: _center,
+        zoom: 16,
+      ),
+      markers: _markers.values.toSet(),
     );
   }
 }
