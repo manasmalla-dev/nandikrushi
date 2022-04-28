@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart' as GMW;
+import 'package:location/location.dart';
+import 'package:nandikrushi/provider/places_provider.dart';
+import 'package:nandikrushi/provider/theme_provider.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 import 'package:nandikrushi/reusable_widgets/textfield_widget.dart';
 
 class AddressSearchScreen extends StatefulWidget {
-  const AddressSearchScreen({Key? key}) : super(key: key);
+  final Function(List<String>) onSaveAddress;
+  const AddressSearchScreen({Key? key, required this.onSaveAddress})
+      : super(key: key);
 
   @override
   State<AddressSearchScreen> createState() => _AddressSearchScreenState();
@@ -13,6 +20,56 @@ class AddressSearchScreen extends StatefulWidget {
 class _AddressSearchScreenState extends State<AddressSearchScreen> {
   var searchController = TextEditingController();
   var addresses = [];
+  LocationData? userLocation;
+  var isSearching = true;
+
+  Future<LocationData?> getLocationAndPermission() async {
+    Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return null;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return null;
+      }
+    }
+
+    userLocation = await location.getLocation();
+
+    GMW.GoogleMapsPlaces _places =
+        GMW.GoogleMapsPlaces(apiKey: PlacesProvider.apiKey);
+    GMW.PlacesSearchResponse results = await _places.searchNearbyWithRadius(
+        GMW.Location(userLocation?.latitude ?? 0, userLocation?.longitude ?? 0),
+        searchController.text != null ? 2500 : 100000,
+        keyword: searchController.text);
+    addresses = results.results;
+    setState(() {
+      isSearching = !isSearching;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      getLocationAndPermission();
+      print(userLocation);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +93,10 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
             child: TextFieldWidget(
               textInputAction: TextInputAction.search,
               onSubmitField: () {
-                setState(() {});
+                setState(() {
+                  isSearching = !isSearching;
+                  getLocationAndPermission();
+                });
               },
               controller: searchController,
               label: "Search",
@@ -46,7 +106,7 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
                 margin: EdgeInsets.all(height(context) * 0.01),
                 child: ClipOval(
                     child: Container(
-                        color: Theme.of(context).primaryColor,
+                        color: SpotmiesTheme.primaryColor,
                         padding: const EdgeInsets.all(0),
                         child: const Icon(
                           Icons.search_rounded,
@@ -57,15 +117,88 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
           ),
         ),
       ),
-      body: ListView.separated(
-        itemBuilder: ((context, index) {
-          return Container();
-        }),
-        separatorBuilder: (context, index) {
-          return const Divider();
-        },
-        itemCount: addresses.where((element) => true).length,
-      ),
+      body: !isSearching
+          ? addresses.length > 0
+              ? ListView.separated(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: ((context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: width(context) * 0.02,
+                          ),
+                          Icon(
+                            Icons.location_on,
+                            color: SpotmiesTheme.primaryColor,
+                          ),
+                          SizedBox(
+                            width: width(context) * 0.05,
+                          ),
+                          TextWidget(
+                            text: addresses[index].name,
+                            weight: FontWeight.w500,
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                  separatorBuilder: (context, index) {
+                    return const Divider();
+                  },
+                  itemCount: addresses.length,
+                )
+              : SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/png/delivery_address.png"),
+                      SizedBox(
+                        height: height(context) * 0.03,
+                      ),
+                      TextWidget(
+                        text: "Oops!",
+                        weight: FontWeight.bold,
+                        align: TextAlign.center,
+                        size: height(context) * 0.05,
+                        color: SpotmiesTheme.primaryColor,
+                      ),
+                      TextWidget(
+                        text: "We didn't find that place...",
+                        weight: FontWeight.w500,
+                        align: TextAlign.center,
+                        size: height(context) * 0.03,
+                        color: SpotmiesTheme.primaryColor,
+                      ),
+                    ],
+                  ),
+                )
+          : SizedBox(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    color: SpotmiesTheme.primaryColor,
+                  ),
+                  SizedBox(
+                    height: height(context) * 0.03,
+                  ),
+                  TextWidget(
+                    text: "Loading...",
+                    weight: FontWeight.bold,
+                    align: TextAlign.center,
+                    size: height(context) * 0.03,
+                    color: SpotmiesTheme.primaryColor,
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }
