@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
@@ -16,6 +18,7 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails> {
   var addedProductQuantity = 0;
+  Placemark? placemark;
   var products = {
     'a2-milk': [
       {
@@ -220,6 +223,21 @@ class _ProductDetailsState extends State<ProductDetails> {
       }
     ]
   };
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPlacemark();
+  }
+
+  Future<void> getPlacemark() async {
+    var location = await Geolocator.getLastKnownPosition();
+    var placemarks = await placemarkFromCoordinates(
+        location?.latitude ?? 0, location?.longitude ?? 0);
+    placemark = placemarks.first;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -229,7 +247,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         title: 'Brinjal',
         suffix: InkWell(
           onTap: () {
-            orderPlacementFlowBS(context);
+            orderPlacementFlowBS(context, placemark);
           },
           child: SizedBox(
             width: 50,

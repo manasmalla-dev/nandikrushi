@@ -6,6 +6,7 @@ import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 class TextFieldWidget extends StatelessWidget {
   final String? text;
   final String? hint;
+  final bool obscureText;
   final String? validateMsg;
   final bool showCounter;
   final TextInputType? keyBoardType;
@@ -49,6 +50,7 @@ class TextFieldWidget extends StatelessWidget {
       this.postIcon,
       this.postIconColor,
       this.focus,
+      this.obscureText = false,
       this.showCounter = false,
       this.focusBorderColor,
       this.focusBorderRadius,
@@ -138,6 +140,7 @@ class TextFieldWidget extends StatelessWidget {
       autofocus: focus ?? false,
       maxLines: maxLines,
       maxLength: maxLength,
+      obscureText: obscureText,
       textInputAction: textInputAction,
       onFieldSubmitted: (value) {
         if (onSubmitField != null) {
