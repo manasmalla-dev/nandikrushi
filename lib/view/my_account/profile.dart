@@ -23,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     'last_name': TextEditingController(),
     'email': TextEditingController(),
     'location': TextEditingController(),
+    'password': TextEditingController(),
   };
   @override
   Widget build(BuildContext context) {
@@ -70,6 +71,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   label: 'Email Address',
                   hintSize: 20,
                   style: fonts(20.0, FontWeight.w500, Colors.black),
+                ),
+                TextFieldWidget(
+                  controller: formControllers['password'],
+                  label: 'Password',
+                  obscureText: true,
+                  hintSize: 20,
+                  style: fonts(20.0, FontWeight.w400, Colors.black),
                 ),
                 SizedBox(
                   height: height(context) * 0.01,
@@ -152,11 +160,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       var lastName = formControllers['last_name']?.text ?? "";
                       var email = formControllers['email']?.text ?? "";
                       var location = formControllers['location']?.text ?? "";
+                      var password = formControllers['password']?.text ?? "";
                       user = User.registerUser(
                           firstName: firstName,
                           lastName: lastName,
                           location: location,
-                          email: email);
+                          email: email,
+                          password: password);
 
                       log(user.toString());
                       Navigator.of(context).pop();

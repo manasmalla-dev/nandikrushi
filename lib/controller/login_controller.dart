@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,9 +17,14 @@ class LoginPageController extends ControllerMVC {
   String _verificationCode = "";
   var loginFormKey = GlobalKey<FormState>();
   var loginscaffoldKey = GlobalKey<ScaffoldState>();
+  var emailScaffoldKey = GlobalKey<ScaffoldState>();
+  var emailFormKey = GlobalKey<FormState>();
   // TextEditingController numberController = TextEditingController();
 
   TextEditingController loginnum = TextEditingController();
+
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   late LoginModel loginModel;
 
@@ -34,6 +41,21 @@ class LoginPageController extends ControllerMVC {
       } else {
         log('Invalid');
       }
+    }
+  }
+
+  dataToEmail(BuildContext context) async {
+    if (emailFormKey.currentState != null) {
+      if (emailFormKey.currentState!.validate()) {
+        emailFormKey.currentState!.save();
+        //login
+        print("email: ${emailController.text}");
+        print("password: ${passwordController.text}");
+      } else {
+        log('Invalid');
+      }
+    } else {
+      print("empty");
     }
   }
 
