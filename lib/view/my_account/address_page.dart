@@ -63,6 +63,7 @@ class _AddressScreenState extends State<AddressScreen> {
           child: SizedBox(
             height: double.infinity,
             child: DeliveryAddressesList(
+                locationCity: "Hyderabad",
                 addresses: addresses,
                 onAddAddress: (list) {
                   setState(() {

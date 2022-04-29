@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/provider/registration_provider.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/login_bg.dart';
@@ -47,7 +48,7 @@ class _LangTypeState extends State<LangType> {
                     text: "REGISTER AS",
                     size: width(context) * 0.04,
                     weight: FontWeight.w800,
-                    color: Colors.green[900],
+                    color: SpotmiesTheme.primaryColor,
                     align: TextAlign.start,
                     lSpace: 2.5,
                   ),
@@ -60,11 +61,13 @@ class _LangTypeState extends State<LangType> {
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
-                    bgColor:
-                        type == 'english' ? Colors.green[900] : Colors.white,
-                    borderSideColor: Colors.green[900],
-                    textColor:
-                        type == 'english' ? Colors.white : Colors.green[900],
+                    bgColor: type == 'english'
+                        ? SpotmiesTheme.primaryColor
+                        : Colors.white,
+                    borderSideColor: SpotmiesTheme.primaryColor,
+                    textColor: type == 'english'
+                        ? Colors.white
+                        : SpotmiesTheme.primaryColor,
                     buttonName: "ENGLISH",
                     center: true,
                     allRadius: true,
@@ -81,10 +84,13 @@ class _LangTypeState extends State<LangType> {
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor: type == 'telugu' ? Colors.green[900] : Colors.white,
-                    borderSideColor: Colors.green[900],
-                    textColor:
-                        type == 'telugu' ? Colors.white : Colors.green[900],
+                    bgColor: type == 'telugu'
+                        ? SpotmiesTheme.primaryColor
+                        : Colors.white,
+                    borderSideColor: SpotmiesTheme.primaryColor,
+                    textColor: type == 'telugu'
+                        ? Colors.white
+                        : SpotmiesTheme.primaryColor,
                     buttonName: "తెలుగు",
                     center: true,
                     borderRadius: 15,
@@ -100,11 +106,13 @@ class _LangTypeState extends State<LangType> {
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor:
-                        type == 'hindi' ? Colors.green[900] : Colors.white,
-                    borderSideColor: Colors.green[900],
-                    textColor:
-                        type == 'hindi' ? Colors.white : Colors.green[900],
+                    bgColor: type == 'hindi'
+                        ? SpotmiesTheme.primaryColor
+                        : Colors.white,
+                    borderSideColor: SpotmiesTheme.primaryColor,
+                    textColor: type == 'hindi'
+                        ? Colors.white
+                        : SpotmiesTheme.primaryColor,
                     buttonName: "हिन्दी",
                     center: true,
                     borderRadius: 15,
@@ -120,9 +128,13 @@ class _LangTypeState extends State<LangType> {
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor: type == 'kannada' ? Colors.green[900] : Colors.white,
-                    borderSideColor: Colors.green[900],
-                    textColor: type == 'kannada' ? Colors.white : Colors.green[900],
+                    bgColor: type == 'kannada'
+                        ? SpotmiesTheme.primaryColor
+                        : Colors.white,
+                    borderSideColor: SpotmiesTheme.primaryColor,
+                    textColor: type == 'kannada'
+                        ? Colors.white
+                        : SpotmiesTheme.primaryColor,
                     buttonName: "ಕನ್ನಡ",
                     center: true,
                     borderRadius: 15,
@@ -136,7 +148,7 @@ class _LangTypeState extends State<LangType> {
                 },
                 minWidth: width(context) * 0.8,
                 height: height(context) * 0.06,
-                bgColor: Colors.green[900],
+                bgColor: SpotmiesTheme.primaryColor,
                 textColor: Colors.white,
                 buttonName: "NEXT",
                 textSize: width(context) * 0.04,

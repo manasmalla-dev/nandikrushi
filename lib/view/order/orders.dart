@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
@@ -229,10 +230,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            IconButton(
-              icon: const Icon(Icons.sort_rounded),
-              onPressed: () {},
-              splashRadius: 12,
+            SizedBox(
+              height: height(context) * 0.02,
+              child: IconButton(
+                iconSize: height(context) * 0.02,
+                icon: const Icon(Icons.sort_rounded),
+                onPressed: () {},
+                splashRadius: 12,
+                padding: EdgeInsets.zero,
+                alignment: Alignment.topCenter,
+              ),
             ),
             Expanded(
               child: Container(
@@ -426,7 +433,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
                                             primary: list[index]['status'] ==
                                                     "accepted"
-                                                ? Theme.of(context).primaryColor
+                                                ? SpotmiesTheme.primaryColor
                                                 : list[index]['status'] ==
                                                         "cancelled"
                                                     ? Colors.red

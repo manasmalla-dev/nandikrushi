@@ -1,15 +1,20 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/view/basket/add_address.dart';
+import 'package:nandikrushifarmer/view/basket/address_search.dart';
 import 'package:nandikrushifarmer/view/basket/confirm_order.dart';
 import 'package:nandikrushifarmer/view/product/product_details.dart';
 
-Future orderPlacementFlowBS(BuildContext context, {int userInitialPage = 0}) {
+Future orderPlacementFlowBS(BuildContext context, Placemark? placemark,
+    {int userInitialPage = 0}) {
   return showModalBottomSheet(
     context: context,
     elevation: 22,
@@ -89,7 +94,7 @@ Future orderPlacementFlowBS(BuildContext context, {int userInitialPage = 0}) {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              AddAddressScreen(
+                                              AddressSearchScreen(
                                             onSaveAddress: (list) {
                                               setState(() {
                                                 log('Helo');
@@ -169,6 +174,8 @@ Future orderPlacementFlowBS(BuildContext context, {int userInitialPage = 0}) {
                                       addresses.removeAt(index);
                                     });
                                   },
+                                  locationCity: placemark?.administrativeArea ??
+                                      "Hyderabad",
                                 ),
                         ),
                         ElevatedButtonWidget(
@@ -289,8 +296,8 @@ class CartItems extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: width(context) * 0.02),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
@@ -415,11 +422,13 @@ class DeliveryAddressesList extends StatelessWidget {
       {Key? key,
       required this.addresses,
       required this.onAddAddress,
-      required this.onDeleteAddress})
+      required this.onDeleteAddress,
+      required this.locationCity})
       : super(key: key);
   final List<List<String>> addresses;
   final Function(int item) onDeleteAddress;
   final Function(List<String>) onAddAddress;
+  final String locationCity;
   @override
   Widget build(BuildContext context) {
     log('redrawn');
@@ -444,7 +453,7 @@ class DeliveryAddressesList extends StatelessWidget {
                 ),
                 TextWidget(
                   text:
-                      'Your selected city is Hyderabad. Please add an address by tapping below.',
+                      'Your selected city is ${locationCity} Hyderabad. Please add an address by tapping below.',
                   weight: FontWeight.w600,
                   color: Colors.grey,
                   flow: TextOverflow.visible,
@@ -458,7 +467,7 @@ class DeliveryAddressesList extends StatelessWidget {
                   padding:
                       EdgeInsets.symmetric(horizontal: width(context) * 0.1),
                   child: ElevatedButtonWidget(
-                    bgColor: Theme.of(context).primaryColor,
+                    bgColor: SpotmiesTheme.primaryColor,
                     allRadius: true,
                     trailingIcon: const Icon(Icons.add_rounded),
                     buttonName: 'Add Address'.toUpperCase(),
@@ -470,7 +479,7 @@ class DeliveryAddressesList extends StatelessWidget {
                     onClick: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => AddAddressScreen(
+                          builder: (context) => AddressSearchScreen(
                             onSaveAddress: onAddAddress,
                           ),
                         ),

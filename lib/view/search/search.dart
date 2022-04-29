@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/textfield_widget.dart';
 import 'package:nandikrushifarmer/view/product/product_details.dart';
+
+import '../../provider/theme_provider.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -23,9 +26,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
   }
 
   Color getTabBarTextColor(int i) {
-    return _controller.index == i
-        ? Theme.of(context).primaryColor
-        : Colors.black;
+    return _controller.index == i ? SpotmiesTheme.primaryColor : Colors.black;
   }
 
   FontWeight getTabBarTextFontWeight(int i) {
@@ -219,10 +220,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
               delegate: SliverChildListDelegate([
             SizedBox(
               height: height(context) * 0.3,
-              child: Image.network(
-                "https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg",
-                fit: BoxFit.cover,
-              ),
+              child: MapsContainer(),
             ),
             Container(
               color: Colors.grey,
@@ -234,7 +232,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
             backgroundColor: Colors.white,
             flexibleSpace: Center(
               child: TabBar(
-                indicatorColor: Theme.of(context).primaryColor,
+                indicatorColor: SpotmiesTheme.primaryColor,
                 controller: _controller,
                 isScrollable: true,
                 tabs: [
@@ -326,7 +324,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                             margin: EdgeInsets.all(height(context) * 0.01),
                             child: ClipOval(
                                 child: Container(
-                                    color: Theme.of(context).primaryColor,
+                                    color: SpotmiesTheme.primaryColor,
                                     padding: const EdgeInsets.all(0),
                                     child: const Icon(
                                       Icons.search_rounded,
@@ -565,7 +563,7 @@ class ProductList extends StatelessWidget {
                                   padding: EdgeInsets.zero, // and this
                                   side: BorderSide(
                                       width: 1,
-                                      color: Theme.of(context).primaryColor),
+                                      color: SpotmiesTheme.primaryColor),
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(100))),
@@ -577,7 +575,7 @@ class ProductList extends StatelessWidget {
                                   text: "Contact".toUpperCase(),
                                   size: height(context) * 0.014,
                                   weight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColor,
+                                  color: SpotmiesTheme.primaryColor,
                                 ),
                               ),
                             ),
@@ -592,6 +590,55 @@ class ProductList extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+}
+
+class MapsContainer extends StatefulWidget {
+  const MapsContainer({Key? key}) : super(key: key);
+
+  @override
+  State<MapsContainer> createState() => _MapsContainerState();
+}
+
+class _MapsContainerState extends State<MapsContainer> {
+  late GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(17.7410624, 83.3071737);
+  final Map<String, LatLng> markerLocations = {
+    "Spotmies": const LatLng(17.7654845, 83.3210725),
+    "Manas's Residence": const LatLng(17.7410624, 83.3071737)
+  };
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    setState(() {
+      _markers.clear();
+      for (final office in markerLocations.entries) {
+        final marker = Marker(
+          markerId: MarkerId(office.key),
+          position: LatLng(office.value.latitude, office.value.longitude),
+          infoWindow: InfoWindow(
+            title: office.key,
+            snippet: "${office.value.latitude},${office.value.longitude}",
+          ),
+        );
+        _markers[office.key] = marker;
+      }
+    });
+  }
+
+  final Map<String, Marker> _markers = {};
+
+  @override
+  Widget build(BuildContext context) {
+    return GoogleMap(
+      onMapCreated: _onMapCreated,
+      initialCameraPosition: CameraPosition(
+        target: _center,
+        zoom: 16,
+      ),
+      markers: _markers.values.toSet(),
     );
   }
 }

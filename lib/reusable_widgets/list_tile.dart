@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 
@@ -78,13 +79,13 @@ expListTile(BuildContext context, {title, leading, List<Widget>? widget}) {
         ExpansionTile(
           backgroundColor: Colors.white,
           collapsedBackgroundColor: Colors.white,
-          textColor: Colors.green[900],
-          iconColor: Colors.green[900],
+          textColor: SpotmiesTheme.primaryColor,
+          iconColor: SpotmiesTheme.primaryColor,
           collapsedIconColor: Colors.grey,
           collapsedTextColor: Colors.grey[900],
           title: Text(title,
               style: TextStyle(
-                fontFamily: 'Quicksand',
+                fontFamily: 'Roboto',
                 fontWeight: FontWeight.w600,
                 fontSize: width(context) * 0.04,
               )),

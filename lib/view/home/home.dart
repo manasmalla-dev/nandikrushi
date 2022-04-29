@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:nandikrushifarmer/reusable_widgets/videos/videos.dart';
@@ -22,7 +23,11 @@ class _HomeState extends State<Home> {
       "icon": "assets/png/myproduct_home.png",
     },
     {
-      "title": "Add Product",
+      "title": SpotmiesTheme.appTheme == UserAppTheme.farmer
+          ? "Add Product"
+          : SpotmiesTheme.appTheme == UserAppTheme.restaurant
+              ? "Sell Food"
+              : "Sell Grocery",
       "sub_title": "List your Product",
       "icon": "assets/png/addproduct_home.png",
     },

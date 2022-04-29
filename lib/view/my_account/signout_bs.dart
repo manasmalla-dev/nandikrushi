@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
@@ -43,7 +44,7 @@ Future signOut(
               Container(
                 padding: const EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
-                    bgColor: Colors.green[900],
+                    bgColor: SpotmiesTheme.primaryColor,
                     minWidth: width(context),
                     height: height(context) * 0.06,
                     textColor: Colors.white,

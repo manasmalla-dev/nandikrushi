@@ -1,14 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushifarmer/controller/login_controller.dart';
 import 'package:nandikrushifarmer/provider/login_provider.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/login_bg.dart';
 import 'package:nandikrushifarmer/reusable_widgets/nandi_krushi_title.dart';
 import 'package:nandikrushifarmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
+import 'package:nandikrushifarmer/view/login/login_with_email.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
@@ -179,8 +180,8 @@ class _LoginState extends StateMVC<Login> {
                       },
                       minWidth: width(context) * 0.85,
                       height: height(context) * 0.06,
-                      bgColor: Colors.green[900],
-                      borderSideColor: Colors.green[900],
+                      bgColor: SpotmiesTheme.primaryColor,
+                      borderSideColor: SpotmiesTheme.primaryColor,
                       textColor: Colors.white,
                       buttonName: "GET OTP",
                       textSize: width(context) * 0.04,
@@ -188,6 +189,21 @@ class _LoginState extends StateMVC<Login> {
                         Icons.arrow_forward,
                         color: Colors.white,
                         size: width(context) * 0.045,
+                      ),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          primary: SpotmiesTheme.primaryColor),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return LoginWithEmail();
+                        }));
+                      },
+                      child: TextWidget(
+                        text: "or, Login With Email",
+                        color: SpotmiesTheme.primaryColor,
+                        weight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(

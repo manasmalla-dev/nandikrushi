@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushifarmer/controller/login_controller.dart';
 import 'package:nandikrushifarmer/provider/login_provider.dart';
+import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
@@ -28,7 +29,17 @@ class _OTPPageState extends StateMVC<OTPPage> {
     loginPageController = controller as LoginPageController;
   }
   final formKey = GlobalKey<FormState>();
+  var canResendSMS = false;
   var pinController = TextEditingController();
+
+  Future<void> startResendCounter() async {
+    Future.delayed(Duration(minutes: 2), () {
+      setState(() {
+        canResendSMS = true;
+      });
+    });
+  }
+
   @override
   void initState() {
     loginProvider = Provider.of<LoginProvider>(context, listen: false);
@@ -40,6 +51,7 @@ class _OTPPageState extends StateMVC<OTPPage> {
     pinController.addListener(() {
       setState(() {});
     });
+    startResendCounter();
     return Consumer<LoginProvider>(builder: (context, data, child) {
       return Scaffold(
           backgroundColor: Colors.white,
@@ -156,10 +168,10 @@ class _OTPPageState extends StateMVC<OTPPage> {
                     minWidth: width(context) * 0.85,
                     height: height(context) * 0.06,
                     bgColor: pinController.text.length == 4
-                        ? Colors.green[900]
+                        ? SpotmiesTheme.primaryColor
                         : Colors.grey.shade400,
                     borderSideColor: pinController.text.length == 4
-                        ? Colors.green[900]
+                        ? SpotmiesTheme.primaryColor
                         : Colors.grey.shade400,
                     textColor: Colors.white,
                     buttonName: "VERIFY OTP",
@@ -181,11 +193,20 @@ class _OTPPageState extends StateMVC<OTPPage> {
                           color: Colors.grey,
                         ),
                         TextButton(
-                            onPressed: () {},
-                            child: TextWidget(
-                              text: "Resend".toUpperCase(),
-                              weight: FontWeight.w800,
-                            ))
+                          onPressed: () {
+                            if (canResendSMS) {
+                              canResendSMS = false;
+                              //RESEND OTP
+                            }
+                          },
+                          child: TextWidget(
+                            text: "Resend".toUpperCase(),
+                            weight: FontWeight.w800,
+                            color: canResendSMS
+                                ? Colors.grey.shade900
+                                : Colors.grey,
+                          ),
+                        ),
                       ],
                     ),
                   )
