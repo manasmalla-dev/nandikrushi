@@ -47,13 +47,13 @@ class LoginPageController extends ControllerMVC {
       if (emailFormKey.currentState!.validate()) {
         emailFormKey.currentState!.save();
         //login
-        print("email: ${emailController.text}");
-        print("password: ${passwordController.text}");
+        log("email: ${emailController.text}");
+        log("password: ${passwordController.text}");
       } else {
         log('Invalid');
       }
     } else {
-      print("empty");
+      log("empty");
     }
   }
 
@@ -70,7 +70,7 @@ class LoginPageController extends ControllerMVC {
                 .signInWithCredential(credential)
                 .then((value) async {
               if (value.user != null) {
-                // print("user already login");
+                // log("user already login");
                 // checkUserRegistered(value.user.uid);
                 Navigator.pushAndRemoveUntil(
                     context,

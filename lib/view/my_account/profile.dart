@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushifarmer/controller/registration_controller.dart';
 import 'package:nandikrushifarmer/model/user.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
@@ -13,30 +15,35 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  var acresInInt = 1.0;
-  var checkBoxStates = [true, false, false, false, false, false];
-  var user = User();
-  var formControllers = {
-    'farmer_name': TextEditingController(),
-    'house_number': TextEditingController(),
-    'city': TextEditingController(),
-    'mandal': TextEditingController(),
-    'district': TextEditingController(),
-    'state': TextEditingController(),
-    'pincode': TextEditingController()
-  };
-  var checkBoxStatesText = [
-    'Self Declared Natural Farmer',
-    'PGS India Green',
-    'PGS India Organic',
-    'Organic FPO',
-    'Organic FPC',
-    'Other Certification +'
-  ];
+class _ProfileScreenState extends StateMVC<ProfileScreen> {
+  late RegistrationController homeController;
+
+  _ProfileScreenState() : super(RegistrationController()) {
+    homeController = controller as RegistrationController;
+  }
+  // var acresInInt = 1.0;
+  // var checkBoxStates = [true, false, false, false, false, false];
+  // var user = User();
+  // var formControllers = {
+  //   'farmer_name': TextEditingController(),
+  //   'house_number': TextEditingController(),
+  //   'city': TextEditingController(),
+  //   'mandal': TextEditingController(),
+  //   'district': TextEditingController(),
+  //   'state': TextEditingController(),
+  //   'pincode': TextEditingController()
+  // };
+  // var checkBoxStatesText = [
+  //   'Self Declared Natural Farmer',
+  //   'PGS India Green',
+  //   'PGS India Organic',
+  //   'Organic FPO',
+  //   'Organic FPC',
+  //   'Other Certification +'
+  // ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       size: height(context) * 0.02,
                     ),
                     TextFieldWidget(
-                      controller: formControllers['farmer_name'],
+                      controller: homeController.formControllers['farmer_name'],
                       label: 'Farmer Name',
                       hintSize: 20,
                       style: fonts(20.0, FontWeight.w500, Colors.black),
@@ -96,7 +103,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Expanded(
                           child: TextFieldWidget(
-                            controller: formControllers['house_number'],
+                            controller:
+                                homeController.formControllers['house_number'],
                             label: 'H.No.',
                             hintSize: 20,
                             hintColor: Colors.grey.shade600,
@@ -108,7 +116,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         Expanded(
                           child: TextFieldWidget(
-                            controller: formControllers['mandal'],
+                            controller:
+                                homeController.formControllers['mandal'],
                             label: 'Mandal',
                             hintSize: 20,
                             hintColor: Colors.grey.shade600,
@@ -124,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Expanded(
                           child: TextFieldWidget(
-                            controller: formControllers['city'],
+                            controller: homeController.formControllers['city'],
                             label: 'City/Vilage',
                             hintSize: 20,
                             hintColor: Colors.grey.shade600,
@@ -136,7 +145,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         Expanded(
                           child: TextFieldWidget(
-                            controller: formControllers['district'],
+                            controller:
+                                homeController.formControllers['district'],
                             label: 'District',
                             hintSize: 20,
                             hintColor: Colors.grey.shade600,
@@ -152,7 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Expanded(
                           child: TextFieldWidget(
-                            controller: formControllers['state'],
+                            controller: homeController.formControllers['state'],
                             label: 'State',
                             hintSize: 20,
                             hintColor: Colors.grey.shade600,
@@ -165,7 +175,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Expanded(
                           child: TextFieldWidget(
                             textInputAction: TextInputAction.done,
-                            controller: formControllers['pincode'],
+                            controller:
+                                homeController.formControllers['pincode'],
                             label: 'Pincode',
                             hintSize: 20,
                             hintColor: Colors.grey.shade600,
@@ -204,15 +215,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           thumbColor: const Color(0xFF368b86),
                           activeColor: const Color(0xFF368b86),
                           inactiveColor: const Color(0x16368b86),
-                          value: acresInInt,
+                          value: homeController.acresInInt,
                           max: 30,
                           min: 1,
-                          label: (acresInInt).round().toString(),
+                          label: (homeController.acresInInt).round().toString(),
                           // ignore: avoid_types_as_parameter_names
                           onChanged: (num) {
                             log("$num");
                             setState(() {
-                              acresInInt = num;
+                              homeController.acresInInt = num;
                             });
                           }),
                     ),
@@ -242,13 +253,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onTap: () {
                           setState(() {
                             for (int i = 0; i <= 5; i++) {
-                              checkBoxStates[i] = false;
+                              homeController.checkBoxStates[i] = false;
                             }
-                            checkBoxStates[index] = true;
+                            homeController.checkBoxStates[index] = true;
                           });
                         },
                         child: Container(
-                          color: checkBoxStates[index]
+                          color: homeController.checkBoxStates[index]
                               ? const Color(0xFF3da894)
                               : Colors.transparent,
                           child: Column(
@@ -259,28 +270,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Checkbox(
                                         activeColor: Colors.white,
                                         checkColor: const Color(0xFF368b86),
-                                        value: checkBoxStates[index],
+                                        value: homeController
+                                            .checkBoxStates[index],
                                         onChanged: (boolean) {
                                           setState(() {
                                             for (int i = 0; i <= 5; i++) {
-                                              checkBoxStates[i] = false;
+                                              homeController.checkBoxStates[i] =
+                                                  false;
                                             }
-                                            checkBoxStates[index] =
+                                            homeController
+                                                    .checkBoxStates[index] =
                                                 boolean ?? false;
                                           });
                                         }),
                                     SizedBox(
                                       width: width(context) * 0.6,
                                       child: TextWidget(
-                                        text: checkBoxStatesText[index],
+                                        text: homeController
+                                            .checkBoxStatesText[index],
                                         weight: FontWeight.w600,
-                                        color: checkBoxStates[index]
-                                            ? Colors.white
-                                            : Colors.black,
+                                        color:
+                                            homeController.checkBoxStates[index]
+                                                ? Colors.white
+                                                : Colors.black,
                                       ),
                                     )
                                   ]),
-                              index != 0 && index != 5 && checkBoxStates[index]
+                              index != 0 &&
+                                      index != 5 &&
+                                      homeController.checkBoxStates[index]
                                   ? Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -352,25 +370,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: EdgeInsets.only(bottom: height(context) * 0.03),
                 child: ElevatedButtonWidget(
                   onClick: () {
-                    var farmerName = formControllers['farmer_name']?.text ?? "";
-                    var houseNumber =
-                        formControllers['house_number']?.text ?? "";
-                    var mandal = formControllers['mandal']?.text ?? "";
-                    var city = formControllers['city']?.text ?? "";
-                    var district = formControllers['district']?.text ?? "";
-                    var state = formControllers['state']?.text ?? "";
-                    var pincode = formControllers['pincode']?.text ?? "";
-                    user = User.registerPartA(
-                        farmerName: farmerName,
-                        city: city,
-                        houseNumber: houseNumber,
-                        district: district,
-                        mandal: mandal,
+                    homeController.user = User.registerPartA(
+                        firstName:
+                            homeController.formControllers['first_name']?.text ??
+                                "",
+                        lastName:
+                            homeController.formControllers['last_name']?.text ??
+                                "",
+                         email:
+                            homeController.formControllers['email']?.text ?? "",
+                        telePhone:
+                            homeController.formControllers['telePhone']?.text ??
+                                "",
+                        pass: homeController.formControllers['password']?.text ??
+                            "",
+                        cpass:
+                            homeController.formControllers['c_password']?.text ??
+                                "",
+                        city:
+                            homeController.formControllers['city']?.text ?? "",
+                        houseNumber: homeController
+                                .formControllers['house_number']?.text ??
+                            "",
+                        district:
+                            homeController.formControllers['district']?.text ??
+                                "",
+                        mandal: homeController.formControllers['mandal']?.text ??
+                            "",
                         farmerImage: "IMAGE",
-                        pincode: pincode,
-                        state: state);
+                        pincode:
+                            homeController.formControllers['pincode']?.text ?? "",
+                        state: homeController.formControllers['state']?.text ?? "");
 
-                    log(user.toString());
+                    log(homeController.user.toString());
                   },
                   minWidth: width(context) * 0.85,
                   height: height(context) * 0.06,
