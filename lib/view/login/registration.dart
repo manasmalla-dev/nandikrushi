@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -7,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushifarmer/controller/registration_controller.dart';
 import 'package:nandikrushifarmer/model/user.dart';
 import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
@@ -21,15 +25,16 @@ class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenState();
+  _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
-  PageController pageController = PageController(initialPage: 0);
-  var acresInInt = 1.0;
-  var checkBoxStates = [true, false, false, false, false, false];
-  var user = User();
-  String _comingSms = '';
+class _RegistrationScreenState extends StateMVC<RegistrationScreen> {
+  late RegistrationController homeController;
+
+  _RegistrationScreenState() : super(RegistrationController()) {
+    homeController = controller as RegistrationController;
+  }
+
   Future<void> initSmsListener() async {
     String? comingSms;
     try {
@@ -39,120 +44,53 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
     if (!mounted) return;
     setState(() {
-      _comingSms = comingSms ?? '';
-      print("====>Message: ${_comingSms}");
+      homeController.comingSms = comingSms ?? '';
+      log("====>Message: ${homeController.comingSms}");
     });
-  }
-
-  var formControllers = {
-    'farmer_name': TextEditingController(),
-    'house_number': TextEditingController(),
-    'city': TextEditingController(),
-    'mandal': TextEditingController(),
-    'district': TextEditingController(),
-    'state': TextEditingController(),
-    'pincode': TextEditingController(),
-    'email': TextEditingController(),
-    'password': TextEditingController(),
-    'c_password': TextEditingController(),
-  };
-  var checkBoxStatesText = [
-    'Self Declared Natural Farmer',
-    'PGS India Green',
-    'PGS India Organic',
-    'Organic FPO',
-    'Organic FPC',
-    'Other Certification +'
-  ];
-  Position? location = null;
-  List<Placemark>? locationGeoCoded;
-
-  Future<void> checkLocationPermissionAndGetLocation() async {
-    var permissionGranted = await Geolocator.checkPermission();
-    if (permissionGranted == LocationPermission.always ||
-        permissionGranted == LocationPermission.whileInUse) {
-      location = await Geolocator.getLastKnownPosition();
-      var isLocationServiceEnabled =
-          await Geolocator.isLocationServiceEnabled();
-      if (isLocationServiceEnabled) {
-        location = await Geolocator.getCurrentPosition();
-        geocodeLocation();
-      } else {
-        Geolocator.openLocationSettings();
-      }
-    } else {
-      var locationPermission = await Geolocator.requestPermission();
-      checkLocationPermissionAndGetLocation();
-    }
-  }
-
-  Future<void> geocodeLocation() async {
-    locationGeoCoded =
-        await placemarkFromCoordinates(location!.latitude, location!.longitude);
-    print(locationGeoCoded);
-    formControllers["pincode"]?.text = locationGeoCoded?.first.postalCode ?? "";
-    formControllers["state"]?.text =
-        locationGeoCoded?.first.administrativeArea ?? "";
-    formControllers["district"]?.text =
-        locationGeoCoded?.first.subAdministrativeArea ?? "";
-    formControllers["city"]?.text = locationGeoCoded?.first.locality ?? "";
-    formControllers["house_number"]?.text =
-        locationGeoCoded?.first.street ?? "";
-    formControllers["mandal"]?.text = locationGeoCoded?.first.subLocality ?? "";
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    checkLocationPermissionAndGetLocation();
-  }
-
-  XFile? image;
-
-  Future<void> getImages(ImageSource imageSource) async {
-    ImagePicker _picker = ImagePicker();
-
-    image = await _picker.pickImage(source: imageSource);
-    Navigator.of(context).pop();
-    setState(() {});
+    homeController.checkLocationPermissionAndGetLocation();
   }
 
   @override
   Widget build(BuildContext context) {
     initSmsListener();
-    checkBoxStatesText = SpotmiesTheme.appTheme == UserAppTheme.restaurant
-        ? [
-            'FSSAI',
-            'Eating House License',
-            'Fire Safety License',
-            'Certificate of Environmental Clearance',
-            'Other Certification +'
-          ]
-        : SpotmiesTheme.appTheme == UserAppTheme.store
+    homeController.checkBoxStatesText =
+        SpotmiesTheme.appTheme == UserAppTheme.restaurant
             ? [
                 'FSSAI',
+                'Eating House License',
                 'Fire Safety License',
                 'Certificate of Environmental Clearance',
                 'Other Certification +'
               ]
-            : [
-                'Self Declared Natural Farmer',
-                'PGS India Green',
-                'PGS India Organic',
-                'Organic FPO',
-                'Organic FPC',
-                'Other Certification +'
-              ];
+            : SpotmiesTheme.appTheme == UserAppTheme.store
+                ? [
+                    'FSSAI',
+                    'Fire Safety License',
+                    'Certificate of Environmental Clearance',
+                    'Other Certification +'
+                  ]
+                : [
+                    'Self Declared Natural Farmer',
+                    'PGS India Green',
+                    'PGS India Organic',
+                    'Organic FPO',
+                    'Organic FPC',
+                    'Other Certification +'
+                  ];
     return Scaffold(
       body: PageView.builder(
         physics: const NeverScrollableScrollPhysics(),
-        controller: pageController,
+        controller: homeController.pageController,
         itemCount: 2,
         itemBuilder: (context, pageIndex) {
           return SingleChildScrollView(
             child: SizedBox(
-              height: height(context) * (pageIndex == 0 ? 1.2 : 1),
+              height: height(context) * (pageIndex == 0 ? 1.3 : 1),
               width: width(context),
               child: Stack(
                 children: [
@@ -196,9 +134,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ? [
                                   SizedBox(
                                     height: height(context) *
-                                        (image == null ? 0.02 : 0.04),
+                                        (homeController.image == null
+                                            ? 0.02
+                                            : 0.04),
                                   ),
-                                  image == null
+                                  homeController.image == null
                                       ? IconButton(
                                           iconSize: height(context) * 0.1,
                                           color: SpotmiesTheme.primaryColor,
@@ -213,7 +153,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           children: [
                                             ClipOval(
                                                 child: Image.file(
-                                              File(image?.path ?? ""),
+                                              File(homeController.image?.path ??
+                                                  ""),
                                               height: height(context) * 0.17,
                                               width: height(context) * 0.17,
                                               fit: BoxFit.cover,
@@ -230,7 +171,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                   onPressed: () {
                                                     showImagePickerSheet();
                                                   },
-                                                  icon: Icon(
+                                                  icon: const Icon(
                                                     Icons.edit_rounded,
                                                     color: Colors.white,
                                                   ),
@@ -239,7 +180,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             ),
                                           ],
                                         ),
-                                  image == null
+                                  homeController.image == null
                                       ? TextWidget(
                                           text:
                                               "Add ${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"} Image",
@@ -247,13 +188,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           weight: FontWeight.bold,
                                           size: height(context) * 0.02,
                                         )
-                                      : SizedBox(),
+                                      : const SizedBox(),
                                   Container(
-                                    width: double.infinity,
+                                    width: width(context),
                                     margin: EdgeInsets.symmetric(
                                         horizontal: width(context) * 0.075,
                                         vertical: width(context) *
-                                            (image == null ? 0.05 : 0.08)),
+                                            (homeController.image == null
+                                                ? 0.05
+                                                : 0.08)),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -266,24 +209,40 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           size: height(context) * 0.02,
                                         ),
                                         TextFieldWidget(
-                                          controller:
-                                              formControllers['farmer_name'],
-                                          label:
-                                              '${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"} Name',
+                                          controller: homeController
+                                              .formControllers['first_name'],
+                                          label: "First name",
                                           hintSize: 20,
                                           style: fonts(20.0, FontWeight.w500,
                                               Colors.black),
                                         ),
                                         TextFieldWidget(
-                                          controller: formControllers['email'],
+                                          controller: homeController
+                                              .formControllers['last_name'],
+                                          label: "Last name",
+                                          hintSize: 20,
+                                          style: fonts(20.0, FontWeight.w500,
+                                              Colors.black),
+                                        ),
+                                        TextFieldWidget(
+                                          controller: homeController
+                                              .formControllers['telePhone'],
+                                          label: "Telephone",
+                                          hintSize: 20,
+                                          style: fonts(20.0, FontWeight.w500,
+                                              Colors.black),
+                                        ),
+                                        TextFieldWidget(
+                                          controller: homeController
+                                              .formControllers['email'],
                                           label: 'Email Address',
                                           hintSize: 20,
                                           style: fonts(20.0, FontWeight.w400,
                                               Colors.black),
                                         ),
                                         TextFieldWidget(
-                                          controller:
-                                              formControllers['password'],
+                                          controller: homeController
+                                              .formControllers['password'],
                                           label: 'Create Password',
                                           obscureText: true,
                                           hintSize: 20,
@@ -291,8 +250,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                               Colors.black),
                                         ),
                                         TextFieldWidget(
-                                          controller:
-                                              formControllers['c_password'],
+                                          controller: homeController
+                                              .formControllers['c_password'],
                                           label: 'Confirm Password',
                                           hintSize: 20,
                                           obscureText: true,
@@ -312,8 +271,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           children: [
                                             Expanded(
                                               child: TextFieldWidget(
-                                                controller:
-                                                    formControllers['state'],
+                                                controller: homeController
+                                                    .formControllers['state'],
                                                 label: 'State',
                                                 hintSize: 20,
                                                 hintColor: Colors.grey.shade600,
@@ -328,8 +287,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             ),
                                             Expanded(
                                               child: TextFieldWidget(
-                                                controller:
-                                                    formControllers['district'],
+                                                controller: homeController
+                                                        .formControllers[
+                                                    'district'],
                                                 label: 'District',
                                                 hintSize: 20,
                                                 hintColor: Colors.grey.shade600,
@@ -348,8 +308,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           children: [
                                             Expanded(
                                               child: TextFieldWidget(
-                                                controller:
-                                                    formControllers['mandal'],
+                                                controller: homeController
+                                                    .formControllers['mandal'],
                                                 label: 'Locality',
                                                 hintSize: 20,
                                                 hintColor: Colors.grey.shade600,
@@ -364,8 +324,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             ),
                                             Expanded(
                                               child: TextFieldWidget(
-                                                controller:
-                                                    formControllers['city'],
+                                                controller: homeController
+                                                    .formControllers['city'],
                                                 label: 'City/Vilage',
                                                 hintSize: 20,
                                                 hintColor: Colors.grey.shade600,
@@ -384,7 +344,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           children: [
                                             Expanded(
                                               child: TextFieldWidget(
-                                                controller: formControllers[
+                                                controller: homeController
+                                                        .formControllers[
                                                     'house_number'],
                                                 label: 'H.No.',
                                                 hintSize: 20,
@@ -402,8 +363,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                               child: TextFieldWidget(
                                                 textInputAction:
                                                     TextInputAction.done,
-                                                controller:
-                                                    formControllers['pincode'],
+                                                controller: homeController
+                                                    .formControllers['pincode'],
                                                 label: 'Pincode',
                                                 hintSize: 20,
                                                 hintColor: Colors.grey.shade600,
@@ -427,49 +388,39 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       padding: EdgeInsets.only(
                                           bottom: height(context) * 0.03),
                                       child: ElevatedButtonWidget(
-                                        onClick: () {
-                                          var farmerName =
-                                              formControllers['farmer_name']
+                                        onClick: () async {
+                                          homeController.user = User.registerPartA(
+                                              firstName: homeController
+                                                      .formControllers[
+                                                          'first_name']
                                                       ?.text ??
-                                                  "";
-                                          var houseNumber =
-                                              formControllers['house_number']
+                                                  "",
+                                              lastName:
+                                                  homeController.formControllers['last_name']?.text ??
+                                                      "",
+                                              email: homeController
+                                                      .formControllers['email']
                                                       ?.text ??
-                                                  "";
-                                          var mandal =
-                                              formControllers['mandal']?.text ??
-                                                  "";
-                                          var city =
-                                              formControllers['city']?.text ??
-                                                  "";
-                                          var district =
-                                              formControllers['district']
+                                                  "",
+                                              telePhone: homeController
+                                                      .formControllers['telePhone']
                                                       ?.text ??
-                                                  "";
-                                          var state =
-                                              formControllers['state']?.text ??
-                                                  "";
-                                          var pincode =
-                                              formControllers['pincode']
-                                                      ?.text ??
-                                                  "";
-                                          user = User.registerPartA(
-                                              farmerName: farmerName,
-                                              city: city,
-                                              houseNumber: houseNumber,
-                                              district: district,
-                                              mandal: mandal,
+                                                  "",
+                                              pass: homeController.formControllers['password']?.text ?? "",
+                                              cpass: homeController.formControllers['c_password']?.text ?? "",
+                                              city: homeController.formControllers['city']?.text ?? "",
+                                              houseNumber: homeController.formControllers['house_number']?.text ?? "",
+                                              district: homeController.formControllers['district']?.text ?? "",
+                                              mandal: homeController.formControllers['mandal']?.text ?? "",
                                               farmerImage: "IMAGE",
-                                              pincode: pincode,
-                                              state: state);
-
-                                          log(user.toString());
-
-                                          pageController.animateToPage(
-                                              pageIndex + 1,
-                                              duration: const Duration(
-                                                  milliseconds: 400),
-                                              curve: Curves.easeInOut);
+                                              pincode: homeController.formControllers['pincode']?.text ?? "",
+                                              state: homeController.formControllers['state']?.text ?? "");
+                                          log(homeController.user.toString());
+                                          homeController.pageController
+                                              .animateToPage(pageIndex + 1,
+                                                  duration: const Duration(
+                                                      milliseconds: 400),
+                                                  curve: Curves.easeInOut);
                                         },
                                         minWidth: width(context) * 0.85,
                                         height: height(context) * 0.06,
@@ -550,17 +501,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                         const Color(0xFF006838),
                                                     inactiveColor:
                                                         const Color(0x16006838),
-                                                    value: acresInInt,
+                                                    value: homeController
+                                                        .acresInInt,
                                                     max: 30,
                                                     min: 1,
-                                                    label: (acresInInt)
+                                                    label: (homeController
+                                                            .acresInInt)
                                                         .round()
                                                         .toString(),
                                                     // ignore: avoid_types_as_parameter_names
                                                     onChanged: (num) {
                                                       log("$num");
                                                       setState(() {
-                                                        acresInInt = num;
+                                                        homeController
+                                                            .acresInInt = num;
                                                       });
                                                     }),
                                               )
@@ -581,24 +535,30 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     child: SizedBox(
                                       width: double.infinity,
                                       child: ListView.builder(
-                                          itemCount: checkBoxStatesText.length,
+                                          itemCount: homeController
+                                              .checkBoxStatesText.length,
                                           itemBuilder: (context, index) {
                                             return InkWell(
                                               onTap: () {
                                                 setState(() {
                                                   for (int i = 0;
                                                       i <=
-                                                          (checkBoxStatesText
+                                                          (homeController
+                                                                  .checkBoxStatesText
                                                                   .length -
                                                               1);
                                                       i++) {
-                                                    checkBoxStates[i] = false;
+                                                    homeController
+                                                            .checkBoxStates[i] =
+                                                        false;
                                                   }
-                                                  checkBoxStates[index] = true;
+                                                  homeController.checkBoxStates[
+                                                      index] = true;
                                                 });
                                               },
                                               child: Container(
-                                                color: checkBoxStates[index]
+                                                color: homeController
+                                                        .checkBoxStates[index]
                                                     ? SpotmiesTheme.primaryColor
                                                     : Colors.transparent,
                                                 child: Column(
@@ -620,9 +580,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                               checkColor:
                                                                   SpotmiesTheme
                                                                       .primaryColor,
-                                                              value:
-                                                                  checkBoxStates[
-                                                                      index],
+                                                              value: homeController
+                                                                      .checkBoxStates[
+                                                                  index],
                                                               onChanged:
                                                                   (boolean) {
                                                                 setState(() {
@@ -630,11 +590,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                                           0;
                                                                       i <= 5;
                                                                       i++) {
-                                                                    checkBoxStates[
-                                                                            i] =
-                                                                        false;
+                                                                    homeController
+                                                                            .checkBoxStates[
+                                                                        i] = false;
                                                                   }
-                                                                  checkBoxStates[
+                                                                  homeController
+                                                                              .checkBoxStates[
                                                                           index] =
                                                                       boolean ??
                                                                           false;
@@ -645,12 +606,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                                 width(context) *
                                                                     0.6,
                                                             child: TextWidget(
-                                                              text:
-                                                                  checkBoxStatesText[
-                                                                      index],
+                                                              text: homeController
+                                                                      .checkBoxStatesText[
+                                                                  index],
                                                               weight: FontWeight
                                                                   .w600,
-                                                              color: checkBoxStates[
+                                                              color: homeController
+                                                                          .checkBoxStates[
                                                                       index]
                                                                   ? SpotmiesTheme
                                                                               .appTheme ==
@@ -671,7 +633,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                                 ? index != 0
                                                                 : true) &&
                                                             index != 5 &&
-                                                            checkBoxStates[
+                                                            homeController
+                                                                    .checkBoxStates[
                                                                 index]
                                                         ? Row(
                                                             mainAxisAlignment:
@@ -749,62 +712,55 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     padding: EdgeInsets.only(
                                         bottom: height(context) * 0.03),
                                     child: ElevatedButtonWidget(
-                                      onClick: () {
+                                      onClick: () async {
                                         if (pageIndex == 1) {
+                                          // await homeController.registerButton();
+
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       const NavBar()));
                                         } else {
-                                          var farmerName =
-                                              formControllers['farmer_name']
+                                          homeController.user = User.registerPartA(
+                                              firstName: homeController
+                                                      .formControllers[
+                                                          'first_name']
                                                       ?.text ??
-                                                  "";
-                                          var houseNumber =
-                                              formControllers['house_number']
+                                                  "",
+                                              lastName:
+                                                  homeController.formControllers['last_name']?.text ??
+                                                      "",
+                                              email: homeController
+                                                      .formControllers['email']
                                                       ?.text ??
-                                                  "";
-                                          var mandal =
-                                              formControllers['mandal']?.text ??
-                                                  "";
-                                          var city =
-                                              formControllers['city']?.text ??
-                                                  "";
-                                          var district =
-                                              formControllers['district']
+                                                  "",
+                                              telePhone: homeController
+                                                      .formControllers['telePhone']
                                                       ?.text ??
-                                                  "";
-                                          var state =
-                                              formControllers['state']?.text ??
-                                                  "";
-                                          var pincode =
-                                              formControllers['pincode']
-                                                      ?.text ??
-                                                  "";
-                                          user = User.registerPartA(
-                                              farmerName: farmerName,
-                                              city: city,
-                                              houseNumber: houseNumber,
-                                              district: district,
-                                              mandal: mandal,
+                                                  "",
+                                              pass: homeController.formControllers['password']?.text ?? "",
+                                              cpass: homeController.formControllers['c_password']?.text ?? "",
+                                              city: homeController.formControllers['city']?.text ?? "",
+                                              houseNumber: homeController.formControllers['house_number']?.text ?? "",
+                                              district: homeController.formControllers['district']?.text ?? "",
+                                              mandal: homeController.formControllers['mandal']?.text ?? "",
                                               farmerImage: "IMAGE",
-                                              pincode: pincode,
-                                              state: state);
-
-                                          log(user.toString());
-
-                                          pageController.animateToPage(
-                                              pageIndex + 1,
-                                              duration: const Duration(
-                                                  milliseconds: 400),
-                                              curve: Curves.easeInOut);
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      const NavBar()),
-                                              (route) => false);
+                                              pincode: homeController.formControllers['pincode']?.text ?? "",
+                                              state: homeController.formControllers['state']?.text ?? "");
+                                          log(homeController.user.toString());
+                                          await homeController.registerButton();
+                                          homeController.pageController
+                                              .animateToPage(pageIndex + 1,
+                                                  duration: const Duration(
+                                                      milliseconds: 400),
+                                                  curve: Curves.easeInOut);
+                                          // Navigator.pushAndRemoveUntil(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //         builder: (_) =>
+                                          //             const NavBar()),
+                                          //     (route) => false);
                                         }
                                       },
                                       minWidth: width(context) * 0.85,
@@ -854,7 +810,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         builder: (context) {
           return Container(
             height: height(context) * 0.2,
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -862,13 +818,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   text: "Choose Profile Picture",
                   size: height(context) * 0.03,
                 ),
-                TextWidget(
+                const TextWidget(
                   text:
                       "Choose an image as a profile picture from one of the following sources",
                   flow: TextOverflow.visible,
                   color: Colors.grey,
                 ),
-                Spacer(),
+                const Spacer(),
                 Row(
                   children: [
                     Expanded(
@@ -877,16 +833,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             primary: SpotmiesTheme.primaryColor,
                             onPrimary: Colors.white),
                         onPressed: () {
-                          getImages(ImageSource.gallery);
+                          homeController.getImages(ImageSource.gallery);
                         },
-                        child: TextWidget(
+                        child: const TextWidget(
                           text: "Gallery",
                           color: Colors.white,
                         ),
                       ),
                       flex: 3,
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Expanded(
                       flex: 3,
                       child: ElevatedButton(
@@ -894,9 +850,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             primary: SpotmiesTheme.primaryColor,
                             onPrimary: Colors.white),
                         onPressed: () {
-                          getImages(ImageSource.camera);
+                          homeController.getImages(ImageSource.camera);
                         },
-                        child: TextWidget(text: "Camera", color: Colors.white),
+                        child: const TextWidget(
+                            text: "Camera", color: Colors.white),
                       ),
                     ),
                   ],

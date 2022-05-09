@@ -8,7 +8,7 @@ import 'package:nandikrushifarmer/provider/login_provider.dart';
 import 'package:nandikrushifarmer/provider/onboard_provider.dart';
 import 'package:nandikrushifarmer/provider/registration_provider.dart';
 import 'package:nandikrushifarmer/provider/theme_provider.dart';
-import 'package:nandikrushifarmer/view/login/splash_screen.dart';
+import 'package:nandikrushifarmer/view/login/registration.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           selectionHandleColor: Color(0xFF006838),
         ),
       ),
-      home: const SplashScreen(),
+      home: const RegistrationScreen(),
     );
   }
 }
