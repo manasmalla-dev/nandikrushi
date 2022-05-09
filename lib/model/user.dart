@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class User {
   late String farmerImage;
   late String firstName;
@@ -14,6 +16,13 @@ class User {
   late String pincode;
   late int landAreaInAcres;
   late String certificationType;
+  late String certificationRegisterationNumber;
+  late List<File> certificates;
+  addCertification(rn, cert) {
+    certificationRegisterationNumber = rn;
+    certificates = cert;
+  }
+
   User.registerUser(
       {required this.farmerImage,
       required this.firstName,
