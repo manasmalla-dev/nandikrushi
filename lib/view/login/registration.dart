@@ -1,33 +1,31 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:nandikrushi/model/user.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushi/controller/registration_controller.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushi/reusable_widgets/nandi_krushi_title.dart';
-import 'package:nandikrushi/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 import 'package:nandikrushi/reusable_widgets/textfield_widget.dart';
 import 'package:nandikrushi/view/basket/add_address.dart';
-import 'package:nandikrushi/view/login/nav_bar.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenState();
+  _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
-  var user = User();
-  var formControllers = {
-    'first_name': TextEditingController(),
-    'last_name': TextEditingController(),
-    'email': TextEditingController(),
-    'location': TextEditingController(),
-    'password': TextEditingController(),
-    'c_password': TextEditingController(),
-  };
+class _RegistrationScreenState extends StateMVC<RegistrationScreen> {
+  late RegistrationController homeController;
+
+  _RegistrationScreenState() : super(RegistrationController()) {
+    homeController = controller as RegistrationController;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +79,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           children: [
                             Expanded(
                               child: TextFieldWidget(
-                                controller: formControllers['first_name'],
+                                controller: homeController
+                                    .formControllers['first_name'],
                                 label: 'First Name',
                                 hintSize: 20,
                                 hintColor: Colors.grey.shade600,
@@ -94,7 +93,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                             Expanded(
                               child: TextFieldWidget(
-                                controller: formControllers['last_name'],
+                                controller:
+                                    homeController.formControllers['last_name'],
                                 label: 'Last Name',
                                 hintSize: 20,
                                 hintColor: Colors.grey.shade600,
@@ -108,20 +108,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           height: height(context) * 0.02,
                         ),
                         TextFieldWidget(
-                          controller: formControllers['email'],
+                          controller: homeController.formControllers['email'],
                           label: 'Email Address',
                           hintSize: 20,
                           style: fonts(20.0, FontWeight.w500, Colors.black),
                         ),
                         TextFieldWidget(
-                          controller: formControllers['password'],
+                          controller:
+                              homeController.formControllers['password'],
                           label: 'Create Password',
                           obscureText: true,
                           hintSize: 20,
                           style: fonts(20.0, FontWeight.w400, Colors.black),
                         ),
                         TextFieldWidget(
-                          controller: formControllers['c_password'],
+                          controller:
+                              homeController.formControllers['c_password'],
                           label: 'Confirm Password',
                           hintSize: 20,
                           obscureText: true,
@@ -154,7 +156,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           children: [
                             Expanded(
                               child: TextFieldWidget(
-                                controller: formControllers['location'],
+                                controller:
+                                    homeController.formControllers['location'],
                                 prefix: const Icon(Icons.location_on_rounded),
                                 suffix: TextWidget(
                                   text: "Apply",
@@ -208,27 +211,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     padding: EdgeInsets.only(bottom: height(context) * 0.03),
                     child: ElevatedButtonWidget(
                       onClick: () {
-                        var firstName =
-                            formControllers['first_name']?.text ?? "";
-                        var lastName = formControllers['last_name']?.text ?? "";
-                        var email = formControllers['email']?.text ?? "";
-                        var location = formControllers['location']?.text ?? "";
-                        var password = formControllers["password"]?.text ?? "";
-                        var c_password =
-                            formControllers["c_password"]?.text ?? "";
-                        if (c_password != password) {
-                          return snackbar(context, "Passwords not the same!");
-                        }
-                        user = User.registerUser(
-                            firstName: firstName,
-                            lastName: lastName,
-                            location: location,
-                            email: email,
-                            password: password);
-
-                        log(user.toString());
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const NavBar()));
+                        homeController.registerUser(context);
                       },
                       minWidth: width(context) * 0.85,
                       height: height(context) * 0.06,

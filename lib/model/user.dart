@@ -4,6 +4,7 @@ class User {
   late String email;
   late String location;
   late String password;
+  late num phoneNumber;
 
   User.registerUser(
       {required this.firstName,

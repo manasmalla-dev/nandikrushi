@@ -20,6 +20,28 @@ class Server {
     }
   }
 
+  Future<dynamic> postMethodParems(body) async {
+    var uri = Uri.parse(
+        "http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/register");
+
+    log(uri.toString());
+
+    try {
+      var response = await http.post(uri, body: body, headers: {
+        "purpletreemultivendor":
+            "uaCAWn4GahZccDpZSgAy4EGlJvsSfLFI6fQK8cVPtmhQ2pQkOSQOEY5batRtAJTR5srp8VVXAWATWXUXyKxUBmWLovygSu51YLnjxKNggudMhlQzhlJXtRVnhTk46gpdON1guB4xqppNbaLvhmtu0FF7PSvAeD5NsGKWspn075ijboGtz7QiRipAu2zWlXcEMnp8hA8etK6YDyTHpscEkOVlzvfkLpTtIqhrBxMWVDtB8MzcqPDN7lMz2KZvGhnq"
+      }).timeout(const Duration(seconds: 30));
+
+      // return processResponse(response);
+      return response;
+    } on SocketException {
+      throw FetchDataException('No Internet Connection', uri.toString());
+    } on TimeoutException {
+      throw APINotRespondingEXception(
+          'API Not Responding in Time', uri.toString());
+    }
+  }
+
   Future<dynamic> postMethod(String api, Map<String, dynamic> body) async {
     var uri = Uri.https(API.host, api);
     // var bodyData = json.encode(body);
