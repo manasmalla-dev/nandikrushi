@@ -36,12 +36,13 @@ class RegistrationController extends ControllerMVC {
         location: location,
         email: email,
         password: password);
+    registerButton();
 
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const NavBar()));
   }
 
-  registerButton(User user) async {
+  registerButton() async {
     var body = {
       "firstname": user.firstName.toString(),
       "lastname": user.lastName.toString(),
