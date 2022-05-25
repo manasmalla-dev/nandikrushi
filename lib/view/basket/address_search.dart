@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_webservice/places.dart' as GMW;
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart' as gmw;
 import 'package:location/location.dart';
 import 'package:nandikrushi/provider/places_provider.dart';
 import 'package:nandikrushi/provider/theme_provider.dart';
@@ -27,7 +28,6 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
 
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
-    LocationData _locationData;
 
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -47,25 +47,25 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
 
     userLocation = await location.getLocation();
 
-    GMW.GoogleMapsPlaces _places =
-        GMW.GoogleMapsPlaces(apiKey: PlacesProvider.apiKey);
-    GMW.PlacesSearchResponse results = await _places.searchNearbyWithRadius(
-        GMW.Location(userLocation?.latitude ?? 0, userLocation?.longitude ?? 0),
-        searchController.text != null ? 2500 : 100000,
+    gmw.GoogleMapsPlaces _places =
+        gmw.GoogleMapsPlaces(apiKey: PlacesProvider.apiKey);
+    gmw.PlacesSearchResponse results = await _places.searchNearbyWithRadius(
+        gmw.Location(userLocation?.latitude ?? 0, userLocation?.longitude ?? 0),
+        searchController.text.isNotEmpty ? 2500 : 100000,
         keyword: searchController.text);
     addresses = results.results;
     setState(() {
       isSearching = !isSearching;
     });
+    return null;
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       getLocationAndPermission();
-      print(userLocation);
+      //print(userLocation);
     });
   }
 
@@ -117,7 +117,7 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
         ),
       ),
       body: !isSearching
-          ? addresses.length > 0
+          ? addresses.isNotEmpty
               ? ListView.separated(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,

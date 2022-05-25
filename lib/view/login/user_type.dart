@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushi/provider/registration_provider.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
@@ -5,6 +7,8 @@ import 'package:nandikrushi/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushi/reusable_widgets/login_bg.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 import 'package:provider/provider.dart';
+
+import 'package:http/http.dart' as http;
 
 class UserType extends StatefulWidget {
   const UserType({Key? key}) : super(key: key);
@@ -14,12 +18,29 @@ class UserType extends StatefulWidget {
 }
 
 class _UserTypeState extends State<UserType> {
+  var userTypeData = [];
   RegistrationProvider? registrationProvider;
   @override
   void initState() {
+    getUserRegistrationData();
     registrationProvider =
         Provider.of<RegistrationProvider>(context, listen: false);
     super.initState();
+  }
+
+  getUserRegistrationData() async {
+    var url =
+        'http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/customergroups';
+    var jsonUri = Uri.tryParse(url);
+    if (jsonUri == null) {
+      return;
+    }
+    final response = await http.get(jsonUri);
+    if (response.statusCode == 200) {
+      List<dynamic> values = json.decode(response.body)["message"];
+      userTypeData = values.map((e) => e["name"]).toList();
+      print(values.map((e) => e["name"]));
+    }
   }
 
   @override
@@ -56,16 +77,18 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('farmer');
+                      value.updateUserType(userTypeData[0]);
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
-                    bgColor:
-                        type == 'farmer' ? Colors.green[900] : Colors.white,
+                    bgColor: type == userTypeData[0]
+                        ? Colors.green[900]
+                        : Colors.white,
                     borderSideColor: Colors.green[900],
-                    textColor:
-                        type == 'farmer' ? Colors.white : Colors.green[900],
-                    buttonName: "FARMER",
+                    textColor: type == userTypeData[0]
+                        ? Colors.white
+                        : Colors.green[900],
+                    buttonName: userTypeData[0],
                     center: true,
                     allRadius: true,
                     borderRadius: 15,
@@ -76,16 +99,19 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('store');
+                      value.updateUserType(userTypeData[1]);
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor: type == 'store' ? Colors.green[900] : Colors.white,
+                    bgColor: type == userTypeData[1]
+                        ? Colors.green[900]
+                        : Colors.white,
                     borderSideColor: Colors.green[900],
-                    textColor:
-                        type == 'store' ? Colors.white : Colors.green[900],
-                    buttonName: "ORGANIC STORE",
+                    textColor: type == userTypeData[1]
+                        ? Colors.white
+                        : Colors.green[900],
+                    buttonName: userTypeData[1],
                     center: true,
                     borderRadius: 15,
                     textSize: width(context) * 0.03,
@@ -95,17 +121,19 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('restaurant');
+                      value.updateUserType(userTypeData[2]);
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor:
-                        type == 'restaurant' ? Colors.green[900] : Colors.white,
+                    bgColor: type == userTypeData[2]
+                        ? Colors.green[900]
+                        : Colors.white,
                     borderSideColor: Colors.green[900],
-                    textColor:
-                        type == 'restaurant' ? Colors.white : Colors.green[900],
-                    buttonName: "ORGANIC RESTAURANT",
+                    textColor: type == userTypeData[2]
+                        ? Colors.white
+                        : Colors.green[900],
+                    buttonName: userTypeData[2],
                     center: true,
                     borderRadius: 15,
                     textSize: width(context) * 0.03,
@@ -115,15 +143,19 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType('ads');
+                      value.updateUserType(userTypeData[3]);
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor: type == 'ads' ? Colors.green[900] : Colors.white,
+                    bgColor: type == userTypeData[3]
+                        ? Colors.green[900]
+                        : Colors.white,
                     borderSideColor: Colors.green[900],
-                    textColor: type == 'ads' ? Colors.white : Colors.green[900],
-                    buttonName: "SPONSORED ADS",
+                    textColor: type == userTypeData[3]
+                        ? Colors.white
+                        : Colors.green[900],
+                    buttonName: userTypeData[3],
                     center: true,
                     borderRadius: 15,
                     textSize: width(context) * 0.03,
