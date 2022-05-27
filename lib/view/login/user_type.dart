@@ -29,6 +29,7 @@ class _UserTypeState extends State<UserType> {
   }
 
   getUserRegistrationData() async {
+    //getting api data dynamically
     var url =
         'http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/customergroups';
     var jsonUri = Uri.tryParse(url);
