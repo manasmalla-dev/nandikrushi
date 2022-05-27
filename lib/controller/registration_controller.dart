@@ -57,6 +57,15 @@ class RegistrationController extends ControllerMVC {
       "agree": 1.toString(),
       "become_seller": 1.toString(),
       "seller_storename": user.firstName.toString(),
+      "seller_type": "Farmers",
+      "land": user.landAreaInAcres,
+      "seller_image": user.farmerImage,
+      "additional_comments": "Farmer is the backbone of India",
+      "additional_documents": user.certificationType,
+      "upload_document": user.certificates.toString(),
+      "seller_storename": user.certificationRegisterationNumber,
+      "store_logo": user.farmerImage,
+      "store_address": user.city,
       // "agree": "1"
     };
     log(body.toString());
