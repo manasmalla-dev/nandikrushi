@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushifarmer/controller/add_product_controller.dart';
 import 'package:nandikrushifarmer/model/product.dart';
 import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
@@ -15,18 +17,15 @@ class AddProductScreen extends StatefulWidget {
   const AddProductScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddProductScreen> createState() => _AddProductScreenState();
+  _AddProductScreenState createState() => _AddProductScreenState();
 }
 
-class _AddProductScreenState extends State<AddProductScreen> {
-  var formControllers = {
-    'category': TextEditingController(),
-    'sub-category': TextEditingController(),
-    'units': TextEditingController(),
-    'quantity': TextEditingController(),
-    'price': TextEditingController(),
-    'description': TextEditingController()
-  };
+class _AddProductScreenState extends StateMVC<AddProductScreen> {
+  late AddProductController addProductController;
+
+  _AddProductScreenState() : super(AddProductController()) {
+    addProductController = controller as AddProductController;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +106,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       children: [
                                         Expanded(
                                           child: TextFieldWidget(
-                                            controller:
-                                                formControllers['category'],
+                                            controller: addProductController
+                                                .formControllers['category'],
                                             label: 'Category',
                                             hintSize: 20,
                                             hintColor: Colors.grey.shade600,
@@ -121,8 +120,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                         ),
                                         Expanded(
                                           child: TextFieldWidget(
-                                            controller:
-                                                formControllers['sub-category'],
+                                            controller: addProductController
+                                                    .formControllers[
+                                                'sub-category'],
                                             label: 'Sub-Category',
                                             hintSize: 20,
                                             hintColor: Colors.grey.shade600,
@@ -136,8 +136,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       children: [
                                         Expanded(
                                           child: TextFieldWidget(
-                                            controller:
-                                                formControllers['units'],
+                                            controller: addProductController
+                                                .formControllers['units'],
                                             label: 'Units',
                                             hintSize: 20,
                                             hintColor: Colors.grey.shade600,
@@ -150,8 +150,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                         ),
                                         Expanded(
                                           child: TextFieldWidget(
-                                            controller:
-                                                formControllers['quantity'],
+                                            controller: addProductController
+                                                .formControllers['quantity'],
                                             label: 'Quantity',
                                             hintSize: 20,
                                             hintColor: Colors.grey.shade600,
@@ -167,7 +167,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               TextFieldWidget(
                                 shouldShowCurreny: true,
                                 keyBoardType: TextInputType.number,
-                                controller: formControllers['price'],
+                                controller: addProductController
+                                    .formControllers['price'],
                                 label: 'Price',
                                 hintSize: 20,
                                 style:
@@ -193,7 +194,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 height: height(context) * 0.16,
                                 child: FilledTextFieldWidget(
                                   keyBoardType: TextInputType.number,
-                                  controller: formControllers['description'],
+                                  controller: addProductController
+                                      .formControllers['description'],
                                   hintSize: 20,
                                   style: fonts(
                                       20.0, FontWeight.w500, Colors.black),
@@ -208,30 +210,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       padding: EdgeInsets.only(bottom: height(context) * 0.03),
                       child: ElevatedButtonWidget(
                         onClick: () {
-                          var category =
-                              formControllers['category']?.text ?? "";
-                          var subcategory =
-                              formControllers['sub-category']?.text ?? "";
-                          var units = formControllers['units']?.text ?? "";
-                          var quantity =
-                              formControllers['quantity']?.text ?? "";
-                          var price = formControllers['price']?.text ?? "";
-                          var description =
-                              formControllers['description']?.text ?? "";
-                          var product = Product(
-                              category: category,
-                              subcategory: subcategory,
-                              units: units,
-                              price: double.tryParse(price) ?? 0.0,
-                              quantity: int.tryParse(quantity) ?? 0,
-                              description: description,
-                              productImage: "");
-
-                          log(product.toString());
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SuccessScreen()));
+                          addProductController.addProduct(context, "");
                         },
                         minWidth: width(context) * 0.85,
                         height: height(context) * 0.06,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushifarmer/provider/registration_provider.dart';
 import 'package:nandikrushifarmer/provider/theme_provider.dart';
@@ -6,6 +8,7 @@ import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/login_bg.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class UserType extends StatefulWidget {
   const UserType({Key? key}) : super(key: key);
@@ -15,12 +18,31 @@ class UserType extends StatefulWidget {
 }
 
 class _UserTypeState extends State<UserType> {
+  var userTypeData = ["Loading...", "Loading...", "Loading..."];
+
   RegistrationProvider? registrationProvider;
   @override
   void initState() {
+    getUserRegistrationData();
     registrationProvider =
         Provider.of<RegistrationProvider>(context, listen: false);
     super.initState();
+  }
+
+  getUserRegistrationData() async {
+    //getting api data dynamically
+    var url =
+        'http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/customergroups';
+    var jsonUri = Uri.tryParse(url);
+    if (jsonUri == null) {
+      return;
+    }
+    final response = await http.get(jsonUri);
+    if (response.statusCode == 200) {
+      List<dynamic> values = json.decode(response.body)["message"];
+      userTypeData = values.map((e) => e["name"].toString()).toList();
+      print(values.map((e) => e["name"]));
+    }
   }
 
   @override
@@ -48,7 +70,7 @@ class _UserTypeState extends State<UserType> {
                     text: "REGISTER AS",
                     size: width(context) * 0.04,
                     weight: FontWeight.w800,
-                    color: SpotmiesTheme.primaryColor,
+                    color: Colors.green[900],
                     align: TextAlign.start,
                     lSpace: 2.5,
                   ),
@@ -57,18 +79,18 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType(context, 'farmer');
+                      value.updateUserType(context, userTypeData[0]);
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
-                    bgColor: type == 'farmer'
-                        ? SpotmiesTheme.primaryColor
+                    bgColor: type == userTypeData[0]
+                        ? Colors.green[900]
                         : Colors.white,
-                    borderSideColor: SpotmiesTheme.primaryColor,
-                    textColor: type == 'farmer'
+                    borderSideColor: Colors.green[900],
+                    textColor: type == userTypeData[0]
                         ? Colors.white
-                        : SpotmiesTheme.primaryColor,
-                    buttonName: "FARMER",
+                        : Colors.green[900],
+                    buttonName: userTypeData[0],
                     center: true,
                     allRadius: true,
                     borderRadius: 15,
@@ -79,19 +101,19 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType(context, 'store');
+                      value.updateUserType(context, userTypeData[1]);
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor: type == 'store'
-                        ? SpotmiesTheme.primaryColor
+                    bgColor: type == userTypeData[1]
+                        ? Colors.green[900]
                         : Colors.white,
-                    borderSideColor: SpotmiesTheme.primaryColor,
-                    textColor: type == 'store'
+                    borderSideColor: Colors.green[900],
+                    textColor: type == userTypeData[1]
                         ? Colors.white
-                        : SpotmiesTheme.primaryColor,
-                    buttonName: "ORGANIC STORE",
+                        : Colors.green[900],
+                    buttonName: userTypeData[1],
                     center: true,
                     borderRadius: 15,
                     textSize: width(context) * 0.03,
@@ -101,41 +123,19 @@ class _UserTypeState extends State<UserType> {
                   ),
                   ElevatedButtonWidget(
                     onClick: () {
-                      value.updateUserType(context, 'restaurant');
+                      value.updateUserType(context, userTypeData[2]);
                     },
                     minWidth: width(context) * 0.55,
                     height: height(context) * 0.035,
                     allRadius: true,
-                    bgColor: type == 'restaurant'
-                        ? SpotmiesTheme.primaryColor
+                    bgColor: type == userTypeData[2]
+                        ? Colors.green[900]
                         : Colors.white,
-                    borderSideColor: SpotmiesTheme.primaryColor,
-                    textColor: type == 'restaurant'
+                    borderSideColor: Colors.green[900],
+                    textColor: type == userTypeData[2]
                         ? Colors.white
-                        : SpotmiesTheme.primaryColor,
-                    buttonName: "ORGANIC RESTAURANT",
-                    center: true,
-                    borderRadius: 15,
-                    textSize: width(context) * 0.03,
-                  ),
-                  SizedBox(
-                    height: height(context) * 0.035,
-                  ),
-                  ElevatedButtonWidget(
-                    onClick: () {
-                      value.updateUserType(context, 'ads');
-                    },
-                    minWidth: width(context) * 0.55,
-                    height: height(context) * 0.035,
-                    allRadius: true,
-                    bgColor: type == 'ads'
-                        ? SpotmiesTheme.primaryColor
-                        : Colors.white,
-                    borderSideColor: SpotmiesTheme.primaryColor,
-                    textColor: type == 'ads'
-                        ? Colors.white
-                        : SpotmiesTheme.primaryColor,
-                    buttonName: "SPONSORED ADS",
+                        : Colors.green[900],
+                    buttonName: userTypeData[2],
                     center: true,
                     borderRadius: 15,
                     textSize: width(context) * 0.03,
@@ -148,7 +148,7 @@ class _UserTypeState extends State<UserType> {
                 },
                 minWidth: width(context) * 0.8,
                 height: height(context) * 0.06,
-                bgColor: SpotmiesTheme.primaryColor,
+                bgColor: Colors.green[900],
                 textColor: Colors.white,
                 buttonName: "NEXT",
                 textSize: width(context) * 0.04,

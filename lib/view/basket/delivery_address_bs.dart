@@ -453,7 +453,7 @@ class DeliveryAddressesList extends StatelessWidget {
                 ),
                 TextWidget(
                   text:
-                      'Your selected city is ${locationCity} Hyderabad. Please add an address by tapping below.',
+                      'Your selected city is ${locationCity}. Please add an address by tapping below.',
                   weight: FontWeight.w600,
                   color: Colors.grey,
                   flow: TextOverflow.visible,

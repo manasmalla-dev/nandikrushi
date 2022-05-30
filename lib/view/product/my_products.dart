@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushifarmer/controller/my_products_controller.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
@@ -11,10 +13,15 @@ class MyProductsScreen extends StatefulWidget {
   const MyProductsScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyProductsScreen> createState() => _MyProductsScreenState();
+  _MyProductsScreenState createState() => _MyProductsScreenState();
 }
 
-class _MyProductsScreenState extends State<MyProductsScreen> {
+class _MyProductsScreenState extends StateMVC<MyProductsScreen> {
+  late MyProductsController productsController;
+
+  _MyProductsScreenState() : super(MyProductsController()) {
+    productsController = controller as MyProductsController;
+  }
   var products = {
     'a2-milk': [
       {
@@ -219,10 +226,9 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
       }
     ]
   };
-  List list = [];
   @override
   Widget build(BuildContext context) {
-    list = products['vegetables']!;
+    productsController.list = products['vegetables']!;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appBarWithTitle(context, title: "My Products".toUpperCase()),
@@ -248,10 +254,12 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                   ),
                 ),
                 child: ListView.separated(
-                  itemCount: list.length,
+                  itemCount: productsController.list.length,
                   itemBuilder: ((context, index) {
                     return Opacity(
-                      opacity: list[index]['stock'] == "true" ? 1 : 0.5,
+                      opacity: productsController.list[index]['stock'] == "true"
+                          ? 1
+                          : 0.5,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 6),
@@ -265,7 +273,8 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   TextWidget(
-                                    text: list[index]['name'],
+                                    text: productsController.list[index]
+                                        ['name'],
                                     weight: FontWeight.w800,
                                     size: height(context) * 0.024,
                                   ),
@@ -274,7 +283,7 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                     children: [
                                       TextWidget(
                                         text:
-                                            "Product posted on: ${list[index]['date']}",
+                                            "Product posted on: ${productsController.list[index]['date']}",
                                         weight: FontWeight.w500,
                                         size: height(context) * 0.013,
                                         color: Colors.blue,
@@ -291,7 +300,8 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                 ],
                               ),
                               TextWidget(
-                                text: list[index]['description'],
+                                text: productsController.list[index]
+                                    ['description'],
                               ),
                               SizedBox(
                                 height: height(context) * 0.018,
@@ -304,7 +314,7 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                       height: height(context) * 0.08,
                                       width: height(context) * 0.08,
                                       child: Image.network(
-                                        list[index]['url'],
+                                        productsController.list[index]['url'],
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -331,14 +341,15 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                                 ),
                                                 TextWidget(
                                                   text:
-                                                      "${list[index]['price']}",
+                                                      "${productsController.list[index]['price']}",
                                                   size: height(context) * 0.024,
                                                   weight: FontWeight.w800,
                                                 ),
                                               ],
                                             ),
                                             TextWidget(
-                                              text: list[index]['units'],
+                                              text: productsController
+                                                  .list[index]['units'],
                                             ),
                                             Row(
                                               children: [
@@ -347,7 +358,8 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                                   size: 8,
                                                 ),
                                                 TextWidget(
-                                                  text: list[index]['place'],
+                                                  text: productsController
+                                                      .list[index]['place'],
                                                   size: height(context) * 0.01,
                                                 ),
                                               ],
@@ -365,7 +377,9 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                           side: BorderSide(
                                               width: 1,
                                               color:
-                                                  list[index]['stock'] == "true"
+                                                  productsController.list[index]
+                                                              ['stock'] ==
+                                                          "true"
                                                       ? Theme.of(context)
                                                           .primaryColor
                                                       : Colors.red),
@@ -377,12 +391,16 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0, vertical: 2),
                                         child: TextWidget(
-                                          text: list[index]['stock'] == "true"
+                                          text: productsController.list[index]
+                                                      ['stock'] ==
+                                                  "true"
                                               ? "In Stock".toUpperCase()
                                               : "Out Of Stock".toUpperCase(),
                                           size: height(context) * 0.014,
                                           weight: FontWeight.bold,
-                                          color: list[index]['stock'] == "true"
+                                          color: productsController.list[index]
+                                                      ['stock'] ==
+                                                  "true"
                                               ? SpotmiesTheme.primaryColor
                                               : Colors.red,
                                         ),

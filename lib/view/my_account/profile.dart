@@ -377,7 +377,7 @@ class _ProfileScreenState extends StateMVC<ProfileScreen> {
                         lastName:
                             homeController.formControllers['last_name']?.text ??
                                 "",
-                         email:
+                        email:
                             homeController.formControllers['email']?.text ?? "",
                         telePhone:
                             homeController.formControllers['telePhone']?.text ??
@@ -389,17 +389,12 @@ class _ProfileScreenState extends StateMVC<ProfileScreen> {
                                 "",
                         city:
                             homeController.formControllers['city']?.text ?? "",
-                        houseNumber: homeController
-                                .formControllers['house_number']?.text ??
-                            "",
-                        district:
-                            homeController.formControllers['district']?.text ??
-                                "",
-                        mandal: homeController.formControllers['mandal']?.text ??
-                            "",
+                        houseNumber:
+                            homeController.formControllers['house_number']?.text ?? "",
+                        district: homeController.formControllers['district']?.text ?? "",
+                        mandal: homeController.formControllers['mandal']?.text ?? "",
                         farmerImage: "IMAGE",
-                        pincode:
-                            homeController.formControllers['pincode']?.text ?? "",
+                        pincode: homeController.formControllers['pincode']?.text ?? "",
                         state: homeController.formControllers['state']?.text ?? "");
 
                     log(homeController.user.toString());
