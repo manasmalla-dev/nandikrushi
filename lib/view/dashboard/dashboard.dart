@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushi/controller/cart_controller.dart';
 import 'package:nandikrushi/reusable_widgets/app_bar.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
@@ -8,10 +10,10 @@ class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  _DashboardState createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardState extends StateMVC<Dashboard> {
   var carouselController = CarouselController();
   var currentPos = 0;
   var freshFarms = [
@@ -68,6 +70,11 @@ class _DashboardState extends State<Dashboard> {
           'https://5.imimg.com/data5/BS/VQ/WG/SELLER-66548153/fresh-raw-buffalo-milk-500x500.jpeg'
     },
   ];
+  late CartController cartController;
+
+  _DashboardState() : super(CartController()) {
+    cartController = controller as CartController;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -318,6 +325,7 @@ class _DashboardState extends State<Dashboard> {
                           scrollDirection: Axis.horizontal,
                           physics: const NeverScrollableScrollPhysics(),
                           children: freshFarms.map((e) {
+                            var index = freshFarms.indexOf(e);
                             return Row(
                               children: [
                                 Column(
@@ -361,7 +369,46 @@ class _DashboardState extends State<Dashboard> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(100))),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        print("Add");
+                                        setState(() {
+                                          cartController
+                                                  .addedDashboardProductQuantity[
+                                              index] = (cartController
+                                                          .addedDashboardProductQuantity[
+                                                      index] ??
+                                                  0) +
+                                              1;
+                                          if (cartController.items
+                                                  .where((element) =>
+                                                      element["name"] ==
+                                                      "Brinjal")
+                                                  .length >
+                                              0) {
+                                            cartController.items.firstWhere(
+                                                    (element) =>
+                                                        element["name"] ==
+                                                        "Brinjal")["quantity"] =
+                                                "${cartController.addedDashboardProductQuantity[index]}";
+
+                                            cartController.updateCart();
+                                          } else {
+                                            cartController.items.add({
+                                              'name': 'Brinjal',
+                                              'unit': '1 kg',
+                                              'price': '34',
+                                              'quantity':
+                                                  '${cartController.addedDashboardProductQuantity[index]}',
+                                              'place':
+                                                  'Paravada, Visakhapatnam.',
+                                              'url':
+                                                  'https://resources.commerceup.io/?key=https%3A%2F%2Fprod-admin-images.s3.ap-south-1.amazonaws.com%2FpWVdUiFHtKGqyJxESltt%2Fproduct%2F30571001191.jpg&width=800&resourceKey=pWVdUiFHtKGqyJxESltt'
+                                            });
+
+                                            cartController.updateCart();
+                                          }
+                                        });
+                                      },
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0, vertical: 2),
@@ -376,7 +423,14 @@ class _DashboardState extends State<Dashboard> {
                                               width: 6,
                                             ),
                                             TextWidget(
-                                                text: "Add".toUpperCase(),
+                                                text:
+                                                    ((cartController.addedDashboardProductQuantity[
+                                                                        index] ??
+                                                                    0) ==
+                                                                0
+                                                            ? "Add"
+                                                            : "Added")
+                                                        .toUpperCase(),
                                                 weight: FontWeight.bold,
                                                 size: height(context) * 0.014),
                                           ],

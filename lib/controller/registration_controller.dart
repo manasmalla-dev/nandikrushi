@@ -4,9 +4,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushi/model/user.dart';
+import 'package:nandikrushi/provider/registration_provider.dart';
 import 'package:nandikrushi/repo/api_methods.dart';
 import 'package:nandikrushi/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi/view/login/nav_bar.dart';
+import 'package:provider/provider.dart';
 
 class RegistrationController extends ControllerMVC {
   var user = User();
@@ -36,13 +38,14 @@ class RegistrationController extends ControllerMVC {
         location: location,
         email: email,
         password: password);
-    registerButton();
+
+    registerButton(context);
 
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const NavBar()));
   }
 
-  registerButton() async {
+  registerButton(context) async {
     var body = {
       "firstname": user.firstName.toString(),
       "lastname": user.lastName.toString(),
@@ -56,10 +59,25 @@ class RegistrationController extends ControllerMVC {
     };
     log(body.toString());
 
+    var provider = Provider.of<RegistrationProvider>(context, listen: false);
+    provider.updateUser(user);
+
     var resp =
         await Server().postMethodParems(jsonEncode(body)).catchError((e) {
       log("64" + e.toString());
     });
     log(resp.body.toString());
+  }
+
+  fetchUserData(context) {
+    var provider = Provider.of<RegistrationProvider>(context, listen: false);
+    formControllers = {
+      'first_name': TextEditingController(text: provider.user?.firstName ?? ""),
+      'last_name': TextEditingController(text: provider.user?.lastName ?? ""),
+      'location': TextEditingController(text: provider.user?.location ?? ""),
+      'email': TextEditingController(text: provider.user?.email ?? ""),
+      'password': TextEditingController(text: provider.user?.password ?? ""),
+      'c_password': TextEditingController(text: provider.user?.password ?? ""),
+    };
   }
 }

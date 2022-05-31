@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushi/controller/cart_controller.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 import 'package:nandikrushi/reusable_widgets/textfield_widget.dart';
@@ -420,7 +422,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
   }
 }
 
-class ProductList extends StatelessWidget {
+class ProductList extends StatefulWidget {
   final List list;
   final double padding;
   final bool shouldDisableScroll;
@@ -432,11 +434,22 @@ class ProductList extends StatelessWidget {
       : super(key: key);
 
   @override
+  _ProductListState createState() => _ProductListState();
+}
+
+class _ProductListState extends StateMVC<ProductList> {
+  late CartController cartController;
+
+  _ProductListState() : super(CartController()) {
+    cartController = controller as CartController;
+  }
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: list.length,
-      physics:
-          shouldDisableScroll ? const NeverScrollableScrollPhysics() : null,
+      itemCount: widget.list.length,
+      physics: widget.shouldDisableScroll
+          ? const NeverScrollableScrollPhysics()
+          : null,
       itemBuilder: ((context, index) {
         return InkWell(
           onTap: () {
@@ -446,19 +459,20 @@ class ProductList extends StatelessWidget {
                     builder: (context) => const ProductDetails()));
           },
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding, vertical: 6),
+            padding:
+                EdgeInsets.symmetric(horizontal: widget.padding, vertical: 6),
             child: SizedBox(
               height: height(context) * 0.16,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                    text: list[index]['name'],
+                    text: widget.list[index]['name'],
                     weight: FontWeight.w800,
                     size: height(context) * 0.024,
                   ),
                   TextWidget(
-                    text: list[index]['description'],
+                    text: widget.list[index]['description'],
                   ),
                   SizedBox(
                     height: height(context) * 0.018,
@@ -471,7 +485,7 @@ class ProductList extends StatelessWidget {
                           height: height(context) * 0.08,
                           width: height(context) * 0.08,
                           child: Image.network(
-                            list[index]['url'],
+                            widget.list[index]['url'],
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -494,14 +508,14 @@ class ProductList extends StatelessWidget {
                                       weight: FontWeight.bold,
                                     ),
                                     TextWidget(
-                                      text: "${list[index]['price']}",
+                                      text: "${widget.list[index]['price']}",
                                       size: height(context) * 0.024,
                                       weight: FontWeight.w800,
                                     ),
                                   ],
                                 ),
                                 TextWidget(
-                                  text: list[index]['units'],
+                                  text: widget.list[index]['units'],
                                 ),
                                 Row(
                                   children: [
@@ -510,7 +524,7 @@ class ProductList extends StatelessWidget {
                                       size: 8,
                                     ),
                                     TextWidget(
-                                      text: list[index]['place'],
+                                      text: widget.list[index]['place'],
                                       size: 10,
                                     ),
                                   ],
@@ -532,7 +546,41 @@ class ProductList extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(100))),
-                              onPressed: () {},
+                              onPressed: () {
+                                print("Add");
+                                setState(() {
+                                  cartController.addedProductQuantity[index] =
+                                      (cartController.addedProductQuantity[
+                                                  index] ??
+                                              0) +
+                                          1;
+                                  if (cartController.items
+                                          .where((element) =>
+                                              element["name"] == "Brinjal")
+                                          .length >
+                                      0) {
+                                    cartController.items.firstWhere((element) =>
+                                            element["name"] ==
+                                            "Brinjal")["quantity"] =
+                                        "${cartController.addedProductQuantity[index]}";
+
+                                    cartController.updateCart();
+                                  } else {
+                                    cartController.items.add({
+                                      'name': 'Brinjal',
+                                      'unit': '1 kg',
+                                      'price': '34',
+                                      'quantity':
+                                          '${cartController.addedProductQuantity[index]}',
+                                      'place': 'Paravada, Visakhapatnam.',
+                                      'url':
+                                          'https://resources.commerceup.io/?key=https%3A%2F%2Fprod-admin-images.s3.ap-south-1.amazonaws.com%2FpWVdUiFHtKGqyJxESltt%2Fproduct%2F30571001191.jpg&width=800&resourceKey=pWVdUiFHtKGqyJxESltt'
+                                    });
+
+                                    cartController.updateCart();
+                                  }
+                                });
+                              },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8.0, vertical: 2),
@@ -547,7 +595,14 @@ class ProductList extends StatelessWidget {
                                       width: 6,
                                     ),
                                     TextWidget(
-                                        text: "Add".toUpperCase(),
+                                        text:
+                                            ((cartController.addedProductQuantity[
+                                                                index] ??
+                                                            0) ==
+                                                        0
+                                                    ? "Add"
+                                                    : "Added")
+                                                .toUpperCase(),
                                         weight: FontWeight.bold,
                                         size: height(context) * 0.014),
                                   ],

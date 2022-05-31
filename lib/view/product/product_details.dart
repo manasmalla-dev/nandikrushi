@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushi/controller/cart_controller.dart';
 import 'package:nandikrushi/reusable_widgets/app_bar.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
@@ -9,10 +11,10 @@ class ProductDetails extends StatefulWidget {
   const ProductDetails({Key? key}) : super(key: key);
 
   @override
-  State<ProductDetails> createState() => _ProductDetailsState();
+  _ProductDetailsState createState() => _ProductDetailsState();
 }
 
-class _ProductDetailsState extends State<ProductDetails> {
+class _ProductDetailsState extends StateMVC<ProductDetails> {
   var addedProductQuantity = 0;
   var products = {
     'a2-milk': [
@@ -218,6 +220,11 @@ class _ProductDetailsState extends State<ProductDetails> {
       }
     ]
   };
+  late CartController cartController;
+
+  _ProductDetailsState() : super(CartController()) {
+    cartController = controller as CartController;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -347,6 +354,30 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 onPressed: () {
                                   setState(() {
                                     addedProductQuantity += 1;
+                                    if (cartController.items
+                                            .where((element) =>
+                                                element["name"] == "Brinjal")
+                                            .length >
+                                        0) {
+                                      cartController.items.firstWhere(
+                                              (element) =>
+                                                  element["name"] ==
+                                                  "Brinjal")["quantity"] =
+                                          "$addedProductQuantity";
+                                      cartController.updateCart();
+                                    } else {
+                                      cartController.items.add({
+                                        'name': 'Brinjal',
+                                        'unit': '1 kg',
+                                        'price': '34',
+                                        'quantity': '$addedProductQuantity',
+                                        'place': 'Paravada, Visakhapatnam.',
+                                        'url':
+                                            'https://resources.commerceup.io/?key=https%3A%2F%2Fprod-admin-images.s3.ap-south-1.amazonaws.com%2FpWVdUiFHtKGqyJxESltt%2Fproduct%2F30571001191.jpg&width=800&resourceKey=pWVdUiFHtKGqyJxESltt'
+                                      });
+
+                                      cartController.updateCart();
+                                    }
                                   });
                                 },
                                 child: Padding(
@@ -388,6 +419,31 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     onPressed: () {
                                       setState(() {
                                         addedProductQuantity += 1;
+                                        if (cartController.items
+                                                .where((element) =>
+                                                    element["name"] ==
+                                                    "Brinjal")
+                                                .length >
+                                            0) {
+                                          cartController.items.firstWhere(
+                                                  (element) =>
+                                                      element["name"] ==
+                                                      "Brinjal")["quantity"] =
+                                              "$addedProductQuantity";
+                                          cartController.updateCart();
+                                        } else {
+                                          cartController.items.add({
+                                            'name': 'Brinjal',
+                                            'unit': '1 kg',
+                                            'price': '34',
+                                            'quantity': '$addedProductQuantity',
+                                            'place': 'Paravada, Visakhapatnam.',
+                                            'url':
+                                                'https://resources.commerceup.io/?key=https%3A%2F%2Fprod-admin-images.s3.ap-south-1.amazonaws.com%2FpWVdUiFHtKGqyJxESltt%2Fproduct%2F30571001191.jpg&width=800&resourceKey=pWVdUiFHtKGqyJxESltt'
+                                          });
+
+                                          cartController.updateCart();
+                                        }
                                       });
                                     },
                                     child: const Padding(
@@ -424,6 +480,31 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     onPressed: () {
                                       setState(() {
                                         addedProductQuantity -= 1;
+                                        if (cartController.items
+                                                .where((element) =>
+                                                    element["name"] ==
+                                                    "Brinjal")
+                                                .length >
+                                            0) {
+                                          cartController.items.firstWhere(
+                                                  (element) =>
+                                                      element["name"] ==
+                                                      "Brinjal")["quantity"] =
+                                              "$addedProductQuantity";
+                                          cartController.updateCart();
+                                        } else {
+                                          cartController.items.add({
+                                            'name': 'Brinjal',
+                                            'unit': '1 kg',
+                                            'price': '34',
+                                            'quantity': '$addedProductQuantity',
+                                            'place': 'Paravada, Visakhapatnam.',
+                                            'url':
+                                                'https://resources.commerceup.io/?key=https%3A%2F%2Fprod-admin-images.s3.ap-south-1.amazonaws.com%2FpWVdUiFHtKGqyJxESltt%2Fproduct%2F30571001191.jpg&width=800&resourceKey=pWVdUiFHtKGqyJxESltt'
+                                          });
+
+                                          cartController.updateCart();
+                                        }
                                       });
                                     },
                                     child: const Padding(
