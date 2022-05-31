@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/model/user.dart';
 import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushifarmer/view/login/lang_type.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 class RegistrationProvider extends ChangeNotifier {
   String userAccountType = "";
   String langType = "";
+  User? user;
 
   updateUserType(context, String type) {
     userAccountType = type;
@@ -43,5 +45,10 @@ class RegistrationProvider extends ChangeNotifier {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const Login()),
     );
+  }
+
+  updateUser(_) {
+    user = _;
+    notifyListeners();
   }
 }

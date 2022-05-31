@@ -23,6 +23,7 @@ class _ProfileScreenState extends StateMVC<ProfileScreen> {
 
   _ProfileScreenState() : super(RegistrationController()) {
     homeController = controller as RegistrationController;
+    homeController.fetchUserData(context);
   }
   // var acresInInt = 1.0;
   // var checkBoxStates = [true, false, false, false, false, false];

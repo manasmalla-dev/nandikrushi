@@ -10,8 +10,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushifarmer/model/user.dart';
+import 'package:nandikrushifarmer/provider/registration_provider.dart';
 import 'package:nandikrushifarmer/repo/api_methods.dart';
 import 'package:nandikrushifarmer/repo/api_urls.dart';
+import 'package:provider/provider.dart';
 
 class RegistrationController extends ControllerMVC {
   PageController pageController = PageController(initialPage: 0);
@@ -46,7 +48,7 @@ class RegistrationController extends ControllerMVC {
     'Other Certification +'
   ];
 
-  registerButton() async {
+  registerButton(context) async {
     var body = {
       "firstname": user.firstName.toString(),
       "lastname": user.lastName.toString(),
@@ -70,6 +72,8 @@ class RegistrationController extends ControllerMVC {
     };
     log(body.toString());
 
+    var provider = Provider.of<RegistrationProvider>(context, listen: false);
+    provider.updateUser(user);
     var resp =
         await Server().postMethodParems(jsonEncode(body)).catchError((e) {
       log("64" + e.toString());
@@ -117,5 +121,26 @@ class RegistrationController extends ControllerMVC {
     formControllers["house_number"]?.text =
         locationGeoCoded?.first.street ?? "";
     formControllers["mandal"]?.text = locationGeoCoded?.first.subLocality ?? "";
+  }
+
+  fetchUserData(context) {
+    var provider = Provider.of<RegistrationProvider>(context, listen: false);
+    formControllers = {
+      'first_name': TextEditingController(text: provider.user?.firstName ?? ""),
+      'last_name': TextEditingController(text: provider.user?.lastName ?? ""),
+      'house_number':
+          TextEditingController(text: provider.user?.houseNumber ?? ""),
+      'city': TextEditingController(text: provider.user?.city ?? ""),
+      'mandal': TextEditingController(text: provider.user?.mandal ?? ""),
+      'district': TextEditingController(text: provider.user?.district ?? ""),
+      'state': TextEditingController(text: provider.user?.state ?? ""),
+      'pincode': TextEditingController(text: provider.user?.pincode ?? ""),
+      'email': TextEditingController(text: provider.user?.email ?? ""),
+      'password': TextEditingController(text: provider.user?.pass ?? ""),
+      'c_password': TextEditingController(text: provider.user?.cpass ?? ""),
+      'telePhone': TextEditingController(text: provider.user?.telePhone ?? ""),
+      'storeName': TextEditingController(
+          text: provider.user?.certificationRegisterationNumber ?? ""),
+    };
   }
 }

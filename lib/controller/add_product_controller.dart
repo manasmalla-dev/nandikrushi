@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -33,9 +32,8 @@ class AddProductController extends ControllerMVC {
         quantity: int.tryParse(quantity) ?? 0,
         description: description,
         productImage: image);
-    var random = math.Random();
     var body = {
-      "seller_id": random.nextInt(50).toString(),
+      "seller_id": "57",
       "category_id": product.category.toString(),
       "name": product.subcategory.toString(),
       "units": product.units.toString(),

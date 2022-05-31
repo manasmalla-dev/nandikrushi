@@ -749,7 +749,8 @@ class _RegistrationScreenState extends StateMVC<RegistrationScreen> {
                                               pincode: homeController.formControllers['pincode']?.text ?? "",
                                               state: homeController.formControllers['state']?.text ?? "");
                                           log(homeController.user.toString());
-                                          await homeController.registerButton();
+                                          await homeController
+                                              .registerButton(context);
                                           homeController.pageController
                                               .animateToPage(pageIndex + 1,
                                                   duration: const Duration(
