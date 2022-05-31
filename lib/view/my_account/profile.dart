@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushi/controller/registration_controller.dart';
 import 'package:nandikrushi/model/user.dart';
 import 'package:nandikrushi/reusable_widgets/app_bar.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
@@ -13,18 +15,16 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  var user = User();
-  var formControllers = {
-    'first_name': TextEditingController(),
-    'last_name': TextEditingController(),
-    'email': TextEditingController(),
-    'location': TextEditingController(),
-    'password': TextEditingController(),
-  };
+class _ProfileScreenState extends StateMVC<ProfileScreen> {
+  late RegistrationController registrationController;
+
+  _ProfileScreenState() : super(RegistrationController()) {
+    registrationController = controller as RegistrationController;
+    registrationController.fetchUserData(context);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +42,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Expanded(
                       child: TextFieldWidget(
-                        controller: formControllers['first_name'],
+                        controller: registrationController
+                            .formControllers['first_name'],
                         label: 'First Name',
                         hintSize: 20,
                         hintColor: Colors.grey.shade600,
@@ -54,7 +55,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Expanded(
                       child: TextFieldWidget(
-                        controller: formControllers['last_name'],
+                        controller:
+                            registrationController.formControllers['last_name'],
                         label: 'Last Name',
                         hintSize: 20,
                         hintColor: Colors.grey.shade600,
@@ -67,13 +69,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: height(context) * 0.02,
                 ),
                 TextFieldWidget(
-                  controller: formControllers['email'],
+                  controller: registrationController.formControllers['email'],
                   label: 'Email Address',
                   hintSize: 20,
                   style: fonts(20.0, FontWeight.w500, Colors.black),
                 ),
                 TextFieldWidget(
-                  controller: formControllers['password'],
+                  controller:
+                      registrationController.formControllers['password'],
                   label: 'Password',
                   obscureText: true,
                   hintSize: 20,
@@ -106,7 +109,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Expanded(
                       child: TextFieldWidget(
-                        controller: formControllers['location'],
+                        controller:
+                            registrationController.formControllers['location'],
                         prefix: const Icon(Icons.location_on_rounded),
                         suffix: TextWidget(
                           text: "Apply",
@@ -156,19 +160,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: EdgeInsets.only(bottom: height(context) * 0.03),
                   child: ElevatedButtonWidget(
                     onClick: () {
-                      var firstName = formControllers['first_name']?.text ?? "";
-                      var lastName = formControllers['last_name']?.text ?? "";
-                      var email = formControllers['email']?.text ?? "";
-                      var location = formControllers['location']?.text ?? "";
-                      var password = formControllers['password']?.text ?? "";
-                      user = User.registerUser(
+                      var firstName = registrationController
+                              .formControllers['first_name']?.text ??
+                          "";
+                      var lastName = registrationController
+                              .formControllers['last_name']?.text ??
+                          "";
+                      var email = registrationController
+                              .formControllers['email']?.text ??
+                          "";
+                      var location = registrationController
+                              .formControllers['location']?.text ??
+                          "";
+                      var password = registrationController
+                              .formControllers['password']?.text ??
+                          "";
+                      registrationController.user = User.registerUser(
                           firstName: firstName,
                           lastName: lastName,
                           location: location,
                           email: email,
                           password: password);
 
-                      log(user.toString());
+                      log(registrationController.user.toString());
                       Navigator.of(context).pop();
                     },
                     minWidth: width(context) * 0.85,
