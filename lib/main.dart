@@ -4,11 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nandikrushifarmer/provider/data_provider.dart';
 import 'package:nandikrushifarmer/provider/login_provider.dart';
 import 'package:nandikrushifarmer/provider/onboard_provider.dart';
 import 'package:nandikrushifarmer/provider/registration_provider.dart';
 import 'package:nandikrushifarmer/provider/theme_provider.dart';
-import 'package:nandikrushifarmer/view/login/registration.dart';
+import 'package:nandikrushifarmer/view/login/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -33,6 +34,7 @@ void main() async {
     ChangeNotifierProvider<LoginProvider>(
       create: (context) => LoginProvider(),
     ),
+    ChangeNotifierProvider<DataProvider>(create: (context) => DataProvider())
   ], child: const MyApp()));
 }
 
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
           selectionHandleColor: Color(0xFF006838),
         ),
       ),
-      home: const RegistrationScreen(),
+      home: const SplashScreen(),
     );
   }
 }

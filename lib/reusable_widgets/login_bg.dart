@@ -6,7 +6,9 @@ import 'package:nandikrushifarmer/view/login/registration.dart';
 
 class LoginBG extends StatefulWidget {
   final Widget? bottomWidget;
-  const LoginBG({Key? key, this.bottomWidget}) : super(key: key);
+  bool isPrimary = true;
+  LoginBG({Key? key, this.bottomWidget, this.isPrimary = true})
+      : super(key: key);
 
   @override
   State<LoginBG> createState() => _LoginBGState();
@@ -42,7 +44,9 @@ class _LoginBGState extends State<LoginBG> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const RegistrationScreen()));
+                                        const RegistrationScreen(
+                                          isPhoneOrEmail: 0,
+                                        )));
                           },
                           child: SizedBox(
                             width: width(context),
@@ -66,7 +70,9 @@ class _LoginBGState extends State<LoginBG> {
                               fontFamily: 'Samarkan',
                               fontSize: width(context) * 0.08,
                               fontWeight: FontWeight.w500,
-                              color: SpotmiesTheme.primaryColor,
+                              color: widget.isPrimary
+                                  ? SpotmiesTheme.primaryColor
+                                  : const Color(0xFF006838),
                             ),
                             textAlign: TextAlign.start,
                           ),

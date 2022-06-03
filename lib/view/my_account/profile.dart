@@ -23,7 +23,6 @@ class _ProfileScreenState extends StateMVC<ProfileScreen> {
 
   _ProfileScreenState() : super(RegistrationController()) {
     homeController = controller as RegistrationController;
-    homeController.fetchUserData(context);
   }
   // var acresInInt = 1.0;
   // var checkBoxStates = [true, false, false, false, false, false];
@@ -47,6 +46,7 @@ class _ProfileScreenState extends StateMVC<ProfileScreen> {
   // ];
   @override
   Widget build(BuildContext context) {
+    homeController.fetchUserData(context);
     return Scaffold(
         appBar: appBarWithTitle(context, title: 'Profile'),
         body: SingleChildScrollView(
@@ -86,7 +86,7 @@ class _ProfileScreenState extends StateMVC<ProfileScreen> {
                       size: height(context) * 0.02,
                     ),
                     TextFieldWidget(
-                      controller: homeController.formControllers['farmer_name'],
+                      controller: homeController.formControllers['first_name'],
                       label: 'Farmer Name',
                       hintSize: 20,
                       style: fonts(20.0, FontWeight.w500, Colors.black),

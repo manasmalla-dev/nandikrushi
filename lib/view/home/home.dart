@@ -70,8 +70,8 @@ class _HomeState extends State<Home> {
             decoration: BoxDecoration(
                 color: Colors.grey[300],
                 borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50))),
+                    topLeft: Radius.circular(32),
+                    topRight: Radius.circular(32))),
             height: height(context) * 1.5,
             width: width(context),
             child: GridView.count(
@@ -114,7 +114,7 @@ class _HomeState extends State<Home> {
                     child: Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(5)),
+                          borderRadius: BorderRadius.circular(15)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

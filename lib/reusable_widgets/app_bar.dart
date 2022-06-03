@@ -96,7 +96,7 @@ profileAppBar(BuildContext context) {
         ),
         SizedBox(
           width: width(context) * 0.6,
-          height: width(context) * 0.15,
+          height: width(context) * 0.16,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

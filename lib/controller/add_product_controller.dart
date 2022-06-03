@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushifarmer/model/product.dart';
-import 'package:nandikrushifarmer/repo/api_methods.dart';
 import 'package:nandikrushifarmer/reusable_widgets/success_screen.dart';
 
 class AddProductController extends ControllerMVC {

@@ -10,15 +10,28 @@ class RegistrationProvider extends ChangeNotifier {
   String userAccountType = "";
   String langType = "";
   User? user;
+  var isLoading = false;
+
+  setLoader(_) {
+    isLoading = _;
+    notifyListeners();
+  }
+
+  var userTypes = [];
+  getUserTypes(_) {
+    userTypes = _;
+    notifyListeners();
+  }
 
   updateUserType(context, String type) {
     userAccountType = type;
     var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-    themeProvider.setUserType(type == 'farmer'
+    var userParsedType = type.toLowerCase().contains("farmer")
         ? UserAppTheme.farmer
-        : type == 'store'
+        : type.toLowerCase().contains("store")
             ? UserAppTheme.store
-            : UserAppTheme.restaurant);
+            : UserAppTheme.restaurant;
+    themeProvider.setUserType(userParsedType);
     notifyListeners();
   }
 

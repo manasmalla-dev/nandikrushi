@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextWidget extends StatelessWidget {
   final String? text;
@@ -25,8 +26,8 @@ class TextWidget extends StatelessWidget {
     return Text(text!,
         overflow: flow ?? TextOverflow.ellipsis,
         textAlign: align ?? TextAlign.start,
-        style: TextStyle(
-          fontFamily: 'Roboto',
+        style: GoogleFonts.poppins(
+          // fontFamily: 'Roboto',
           letterSpacing: lSpace ?? 0,
           fontSize: size ?? 14,
           color: color ?? Colors.grey[900],
@@ -36,6 +37,8 @@ class TextWidget extends StatelessWidget {
 }
 
 fonts(size, bold, color) {
+  return GoogleFonts.poppins(
+      color: color, fontSize: size, fontWeight: bold, letterSpacing: 1.0);
   return TextStyle(
       fontFamily: 'Roboto',
       color: color,

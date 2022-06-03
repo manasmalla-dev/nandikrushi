@@ -271,13 +271,13 @@ class CartItems extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             child: SizedBox(
-              height: height(context) * 0.12,
+              height: height(context) * 0.13,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
                     text: items[index]['name'],
-                    weight: FontWeight.w800,
+                    weight: FontWeight.w700,
                     size: height(context) * 0.024,
                   ),
                   Flexible(
@@ -309,12 +309,12 @@ class CartItems extends StatelessWidget {
                                       TextWidget(
                                         text: "Rs.",
                                         size: height(context) * 0.019,
-                                        weight: FontWeight.bold,
+                                        weight: FontWeight.w500,
                                       ),
                                       TextWidget(
                                         text: "${items[index]['price']}",
                                         size: height(context) * 0.024,
-                                        weight: FontWeight.w800,
+                                        weight: FontWeight.w600,
                                       ),
                                     ],
                                   ),

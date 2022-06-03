@@ -65,7 +65,7 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getLocationAndPermission();
       print(userLocation);
     });

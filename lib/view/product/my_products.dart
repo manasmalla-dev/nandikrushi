@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushifarmer/controller/my_products_controller.dart';
+import 'package:nandikrushifarmer/provider/data_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_bar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
+import 'package:provider/provider.dart';
 
 import '../../provider/theme_provider.dart';
 
@@ -13,15 +15,10 @@ class MyProductsScreen extends StatefulWidget {
   const MyProductsScreen({Key? key}) : super(key: key);
 
   @override
-  _MyProductsScreenState createState() => _MyProductsScreenState();
+  State<MyProductsScreen> createState() => _MyProductsScreenState();
 }
 
-class _MyProductsScreenState extends StateMVC<MyProductsScreen> {
-  late MyProductsController productsController;
-
-  _MyProductsScreenState() : super(MyProductsController()) {
-    productsController = controller as MyProductsController;
-  }
+class _MyProductsScreenState extends State<MyProductsScreen> {
   var products = {
     'a2-milk': [
       {
@@ -228,204 +225,216 @@ class _MyProductsScreenState extends StateMVC<MyProductsScreen> {
   };
   @override
   Widget build(BuildContext context) {
-    productsController.list = products['vegetables']!;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: appBarWithTitle(context, title: "My Products".toUpperCase()),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.sort_rounded),
-              onPressed: () {},
-              splashRadius: 12,
-            ),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                padding: EdgeInsets.all(height(context) * 0.01),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(32),
+    return Consumer<DataProvider>(builder: (context, productsController, _) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: appBarWithTitle(context, title: "My Products".toUpperCase()),
+        body: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.sort_rounded),
+                onPressed: () {},
+                splashRadius: 12,
+              ),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  padding: EdgeInsets.all(height(context) * 0.01),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(32),
+                    ),
                   ),
-                ),
-                child: ListView.separated(
-                  itemCount: productsController.list.length,
-                  itemBuilder: ((context, index) {
-                    return Opacity(
-                      opacity: productsController.list[index]['stock'] == "true"
-                          ? 1
-                          : 0.5,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 6),
-                        child: SizedBox(
-                          height: height(context) * 0.19,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextWidget(
-                                    text: productsController.list[index]
-                                        ['name'],
-                                    weight: FontWeight.w800,
-                                    size: height(context) * 0.024,
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextWidget(
-                                        text:
-                                            "Product posted on: ${productsController.list[index]['date']}",
-                                        weight: FontWeight.w500,
-                                        size: height(context) * 0.013,
-                                        color: Colors.blue,
-                                      ),
-                                      IconButton(
-                                        iconSize: height(context) * 0.02,
-                                        onPressed: () {
-                                          log("SHOW MENU");
-                                        },
-                                        icon: const Icon(Icons.more_vert),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              TextWidget(
-                                text: productsController.list[index]
-                                    ['description'],
-                              ),
-                              SizedBox(
-                                height: height(context) * 0.018,
-                              ),
-                              Flexible(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                  child: ListView.separated(
+                    itemCount: productsController.orders.length,
+                    itemBuilder: ((context, index) {
+                      return Opacity(
+                        opacity:
+                            productsController.orders[index]['stock'] == "true"
+                                ? 1
+                                : 0.5,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 6),
+                          child: SizedBox(
+                            height: height(context) * 0.19,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    SizedBox(
-                                      height: height(context) * 0.08,
-                                      width: height(context) * 0.08,
-                                      child: Image.network(
-                                        productsController.list[index]['url'],
-                                        fit: BoxFit.cover,
-                                      ),
+                                    TextWidget(
+                                      text: productsController.orders[index]
+                                          ['name'],
+                                      weight: FontWeight.w800,
+                                      size: height(context) * 0.024,
                                     ),
-                                    Expanded(
-                                        child: Padding(
-                                      padding: const EdgeInsets.only(bottom: 8),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 16.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                TextWidget(
-                                                  text: "Rs.",
-                                                  size: height(context) * 0.019,
-                                                  weight: FontWeight.bold,
-                                                ),
-                                                TextWidget(
-                                                  text:
-                                                      "${productsController.list[index]['price']}",
-                                                  size: height(context) * 0.024,
-                                                  weight: FontWeight.w800,
-                                                ),
-                                              ],
-                                            ),
-                                            TextWidget(
-                                              text: productsController
-                                                  .list[index]['units'],
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.location_on,
-                                                  size: 8,
-                                                ),
-                                                TextWidget(
-                                                  text: productsController
-                                                      .list[index]['place'],
-                                                  size: height(context) * 0.01,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextWidget(
+                                          text:
+                                              "Product posted on: ${productsController.orders[index]['date']}",
+                                          weight: FontWeight.w500,
+                                          size: height(context) * 0.013,
+                                          color: Colors.blue,
                                         ),
-                                      ),
-                                    )),
-                                    OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                          tapTargetSize:
-                                              MaterialTapTargetSize.shrinkWrap,
-                                          minimumSize: Size.zero, // Set this
-                                          padding: EdgeInsets.zero, // and this
-                                          side: BorderSide(
-                                              width: 1,
-                                              color:
-                                                  productsController.list[index]
-                                                              ['stock'] ==
-                                                          "true"
-                                                      ? Theme.of(context)
-                                                          .primaryColor
-                                                      : Colors.red),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(100))),
-                                      onPressed: () {},
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0, vertical: 2),
-                                        child: TextWidget(
-                                          text: productsController.list[index]
-                                                      ['stock'] ==
-                                                  "true"
-                                              ? "In Stock".toUpperCase()
-                                              : "Out Of Stock".toUpperCase(),
-                                          size: height(context) * 0.014,
-                                          weight: FontWeight.bold,
-                                          color: productsController.list[index]
-                                                      ['stock'] ==
-                                                  "true"
-                                              ? SpotmiesTheme.primaryColor
-                                              : Colors.red,
+                                        IconButton(
+                                          iconSize: height(context) * 0.02,
+                                          onPressed: () {
+                                            log("SHOW MENU");
+                                          },
+                                          icon: const Icon(Icons.more_vert),
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              )
-                            ],
+                                TextWidget(
+                                  text: productsController.orders[index]
+                                      ['description'],
+                                ),
+                                SizedBox(
+                                  height: height(context) * 0.018,
+                                ),
+                                Flexible(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: height(context) * 0.08,
+                                        width: height(context) * 0.08,
+                                        child: Image.network(
+                                          productsController.orders[index]
+                                              ['url'],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Expanded(
+                                          child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  TextWidget(
+                                                    text: "Rs.",
+                                                    size:
+                                                        height(context) * 0.019,
+                                                    weight: FontWeight.bold,
+                                                  ),
+                                                  TextWidget(
+                                                    text:
+                                                        "${productsController.orders[index]['price']}",
+                                                    size:
+                                                        height(context) * 0.024,
+                                                    weight: FontWeight.w800,
+                                                  ),
+                                                ],
+                                              ),
+                                              TextWidget(
+                                                text: productsController
+                                                    .orders[index]['units'],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.location_on,
+                                                    size: 8,
+                                                  ),
+                                                  TextWidget(
+                                                    text: productsController
+                                                        .orders[index]['place'],
+                                                    size:
+                                                        height(context) * 0.01,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )),
+                                      OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
+                                            minimumSize: Size.zero, // Set this
+                                            padding:
+                                                EdgeInsets.zero, // and this
+                                            side: BorderSide(
+                                                width: 1,
+                                                color: productsController
+                                                                .orders[index]
+                                                            ['stock'] ==
+                                                        "true"
+                                                    ? Theme.of(context)
+                                                        .primaryColor
+                                                    : Colors.red),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        100))),
+                                        onPressed: () {},
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0, vertical: 2),
+                                          child: TextWidget(
+                                            text: productsController
+                                                            .orders[index]
+                                                        ['stock'] ==
+                                                    "true"
+                                                ? "In Stock".toUpperCase()
+                                                : "Out Of Stock".toUpperCase(),
+                                            size: height(context) * 0.014,
+                                            weight: FontWeight.bold,
+                                            color:
+                                                productsController.orders[index]
+                                                            ['stock'] ==
+                                                        "true"
+                                                    ? SpotmiesTheme.primaryColor
+                                                    : Colors.red,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Divider(
-                      thickness: 1.5,
-                    );
-                  },
+                      );
+                    }),
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Divider(
+                        thickness: 1.5,
+                      );
+                    },
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

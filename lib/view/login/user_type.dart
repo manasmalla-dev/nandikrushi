@@ -1,14 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:nandikrushifarmer/provider/data_provider.dart';
 import 'package:nandikrushifarmer/provider/registration_provider.dart';
-import 'package:nandikrushifarmer/provider/theme_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/app_config.dart';
 import 'package:nandikrushifarmer/reusable_widgets/elevated_widget.dart';
 import 'package:nandikrushifarmer/reusable_widgets/login_bg.dart';
 import 'package:nandikrushifarmer/reusable_widgets/text_wid.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class UserType extends StatefulWidget {
   const UserType({Key? key}) : super(key: key);
@@ -18,38 +15,23 @@ class UserType extends StatefulWidget {
 }
 
 class _UserTypeState extends State<UserType> {
-  var userTypeData = ["Loading...", "Loading...", "Loading..."];
+  late DataProvider dataProvider;
 
   RegistrationProvider? registrationProvider;
   @override
   void initState() {
-    getUserRegistrationData();
     registrationProvider =
         Provider.of<RegistrationProvider>(context, listen: false);
     super.initState();
   }
 
-  getUserRegistrationData() async {
-    //getting api data dynamically
-    var url =
-        'http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/customergroups';
-    var jsonUri = Uri.tryParse(url);
-    if (jsonUri == null) {
-      return;
-    }
-    final response = await http.get(jsonUri);
-    if (response.statusCode == 200) {
-      List<dynamic> values = json.decode(response.body)["message"];
-      userTypeData = values.map((e) => e["name"].toString()).toList();
-      print(values.map((e) => e["name"]));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return LoginBG(
+      isPrimary: false,
       bottomWidget:
           Consumer<RegistrationProvider>(builder: (context, value, child) {
+        var userTypeData = value.userTypes;
         dynamic type = value.userAccountType;
         return Container(
           padding: EdgeInsets.only(

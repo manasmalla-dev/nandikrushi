@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             text: data["title"],
                             size: width(context) * 0.10,
                             align: TextAlign.start,
-                            color: SpotmiesTheme.primaryColor,
+                            color: const Color(0xFF006838),
                             weight: FontWeight.w700,
                           ),
                         ),
@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       children: [
                                         Divider(
                                           thickness: index == 0 ? 2 : 1,
-                                          color: SpotmiesTheme.primaryColor,
+                                          color: const Color(0xFF006838),
                                           indent: width(context) * 0.04,
                                           endIndent: width(context) * 0.04,
                                         ),
@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     minWidth: width(context) * 0.9,
                     height: height(context) * 0.06,
                     // borderRadius: 16,
-                    bgColor: SpotmiesTheme.primaryColor,
+                    bgColor: const Color(0xFF006838),
                     textColor: Colors.white,
                     buttonName: data["button_name"],
                     textSize: width(context) * 0.04,

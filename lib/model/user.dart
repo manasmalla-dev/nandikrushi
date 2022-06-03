@@ -16,11 +16,11 @@ class User {
   late String pincode;
   late int landAreaInAcres;
   late String certificationType;
-  late String certificationRegisterationNumber;
-  late List<File> certificates;
+  String certificationRegisterationNumber = "";
+  List<File> certificates = [];
   addCertification(rn, cert) {
     certificationRegisterationNumber = rn;
-    certificates = cert;
+    certificates.add(cert);
   }
 
   User.registerUser(

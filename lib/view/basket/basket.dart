@@ -92,7 +92,7 @@ class _BasketState extends State<Basket> {
               children: [
                 TextWidget(
                   text: 'Delivery Charge',
-                  weight: FontWeight.w700,
+                  weight: FontWeight.w500,
                   size: height(context) * 0.022,
                 ),
                 TextWidget(
@@ -109,7 +109,7 @@ class _BasketState extends State<Basket> {
                           0
                       ? 'N/A'
                       : 'Rs. 100.00',
-                  weight: FontWeight.w700,
+                  weight: FontWeight.w600,
                   size: height(context) * 0.022,
                 ),
               ],
@@ -153,7 +153,7 @@ class _BasketState extends State<Basket> {
                 children: [
                   TextWidget(
                     text: 'Total'.toUpperCase(),
-                    weight: FontWeight.w800,
+                    weight: FontWeight.w600,
                     size: height(context) * 0.022,
                   ),
                   TextWidget(

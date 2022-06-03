@@ -62,7 +62,7 @@ class _LoginState extends StateMVC<Login> {
                       child: TextWidget(
                         text: "Enter your Mobile number to login",
                         color: Colors.grey[900],
-                        weight: FontWeight.w800,
+                        weight: FontWeight.w700,
                         align: TextAlign.center,
                         size: height(context) * 0.02,
                       ),
@@ -87,7 +87,7 @@ class _LoginState extends StateMVC<Login> {
                             child: loginPageController!.loginnum.text.isNotEmpty
                                 ? TextWidget(
                                     text: '+91',
-                                    size: height(context) * 0.025,
+                                    size: height(context) * 0.02,
                                     weight: FontWeight.bold,
                                     color: Colors.grey,
                                   )
@@ -216,7 +216,7 @@ class _LoginState extends StateMVC<Login> {
                           TextWidget(
                             text: "I agree to the terms and conditions of",
                             color: Colors.white,
-                            weight: FontWeight.w600,
+                            weight: FontWeight.w500,
                             align: TextAlign.center,
                             flow: TextOverflow.visible,
                             size: width(context) * 0.045,

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,11 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushifarmer/model/login_model.dart';
 import 'package:nandikrushifarmer/provider/login_provider.dart';
+import 'package:nandikrushifarmer/provider/registration_provider.dart';
 import 'package:nandikrushifarmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushifarmer/view/login/nav_bar.dart';
 import 'package:nandikrushifarmer/view/login/onboard_screen.dart';
 import 'package:nandikrushifarmer/view/login/otp.dart';
 import 'package:nandikrushifarmer/view/login/registration.dart';
+import 'package:provider/provider.dart';
+
+import '../repo/api_methods.dart';
 
 class LoginPageController extends ControllerMVC {
   String _verificationCode = "";
@@ -25,6 +30,41 @@ class LoginPageController extends ControllerMVC {
   var passwordController = TextEditingController();
 
   late LoginModel loginModel;
+
+  getUserRegistrationData(context, provider) async {
+    var response = await Server().getMethodParams(
+      'http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/customergroups',
+    );
+    if (response.statusCode == 200) {
+      log("sucess");
+      log(response.body);
+      List<dynamic> values = json.decode(response.body)["message"];
+
+      var userTypeData = values.map((e) => e["name"].toString()).toList();
+      provider.getUserTypes(userTypeData);
+    } else if (response.statusCode == 400) {
+      snackbar(context, "Undefined Parameter when calling API");
+      log("Undefined Parameter");
+    } else if (response.statusCode == 404) {
+      snackbar(context, "API Not found");
+      log("Not found");
+    } else {
+      snackbar(context, "Failed to get data!");
+      log("failure");
+    }
+    //getting api data dynamically
+    //var server = Server();
+
+    /*server.getMethodParams(
+        'http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/customergroups',
+        (response) {
+      List<dynamic> values = json.decode(response.body)["message"];
+      var provider = Provider.of<RegistrationProvider>(context, listen: false);
+      var userTypeData = values.map((e) => e["name"].toString()).toList();
+      provider.getUserTypes(userTypeData);
+    });
+    */
+  }
 
   LoginPageController() {
     loginModel = LoginModel();
@@ -49,6 +89,11 @@ class LoginPageController extends ControllerMVC {
         //login
         log("email: ${emailController.text}");
         log("password: ${passwordController.text}");
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: ((context) => const RegistrationScreen(isPhoneOrEmail: 2)),
+          ),
+        );
       } else {
         log('Invalid');
       }
@@ -75,7 +120,8 @@ class LoginPageController extends ControllerMVC {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const RegistrationScreen()),
+                        builder: (context) =>
+                            const RegistrationScreen(isPhoneOrEmail: 1)),
                     (route) => false);
               }
             });
@@ -134,7 +180,10 @@ class LoginPageController extends ControllerMVC {
           // log("respp 122 $resp");
           loginProvider.setLoader(false);
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const RegistrationScreen()),
+            MaterialPageRoute(
+                builder: (_) => const RegistrationScreen(
+                      isPhoneOrEmail: 1,
+                    )),
           );
           // if (resp == "false") {
           //   Navigator.pushAndRemoveUntil(

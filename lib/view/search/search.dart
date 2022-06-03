@@ -33,7 +33,7 @@ class _SearchState extends StateMVC<Search>
   }
 
   FontWeight getTabBarTextFontWeight(int i) {
-    return _controller.index == i ? FontWeight.w900 : FontWeight.w700;
+    return _controller.index == i ? FontWeight.w800 : FontWeight.w600;
   }
 
   var tabs = ["A2 Milk", "Vegetables", "Fruits", "Ghee", "Oil", "Millets"];
@@ -463,13 +463,13 @@ class _ProductListState extends StateMVC<ProductList> {
             padding:
                 EdgeInsets.symmetric(horizontal: widget.padding, vertical: 6),
             child: SizedBox(
-              height: height(context) * 0.16,
+              height: height(context) * 0.167,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
                     text: widget.list[index]['name'],
-                    weight: FontWeight.w800,
+                    weight: FontWeight.w700,
                     size: height(context) * 0.024,
                   ),
                   TextWidget(
@@ -506,12 +506,12 @@ class _ProductListState extends StateMVC<ProductList> {
                                     TextWidget(
                                       text: "Rs.",
                                       size: height(context) * 0.019,
-                                      weight: FontWeight.bold,
+                                      weight: FontWeight.w500,
                                     ),
                                     TextWidget(
                                       text: "${widget.list[index]['price']}",
                                       size: height(context) * 0.024,
-                                      weight: FontWeight.w800,
+                                      weight: FontWeight.w600,
                                     ),
                                   ],
                                 ),

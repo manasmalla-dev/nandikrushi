@@ -4,7 +4,22 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:nandikrushifarmer/repo/api_exceptions.dart';
 
+import 'api_urls.dart';
+
 class Server {
+  Future<dynamic> getMethodParams(String api) async {
+    var uri = Uri.parse(api);
+
+    try {
+      return http.get(uri).timeout(Duration(seconds: 30));
+    } on SocketException {
+      throw FetchDataException('No Internet Connection', uri.toString());
+    } on TimeoutException {
+      throw APINotRespondingEXception(
+          'API Not Responding in Time', uri.toString());
+    }
+  }
+
   Future<dynamic> postMethodParems(body) async {
     var uri = Uri.parse(
         "http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/register");
