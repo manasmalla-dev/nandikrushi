@@ -20,9 +20,10 @@ class Server {
     }
   }
 
-  Future<dynamic> postMethodParems(body) async {
-    var uri = Uri.parse(
-        "http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/register");
+  Future<dynamic> postMethodParems(body,
+      {url =
+          "http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/register"}) async {
+    var uri = Uri.parse(url);
 
     log(uri.toString());
 

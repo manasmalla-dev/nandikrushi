@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushifarmer/model/product.dart';
+import 'package:nandikrushifarmer/repo/api_methods.dart';
+import 'package:nandikrushifarmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushifarmer/reusable_widgets/success_screen.dart';
 
 class AddProductController extends ControllerMVC {
@@ -41,6 +43,26 @@ class AddProductController extends ControllerMVC {
       "product_image": product.productImage.toString(),
     };
     log(body.toString());
+
+    Server()
+        .postMethodParems(body,
+            url:
+                "http://13.235.27.243/nkweb/index.php?route=extension/account/purpletree_multivendor/api/addsellerproduct/index")
+        .then((response) {
+      if (response.statusCode == 200) {
+        log("sucess");
+        log(response.body);
+      } else if (response.statusCode == 400) {
+        snackbar(context, "Undefined Parameter when calling API");
+        log("Undefined Parameter");
+      } else if (response.statusCode == 404) {
+        snackbar(context, "API Not found");
+        log("Not found");
+      } else {
+        snackbar(context, "Failed to get data!");
+        log("failure");
+      }
+    });
 
     /*var resp =
         await Server().postMethodParems(jsonEncode(body)).catchError((e) {
