@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
             itemBuilder: (context, index) {
               return Scaffold(
                 body: SafeArea(
+                  bottom: false,
                   child: SizedBox(
                     width: width(context),
                     child: Column(
@@ -70,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             text: data["title"],
                             size: width(context) * 0.10,
                             align: TextAlign.start,
-                            color: Colors.green[900],
+                            color: const Color(0xFF006838),
                             weight: FontWeight.w700,
                           ),
                         ),
@@ -85,12 +86,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                   itemBuilder: (context, index) {
                                     return Column(
                                       children: [
-                                        Divider(
-                                          thickness: index == 0 ? 2 : 1,
-                                          color: Colors.green[900],
-                                          indent: width(context) * 0.04,
-                                          endIndent: width(context) * 0.04,
-                                        ),
+                                        index != 0
+                                            ? Divider(
+                                                thickness: index == 0 ? 0 : 1,
+                                                color: const Color(0x50006838),
+                                                indent: width(context) * 0.04,
+                                                endIndent:
+                                                    width(context) * 0.04,
+                                              )
+                                            : const SizedBox(),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left: width(context) * 0.05,
@@ -124,8 +128,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     onClick: () {
                       log('message');
                       if (onboardProvider?.step == 1) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const LangType()),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: ((context) => const LangType()),
+                          ),
                         );
                       } else {
                         _pageController.animateToPage(1,
@@ -135,8 +142,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     minWidth: width(context) * 0.9,
                     height: height(context) * 0.06,
-                    // borderRadius: 16,
-                    bgColor: Colors.green[900],
+                    allRadius: true,
+                    borderRadius: height(context) * 0.015,
+                    bgColor: const Color(0xFF006838),
                     textColor: Colors.white,
                     buttonName: data["button_name"],
                     textSize: width(context) * 0.04,

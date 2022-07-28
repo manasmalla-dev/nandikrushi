@@ -1,5 +1,6 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:nandikrushi/provider/theme_provider.dart';
 import 'package:nandikrushi/reusable_widgets/app_config.dart';
 import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 import 'package:nandikrushi/view/basket/basket.dart';
@@ -46,58 +47,83 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(child: widgetOptions.elementAt(_selectedIndex)),
-      bottomNavigationBar: SizedBox(
-        height: width(context) * 0.163,
-        child: AnimatedBottomNavigationBar.builder(
-          elevation: 0,
-          itemCount: icons.length,
-          tabBuilder: (int index, bool isActive) {
-            final color = isActive ? Colors.grey[900] : Colors.grey;
+        body: Container(child: widgetOptions.elementAt(_selectedIndex)),
+        bottomNavigationBar: NavigationBarTheme(
+          data: NavigationBarThemeData(
+              indicatorColor: SpotmiesTheme.primaryColor),
+          child: NavigationBar(
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            backgroundColor: Colors.white,
+            destinations: widgetOptions
+                .asMap()
+                .map((key, value) {
+                  return MapEntry(
+                      key,
+                      NavigationDestination(
+                          icon: Icon(icons[key]),
+                          selectedIcon: Icon(filledIcons[key]),
+                          label: text[key]));
+                })
+                .values
+                .toList(),
+          ),
+        )
+        // SizedBox(
+        //   height: width(context) * 0.163,
+        //   child: AnimatedBottomNavigationBar.builder(
+        //     shadow: null,
+        //     itemCount: icons.length,
+        //     tabBuilder: (int index, bool isActive) {
+        //       final color = isActive ? Colors.grey[900] : Colors.grey;
 
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Icon(
-                          isActive ? filledIcons[index] : icons[index],
-                          size: width(context) * 0.05,
-                          color: color,
-                        ),
-                        SizedBox(
-                          height: height(context) * 0.006,
-                        ),
-                        TextWidget(
-                          text: text[index],
-                          color: color,
-                          size: width(context) * 0.03,
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            );
-          },
-          backgroundColor: Colors.white,
-          activeIndex: _selectedIndex,
-          splashColor: const Color.fromARGB(255, 255, 255, 255),
-          splashSpeedInMilliseconds: 50,
-          notchSmoothness: NotchSmoothness.verySmoothEdge,
-          gapLocation: GapLocation.none,
-          // leftCornerRadius: 32,
-          // rightCornerRadius: 32,
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
-      ),
-    );
+        //       return Column(
+        //         mainAxisSize: MainAxisSize.min,
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         children: [
+        //           Stack(
+        //             children: [
+        //               Column(
+        //                 children: [
+        //                   Icon(
+        //                     isActive ? filledIcons[index] : icons[index],
+        //                     size: width(context) * 0.05,
+        //                     color: color,
+        //                   ),
+        //                   SizedBox(
+        //                     height: height(context) * 0.006,
+        //                   ),
+        //                   TextWidget(
+        //                     text: text[index],
+        //                     color: color,
+        //                     size: width(context) * 0.03,
+        //                   )
+        //                 ],
+        //               ),
+        //             ],
+        //           ),
+        //         ],
+        //       );
+        //     },
+        //     backgroundColor: Colors.white,
+        //     activeIndex: _selectedIndex,
+        //     splashColor: const Color.fromARGB(255, 255, 255, 255),
+        //     splashSpeedInMilliseconds: 50,
+        //     notchSmoothness: NotchSmoothness.verySmoothEdge,
+        //     gapLocation: GapLocation.none,
+        //     // leftCornerRadius: 32,
+        //     // rightCornerRadius: 32,
+        //     onTap: (index) {
+        //       setState(() {
+        //         _selectedIndex = index;
+        //       });
+        //     },
+        //   ),
+        // ),
+        );
   }
 }

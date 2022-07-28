@@ -59,101 +59,110 @@ class _LoginState extends StateMVC<Login> {
                     SizedBox(
                       width: width(context) * 0.85,
                       child: TextWidget(
-                        text: "Enter your Mobile number to login",
+                        text: " Enter your Mobile number to login",
                         color: Colors.grey[900],
-                        weight: FontWeight.w800,
-                        align: TextAlign.center,
+                        weight: FontWeight.w500,
                         size: height(context) * 0.02,
                       ),
                     ),
                     SizedBox(
                       height: height(context) * 0.012,
                     ),
-                    Container(
-                      width: width(context) * 0.85,
-                      height: height(context) * 0.06,
-                      color: Colors.white,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          AnimatedContainer(
-                            width: loginPageController!.loginnum.text.isNotEmpty
-                                ? width(context) * 0.09
-                                : 0,
-                            duration: const Duration(milliseconds: 250),
-                            child: loginPageController!.loginnum.text.isNotEmpty
-                                ? TextWidget(
-                                    text: '+91',
-                                    size: height(context) * 0.025,
-                                    weight: FontWeight.bold,
-                                    color: Colors.grey,
-                                  )
-                                : const SizedBox(),
-                          ),
-                          // Expanded(
-                          //   child: FilledTextFieldWidget(
-                          //     controller: loginPageController!.numberController,
-                          //     keyBoardType: TextInputType.number,
-                          //     maxLength: 10,
-                          //     functionValidate: (value) {
-                          //       if (value!.length != 10 && value!.empty) {
-                          //         return 'Please Enter Valid Mobile Number';
-                          //       }
-                          //       return null;
-                          //     },
-                          //     borderRadius: 0,
-                          //     label: "",
-                          //     style: fonts(height(context) * 0.025,
-                          //         FontWeight.bold, Colors.black),
-                          //   ),
-                          // ),
-                          Expanded(
-                            child: TextFormField(
-                              textInputAction: TextInputAction.done,
-                              onFieldSubmitted: (_) {},
-                              style: fonts(height(context) * 0.025,
-                                  FontWeight.bold, Colors.black),
-                              decoration: InputDecoration(
-                                hintStyle: fonts(width(context) * 0.045,
-                                    FontWeight.w600, Colors.grey[400]),
-                                hintText: 'Phone number',
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(0)),
-                                focusedBorder: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(0)),
-                                    borderSide: BorderSide(
-                                        width: 1, color: Colors.white)),
-                                enabledBorder: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(0)),
-                                    borderSide: BorderSide(
-                                        width: 1, color: Colors.white)),
-                              ),
-                              validator: (value) {
-                                if (value?.length != 10) {
-                                  snackbar(context,
-                                      "Please Enter Valid Mobile Number");
-                                }
-                                return null;
-                              },
-                              maxLength: 10,
-                              keyboardAppearance: Brightness.dark,
-                              buildCounter: (BuildContext context,
-                                  {int? currentLength,
-                                  int? maxLength,
-                                  bool? isFocused}) {
-                                return null;
-                              },
-                              keyboardType: TextInputType.number,
-                              controller: loginPageController!.loginnum,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        width: width(context) * 0.85,
+                        height: height(context) * 0.06,
+                        color: Colors.white,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            AnimatedContainer(
+                              width:
+                                  loginPageController!.loginnum.text.isNotEmpty
+                                      ? width(context) * 0.09
+                                      : 0,
+                              duration: const Duration(milliseconds: 250),
+                              child:
+                                  loginPageController!.loginnum.text.isNotEmpty
+                                      ? TextWidget(
+                                          text: '+91',
+                                          size: height(context) * 0.02,
+                                          weight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        )
+                                      : const SizedBox(),
                             ),
-                          )
-                        ],
+                            // Expanded(
+                            //   child: FilledTextFieldWidget(
+                            //     controller: loginPageController!.numberController,
+                            //     keyBoardType: TextInputType.number,
+                            //     maxLength: 10,
+                            //     functionValidate: (value) {
+                            //       if (value!.length != 10 && value!.empty) {
+                            //         return 'Please Enter Valid Mobile Number';
+                            //       }
+                            //       return null;
+                            //     },
+                            //     borderRadius: 0,
+                            //     label: "",
+                            //     style: fonts(height(context) * 0.025,
+                            //         FontWeight.bold, Colors.black),
+                            //   ),
+                            // ),
+                            Expanded(
+                              child: TextFormField(
+                                cursorColor: SpotmiesTheme.primaryColor,
+                                textInputAction: TextInputAction.done,
+                                onFieldSubmitted: (_) {},
+                                style: fonts(
+                                    height(context) * 0.025,
+                                    FontWeight.bold,
+                                    Color.fromRGBO(0, 0, 0, 1)),
+                                decoration: InputDecoration(
+                                  counterStyle: fonts(width(context) * 0.03,
+                                      FontWeight.w600, Colors.grey[400]),
+                                  hintStyle: fonts(width(context) * 0.045,
+                                      FontWeight.w600, Colors.grey[400]),
+                                  hintText: 'Phone number',
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(8)),
+                                  focusedBorder: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                      borderSide: BorderSide(
+                                          width: 1, color: Colors.white)),
+                                  enabledBorder: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                      borderSide: BorderSide(
+                                          width: 1, color: Colors.white)),
+                                ),
+                                validator: (value) {
+                                  if (value?.length != 10) {
+                                    snackbar(context,
+                                        "Please Enter Valid Mobile Number");
+                                  }
+                                  return null;
+                                },
+                                maxLength: 10,
+                                keyboardAppearance: Brightness.dark,
+                                buildCounter: (BuildContext context,
+                                    {int? currentLength,
+                                    int? maxLength,
+                                    bool? isFocused}) {
+                                  return null;
+                                },
+                                keyboardType: TextInputType.number,
+                                controller: loginPageController!.loginnum,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -179,10 +188,12 @@ class _LoginState extends StateMVC<Login> {
                       },
                       minWidth: width(context) * 0.85,
                       height: height(context) * 0.06,
-                      bgColor: Colors.green[900],
-                      borderSideColor: Colors.green[900],
+                      bgColor: SpotmiesTheme.primaryColor,
+                      borderSideColor: SpotmiesTheme.primaryColor,
                       textColor: Colors.white,
                       buttonName: "GET OTP",
+                      borderRadius: 8,
+                      allRadius: true,
                       textSize: width(context) * 0.04,
                       trailingIcon: Icon(
                         Icons.arrow_forward,

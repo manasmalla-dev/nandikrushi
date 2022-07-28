@@ -83,24 +83,34 @@ class _DashboardState extends StateMVC<Dashboard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             appbar(context, actions: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.location_on_rounded),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      TextWidget(
-                        text: 'Hyderabad',
-                        size: 14,
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.location_on_rounded),
+                    ),
+                    SizedBox(
+                      height: 8,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          TextWidget(
+                            text: 'Hyderabad',
+                            size: 14,
+                            height: 0.1,
+                          ),
+                          TextWidget(
+                            text: '- - - - - - - -',
+                          ),
+                        ],
                       ),
-                      TextWidget(text: '-------------'),
-                    ],
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
               IconButton(
                 onPressed: () {},
@@ -127,8 +137,9 @@ class _DashboardState extends StateMVC<Dashboard> {
                           child: SizedBox(
                             width: width(context) * 0.9,
                             child: Image.asset(
-                              'assets/png/globalagriculture.jpeg',
+                              'assets/png/green_fresh.png',
                               fit: BoxFit.cover,
+                              height: double.infinity,
                             ),
                           ),
                         ),
@@ -137,7 +148,7 @@ class _DashboardState extends StateMVC<Dashboard> {
                           child: Container(
                             width: width(context) * 0.9,
                             height: double.infinity,
-                            color: Colors.black.withOpacity(0.5),
+                            color: Colors.black.withOpacity(0.47),
                           ),
                         ),
                         Container(
@@ -152,9 +163,6 @@ class _DashboardState extends StateMVC<Dashboard> {
                                 weight: FontWeight.w500,
                                 color: Colors.white,
                                 size: height(context) * 0.03,
-                              ),
-                              const Divider(
-                                color: Colors.white,
                               ),
                               const TextWidget(
                                 text: 'We believe in Truly food is a Medicine',
@@ -215,41 +223,51 @@ class _DashboardState extends StateMVC<Dashboard> {
                     height: 8,
                   ),
                   SizedBox(
-                    height: height(context) * 0.3,
-                    child: ListView.builder(
+                    height: height(context) * 0.36,
+                    child: ListView.separated(
+                      separatorBuilder: (_, __) {
+                        return SizedBox(
+                          width: width(context) * 0.04,
+                        );
+                      },
                       itemCount: 5,
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return Container(
                           width: width(context) * 0.35,
-                          margin: index == 0
-                              ? const EdgeInsets.only(right: 8)
-                              : const EdgeInsets.symmetric(horizontal: 8),
-                          height: height(context) * 0.3,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(16),
                             child: Stack(
                               children: [
                                 Image.asset(
-                                  'assets/png/vegetables.png',
+                                  index % 3 == 0
+                                      ? 'assets/png/vegetables.webp'
+                                      : index % 3 == 1
+                                          ? 'assets/png/fruit.png'
+                                          : 'assets/png/green_fresh.png',
                                   fit: BoxFit.cover,
                                   height: double.infinity,
-                                  width: width(context) * 0.35,
+                                  width: double.infinity,
                                 ),
                                 Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(0.5),
+                                        color:
+                                            Color(0xFF434343).withOpacity(0.39),
                                         borderRadius:
                                             const BorderRadius.vertical(
                                                 top: Radius.circular(16))),
-                                    width: double.infinity,
                                     height: height(context) * 0.1,
-                                    child: const Center(
+                                    child: Center(
                                         child: TextWidget(
-                                      text: 'Vegetables',
+                                      text: (index % 3 == 0
+                                              ? 'Vegetables'
+                                              : index % 3 == 1
+                                                  ? 'Fruits'
+                                                  : 'Leafy Vegetables')
+                                          .toUpperCase(),
                                       weight: FontWeight.bold,
                                       color: Colors.white,
                                     )),

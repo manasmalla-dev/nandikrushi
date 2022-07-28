@@ -25,6 +25,7 @@ class _MyAccountState extends State<MyAccount> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
+        bottom: false,
         child: SingleChildScrollView(
           child: Column(
             children: [

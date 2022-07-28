@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushi/model/user.dart';
+import 'package:nandikrushi/provider/login_provider.dart';
 import 'package:nandikrushi/provider/registration_provider.dart';
 import 'package:nandikrushi/repo/api_methods.dart';
 import 'package:nandikrushi/reusable_widgets/snackbar.dart';
@@ -41,11 +42,14 @@ class RegistrationController extends ControllerMVC {
 
     registerButton(context);
 
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const NavBar()));
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const NavBar()),
+        (route) => false);
   }
 
   registerButton(context) async {
+    var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    user.phoneNumber = loginProvider.phNumber;
     var body = {
       "firstname": user.firstName.toString(),
       "lastname": user.lastName.toString(),
@@ -54,8 +58,6 @@ class RegistrationController extends ControllerMVC {
       "password": user.password.toString(),
       "confirm": user.password.toString(),
       "agree": 1.toString(),
-      "become_seller": 1.toString(),
-      "seller_storename": user.firstName.toString(),
     };
     log(body.toString());
 

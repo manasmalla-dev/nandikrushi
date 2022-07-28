@@ -43,6 +43,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "250225425929-9vrr2p1m92k6cuoukbcohq9npikcq75l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "farm.nandikrushi",
+            "certificate_hash": "924d84659eb6a93fdd9d99913232ee71a11a70ff"
+          }
+        },
+        {
+          "client_id": "250225425929-eessa9b50h1plov0pfnfehgs159cbolh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "farm.nandikrushi",
+            "certificate_hash": "b0c0bffb904cd200b6df8912707bcd22af113063"
+          }
+        },
+        {
           "client_id": "250225425929-p1nhjut1vf1r28b4otbv559jaue0j3hg.apps.googleusercontent.com",
           "client_type": 3
         }

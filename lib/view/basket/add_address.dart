@@ -8,8 +8,12 @@ import 'package:nandikrushi/reusable_widgets/text_wid.dart';
 import 'package:nandikrushi/reusable_widgets/textfield_widget.dart';
 
 class AddAddressScreen extends StatefulWidget {
+  final Map<String, String> geolocatedLocationAddress;
   final Function(List<String>) onSaveAddress;
-  const AddAddressScreen({Key? key, required this.onSaveAddress})
+  const AddAddressScreen(
+      {Key? key,
+      required this.onSaveAddress,
+      this.geolocatedLocationAddress = const {}})
       : super(key: key);
 
   @override
@@ -24,6 +28,20 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
     'pincode': TextEditingController(),
     'alternate_mobile_number': TextEditingController(),
   };
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.geolocatedLocationAddress.isNotEmpty) {
+      formControllers["house_number"]?.text =
+          widget.geolocatedLocationAddress["premise"] ?? "";
+      formControllers["full_address"]?.text =
+          widget.geolocatedLocationAddress["address"] ?? "";
+      formControllers["pincode"]?.text =
+          widget.geolocatedLocationAddress["postal_code"] ?? "";
+    }
+  }
+
   var chipSelection = 0;
   var otherController = TextEditingController();
   @override
@@ -32,7 +50,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
       appBar: appBarWithTitle(context, title: 'Add Address'),
       body: SingleChildScrollView(
         child: SizedBox(
-          height: height(context) * 0.9,
+          height: height(context) * 0.85,
           child: Column(
             children: [
               SizedBox(
@@ -57,9 +75,9 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                           child: TextFieldWidget(
                             controller: formControllers['house_number'],
                             label: 'House / Flat No.',
-                            hintSize: 15,
+                            hintSize: 16,
                             hintColor: Colors.grey.shade600,
-                            style: fonts(20.0, FontWeight.w500, Colors.black),
+                            style: fonts(18.0, FontWeight.w500, Colors.black),
                           ),
                         ),
                         SizedBox(
@@ -69,36 +87,37 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                           child: TextFieldWidget(
                             controller: formControllers['landmark'],
                             label: 'Landmark',
-                            hintSize: 20,
+                            hintSize: 16,
                             hintColor: Colors.grey.shade600,
-                            style: fonts(15.0, FontWeight.w500, Colors.black),
+                            style: fonts(18.0, FontWeight.w500, Colors.black),
                           ),
                         )
                       ],
                     ),
                     SizedBox(
-                      height: height(context) * 0.015,
+                      height: height(context) * 0.01,
                     ),
                     TextFieldWidget(
                       controller: formControllers['full_address'],
-                      label: 'Full Address',
-                      hintSize: 20,
-                      style: fonts(20.0, FontWeight.w500, Colors.black),
+                      label: 'Address',
+                      hintSize: 16,
+                      style: fonts(18.0, FontWeight.w500, Colors.black),
                     ),
                     SizedBox(
-                      height: height(context) * 0.015,
+                      height: height(context) * 0.01,
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: TextFieldWidget(
                             controller: formControllers['pincode'],
                             label: 'Pincode',
-                            hintSize: 20,
-                            showCounter: true,
+                            hintSize: 16,
+                            showCounter: false,
                             maxLength: 6,
                             hintColor: Colors.grey.shade600,
-                            style: fonts(15.0, FontWeight.w500, Colors.black),
+                            style: fonts(18.0, FontWeight.w500, Colors.black),
                           ),
                         ),
                         SizedBox(
@@ -109,18 +128,15 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                             textInputAction: TextInputAction.done,
                             controller:
                                 formControllers['alternate_mobile_number'],
-                            label: 'Alternative Contact Number',
-                            hintSize: 10,
+                            label: 'Alternative Contact',
+                            hintSize: 16,
                             maxLength: 10,
                             showCounter: true,
                             hintColor: Colors.grey.shade600,
-                            style: fonts(20.0, FontWeight.w500, Colors.black),
+                            style: fonts(18.0, FontWeight.w500, Colors.black),
                           ),
                         )
                       ],
-                    ),
-                    SizedBox(
-                      height: height(context) * 0.01,
                     ),
                   ],
                 ),
@@ -141,6 +157,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       avatar: const Icon(
                         Icons.home_rounded,
                         color: Colors.white,
+                        size: 16,
                       ),
                       label: const TextWidget(
                         text: 'Home',
@@ -159,8 +176,9 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).primaryColor.withOpacity(0.5),
                       avatar: const Icon(
-                        Icons.home_rounded,
+                        Icons.work_rounded,
                         color: Colors.white,
+                        size: 16,
                       ),
                       label: const TextWidget(
                         text: 'Office',
@@ -181,7 +199,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                               ? Theme.of(context).primaryColor
                               : Theme.of(context).primaryColor.withOpacity(0.5),
                           avatar: const Icon(
-                            Icons.home_rounded,
+                            Icons.place_rounded,
+                            size: 16,
                             color: Colors.white,
                           ),
                           label: const TextWidget(
@@ -232,7 +251,6 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       log(shouldCheckOtherController.toString());
                       if (checkingControllersNull &&
                           shouldCheckOtherController) {
-                        addressList.insert(4, "1234567890");
                         addressList.insert(
                             0,
                             chipSelection == 0
@@ -241,6 +259,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                     ? "Store"
                                     : otherController.text.toString());
                         widget.onSaveAddress(addressList);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       }
                     },
                     minWidth: width(context) * 0.9,
@@ -248,6 +268,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                     // borderRadius: 16,
                     bgColor: Colors.green[900],
                     textColor: Colors.white,
+                    borderRadius: width(context) * 0.03,
+                    allRadius: true,
                     buttonName: 'Save'.toUpperCase(),
                     textSize: width(context) * 0.04,
                     trailingIcon: Icon(

@@ -24,12 +24,12 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final styleActive = TextStyle(
-        fontFamily: 'Quicksand',
+        fontFamily: 'Product Sans',
         color: Colors.grey[700],
         fontWeight: FontWeight.w600,
         letterSpacing: 1.0);
     final styleHint = TextStyle(
-        fontFamily: 'Quicksand',
+        fontFamily: 'Product Sans',
         color: Colors.grey[700],
         fontWeight: FontWeight.w600,
         fontSize: 17,

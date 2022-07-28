@@ -155,12 +155,13 @@ class _OTPPageState extends StateMVC<OTPPage> {
                     },
                     minWidth: width(context) * 0.85,
                     height: height(context) * 0.06,
-                    bgColor: pinController.text.length == 4
+                    bgColor: pinController.text.length == 6
                         ? Colors.green[900]
                         : Colors.grey.shade400,
-                    borderSideColor: pinController.text.length == 4
+                    borderSideColor: pinController.text.length == 6
                         ? Colors.green[900]
                         : Colors.grey.shade400,
+                    borderRadius: width(context) * 0.02,
                     textColor: Colors.white,
                     buttonName: "VERIFY OTP",
                     textSize: width(context) * 0.04,

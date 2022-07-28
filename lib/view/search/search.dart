@@ -215,6 +215,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
       },
     );
     return SafeArea(
+      bottom: false,
       child: CustomScrollView(
         slivers: [
           SliverList(
@@ -318,6 +319,9 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                         child: TextFieldWidget(
                           textInputAction: TextInputAction.search,
                           onSubmitField: () {
+                            setState(() {});
+                          },
+                          onEdit: (_) {
                             setState(() {});
                           },
                           controller: searchController,
@@ -462,7 +466,7 @@ class _ProductListState extends StateMVC<ProductList> {
             padding:
                 EdgeInsets.symmetric(horizontal: widget.padding, vertical: 6),
             child: SizedBox(
-              height: height(context) * 0.16,
+              height: height(context) * 0.165,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

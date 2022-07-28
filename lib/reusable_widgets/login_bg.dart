@@ -27,6 +27,7 @@ class _LoginBGState extends State<LoginBG> {
           child: SizedBox(
             width: width(context),
             child: SafeArea(
+              bottom: false,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

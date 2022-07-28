@@ -26,6 +26,7 @@ class TextFieldWidget extends StatelessWidget {
   final Widget? suffix;
   final Color? prefixColor;
   final TextEditingController? controller;
+  final Function(String)? onEdit;
   final Function? onSubmitField;
   final Function? functionValidate;
   final String? parametersValidate;
@@ -33,6 +34,7 @@ class TextFieldWidget extends StatelessWidget {
   final int maxLines;
   final String? label;
   final bool? focus;
+  final bool readOnly;
   final List<TextInputFormatter>? formatter;
   final TextStyle? style;
   final TextInputAction textInputAction;
@@ -50,6 +52,7 @@ class TextFieldWidget extends StatelessWidget {
       this.postIcon,
       this.obscureText = false,
       this.postIconColor,
+      this.readOnly = false,
       this.focus,
       this.showCounter = false,
       this.focusBorderColor,
@@ -74,7 +77,8 @@ class TextFieldWidget extends StatelessWidget {
       this.formatter,
       this.style,
       this.shouldShowCurreny = false,
-      this.textInputAction = TextInputAction.next})
+      this.textInputAction = TextInputAction.next,
+      this.onEdit})
       : super(key: key);
 
   @override
@@ -84,6 +88,7 @@ class TextFieldWidget extends StatelessWidget {
       controller: controller,
       cursorColor: const Color(0xFF006838),
       obscureText: obscureText,
+      readOnly: readOnly,
       decoration: InputDecoration(
         suffixIcon: suffix,
         prefixIcon: shouldShowCurreny
@@ -113,9 +118,8 @@ class TextFieldWidget extends StatelessWidget {
         hintStyle: fonts(hintSize ?? 15.0, hintWeight ?? FontWeight.w500,
             hintColor ?? Colors.grey),
         hintText: hint ?? '',
-        labelText: label != null ? "$label*" : "",
-        labelStyle: fonts(hintSize ?? 15.0, hintWeight ?? FontWeight.w500,
-            hintColor ?? Colors.grey),
+        labelText: label,
+        labelStyle: fonts(hintSize ?? 15.0, FontWeight.normal, Colors.grey),
       ),
       validator: (value) {
         if (label == "Alternative Number") {
@@ -142,6 +146,7 @@ class TextFieldWidget extends StatelessWidget {
       maxLines: maxLines,
       maxLength: maxLength,
       textInputAction: textInputAction,
+      onChanged: onEdit ?? (_) {},
       onFieldSubmitted: (value) {
         if (onSubmitField != null) {
           onSubmitField!();
