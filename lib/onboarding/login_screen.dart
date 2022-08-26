@@ -60,6 +60,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                         "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
                                         isError: false);
                                   },
+                                  onError: (error) {
+                                    snackbar(context, error);
+                                  },
+                                  showMessage: (message) {
+                                    snackbar(context, message, isError: false);
+                                  },
                                 );
                               },
                             ),
@@ -90,6 +96,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 snackbar(context,
                                     "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
                                     isError: false);
+                              },
+                              onError: (error) {
+                                snackbar(context, error);
+                              },
+                              showMessage: (message) {
+                                snackbar(context, message, isError: false);
                               },
                             );
                           },

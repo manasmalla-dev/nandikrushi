@@ -13,16 +13,6 @@ Future<void> main() async {
     ChangeNotifierProvider<LoginProvider>(
       create: (context) => LoginProvider(),
     ),
-    // ChangeNotifierProvider<OnboardProvider>(
-    //   create: (context) => OnboardProvider(),
-    // ),
-    // ChangeNotifierProvider<ThemeProvider>(create: (context) => ThemeProvider()),
-    // ChangeNotifierProvider<RegistrationProvider>(
-    //   create: (context) => RegistrationProvider(),
-    // ),
-    // ChangeNotifierProvider<LoginProvider>(
-    //   create: (context) => LoginProvider(),
-    // ),
     // ChangeNotifierProvider<UniversalProvider>(
     //   create: (context) => UniversalProvider(),
     // ),
@@ -72,36 +62,3 @@ class _MyAppState extends State<MyApp> {
     });
   }
 }
-
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({Key? key}) : super(key: key);
-
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-
-// class _MyHomePageState extends State<MyHomePage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Nandikrushi Farmer"),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             const Text(
-//               'You have pushed the button this many times:',
-//             ),
-//           ],
-//         ),
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () {},
-//         tooltip: 'Increment',
-//         child: const Icon(Icons.add_rounded),
-//       ), // This trailing comma makes auto-formatting nicer for build methods.
-//     );
-//   }
-// }
