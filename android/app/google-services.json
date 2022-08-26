@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "250225425929",
+    "project_id": "nandikrushi-35ddb",
+    "storage_bucket": "nandikrushi-35ddb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250225425929:android:02d5f89ddb411d5f3a02d8",
+        "android_client_info": {
+          "package_name": "com.nandikrushi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "250225425929-p1nhjut1vf1r28b4otbv559jaue0j3hg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5eidVV2rDAml4j-h0h8yZYu1yZJXxcf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "250225425929-p1nhjut1vf1r28b4otbv559jaue0j3hg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "250225425929-i7ca6d5dckfp5rq45cejs87rm5p2g4gs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nandikrushi"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250225425929:android:4dda15b06aba32fa3a02d8",
+        "android_client_info": {
+          "package_name": "farm.nandikrushi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "250225425929-9vrr2p1m92k6cuoukbcohq9npikcq75l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "farm.nandikrushi",
+            "certificate_hash": "924d84659eb6a93fdd9d99913232ee71a11a70ff"
+          }
+        },
+        {
+          "client_id": "250225425929-eessa9b50h1plov0pfnfehgs159cbolh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "farm.nandikrushi",
+            "certificate_hash": "b0c0bffb904cd200b6df8912707bcd22af113063"
+          }
+        },
+        {
+          "client_id": "250225425929-p1nhjut1vf1r28b4otbv559jaue0j3hg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5eidVV2rDAml4j-h0h8yZYu1yZJXxcf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "250225425929-p1nhjut1vf1r28b4otbv559jaue0j3hg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "250225425929-i7ca6d5dckfp5rq45cejs87rm5p2g4gs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nandikrushi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
