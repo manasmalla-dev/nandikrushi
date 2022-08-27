@@ -16,10 +16,12 @@ import 'package:nandikrushi_farmer/utils/server.dart';
 class LoginController extends ControllerMVC {
   GlobalKey<FormState> mobileFormKey = GlobalKey();
   GlobalKey<FormState> emailFormKey = GlobalKey();
+  GlobalKey<FormState> otpFormKey = GlobalKey();
 
   TextEditingController emailTextEditController = TextEditingController();
   TextEditingController passwordTextEditController = TextEditingController();
   TextEditingController phoneTextEditController = TextEditingController();
+  TextEditingController otpTextEditController = TextEditingController();
 
   checkUser(BuildContext context,
       {required NavigatorState navigator,

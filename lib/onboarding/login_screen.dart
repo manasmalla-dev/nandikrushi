@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/onboarding/login_bg.dart';
 import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/otp_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
@@ -90,6 +91,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                 snackbar(context,
                                     "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
                                     isError: false);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => OTPScreen(
+                                      phoneNumber: loginPageController
+                                          .phoneTextEditController.text
+                                          .toString(),
+                                    ),
+                                  ),
+                                );
                               },
                             );
                           },

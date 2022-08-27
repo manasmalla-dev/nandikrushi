@@ -8,6 +8,7 @@ class TextWidget extends StatelessWidget {
   final double? lSpace;
   final TextOverflow? flow;
   final TextAlign? align;
+  final double? height;
 
   const TextWidget(this.text,
       {Key? key,
@@ -16,7 +17,8 @@ class TextWidget extends StatelessWidget {
       this.weight,
       this.align,
       this.flow,
-      this.lSpace})
+      this.lSpace,
+      this.height})
       : super(key: key);
 
   @override
@@ -25,13 +27,13 @@ class TextWidget extends StatelessWidget {
         overflow: flow ?? TextOverflow.ellipsis,
         textAlign: align ?? TextAlign.start,
         style: TextStyle(
-          fontFamily: 'Product Sans',
-          // fontFamily: 'Roboto',
-          letterSpacing: lSpace ?? 0,
-          fontSize: size ?? 14,
-          color: color ?? Colors.grey[900],
-          fontWeight: weight ?? FontWeight.normal,
-        ));
+            fontFamily: 'Product Sans',
+            // fontFamily: 'Roboto',
+            letterSpacing: lSpace ?? 0,
+            fontSize: size ?? 14,
+            color: color ?? Colors.grey[900],
+            fontWeight: weight ?? FontWeight.normal,
+            height: height));
   }
 }
 
