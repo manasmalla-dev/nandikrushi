@@ -67,13 +67,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   showMessage: (message) {
                                     snackbar(context, message, isError: false);
                                   },
-                                  navigateToOTPScreen: () {
+                                  navigateToOTPScreen: (onValidateOTP) {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) => OTPScreen(
                                           phoneNumber: loginPageController
                                               .phoneTextEditController.text
                                               .toString(),
+                                          onValidateOTP: onValidateOTP,
                                         ),
                                       ),
                                     );
@@ -115,13 +116,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               showMessage: (message) {
                                 snackbar(context, message, isError: false);
                               },
-                              navigateToOTPScreen: () {
+                              navigateToOTPScreen: (onValidateOTP) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => OTPScreen(
                                       phoneNumber: loginPageController
                                           .phoneTextEditController.text
                                           .toString(),
+                                      onValidateOTP: onValidateOTP,
                                     ),
                                   ),
                                 );

@@ -10,7 +10,10 @@ import 'package:provider/provider.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phoneNumber;
-  const OTPScreen({Key? key, required this.phoneNumber}) : super(key: key);
+  final Function(String) onValidateOTP;
+  const OTPScreen(
+      {Key? key, required this.phoneNumber, required this.onValidateOTP})
+      : super(key: key);
 
   @override
   State<OTPScreen> createState() => _OTPScreenState();
