@@ -64,6 +64,7 @@ class LoginProvider extends ChangeNotifier {
     required Function(String, bool) onSuccessfulLogin,
     required Function(String) onError,
     required Function(String) showMessage,
+    required Function navigateToOTPScreen,
   }) async {
     if (isEmailProvider) {
       var isFormReady =
@@ -154,11 +155,13 @@ class LoginProvider extends ChangeNotifier {
               firebaseVerificationID = verificationId;
               showMessage("OTP sent successfully");
               //Navigate to OTP page
+              navigateToOTPScreen();
             },
             codeAutoRetrievalTimeout: (String verificationId) {
               firebaseVerificationID = verificationId;
               showMessage("OTP sent successfully");
               //Navigate to OTP page
+              navigateToOTPScreen();
             },
             timeout: const Duration(
               seconds: 120,

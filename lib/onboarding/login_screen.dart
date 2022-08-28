@@ -67,6 +67,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                   showMessage: (message) {
                                     snackbar(context, message, isError: false);
                                   },
+                                  navigateToOTPScreen: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => OTPScreen(
+                                          phoneNumber: loginPageController
+                                              .phoneTextEditController.text
+                                              .toString(),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             ),
@@ -97,6 +108,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 snackbar(context,
                                     "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
                                     isError: false);
+                              },
+                              onError: (error) {
+                                snackbar(context, error);
+                              },
+                              showMessage: (message) {
+                                snackbar(context, message, isError: false);
+                              },
+                              navigateToOTPScreen: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => OTPScreen(
@@ -106,12 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                 );
-                              },
-                              onError: (error) {
-                                snackbar(context, error);
-                              },
-                              showMessage: (message) {
-                                snackbar(context, message, isError: false);
                               },
                             );
                           },
