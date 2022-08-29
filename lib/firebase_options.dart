@@ -74,12 +74,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyCmvpgvCI61KzrTwaQgzKsMKqAHLfv0Lzc',
-    appId: '1:250225425929:ios:12347e2190eb247c3a02d8',
+    appId: '1:250225425929:ios:08c8b967d24acd353a02d8',
     messagingSenderId: '250225425929',
     projectId: 'nandikrushi-35ddb',
     storageBucket: 'nandikrushi-35ddb.appspot.com',
     androidClientId: '250225425929-9vrr2p1m92k6cuoukbcohq9npikcq75l.apps.googleusercontent.com',
-    iosClientId: '250225425929-s33c48667cku8oasct7rfk3df1p97mod.apps.googleusercontent.com',
-    iosBundleId: 'farm.nandikrushi',
+    iosClientId: '250225425929-k51dp3b2imdk4dbc8qse5t5o1pna4gnm.apps.googleusercontent.com',
+    iosBundleId: 'farm.nandikrushiFarmer',
   );
 }

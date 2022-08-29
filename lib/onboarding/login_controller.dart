@@ -18,10 +18,15 @@ class LoginController extends ControllerMVC {
   GlobalKey<FormState> emailFormKey = GlobalKey();
   GlobalKey<FormState> otpFormKey = GlobalKey();
 
+  GlobalKey<FormState> forgotPasswordFormKey = GlobalKey();
+
   TextEditingController emailTextEditController = TextEditingController();
   TextEditingController passwordTextEditController = TextEditingController();
   TextEditingController phoneTextEditController = TextEditingController();
   TextEditingController otpTextEditController = TextEditingController();
+
+  TextEditingController forgotPasswordTextEditController =
+      TextEditingController();
 
   checkUser(BuildContext context,
       {required NavigatorState navigator,

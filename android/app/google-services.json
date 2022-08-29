@@ -66,6 +66,14 @@
           }
         },
         {
+          "client_id": "250225425929-gbjj56b43tjn8i661dctrffe6katpeor.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "farm.nandikrushi",
+            "certificate_hash": "e0928a27a5e839c0d5bef33cfdaafd3d944c9705"
+          }
+        },
+        {
           "client_id": "250225425929-p1nhjut1vf1r28b4otbv559jaue0j3hg.apps.googleusercontent.com",
           "client_type": 3
         }

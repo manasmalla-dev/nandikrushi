@@ -11,8 +11,12 @@ import 'package:provider/provider.dart';
 class OTPScreen extends StatefulWidget {
   final String phoneNumber;
   final Function(String) onValidateOTP;
+  final Function() onResendOTP;
   const OTPScreen(
-      {Key? key, required this.phoneNumber, required this.onValidateOTP})
+      {Key? key,
+      required this.phoneNumber,
+      required this.onValidateOTP,
+      required this.onResendOTP})
       : super(key: key);
 
   @override
@@ -58,7 +62,8 @@ class _OTPScreenState extends State<OTPScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image(
-                          image: AssetImage("assets/images/otp_image.png"),
+                          image:
+                              const AssetImage("assets/images/otp_image.png"),
                           height: getProportionateHeight(325, constraints),
                         ),
                         SizedBox(
@@ -97,7 +102,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                       ?.height,
                                   flow: TextOverflow.visible,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 TextWidget(
@@ -140,11 +145,17 @@ class _OTPScreenState extends State<OTPScreen> {
                                 PinputAutovalidateMode.onSubmit,
                             onChanged: (pin) {
                               setState(() {});
-                              //data.setOtp(pin.toString());
                             },
                             onSubmitted: (pin) {
-                              /*loginPageController?.loginUserWithOtp(
-                                    pin, context, loginProvider);*/
+                              var isFormReadyForSubmission = loginPageController
+                                      .otpFormKey.currentState
+                                      ?.validate() ??
+                                  false;
+                              if (isFormReadyForSubmission) {
+                                widget.onValidateOTP(loginPageController
+                                    .otpTextEditController.text
+                                    .toString());
+                              }
                             },
                           ),
                         ),
@@ -153,13 +164,15 @@ class _OTPScreenState extends State<OTPScreen> {
                         ),
                         ElevatedButtonWidget(
                           onClick: () {
-                            /*loginPageController?.loginUserWithOtp(
-                                  data.otp, context, loginProvider);*/
-                            // data.getOtp
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //       builder: (_) => const RegistrationScreen()),
-                            // );
+                            var isFormReadyForSubmission = loginPageController
+                                    .otpFormKey.currentState
+                                    ?.validate() ??
+                                false;
+                            if (isFormReadyForSubmission) {
+                              widget.onValidateOTP(loginPageController
+                                  .otpTextEditController.text
+                                  .toString());
+                            }
                           },
                           height: getProportionateHeight(64, constraints),
                           bgColor: loginPageController
@@ -191,7 +204,8 @@ class _OTPScreenState extends State<OTPScreen> {
                               onPressed: () {
                                 if (canResendSMS) {
                                   canResendSMS = false;
-                                  //RESEND OTP
+                                  //TODO: RESEND OTP
+                                  widget.onResendOTP();
                                 }
                               },
                               child: TextWidget(
@@ -337,8 +351,15 @@ class _OTPScreenState extends State<OTPScreen> {
                                 //data.setOtp(pin.toString());
                               },
                               onSubmitted: (pin) {
-                                /*loginPageController?.loginUserWithOtp(
-                                      pin, context, loginProvider);*/
+                                var isFormReadyForSubmission =
+                                    loginPageController.otpFormKey.currentState
+                                            ?.validate() ??
+                                        false;
+                                if (isFormReadyForSubmission) {
+                                  widget.onValidateOTP(loginPageController
+                                      .otpTextEditController.text
+                                      .toString());
+                                }
                               },
                             ),
                           ),
@@ -347,13 +368,15 @@ class _OTPScreenState extends State<OTPScreen> {
                           ),
                           ElevatedButtonWidget(
                             onClick: () {
-                              /*loginPageController?.loginUserWithOtp(
-                                    data.otp, context, loginProvider);*/
-                              // data.getOtp
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //       builder: (_) => const RegistrationScreen()),
-                              // );
+                              var isFormReadyForSubmission = loginPageController
+                                      .otpFormKey.currentState
+                                      ?.validate() ??
+                                  false;
+                              if (isFormReadyForSubmission) {
+                                widget.onValidateOTP(loginPageController
+                                    .otpTextEditController.text
+                                    .toString());
+                              }
                             },
                             height: getProportionateHeight(64, constraints),
                             bgColor: loginPageController
@@ -388,6 +411,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                   if (canResendSMS) {
                                     canResendSMS = false;
                                     //RESEND OTP
+                                    widget.onResendOTP();
                                   }
                                 },
                                 child: TextWidget(
