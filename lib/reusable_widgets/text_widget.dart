@@ -31,7 +31,7 @@ class TextWidget extends StatelessWidget {
             // fontFamily: 'Roboto',
             letterSpacing: lSpace ?? 0,
             fontSize: size ?? 14,
-            color: color ?? Colors.grey[900],
+            color: color ?? Colors.grey.shade900,
             fontWeight: weight ?? FontWeight.normal,
             height: height));
   }

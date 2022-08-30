@@ -27,6 +27,39 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<LoginProvider>(builder: (context, data, child) {
+      Future<void> loginUser(bool isEmail) {
+        return data.onLoginUser(
+          isEmail,
+          loginPageController,
+          onSuccessfulLogin: (name, isReturningUser) {
+            snackbar(context,
+                "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
+                isError: false);
+            //TODO: Send user to NavHost
+          },
+          onError: (error) {
+            snackbar(context, error);
+          },
+          showMessage: (message) {
+            snackbar(context, message, isError: false);
+          },
+          navigateToOTPScreen: (onValidateOTP) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => OTPScreen(
+                    phoneNumber: loginPageController
+                        .phoneTextEditController.text
+                        .toString(),
+                    onValidateOTP: onValidateOTP,
+                    onResendOTP: () {
+                      loginUser(isEmail);
+                    }),
+              ),
+            );
+          },
+        );
+      }
+
       return Scaffold(
           backgroundColor: const Color(0xFFFFFDD8),
           resizeToAvoidBottomInset: false,
@@ -53,70 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               onLogin: (isEmail) {
                                 data.showLoader();
-                                data.onLoginUser(
-                                  isEmail,
-                                  loginPageController,
-                                  onSuccessfulLogin: (name, isReturningUser) {
-                                    snackbar(context,
-                                        "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
-                                        isError: false);
-                                  },
-                                  onError: (error) {
-                                    snackbar(context, error);
-                                  },
-                                  showMessage: (message) {
-                                    snackbar(context, message, isError: false);
-                                  },
-                                  navigateToOTPScreen: (onValidateOTP) {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => OTPScreen(
-                                          phoneNumber: loginPageController
-                                              .phoneTextEditController.text
-                                              .toString(),
-                                          onValidateOTP: onValidateOTP,
-                                          onResendOTP: () {
-                                            data.onLoginUser(
-                                              isEmail,
-                                              loginPageController,
-                                              onSuccessfulLogin:
-                                                  (name, isReturningUser) {
-                                                snackbar(context,
-                                                    "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
-                                                    isError: false);
-                                              },
-                                              onError: (error) {
-                                                snackbar(context, error);
-                                              },
-                                              showMessage: (message) {
-                                                snackbar(context, message,
-                                                    isError: false);
-                                              },
-                                              navigateToOTPScreen:
-                                                  (onValidateOTP) {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        OTPScreen(
-                                                      phoneNumber:
-                                                          loginPageController
-                                                              .phoneTextEditController
-                                                              .text
-                                                              .toString(),
-                                                      onValidateOTP:
-                                                          onValidateOTP,
-                                                      onResendOTP: () {},
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
+                                loginUser(isEmail);
                               },
                             ),
                           ),
@@ -139,68 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           onLogin: (isEmail) {
                             data.showLoader();
-                            data.onLoginUser(
-                              isEmail,
-                              loginPageController,
-                              onSuccessfulLogin: (name, isReturningUser) {
-                                snackbar(context,
-                                    "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
-                                    isError: false);
-                              },
-                              onError: (error) {
-                                snackbar(context, error);
-                              },
-                              showMessage: (message) {
-                                snackbar(context, message, isError: false);
-                              },
-                              navigateToOTPScreen: (onValidateOTP) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => OTPScreen(
-                                        phoneNumber: loginPageController
-                                            .phoneTextEditController.text
-                                            .toString(),
-                                        onValidateOTP: onValidateOTP,
-                                        onResendOTP: () {
-                                          data.onLoginUser(
-                                            isEmail,
-                                            loginPageController,
-                                            onSuccessfulLogin:
-                                                (name, isReturningUser) {
-                                              snackbar(context,
-                                                  "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
-                                                  isError: false);
-                                            },
-                                            onError: (error) {
-                                              snackbar(context, error);
-                                            },
-                                            showMessage: (message) {
-                                              snackbar(context, message,
-                                                  isError: false);
-                                            },
-                                            navigateToOTPScreen:
-                                                (onValidateOTP) {
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      OTPScreen(
-                                                    phoneNumber: loginPageController
-                                                        .phoneTextEditController
-                                                        .text
-                                                        .toString(),
-                                                    onValidateOTP:
-                                                        onValidateOTP,
-                                                    onResendOTP: () {},
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        }),
-                                  ),
-                                );
-                              },
-                            );
+                            loginUser(isEmail);
                           },
                         )),
                   );
@@ -556,7 +465,8 @@ void showForgotPasswordDialog(
                 if (isFormReadyForOTP) {
                   //TODO: Forgot password
                 } else {
-                  print(loginPageController.forgotPasswordFormKey);
+                  snackbar(context,
+                      "Couldn't proccess your request at this moment. Please try again later!");
                 }
               },
               height: getProportionateHeight(48, constraints),

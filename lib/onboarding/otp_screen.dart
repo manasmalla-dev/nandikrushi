@@ -204,7 +204,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               onPressed: () {
                                 if (canResendSMS) {
                                   canResendSMS = false;
-                                  //TODO: RESEND OTP
+
                                   widget.onResendOTP();
                                 }
                               },

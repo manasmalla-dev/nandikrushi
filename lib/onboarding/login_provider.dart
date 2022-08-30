@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
 import 'package:nandikrushi_farmer/utils/login_utils.dart';
@@ -80,24 +81,8 @@ class LoginProvider extends ChangeNotifier {
           url:
               "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/emaillogin",
         );
-        if (response?.statusCode == 200) {
-          var decodedResponse =
-              jsonDecode(response?.body ?? '{"message": {},"status": true}');
-          if (decodedResponse["status"]) {
-            log("Successful login");
-            print(
-                "User ID: ${decodedResponse["message"]["user_id"]}, Seller ID: ${decodedResponse["message"]["customer_id"]}");
-            onSuccessfulLogin(
-                capitalize(decodedResponse["message"]["firstname"]), true);
-            hideLoader();
-          } else {
-            //TODO: handle the failure
-            print("Failure: ${response?.body}");
-            hideLoader();
-          }
-        } else {
-          //TODO: Handle Server failure
-        }
+
+        onLoginWithServer(response, onSuccessfulLogin, onError);
       } else {
         hideLoader();
       }
@@ -105,7 +90,6 @@ class LoginProvider extends ChangeNotifier {
       var isFormReady =
           loginController.mobileFormKey.currentState?.validate() ?? false;
       if (isFormReady) {
-        //TODO: Use FirebaseAuth and authenticate with mobile number
         log("Trying to login user");
         try {
           await FirebaseAuth.instance.verifyPhoneNumber(
@@ -152,7 +136,7 @@ class LoginProvider extends ChangeNotifier {
           );
         } catch (exception) {
           log("Verification Completed");
-          onError("Couldn't verify your phone number, Error: exception");
+          onError("Couldn't verify your phone number, Error: $exception");
           hideLoader();
         }
       }
@@ -176,29 +160,39 @@ class LoginProvider extends ChangeNotifier {
         url:
             "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerlogin/verify_mobile",
       );
-      if (response?.statusCode == 200) {
-        var decodedResponse =
-            jsonDecode(response?.body ?? '{"message": {},"status": true}');
-        if (decodedResponse["status"]) {
-          if (decodedResponse["message"].toString().contains("No Data Found")) {
-            //TODO: Send to registration screen
-          } else {
-            log("Successful login");
-            print(
-                "User ID: ${decodedResponse["message"]["user_id"]}, Seller ID: ${decodedResponse["message"]["customer_id"]}");
-            onSuccessfulLogin(
-                capitalize(decodedResponse["message"]["firstname"]), true);
-            hideLoader();
-          }
+      onLoginWithServer(response, onSuccessfulLogin, onError);
+    }
+  }
+
+  onLoginWithServer(
+    Response? response,
+    Function(String, bool) onSuccessfulLogin,
+    Function(String) onError,
+  ) {
+    if (response?.statusCode == 200) {
+      var decodedResponse =
+          jsonDecode(response?.body ?? '{"message": {},"status": true}');
+      if (decodedResponse["status"]) {
+        if (decodedResponse["message"].toString().contains("No Data Found")) {
+          //TODO: Send to registration screen
+        } else {
+          log("Successful login");
+          log("User ID: ${decodedResponse["message"]["user_id"]}, Seller ID: ${decodedResponse["message"]["customer_id"]}");
+          onSuccessfulLogin(
+              capitalize(decodedResponse["message"]["firstname"]), true);
+          hideLoader();
+        }
+      } else {
+        if (decodedResponse["message"].toString().contains("No Data Found")) {
+          //TODO: Send to registration screen
         } else {
           onError("Failed to login, error: ${decodedResponse["message"]}");
           hideLoader();
         }
-      } else {
-        onError(
-            "Failed to login, error: ${jsonDecode(response?.body ?? '{"message": {},"status": true}')["message"]}");
-        hideLoader();
       }
+    } else {
+      onError("Oops! Couldn't log you in: ${response?.statusCode}");
+      hideLoader();
     }
   }
 }

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_host.dart';
@@ -17,16 +19,129 @@ class LoginController extends ControllerMVC {
   GlobalKey<FormState> mobileFormKey = GlobalKey();
   GlobalKey<FormState> emailFormKey = GlobalKey();
   GlobalKey<FormState> otpFormKey = GlobalKey();
-
   GlobalKey<FormState> forgotPasswordFormKey = GlobalKey();
+  GlobalKey<FormState> registrationFormKey = GlobalKey();
 
   TextEditingController emailTextEditController = TextEditingController();
   TextEditingController passwordTextEditController = TextEditingController();
   TextEditingController phoneTextEditController = TextEditingController();
   TextEditingController otpTextEditController = TextEditingController();
-
   TextEditingController forgotPasswordTextEditController =
       TextEditingController();
+  var registrationPageFormControllers = {
+    'first_name': TextEditingController(),
+    'last_name': TextEditingController(),
+    'house_number': TextEditingController(),
+    'city': TextEditingController(),
+    'mandal': TextEditingController(),
+    'district': TextEditingController(),
+    'state': TextEditingController(),
+    'pincode': TextEditingController(),
+    'email': TextEditingController(),
+    'password': TextEditingController(),
+    'c_password': TextEditingController(),
+    'telePhone': TextEditingController(),
+    'storeName': TextEditingController(),
+    'reg_number': TextEditingController(),
+  };
+
+  /*
+   loginPageController.checkBoxStatesText =
+        SpotmiesTheme.appTheme == UserAppTheme.restaurant
+            ? [
+                'FSSAI',
+                'Eating House License',
+                'Fire Safety License',
+                'Certificate of Environmental Clearance',
+                'Other Certification +'
+              ]
+            : SpotmiesTheme.appTheme == UserAppTheme.store
+                ? [
+                    'FSSAI',
+                    'Fire Safety License',
+                    'Certificate of Environmental Clearance',
+                    'Other Certification +'
+                  ]
+                : [
+                    'Self Declared Natural Farmer',
+                    'PGS India Green',
+                    'PGS India Organic',
+                    'Organic FPO',
+                    'Organic FPC',
+                    'Other Certification +'
+                  ];
+  */
+
+  PageController pageController = PageController();
+
+  Position? location;
+  List<Placemark>? locationGeoCoded;
+
+  Future<void> checkLocationPermissionAndGetLocation() async {
+    var permissionGranted = await Geolocator.checkPermission();
+    log("IsPermissionGranted: $permissionGranted");
+    if (permissionGranted == LocationPermission.always ||
+        permissionGranted == LocationPermission.whileInUse) {
+      location = await Geolocator.getLastKnownPosition();
+      log(location.toString());
+      var isLocationServiceEnabled =
+          await Geolocator.isLocationServiceEnabled();
+      log(isLocationServiceEnabled.toString());
+      if (isLocationServiceEnabled) {
+        location = await Geolocator.getCurrentPosition();
+        log(location.toString());
+        geocodeLocation();
+      } else {
+        log("open settings");
+        await Geolocator.openLocationSettings();
+        checkLocationPermissionAndGetLocation();
+      }
+    } else {
+      log("Entered location requester");
+      Geolocator.requestPermission();
+      checkLocationPermissionAndGetLocation();
+    }
+  }
+
+  Future<void> geocodeLocation() async {
+    locationGeoCoded =
+        await placemarkFromCoordinates(location!.latitude, location!.longitude);
+    log(locationGeoCoded.toString());
+    registrationPageFormControllers["pincode"]?.text =
+        locationGeoCoded?.first.postalCode ?? "";
+    registrationPageFormControllers["state"]?.text =
+        locationGeoCoded?.first.administrativeArea ?? "";
+    registrationPageFormControllers["district"]?.text =
+        locationGeoCoded?.first.subAdministrativeArea ?? "";
+    registrationPageFormControllers["city"]?.text =
+        locationGeoCoded?.first.locality ?? "";
+    registrationPageFormControllers["house_number"]?.text =
+        locationGeoCoded?.first.street ?? "";
+    registrationPageFormControllers["mandal"]?.text =
+        locationGeoCoded?.first.subLocality ?? "";
+  }
+
+  fetchUserData(context) {
+    //TODO: Manage fetching data
+    /* var provider = Provider.of<RegistrationProvider>(context, listen: false);
+    log(provider.user.toString());
+    formControllers = {
+      'first_name': TextEditingController(text: provider.user?.firstName ?? ""),
+      'house_number':
+          TextEditingController(text: provider.user?.houseNumber ?? ""),
+      'city': TextEditingController(text: provider.user?.city ?? ""),
+      'mandal': TextEditingController(text: provider.user?.mandal ?? ""),
+      'district': TextEditingController(text: provider.user?.district ?? ""),
+      'state': TextEditingController(text: provider.user?.state ?? ""),
+      'pincode': TextEditingController(text: provider.user?.pincode ?? ""),
+      'email': TextEditingController(text: provider.user?.email ?? ""),
+      'password': TextEditingController(text: provider.user?.pass ?? ""),
+      'c_password': TextEditingController(text: provider.user?.cpass ?? ""),
+      'telePhone': TextEditingController(text: provider.user?.telePhone ?? ""),
+      'storeName': TextEditingController(
+          text: provider.user?.certificationRegisterationNumber ?? ""),
+    };*/
+  }
 
   checkUser(BuildContext context,
       {required NavigatorState navigator,
