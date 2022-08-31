@@ -299,7 +299,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         });
   }
 
-  List<Widget> registrationDetailsFirstPage() {
+  List<Widget> registrationDetailsFirstPage(LoginProvider loginProvider) {
     return [
       Container(
         margin: const EdgeInsets.all(32),
@@ -328,7 +328,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         icon: const Icon(Icons.add_a_photo_rounded),
                       ),
                       TextWidget(
-                        "Add ${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "your" : "your"} Image",
+                        "Add ${loginProvider.userAppTheme.key.contains("Farmer") ? "Farmer" : "your"} Image",
                         color: Theme.of(context).primaryColor.withOpacity(0.7),
                         weight:
                             Theme.of(context).textTheme.bodyLarge?.fontWeight,
@@ -342,8 +342,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         child: ClipOval(
                             child: Image.file(
                           File(registrationController.image?.path ?? ""),
-                          height: height(context) * 0.1,
-                          width: height(context) * 0.1,
+                          height: 96,
+                          width: 96,
                           fit: BoxFit.cover,
                         )),
                       ),
@@ -351,8 +351,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         bottom: 0,
                         right: 0,
                         child: Container(
-                          width: height(context) * 0.04,
-                          height: height(context) * 0.04,
+                          width: 32,
+                          height: 32,
                           decoration: BoxDecoration(
                               color: Theme.of(context).primaryColor,
                               shape: BoxShape.circle),
@@ -361,8 +361,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               showImagePickerSheet(false, false);
                             },
                             icon: Icon(Icons.edit_rounded,
-                                color: Colors.white,
-                                size: height(context) * 0.02),
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                size: 16),
                           ),
                         ),
                       ),
