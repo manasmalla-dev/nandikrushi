@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class NandikrushiNavHost extends StatefulWidget {
-  const NandikrushiNavHost({Key? key}) : super(key: key);
+  final String userId;
+  final String customerId;
+  const NandikrushiNavHost(
+      {Key? key, required this.userId, required this.customerId})
+      : super(key: key);
 
   @override
   State<NandikrushiNavHost> createState() => _NandikrushiNavHostState();

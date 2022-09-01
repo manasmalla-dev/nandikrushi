@@ -5,8 +5,10 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
+import 'package:nandikrushi_farmer/utils/firebase_storage_utils.dart';
 import 'package:nandikrushi_farmer/utils/login_utils.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
 
@@ -17,6 +19,8 @@ class LoginProvider extends ChangeNotifier {
       Platform.isAndroid || Platform.isIOS ? isEmail : true;
   Map<String, Color> availableUserTypes = {};
   MapEntry<String, Color> userAppTheme = const MapEntry("", Color(0xFF006838));
+  bool get isFarmer => userAppTheme.key.contains("Farmer");
+
   Map<String, String> languages = {
     "english": "english".toUpperCase(),
     "telugu": "తెలుగు",
@@ -25,8 +29,33 @@ class LoginProvider extends ChangeNotifier {
   };
   MapEntry<String, String> usersLanguage = const MapEntry("", "");
 
+  List<String> get certificationList => isFarmer
+      ? [
+          'Self Declared Natural Farmer',
+          'PGS India Green',
+          'PGS India Organic',
+          'Organic FPO',
+          'Organic FPC',
+          'Other Certification +'
+        ]
+      : userAppTheme.key.contains("Store")
+          ? [
+              'FSSAI',
+              'Fire Safety License',
+              'Certificate of Environmental Clearance',
+              'Other Certification +'
+            ]
+          : [
+              'FSSAI',
+              'Eating House License',
+              'Fire Safety License',
+              'Certificate of Environmental Clearance',
+              'Other Certification +'
+            ];
+
   String firebaseVerificationID = "";
   int? _resendToken;
+  String phoneNumber = "";
 
   updateUserAppType(MapEntry<String, Color> _) {
     userAppTheme = _;
@@ -63,10 +92,11 @@ class LoginProvider extends ChangeNotifier {
   Future<void> onLoginUser(
     bool isEmailProvider,
     LoginController loginController, {
-    required Function(String, bool) onSuccessfulLogin,
+    required Function(String, bool, String, String) onSuccessfulLogin,
     required Function(String) onError,
     required Function(String) showMessage,
     required Function(Function(String)) navigateToOTPScreen,
+    required Function onRegisterUser,
   }) async {
     if (isEmailProvider) {
       var isFormReady =
@@ -82,7 +112,10 @@ class LoginProvider extends ChangeNotifier {
               "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/emaillogin",
         );
 
-        onLoginWithServer(response, onSuccessfulLogin, onError);
+        onLoginWithServer(response, onSuccessfulLogin, onError, () {
+          onError(
+              "Oops! Can't register on this device. Please try on a mobile.");
+        });
       } else {
         hideLoader();
       }
@@ -90,6 +123,7 @@ class LoginProvider extends ChangeNotifier {
       var isFormReady =
           loginController.mobileFormKey.currentState?.validate() ?? false;
       if (isFormReady) {
+        phoneNumber = loginController.phoneTextEditController.text;
         log("Trying to login user");
         try {
           await FirebaseAuth.instance.verifyPhoneNumber(
@@ -97,7 +131,7 @@ class LoginProvider extends ChangeNotifier {
             verificationCompleted:
                 (PhoneAuthCredential phoneAuthCredential) async {
               onLoginWithCredential(phoneAuthCredential, loginController,
-                  onSuccessfulLogin, onError);
+                  onSuccessfulLogin, onError, onRegisterUser);
             },
             verificationFailed: (FirebaseAuthException exception) {
               onError(
@@ -114,7 +148,7 @@ class LoginProvider extends ChangeNotifier {
                     PhoneAuthProvider.credential(
                         verificationId: verificationId, smsCode: otp);
                 onLoginWithCredential(phoneAuthCredential, loginController,
-                    onSuccessfulLogin, onError);
+                    onSuccessfulLogin, onError, onRegisterUser);
               });
             },
             codeAutoRetrievalTimeout: (String verificationId) {
@@ -126,7 +160,7 @@ class LoginProvider extends ChangeNotifier {
                     PhoneAuthProvider.credential(
                         verificationId: verificationId, smsCode: otp);
                 onLoginWithCredential(phoneAuthCredential, loginController,
-                    onSuccessfulLogin, onError);
+                    onSuccessfulLogin, onError, onRegisterUser);
               });
             },
             forceResendingToken: _resendToken,
@@ -146,8 +180,9 @@ class LoginProvider extends ChangeNotifier {
   onLoginWithCredential(
       PhoneAuthCredential phoneAuthCredential,
       LoginController loginController,
-      Function(String, bool) onSuccessfulLogin,
-      Function(String) onError) async {
+      Function(String, bool, String, String) onSuccessfulLogin,
+      Function(String) onError,
+      Function onRegisterUser) async {
     log("Verification Completed");
     var firebaseUser =
         await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
@@ -160,31 +195,36 @@ class LoginProvider extends ChangeNotifier {
         url:
             "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerlogin/verify_mobile",
       );
-      onLoginWithServer(response, onSuccessfulLogin, onError);
+      onLoginWithServer(response, onSuccessfulLogin, onError, onRegisterUser);
     }
   }
 
   onLoginWithServer(
-    Response? response,
-    Function(String, bool) onSuccessfulLogin,
-    Function(String) onError,
-  ) {
+      Response? response,
+      Function(String, bool, String, String) onSuccessfulLogin,
+      Function(String) onError,
+      Function onRegisterUser) {
     if (response?.statusCode == 200) {
       var decodedResponse =
           jsonDecode(response?.body ?? '{"message": {},"status": true}');
       if (decodedResponse["status"]) {
         if (decodedResponse["message"].toString().contains("No Data Found")) {
-          //TODO: Send to registration screen
+          onRegisterUser();
+          hideLoader();
         } else {
           log("Successful login");
           log("User ID: ${decodedResponse["message"]["user_id"]}, Seller ID: ${decodedResponse["message"]["customer_id"]}");
           onSuccessfulLogin(
-              capitalize(decodedResponse["message"]["firstname"]), true);
+              capitalize(decodedResponse["message"]["firstname"]),
+              true,
+              decodedResponse["message"]["user_id"],
+              decodedResponse["message"]["customer_id"]);
           hideLoader();
         }
       } else {
         if (decodedResponse["message"].toString().contains("No Data Found")) {
-          //TODO: Send to registration screen
+          onRegisterUser();
+          hideLoader();
         } else {
           onError("Failed to login, error: ${decodedResponse["message"]}");
           hideLoader();
@@ -194,5 +234,117 @@ class LoginProvider extends ChangeNotifier {
       onError("Oops! Couldn't log you in: ${response?.statusCode}");
       hideLoader();
     }
+  }
+
+  Future<void> registerUser({
+    required LoginController loginPageController,
+    required Function(String, bool, String, String) onSuccess,
+    required Function(String) onError,
+  }) async {
+    showLoader();
+
+    Map<String, String> userAddress = {
+      "coordinates-x": (loginPageController.location?.latitude ?? 0).toString(),
+      "coordinates-y":
+          (loginPageController.location?.longitude ?? 0).toString(),
+      "houseNumber": loginPageController
+              .registrationPageFormControllers["house_number"]?.text
+              .toString() ??
+          "",
+      "city": loginPageController.registrationPageFormControllers["city"]?.text
+              .toString() ??
+          "",
+      "mandal": loginPageController
+              .registrationPageFormControllers["mandal"]?.text
+              .toString() ??
+          "",
+      "district": loginPageController
+              .registrationPageFormControllers["district"]?.text
+              .toString() ??
+          "",
+      "state": loginPageController
+              .registrationPageFormControllers["state"]?.text
+              .toString() ??
+          "",
+      "pincode": loginPageController
+              .registrationPageFormControllers["pincode"]?.text
+              .toString() ??
+          ""
+    };
+
+    var sellerImageURL = await uploadFilesToCloud(
+        loginPageController.profileImage,
+        cloudLocation: "profile_pics");
+    var storeLogoURL = "";
+    if (!isFarmer) {
+      storeLogoURL = await uploadFilesToCloud(loginPageController.storeLogo,
+          cloudLocation: "logo");
+    }
+    List<String> certificatesURLs = [];
+    await Future.forEach<XFile>(
+        loginPageController.userCertificates
+            .firstWhere((element) => element.isNotEmpty), (element) async {
+      String urlData = await uploadFilesToCloud(element,
+          cloudLocation: "legal_docs", fileType: ".jpg");
+      certificatesURLs.add(urlData);
+    });
+    Map<String, String> body = {
+      "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
+      "firstname": loginPageController
+              .registrationPageFormControllers["first_name"]?.text
+              .toString() ??
+          "",
+      "lastname": loginPageController
+              .registrationPageFormControllers["last_name"]?.text
+              .toString() ??
+          "",
+      "email": loginPageController
+              .registrationPageFormControllers["email"]?.text
+              .toString() ??
+          "",
+      "telephone": phoneNumber,
+      "password": loginPageController
+              .registrationPageFormControllers["password"]?.text
+              .toString() ??
+          "",
+      "confirm": loginPageController
+              .registrationPageFormControllers["c_password"]?.text
+              .toString() ??
+          "",
+      "agree": 1.toString(),
+      "become_seller": 1.toString(),
+      "seller_type": userAppTheme.key.toString(),
+      "land": loginPageController.landInAcres.toString(),
+      "seller_image": sellerImageURL.toString(),
+      "additional_comments": "Farmer is the backbone of India",
+      "additional_documents": loginPageController.userCertification,
+      "upload_document": certificatesURLs.first.toString(),
+      "store_address": jsonEncode(userAddress),
+      "store_status": 1.toString()
+      // "agree": "1"
+    };
+    if (!isFarmer) {
+      body.addEntries([
+        MapEntry(
+            "seller_storename",
+            loginPageController
+                    .registrationPageFormControllers["storeName"]?.text
+                    .toString() ??
+                ""),
+        MapEntry(
+          "store_logo",
+          storeLogoURL.toString(),
+        )
+      ]);
+    }
+    var response = await Server()
+        .postFormData(
+            body: body,
+            url:
+                "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/register")
+        .catchError((e) {
+      log("64$e");
+    });
+    onLoginWithServer(response, onSuccess, onError, () {});
   }
 }

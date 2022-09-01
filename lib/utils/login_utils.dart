@@ -4,12 +4,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 extension LoginUtils on BuildContext {
   Future<bool> get isReturningUser async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getBool('isReturningUser') ?? false;
+    return sharedPreferences.getString('userID') != null &&
+        sharedPreferences.getString('customerID') != null &&
+        (sharedPreferences.getString('userID')?.isNotEmpty ?? false) &&
+        (sharedPreferences.getString('customerID')?.isNotEmpty ?? false);
   }
 
-  Future<bool> get setAsReturningUser async {
+  Future<bool> setAsReturningUser(String uId, String cId) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.setBool('isReturningUser', true);
+    sharedPreferences.setString('userID', uId);
+    return sharedPreferences.setString('customerID', cId);
   }
 }
 

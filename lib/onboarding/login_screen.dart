@@ -3,14 +3,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:nandikrushi_farmer/nav_host.dart';
 import 'package:nandikrushi_farmer/onboarding/login_bg.dart';
 import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/otp_screen.dart';
+import 'package:nandikrushi_farmer/onboarding/registration_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
+import 'package:nandikrushi_farmer/utils/login_utils.dart';
 import 'package:nandikrushi_farmer/utils/size_config.dart';
 import 'package:provider/provider.dart';
 
@@ -28,36 +31,41 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Consumer<LoginProvider>(builder: (context, data, child) {
       Future<void> loginUser(bool isEmail) {
-        return data.onLoginUser(
-          isEmail,
-          loginPageController,
-          onSuccessfulLogin: (name, isReturningUser) {
-            snackbar(context,
-                "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
-                isError: false);
-            //TODO: Send user to NavHost
-          },
-          onError: (error) {
-            snackbar(context, error);
-          },
-          showMessage: (message) {
-            snackbar(context, message, isError: false);
-          },
-          navigateToOTPScreen: (onValidateOTP) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => OTPScreen(
-                    phoneNumber: loginPageController
-                        .phoneTextEditController.text
-                        .toString(),
-                    onValidateOTP: onValidateOTP,
-                    onResendOTP: () {
-                      loginUser(isEmail);
-                    }),
-              ),
-            );
-          },
-        );
+        return data.onLoginUser(isEmail, loginPageController,
+            onSuccessfulLogin: (name, isReturningUser, uID, cID) {
+          snackbar(context,
+              "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
+              isError: false);
+          context.setAsReturningUser(uID, cID);
+          data.showLoader();
+          Navigator.maybeOf(context)?.push(MaterialPageRoute(
+              builder: (context) => NandikrushiNavHost(
+                    userId: uID,
+                    customerId: cID,
+                  )));
+        }, onError: (error) {
+          snackbar(context, error);
+        }, showMessage: (message) {
+          snackbar(context, message, isError: false);
+        }, navigateToOTPScreen: (onValidateOTP) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => OTPScreen(
+                  phoneNumber: loginPageController.phoneTextEditController.text
+                      .toString(),
+                  onValidateOTP: onValidateOTP,
+                  onResendOTP: () {
+                    loginUser(isEmail);
+                  }),
+            ),
+          );
+        }, onRegisterUser: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const RegistrationScreen(),
+            ),
+          );
+        });
       }
 
       return Scaffold(

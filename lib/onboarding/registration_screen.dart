@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nandikrushi_farmer/nav_host.dart';
 import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
@@ -11,13 +11,12 @@ import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/textfield_widget.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
+import 'package:nandikrushi_farmer/utils/login_utils.dart';
 import 'package:nandikrushi_farmer/utils/size_config.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  final int isPhoneOrEmail;
-  const RegistrationScreen({Key? key, required this.isPhoneOrEmail})
-      : super(key: key);
+  const RegistrationScreen({Key? key}) : super(key: key);
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -32,86 +31,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     super.initState();
     loginPageController.checkLocationPermissionAndGetLocation();
   }
-
-  /* bool validateData() {
-    var isDataValid = true;
-    registrationController.formControllers.forEach((key, value) {
-      if (key == "first_name" || key == "last_name") {
-        if (value.text.isNotEmpty) {
-          //Name is valid
-        } else {
-          //Name is empty
-          isDataValid = false;
-          snackbar(context, "Please enter a valid full name");
-        }
-      } else if (key == 'telePhone' || key == "reg_number") {
-        log("data");
-      } else if (key == "pincode") {
-        if (int.tryParse(value.text) == null) {
-          //Invalid Pincode
-
-          isDataValid = false;
-          snackbar(context, "Please enter a valid numeric pincode");
-        } else {
-          //Pincode correct
-        }
-      } else if (key == "email") {
-        if (value.text.contains("@") && value.text.contains(".")) {
-          //Email is valid
-        } else {
-          //Email is invalid
-
-          isDataValid = false;
-          snackbar(context, "Please enter a valid email address");
-        }
-      } else if (key == "storeName") {
-        if (value.text.isNotEmpty ||
-            SpotmiesTheme.appTheme == UserAppTheme.farmer) {
-          //Value is valid
-        } else {
-          //Value is invalid
-          isDataValid = false;
-          snackbar(context,
-              "Please enter a valid ${SpotmiesTheme.appTheme == UserAppTheme.restaurant ? "Restaurant" : "Store"}'s Name");
-        }
-      } else if (key == "c_password") {
-        log("Passwrd: ${registrationController.formControllers["password"]?.text}");
-        log("Confirm Password: ${value.text}");
-        if (value.text ==
-            registrationController.formControllers["password"]?.text) {
-          //Passwords are same
-        } else {
-          //Password Mismatch
-
-          isDataValid = false;
-          snackbar(context, "Passwords mismatch");
-        }
-      } else {
-        if (value.text.isNotEmpty) {
-          //Valid input
-        } else {
-          //Invalid input
-          isDataValid = false;
-          snackbar(context, "Please enter a valid $key");
-        }
-      }
-    });
-    if (registrationController.image == null) {
-      isDataValid = false;
-      snackbar(
-          context,
-          "Please upload ${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "the Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "your" : "your"} image");
-    }
-    if (SpotmiesTheme.appTheme != UserAppTheme.farmer) {
-      if (registrationController.storeImage == null) {
-        isDataValid = false;
-        snackbar(context,
-            "Please upload the ${SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"}'s logo");
-      }
-    }
-    return isDataValid;
-  }
-  */
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +52,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           top: -(getProportionateHeight(28, constraints)),
                           left: getProportionateWidth(210, constraints),
                           child: const Image(
-                            image: AssetImage("assets/png/ic_farmer.png"),
+                            image: AssetImage("assets/images/ic_farmer.png"),
                           ),
                         ),
                         Container(
@@ -184,8 +103,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               top: getProportionateHeight(150, constraints)),
                           child: Column(
                             children: pageIndex == 0
-                                ? registrationDetailsFirstPage()
-                                : registrationDetailsSecondPage(loginProvider),
+                                ? registrationDetailsFirstPage(
+                                    loginProvider, constraints)
+                                : registrationDetailsSecondPage(
+                                    loginProvider, constraints),
                           ),
                         ),
                       ],
@@ -299,7 +220,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         });
   }
 
-  List<Widget> registrationDetailsFirstPage(LoginProvider loginProvider) {
+  List<Widget> registrationDetailsFirstPage(
+      LoginProvider loginProvider, BoxConstraints constraints) {
     return [
       Container(
         margin: const EdgeInsets.all(32),
@@ -311,7 +233,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            registrationController.image == null
+            loginPageController.profileImage == null
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -321,14 +243,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         onPressed: () {
                           showImagePickerSheet(
                               onImageSelected: (XFile profileImage) {
-                            //TODO: assign image
+                            loginPageController.profileImage = profileImage;
                           });
                         },
                         splashRadius: 42,
                         icon: const Icon(Icons.add_a_photo_rounded),
                       ),
                       TextWidget(
-                        "Add ${loginProvider.userAppTheme.key.contains("Farmer") ? "Farmer" : "your"} Image",
+                        "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
                         color: Theme.of(context).primaryColor.withOpacity(0.7),
                         weight:
                             Theme.of(context).textTheme.bodyLarge?.fontWeight,
@@ -341,7 +263,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       Center(
                         child: ClipOval(
                             child: Image.file(
-                          File(registrationController.image?.path ?? ""),
+                          File(loginPageController.profileImage?.path ?? ""),
                           height: 96,
                           width: 96,
                           fit: BoxFit.cover,
@@ -358,7 +280,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               shape: BoxShape.circle),
                           child: IconButton(
                             onPressed: () {
-                              showImagePickerSheet(false, false);
+                              showImagePickerSheet(
+                                  onImageSelected: (XFile profileImage) {
+                                loginPageController.profileImage = profileImage;
+                              });
                             },
                             icon: Icon(Icons.edit_rounded,
                                 color: Theme.of(context).colorScheme.onPrimary,
@@ -368,22 +293,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                     ],
                   ),
-            SpotmiesTheme.appTheme != UserAppTheme.farmer
-                ? registrationController.storeImage == null
+            !loginProvider.isFarmer
+                ? loginPageController.storeLogo == null
                     ? Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            iconSize: height(context) * 0.085,
+                            iconSize: 75,
                             color: Theme.of(context).primaryColor,
                             onPressed: () {
-                              showImagePickerSheet(false, true);
+                              showImagePickerSheet(
+                                  onImageSelected: (XFile storeLogo) {
+                                loginPageController.storeLogo = storeLogo;
+                              });
                             },
-                            splashRadius: height(context) * 0.04,
+                            splashRadius: 42,
                             icon: const Icon(Icons.add_a_photo_rounded),
                           ),
                           TextWidget(
-                            "Add ${SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"} Logo",
+                            "Add ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Logo",
                             color:
                                 Theme.of(context).primaryColor.withOpacity(0.7),
                             weight: Theme.of(context)
@@ -400,10 +328,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           Center(
                             child: ClipOval(
                                 child: Image.file(
-                              File(registrationController.storeImage?.path ??
-                                  ""),
-                              height: height(context) * 0.1,
-                              width: height(context) * 0.1,
+                              File(loginPageController.storeLogo?.path ?? ""),
+                              height: 96,
+                              width: 96,
                               fit: BoxFit.cover,
                             )),
                           ),
@@ -411,19 +338,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             bottom: 0,
                             right: 0,
                             child: Container(
-                              width: height(context) * 0.04,
-                              height: height(context) * 0.04,
+                              width: 32,
+                              height: 32,
                               decoration: BoxDecoration(
                                   color: Theme.of(context).primaryColor,
                                   shape: BoxShape.circle),
                               child: IconButton(
                                 onPressed: () {
-                                  showImagePickerSheet(false, true);
+                                  showImagePickerSheet(
+                                      onImageSelected: (XFile storeLogo) {
+                                    loginPageController.storeLogo = storeLogo;
+                                  });
                                 },
                                 icon: Icon(
                                   Icons.edit_rounded,
-                                  color: Colors.white,
-                                  size: height(context) * 0.02,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  size: 16,
                                 ),
                               ),
                             ),
@@ -444,10 +375,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextWidget(
-                "${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer" : SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"} Information",
+                "${loginProvider.isFarmer ? "Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Information",
                 color: Colors.grey.shade800,
-                weight: FontWeight.bold,
-                size: height(context) * 0.02,
+                weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
+                size: Theme.of(context).textTheme.titleMedium?.fontSize,
               ),
               const SizedBox(
                 height: 16,
@@ -456,23 +387,33 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 children: [
                   Expanded(
                     child: TextFieldWidget(
-                      controller:
-                          registrationController.formControllers['first_name'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['first_name'],
                       label:
-                          "${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer's" : SpotmiesTheme.appTheme == UserAppTheme.store ? "" : ""} First Name",
-                      style: fonts(height(context) * 0.021, FontWeight.w500,
-                          Colors.black),
+                          "${loginProvider.isFarmer ? "Farmer's" : ""} First Name",
+                      validator: (value) {
+                        if (value?.isEmpty ?? false) {
+                          return snackbar(
+                              context, "Please enter a valid first name");
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(width: 24),
                   Expanded(
                     child: TextFieldWidget(
-                      controller:
-                          registrationController.formControllers['last_name'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['last_name'],
                       label:
-                          "${SpotmiesTheme.appTheme == UserAppTheme.farmer ? "Farmer's" : SpotmiesTheme.appTheme == UserAppTheme.store ? "" : ""} Last Name",
-                      style: fonts(height(context) * 0.021, FontWeight.w500,
-                          Colors.black),
+                          "${loginProvider.isFarmer ? "Farmer's" : ""} Last Name",
+                      validator: (value) {
+                        if (value?.isEmpty ?? false) {
+                          return snackbar(
+                              context, "Please enter a valid last name");
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -480,26 +421,38 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               const SizedBox(
                 height: 8,
               ),
-              SpotmiesTheme.appTheme != UserAppTheme.farmer
+              !loginProvider.isFarmer
                   ? TextFieldWidget(
-                      controller:
-                          registrationController.formControllers['storeName'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['storeName'],
                       label:
-                          "${SpotmiesTheme.appTheme == UserAppTheme.store ? "Store" : "Restaurant"}'s Name",
-                      style: fonts(height(context) * 0.021, FontWeight.w500,
-                          Colors.black),
+                          "${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"}'s Name",
+                      validator: (value) {
+                        if (value?.isEmpty ?? false) {
+                          return snackbar(context,
+                              "Please enter a valid ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} name");
+                        }
+                        return null;
+                      },
                     )
                   : const SizedBox(),
-              SpotmiesTheme.appTheme != UserAppTheme.farmer
-                  ? SizedBox(
-                      height: height(context) * 0.005,
+              !loginProvider.isFarmer
+                  ? const SizedBox(
+                      height: 8,
                     )
                   : const SizedBox(),
               TextFieldWidget(
-                controller: registrationController.formControllers['email'],
+                controller: loginPageController
+                    .registrationPageFormControllers['email'],
                 label: 'Email Address',
-                style: fonts(
-                    height(context) * 0.021, FontWeight.w400, Colors.black),
+                validator: (value) {
+                  if ((value?.contains("@") ?? false) &&
+                      (value?.contains(".") ?? false)) {
+                    return snackbar(
+                        context, "Please enter a valid email address");
+                  }
+                  return null;
+                },
               ),
               const SizedBox(
                 height: 8,
@@ -508,23 +461,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 children: [
                   Expanded(
                     child: TextFieldWidget(
-                      controller:
-                          registrationController.formControllers['password'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['password'],
                       label: 'Create Password',
                       obscureText: true,
-                      style: fonts(height(context) * 0.021, FontWeight.w400,
-                          Colors.black),
+                      validator: (value) {
+                        if (value?.isEmpty ?? false) {
+                          return snackbar(
+                              context, "Please enter a valid password");
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(width: 24),
                   Expanded(
                     child: TextFieldWidget(
-                      controller:
-                          registrationController.formControllers['c_password'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['c_password'],
                       label: 'Confirm Password',
                       obscureText: true,
-                      style: fonts(height(context) * 0.021, FontWeight.w400,
-                          Colors.black),
+                      validator: (value) {
+                        if ((value?.isEmpty ?? false) &&
+                            value ==
+                                loginPageController
+                                    .registrationPageFormControllers['password']
+                                    ?.text
+                                    .toString()) {
+                          return snackbar(context, "Oops! Passwords mismatch");
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -535,8 +502,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               TextWidget(
                 "Location Details",
                 color: Colors.grey.shade800,
-                weight: FontWeight.bold,
-                size: height(context) * 0.02,
+                weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
+                size: Theme.of(context).textTheme.titleMedium?.fontSize,
               ),
               const SizedBox(
                 height: 16,
@@ -545,21 +512,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 children: [
                   Expanded(
                     child: TextFieldWidget(
-                      controller:
-                          registrationController.formControllers['state'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['state'],
                       label: 'State',
-                      style: fonts(height(context) * 0.02, FontWeight.w500,
-                          Colors.black),
+                      validator: (value) {
+                        if (value?.isEmpty ?? false) {
+                          return snackbar(
+                              context, "Please enter a valid state");
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(width: 24),
                   Expanded(
                     child: TextFieldWidget(
-                      controller:
-                          registrationController.formControllers['district'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['district'],
                       label: 'District',
-                      style: fonts(height(context) * 0.02, FontWeight.w500,
-                          Colors.black),
+                      validator: (value) {
+                        if (value?.isEmpty ?? false) {
+                          return snackbar(
+                              context, "Please enter a valid district");
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -571,21 +548,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 children: [
                   Expanded(
                     child: TextFieldWidget(
-                      controller:
-                          registrationController.formControllers['mandal'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['mandal'],
                       label: 'Locality',
-                      style: fonts(height(context) * 0.02, FontWeight.w500,
-                          Colors.black),
+                      validator: (value) {
+                        if (value?.isEmpty ?? false) {
+                          return snackbar(
+                              context, "Please enter a valid locality");
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(width: 24),
                   Expanded(
                     child: TextFieldWidget(
-                      controller:
-                          registrationController.formControllers['city'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['city'],
                       label: 'City/Vilage',
-                      style: fonts(height(context) * 0.02, FontWeight.w500,
-                          Colors.black),
+                      keyboardType: TextInputType.streetAddress,
+                      validator: (value) {
+                        if (value?.isEmpty ?? false) {
+                          return snackbar(
+                              context, "Please enter a valid city/village");
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -597,22 +585,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 children: [
                   Expanded(
                     child: TextFieldWidget(
-                      controller: registrationController
-                          .formControllers['house_number'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['house_number'],
                       label: 'H.No.',
-                      style: fonts(height(context) * 0.02, FontWeight.w500,
-                          Colors.black),
+                      validator: (value) {
+                        if (value?.isEmpty ?? false) {
+                          return snackbar(
+                              context, "Please enter a valid house number");
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(width: 24),
                   Expanded(
                     child: TextFieldWidget(
                       textInputAction: TextInputAction.done,
-                      controller:
-                          registrationController.formControllers['pincode'],
+                      controller: loginPageController
+                          .registrationPageFormControllers['pincode'],
                       label: 'Pincode',
-                      style: fonts(height(context) * 0.02, FontWeight.w500,
-                          Colors.black),
+                      keyboardType: TextInputType.number,
+                      maxLength: 6,
+                      validator: (value) {
+                        if (value?.isEmpty ?? false) {
+                          return snackbar(
+                              context, "Please enter a valid pincode");
+                        }
+                        return null;
+                      },
                     ),
                   )
                 ],
@@ -630,41 +630,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     .registrationFormKey.currentState
                     ?.validate() ??
                 false;
+
             if (formValidatedState) {
-              /*
-              TODO: Manage data handling
-              registrationController.user = Users.registerPartA(
-                  firstName: registrationController
-                          .formControllers['first_name']?.text ??
-                      "",
-                  lastName:
-                      registrationController.formControllers['last_name']?.text ??
-                          "",
-                  email: registrationController.formControllers['email']?.text ??
-                      "",
-                  telePhone:
-                      registrationController.formControllers['telePhone']?.text ??
-                          "",
-                  pass: registrationController.formControllers['password']?.text ??
-                      "",
-                  cpass: registrationController
-                          .formControllers['c_password']?.text ??
-                      "",
-                  city: registrationController.formControllers['city']?.text ?? "",
-                  houseNumber: registrationController.formControllers['house_number']?.text ?? "",
-                  district: registrationController.formControllers['district']?.text ?? "",
-                  mandal: registrationController.formControllers['mandal']?.text ?? "",
-                  farmerImage: "",
-                  pincode: registrationController.formControllers['pincode']?.text ?? "",
-                  state: registrationController.formControllers['state']?.text ?? "");
-              log(registrationController.user.toString());*/
-              await loginPageController.pageController.animateToPage(1,
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.easeInOut);
+              if (loginPageController.profileImage == null) {
+                formValidatedState = false;
+                snackbar(
+                    context,
+                    "Please upload ${loginProvider.isFarmer ? "the Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "your" : "your"} image");
+              }
+              if (!loginProvider.isFarmer) {
+                if (loginPageController.storeLogo == null) {
+                  formValidatedState = false;
+                  snackbar(context,
+                      "Please upload the ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"}'s logo");
+                }
+              }
+              if (formValidatedState) {
+                await loginPageController.pageController.animateToPage(1,
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeInOut);
+              }
             }
           },
-          minWidth: width(context) * 0.85,
-          height: height(context) * 0.06,
+          height: getProportionateHeight(64, constraints),
           borderRadius: 12,
           bgColor: Theme.of(context).primaryColor,
           textColor: Theme.of(context).colorScheme.onPrimary,
@@ -674,69 +662,60 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     ];
   }
 
-  registrationDetailsSecondPage(LoginProvider loginProvider) {
+  registrationDetailsSecondPage(
+      LoginProvider loginProvider, BoxConstraints constraints) {
     return [
       Container(
-        padding: EdgeInsets.only(
-            left: width(context) * 0.08,
-            right: width(context) * 0.08,
-            top: width(context) * 0.08),
+        margin: const EdgeInsets.all(32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SpotmiesTheme.appTheme == UserAppTheme.farmer
+            loginProvider.isFarmer
                 ? TextWidget(
                     "Cultivated Land Area (in acres)",
                     color: Colors.grey.shade800,
-                    weight: FontWeight.bold,
-                    size: height(context) * 0.02,
+                    weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
+                    size: Theme.of(context).textTheme.titleMedium?.fontSize,
                   )
                 : const SizedBox(),
-            SizedBox(
-              height: SpotmiesTheme.appTheme == UserAppTheme.farmer
-                  ? height(context) * 0.02
-                  : 0,
+            const SizedBox(
+              height: 20,
             ),
-            SpotmiesTheme.appTheme == UserAppTheme.farmer
+            loginProvider.isFarmer
                 ? SliderTheme(
                     data: SliderThemeData(
-                        activeTickMarkColor:
-                            SpotmiesTheme.appTheme == UserAppTheme.restaurant
-                                ? Colors.black
-                                : Colors.white,
-                        inactiveTickMarkColor:
-                            SpotmiesTheme.appTheme == UserAppTheme.restaurant
-                                ? Colors.black
-                                : Colors.white),
+                      activeTickMarkColor:
+                          Theme.of(context).colorScheme.onPrimary,
+                      inactiveTickMarkColor:
+                          Theme.of(context).colorScheme.onPrimary,
+                    ),
                     child: Slider(
                         divisions: 30,
-                        thumbColor: const Color(0xFF006838),
-                        activeColor: const Color(0xFF006838),
+                        thumbColor: Theme.of(context).primaryColor,
+                        activeColor: Theme.of(context).primaryColor,
                         inactiveColor: const Color(0x16006838),
-                        value: registrationController.acresInInt,
+                        value: loginPageController.landInAcres,
                         max: 30,
                         min: 1,
-                        label: (registrationController.acresInInt)
-                            .round()
-                            .toString(),
+                        label:
+                            loginPageController.landInAcres.round().toString(),
                         // ignore: avoid_types_as_parameter_names
                         onChanged: (num) {
-                          log("$num");
                           setState(() {
-                            registrationController.acresInInt = num;
+                            loginPageController.landInAcres = num;
                           });
                         }),
                   )
                 : const SizedBox(),
-            SizedBox(
-              height: height(context) * 0.02,
+            const SizedBox(
+              height: 20,
             ),
             TextWidget(
               "Select Certification Details",
               color: Colors.grey.shade800,
-              weight: FontWeight.bold,
-              size: height(context) * 0.02,
+              weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
+              size: Theme.of(context).textTheme.titleMedium?.fontSize,
             ),
           ],
         ),
@@ -746,26 +725,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: ListView.builder(
             shrinkWrap: true,
             primary: false,
-            itemCount: registrationController.checkBoxStatesText.length,
+            itemCount: loginProvider.certificationList.length,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
                   setState(() {
-                    registrationController.user.certificates[index] = [];
-                    for (int i = 0;
-                        i <=
-                            (registrationController.checkBoxStatesText.length -
-                                1);
-                        i++) {
-                      registrationController.checkBoxStates[i] = false;
-                    }
-                    registrationController.checkBoxStates[index] = true;
-                    registrationController.formControllers["reg_number"]?.text =
-                        "";
+                    loginPageController.userCertificates[index] = [];
+                    loginPageController.userCertification =
+                        loginProvider.certificationList[index];
+                    loginPageController
+                        .registrationPageFormControllers["reg_number"]
+                        ?.text = "";
                   });
                 },
                 child: Container(
-                  color: registrationController.checkBoxStates[index]
+                  color: loginPageController.userCertification ==
+                          loginProvider.certificationList[index]
                       ? Theme.of(context).primaryColor
                       : Colors.transparent,
                   child: Column(
@@ -776,50 +751,49 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             Checkbox(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(3.5)),
-                                activeColor: SpotmiesTheme.appTheme ==
-                                        UserAppTheme.restaurant
+                                activeColor: loginProvider.userAppTheme.key
+                                        .contains("Restaraunts")
                                     ? Colors.green[900]
                                     : Colors.white,
                                 checkColor: Theme.of(context).primaryColor,
-                                value: registrationController
-                                    .checkBoxStates[index],
+                                value: loginPageController.userCertification ==
+                                    loginProvider.certificationList[index],
                                 onChanged: (boolean) {
                                   setState(() {
-                                    for (int i = 0; i <= 5; i++) {
-                                      registrationController.checkBoxStates[i] =
-                                          false;
-                                    }
-                                    registrationController
-                                            .checkBoxStates[index] =
-                                        boolean ?? false;
+                                    loginPageController
+                                        .userCertificates[index] = [];
+                                    loginPageController.userCertification =
+                                        loginProvider.certificationList[index];
+                                    loginPageController
+                                        .registrationPageFormControllers[
+                                            "reg_number"]
+                                        ?.text = "";
                                   });
                                 }),
                             SizedBox(
-                              width: width(context) * 0.6,
+                              width: getProportionateWidth(256, constraints),
                               child: TextWidget(
-                                registrationController
-                                    .checkBoxStatesText[index],
+                                loginProvider.certificationList[index],
                                 weight: FontWeight.w500,
-                                color:
-                                    registrationController.checkBoxStates[index]
-                                        ? SpotmiesTheme.appTheme ==
-                                                UserAppTheme.restaurant
-                                            ? Colors.green[900]
-                                            : Colors.white
-                                        : Colors.black,
+                                color: loginPageController.userCertification ==
+                                        loginProvider.certificationList[index]
+                                    ? loginProvider.userAppTheme.key
+                                            .contains("Restaraunts")
+                                        ? Colors.green[900]
+                                        : Colors.white
+                                    : Colors.black,
                               ),
                             )
                           ]),
-                      (SpotmiesTheme.appTheme == UserAppTheme.farmer
-                                  ? index != 0
-                                  : true) &&
+                      (loginProvider.isFarmer ? index != 0 : true) &&
                               index != 5 &&
-                              registrationController.checkBoxStates[index]
+                              loginPageController.userCertification ==
+                                  loginProvider.certificationList[index]
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                  SizedBox(
-                                    width: width(context) * 0.1,
+                                  const SizedBox(
+                                    width: 42,
                                   ),
                                   Column(
                                     children: [
@@ -828,23 +802,67 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         color: Colors.white,
                                       ),
                                       SizedBox(
-                                        width: width(context) * 0.32,
-                                        height: height(context) * 0.05,
-                                        child: FilledTextFieldWidget(
-                                          controller: registrationController
-                                              .formControllers["reg_number"],
-                                          label: "",
+                                        width: getProportionateWidth(
+                                            136, constraints),
+                                        child: Form(
+                                          key: loginPageController
+                                              .registrationFormSecondPageKey,
+                                          child: TextFormField(
+                                            textInputAction:
+                                                TextInputAction.done,
+                                            onChanged: (_) {
+                                              setState(() {});
+                                            },
+                                            decoration: InputDecoration(
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                                counterStyle: fonts(
+                                                    Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall
+                                                        ?.fontSize,
+                                                    FontWeight.normal,
+                                                    Colors.white),
+                                                hintStyle: fonts(
+                                                    Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.fontSize,
+                                                    FontWeight.w500,
+                                                    Colors.grey[400]),
+                                                prefixIcon: const Icon(
+                                                    Icons.phone_rounded),
+                                                hintText: 'Registration Number',
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide.none,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
+                                                isDense: true,
+                                                errorBorder: InputBorder.none),
+                                            validator: (value) {
+                                              if (value?.isEmpty ?? false) {
+                                                snackbar(context,
+                                                    "Please enter a valid certificate registration number");
+                                              }
+                                              return null;
+                                            },
+                                            controller: loginPageController
+                                                    .registrationPageFormControllers[
+                                                "reg_number"],
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    width: width(context) * 0.05,
+                                  const SizedBox(
+                                    width: 20,
                                   ),
                                   Column(
                                     children: [
                                       const TextWidget(
-                                        text: "Upload Certificate",
+                                        "Upload Certificate",
                                         color: Colors.white,
                                       ),
                                       Row(
@@ -857,10 +875,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                       BorderRadius.circular(8)),
                                               onPressed: () {
                                                 showImagePickerSheet(
-                                                    true, false);
+                                                    onImageSelected:
+                                                        (XFile certificate) {
+                                                  loginPageController
+                                                      .userCertificates[index]
+                                                      .add(certificate);
+                                                });
                                               },
                                               child: const TextWidget(
-                                                text: "Choose File",
+                                                "Choose File",
                                               )),
                                           Icon(
                                             Icons.archive_rounded,
@@ -872,75 +895,58 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   )
                                 ])
                           : const SizedBox(),
-                      (SpotmiesTheme.appTheme == UserAppTheme.farmer
-                                  ? index != 0
-                                  : true) &&
+                      (loginProvider.isFarmer ? index != 0 : true) &&
                               index != 5 &&
-                              registrationController.checkBoxStates[index] &&
-                              (registrationController
-                                      .user.certificates[index]?.isNotEmpty ??
-                                  false)
-                          ? SizedBox(
-                              height: height(context) * 0.12,
-                              child: ListView.builder(
-                                  itemCount: registrationController
-                                      .user.certificates[index]?.length,
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, imageIndex) {
-                                    // print(registrationController
-                                    //    .user.certificates);
-                                    return registrationController
-                                                .user
-                                                .certificates[index]
-                                                    ?[imageIndex]
-                                                .path !=
-                                            null
-                                        ? Stack(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  child: Image.file(
-                                                    File(registrationController
-                                                        .user
-                                                        .certificates[index]![
-                                                            imageIndex]
-                                                        .path),
-                                                    height:
-                                                        height(context) * 0.1,
-                                                  ),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.red,
-                                                      shape: BoxShape.circle),
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      registrationController
-                                                          .user
-                                                          .certificates[index]
-                                                          ?.removeAt(
-                                                              imageIndex);
-                                                      setState(() {});
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.delete_rounded,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        : const SizedBox();
-                                  }),
-                            )
+                              loginPageController.userCertification ==
+                                  loginProvider.certificationList[index] &&
+                              loginPageController
+                                  .userCertificates[index].isNotEmpty
+                          ? ListView.builder(
+                              itemCount: loginPageController
+                                  .userCertificates[index].length,
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              primary: false,
+                              itemBuilder: (context, imageIndex) {
+                                // print(registrationController
+                                //    .userCertificates);
+                                return Stack(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.file(
+                                          File(loginPageController
+                                              .userCertificates[index]
+                                                  [imageIndex]
+                                              .path),
+                                          height: 96,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                            color: Colors.red,
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            loginPageController
+                                                .userCertificates[index]
+                                                .removeAt(imageIndex);
+                                            setState(() {});
+                                          },
+                                          icon: const Icon(
+                                            Icons.delete_rounded,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              })
                           : const SizedBox()
                     ],
                   ),
@@ -949,33 +955,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             }),
       ),
       Padding(
-        padding: EdgeInsets.only(bottom: height(context) * 0.03),
+        padding: const EdgeInsets.only(bottom: 27),
         child: ElevatedButtonWidget(
           onClick: () async {
-            //Validate the acresInLand or the certification
-            if (registrationController.checkBoxStates
-                    .where((element) => element == true)
-                    .length ==
-                1) {
-              registrationController.registerButton(
-                  scaffoldKey.currentContext ?? context,
-                  registrationProvider,
-                  () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NavBar()));
+            var formValidatedState = loginPageController
+                    .registrationFormSecondPageKey.currentState
+                    ?.validate() ??
+                false;
+
+            if (formValidatedState &&
+                loginPageController.landInAcres > 1 &&
+                loginPageController.userCertification.isNotEmpty &&
+                loginPageController.userCertificates
+                    .where((element) => element.isNotEmpty)
+                    .isNotEmpty) {
+              loginProvider.registerUser(
+                  loginPageController: loginPageController,
+                  onError: (error) {
+                    snackbar(context, error);
                   },
-                  false,
-                  () {
-                    Navigator.maybeOf(scaffoldKey.currentContext ?? context)
-                        ?.push(MaterialPageRoute(
-                            builder: (context) => const NavBar()));
+                  onSuccess: (name, _, uID, cID) {
+                    snackbar(
+                        context, "Welcome to the Nandikrushi family, $name!",
+                        isError: false);
+                    loginProvider.showLoader();
+                    context.setAsReturningUser(uID, cID);
+                    Navigator.maybeOf(context)?.push(
+                      MaterialPageRoute(
+                        builder: (context) => NandikrushiNavHost(
+                          userId: uID,
+                          customerId: cID,
+                        ),
+                      ),
+                    );
                   });
             }
           },
-          minWidth: width(context) * 0.85,
-          height: height(context) * 0.06,
+          height: getProportionateHeight(64, constraints),
           borderRadius: 12,
           bgColor: Theme.of(context).primaryColor,
           textColor: Theme.of(context).colorScheme.onPrimary,

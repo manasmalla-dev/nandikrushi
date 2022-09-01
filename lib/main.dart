@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/firebase_options.dart';
@@ -9,23 +10,14 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseAuth.instance.signOut();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<LoginProvider>(
       create: (context) => LoginProvider(),
     ),
-    // ChangeNotifierProvider<UniversalProvider>(
-    //   create: (context) => UniversalProvider(),
-    // ),
-    // ChangeNotifierProvider<SellerProductProvider>(
-    //   create: (context) => SellerProductProvider(),
-    // ),
     // ChangeNotifierProvider<ProfileProvider>(
     //   create: (context) => ProfileProvider(),
     // ),
-    // ChangeNotifierProvider<GetAllProductsProvider>(
-    //   create: (context) => GetAllProductsProvider(),
-    // ),
-    // ChangeNotifierProvider<DataProvider>(create: (context) => DataProvider())
   ], child: const MyApp()));
 }
 

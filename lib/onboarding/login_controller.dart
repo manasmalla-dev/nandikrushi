@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_host.dart';
@@ -14,6 +15,7 @@ import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
 import 'package:nandikrushi_farmer/utils/login_utils.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends ControllerMVC {
   GlobalKey<FormState> mobileFormKey = GlobalKey();
@@ -21,6 +23,7 @@ class LoginController extends ControllerMVC {
   GlobalKey<FormState> otpFormKey = GlobalKey();
   GlobalKey<FormState> forgotPasswordFormKey = GlobalKey();
   GlobalKey<FormState> registrationFormKey = GlobalKey();
+  GlobalKey<FormState> registrationFormSecondPageKey = GlobalKey();
 
   TextEditingController emailTextEditController = TextEditingController();
   TextEditingController passwordTextEditController = TextEditingController();
@@ -44,38 +47,18 @@ class LoginController extends ControllerMVC {
     'storeName': TextEditingController(),
     'reg_number': TextEditingController(),
   };
+  double landInAcres = 0;
+  String userCertification = "";
 
-  /*
-   loginPageController.checkBoxStatesText =
-        SpotmiesTheme.appTheme == UserAppTheme.restaurant
-            ? [
-                'FSSAI',
-                'Eating House License',
-                'Fire Safety License',
-                'Certificate of Environmental Clearance',
-                'Other Certification +'
-              ]
-            : SpotmiesTheme.appTheme == UserAppTheme.store
-                ? [
-                    'FSSAI',
-                    'Fire Safety License',
-                    'Certificate of Environmental Clearance',
-                    'Other Certification +'
-                  ]
-                : [
-                    'Self Declared Natural Farmer',
-                    'PGS India Green',
-                    'PGS India Organic',
-                    'Organic FPO',
-                    'Organic FPC',
-                    'Other Certification +'
-                  ];
-  */
+  XFile? profileImage;
+  XFile? storeLogo;
 
   PageController pageController = PageController();
 
   Position? location;
   List<Placemark>? locationGeoCoded;
+
+  List<List<XFile>> userCertificates = [];
 
   Future<void> checkLocationPermissionAndGetLocation() async {
     var permissionGranted = await Geolocator.checkPermission();
@@ -153,8 +136,16 @@ class LoginController extends ControllerMVC {
       var appTheme = await getAppTheme();
       loginProvider.updateUserAppType(appTheme);
       Timer(const Duration(milliseconds: 2000), () async {
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        var uID = sharedPreferences.getString('userID')!;
+        var cID = sharedPreferences.getString('customerID')!;
         navigator.pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const NandikrushiNavHost()),
+            MaterialPageRoute(
+                builder: (_) => NandikrushiNavHost(
+                      userId: uID,
+                      customerId: cID,
+                    )),
             (route) => false);
       });
     } else {
@@ -178,7 +169,7 @@ class LoginController extends ControllerMVC {
       var userTypeData = {
         "Farmer": Theme.of(context).primaryColor,
         "Organic Stores": const Color(0xFF00bba8),
-        "Organic Restaraunt": const Color(0xFFffd500),
+        "Organic Restaurants": const Color(0xFFffd500),
       };
       isTimedOut = true;
       return userTypeData;
@@ -209,7 +200,7 @@ class LoginController extends ControllerMVC {
         var userTypeData = {
           "Farmer": Theme.of(context).primaryColor,
           "Organic Stores": const Color(0xFF00bba8),
-          "Organic Restaraunt": const Color(0xFFffd500),
+          "Organic Restaurants": const Color(0xFFffd500),
         };
         return userTypeData;
       } else if (response.statusCode == 404) {
@@ -218,7 +209,7 @@ class LoginController extends ControllerMVC {
         var userTypeData = {
           "Farmer": Theme.of(context).primaryColor,
           "Organic Stores": const Color(0xFF00bba8),
-          "Organic Restaraunt": const Color(0xFFffd500),
+          "Organic Restaurants": const Color(0xFFffd500),
         };
         return userTypeData;
       } else {
@@ -227,7 +218,7 @@ class LoginController extends ControllerMVC {
         var userTypeData = {
           "Farmer": Theme.of(context).primaryColor,
           "Organic Stores": const Color(0xFF00bba8),
-          "Organic Restaraunt": const Color(0xFFffd500),
+          "Organic Restaurants": const Color(0xFFffd500),
         };
         return userTypeData;
       }
@@ -237,7 +228,7 @@ class LoginController extends ControllerMVC {
       var userTypeData = {
         "Farmer": Theme.of(context).primaryColor,
         "Organic Stores": const Color(0xFF00bba8),
-        "Organic Restaraunt": const Color(0xFFffd500),
+        "Organic Restaurants": const Color(0xFFffd500),
       };
       return userTypeData;
     }
