@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 
 class NandikrushiNavHost extends StatefulWidget {
   final String userId;
@@ -14,6 +15,10 @@ class NandikrushiNavHost extends StatefulWidget {
 class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      body: Center(
+        child: TextWidget("uID: ${widget.userId}, cID: ${widget.customerId}"),
+      ),
+    );
   }
 }

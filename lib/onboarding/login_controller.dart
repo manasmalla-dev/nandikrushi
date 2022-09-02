@@ -105,7 +105,7 @@ class LoginController extends ControllerMVC {
   }
 
   fetchUserData(context) {
-    //TODO: Manage fetching data
+    //TODO: Manage fetching data for update api
     /* var provider = Provider.of<RegistrationProvider>(context, listen: false);
     log(provider.user.toString());
     formControllers = {

@@ -38,89 +38,169 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       key: scaffoldKey,
       body: Consumer<LoginProvider>(builder: (context, loginProvider, __) {
         return LayoutBuilder(builder: (context, constraints) {
-          return Stack(
-            children: [
-              PageView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: loginPageController.pageController,
-                itemCount: 2,
-                itemBuilder: (context, pageIndex) {
-                  return SingleChildScrollView(
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: -(getProportionateHeight(28, constraints)),
-                          left: getProportionateWidth(210, constraints),
-                          child: const Image(
-                            image: AssetImage("assets/images/ic_farmer.png"),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: getProportionateHeight(75, constraints)),
-                          padding: const EdgeInsets.symmetric(horizontal: 36),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+          return constraints.maxWidth < 500
+              ? Stack(
+                  children: [
+                    PageView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: loginPageController.pageController,
+                      itemCount: 2,
+                      itemBuilder: (context, pageIndex) {
+                        return SingleChildScrollView(
+                          child: Stack(
                             children: [
-                              Text(
-                                "Nandikrushi",
-                                style: TextStyle(
-                                    color: calculateContrast(
-                                                const Color(0xFF769F77),
-                                                createMaterialColor(
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .primary)
-                                                    .shade700) >
-                                            3
-                                        ? createMaterialColor(Theme.of(context)
-                                                .colorScheme
-                                                .primary)
-                                            .shade700
-                                        : createMaterialColor(Theme.of(context)
-                                                .colorScheme
-                                                .primary)
-                                            .shade100,
-                                    fontFamily: 'Samarkan',
-                                    fontSize: getProportionateHeight(
-                                        32, constraints)),
+                              Positioned(
+                                top: -(getProportionateHeight(28, constraints)),
+                                left: getProportionateWidth(210, constraints),
+                                child: const Image(
+                                  image:
+                                      AssetImage("assets/images/ic_farmer.png"),
+                                ),
                               ),
-                              TextWidget(
-                                "Create Account".toUpperCase(),
-                                color: const Color(0xFF006838),
-                                weight: FontWeight.bold,
-                                size: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.fontSize,
+                              Container(
+                                margin: EdgeInsets.only(
+                                    top: getProportionateHeight(
+                                        75, constraints)),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 36),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Nandikrushi",
+                                      style: TextStyle(
+                                          color: calculateContrast(
+                                                      const Color(0xFF769F77),
+                                                      createMaterialColor(
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary)
+                                                          .shade700) >
+                                                  3
+                                              ? createMaterialColor(
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .primary)
+                                                  .shade700
+                                              : createMaterialColor(
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .primary)
+                                                  .shade100,
+                                          fontFamily: 'Samarkan',
+                                          fontSize: getProportionateHeight(
+                                              32, constraints)),
+                                    ),
+                                    TextWidget(
+                                      "Create Account".toUpperCase(),
+                                      color: const Color(0xFF006838),
+                                      weight: FontWeight.bold,
+                                      size: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.fontSize,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: getProportionateHeight(
+                                        150, constraints)),
+                                child: Column(
+                                  children: pageIndex == 0
+                                      ? registrationDetailsFirstPage(
+                                          loginProvider, constraints)
+                                      : registrationDetailsSecondPage(
+                                          loginProvider, constraints),
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: getProportionateHeight(150, constraints)),
-                          child: Column(
-                            children: pageIndex == 0
-                                ? registrationDetailsFirstPage(
-                                    loginProvider, constraints)
-                                : registrationDetailsSecondPage(
-                                    loginProvider, constraints),
-                          ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-              Consumer<LoginProvider>(builder: (context, loginProvider, _) {
-                return loginProvider.shouldShowLoader
-                    ? const LoaderScreen()
-                    : const SizedBox();
-              }),
-            ],
-          );
+                    Consumer<LoginProvider>(
+                        builder: (context, loginProvider, _) {
+                      return loginProvider.shouldShowLoader
+                          ? const LoaderScreen()
+                          : const SizedBox();
+                    }),
+                  ],
+                )
+              : Stack(
+                  children: [
+                    Positioned(
+                      top: -(getProportionateHeight(28, constraints)),
+                      left: getProportionateWidth(210, constraints),
+                      child: const Image(
+                        image: AssetImage("assets/images/ic_farmer.png"),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: getProportionateHeight(75, constraints)),
+                      padding: const EdgeInsets.symmetric(horizontal: 36),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Nandikrushi",
+                            style: TextStyle(
+                                color: calculateContrast(
+                                            const Color(0xFF769F77),
+                                            createMaterialColor(
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .primary)
+                                                .shade700) >
+                                        3
+                                    ? createMaterialColor(Theme.of(context)
+                                            .colorScheme
+                                            .primary)
+                                        .shade700
+                                    : createMaterialColor(Theme.of(context)
+                                            .colorScheme
+                                            .primary)
+                                        .shade100,
+                                fontFamily: 'Samarkan',
+                                fontSize:
+                                    getProportionateHeight(32, constraints)),
+                          ),
+                          TextWidget(
+                            "Create Account".toUpperCase(),
+                            color: const Color(0xFF006838),
+                            weight: FontWeight.bold,
+                            size: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.fontSize,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: getProportionateHeight(150, constraints)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: Column(
+                            children: registrationDetailsFirstPage(
+                                loginProvider, constraints),
+                          )),
+                          Expanded(
+                              child: Column(
+                            children: registrationDetailsSecondPage(
+                                loginProvider, constraints),
+                          )),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
         });
       }),
     );
@@ -662,7 +742,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     ];
   }
 
-  registrationDetailsSecondPage(
+  List<Widget> registrationDetailsSecondPage(
       LoginProvider loginProvider, BoxConstraints constraints) {
     return [
       Container(
