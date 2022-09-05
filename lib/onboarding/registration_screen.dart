@@ -206,12 +206,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  void showImagePickerSheet({required Function(XFile) onImageSelected}) {
+  void showImagePickerSheet(
+      {required Function(XFile) onImageSelected,
+      required BoxConstraints constraints}) {
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         builder: (context) {
           return Container(
+            height: getProportionateHeight(250, constraints),
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,10 +222,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 TextWidget(
                   "Choose Profile Picture",
                   size: Theme.of(context).textTheme.titleLarge?.fontSize,
-                  weight: Theme.of(context).textTheme.titleLarge?.fontWeight,
+                  weight: FontWeight.bold,
                 ),
                 const SizedBox(
-                  height: 16,
+                  height: 8,
                 ),
                 TextWidget(
                   "Choose an image as a profile picture from one of the following sources",
@@ -230,8 +233,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   size: Theme.of(context).textTheme.bodyLarge?.fontSize,
                   weight: Theme.of(context).textTheme.bodyLarge?.fontWeight,
                 ),
+                const Spacer(),
+                Row(
+                  children: const [
+                    Expanded(
+                      flex: 3,
+                      child: Icon(Icons.photo_library_rounded, size: 48),
+                    ),
+                    Spacer(),
+                    Expanded(
+                      flex: 3,
+                      child: Icon(Icons.camera_alt_rounded, size: 48),
+                    ),
+                  ],
+                ),
                 const SizedBox(
-                  height: 32,
+                  height: 8,
                 ),
                 Row(
                   children: [
@@ -311,71 +328,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             loginPageController.profileImage == null
-                ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        iconSize: 75,
-                        color: Theme.of(context).primaryColor,
-                        onPressed: () {
-                          showImagePickerSheet(
-                              onImageSelected: (XFile profileImage) {
-                            loginPageController.profileImage = profileImage;
-                          });
-                        },
-                        splashRadius: 42,
-                        icon: const Icon(Icons.add_a_photo_rounded),
-                      ),
-                      TextWidget(
-                        "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
-                        color: Theme.of(context).primaryColor.withOpacity(0.7),
-                        weight:
-                            Theme.of(context).textTheme.bodyLarge?.fontWeight,
-                        size: Theme.of(context).textTheme.bodyLarge?.fontSize,
-                      )
-                    ],
-                  )
-                : Stack(
-                    children: [
-                      Center(
-                        child: ClipOval(
-                            child: Image.file(
-                          File(loginPageController.profileImage?.path ?? ""),
-                          height: 96,
-                          width: 96,
-                          fit: BoxFit.cover,
-                        )),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              shape: BoxShape.circle),
-                          child: IconButton(
-                            onPressed: () {
-                              showImagePickerSheet(
-                                  onImageSelected: (XFile profileImage) {
-                                loginPageController.profileImage = profileImage;
-                              });
-                            },
-                            icon: Icon(Icons.edit_rounded,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                size: 16),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-            !loginProvider.isFarmer
-                ? loginPageController.storeLogo == null
-                    ? Column(
+                ? Expanded(
+                    child: Center(
+                      child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
@@ -383,15 +340,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             color: Theme.of(context).primaryColor,
                             onPressed: () {
                               showImagePickerSheet(
-                                  onImageSelected: (XFile storeLogo) {
-                                loginPageController.storeLogo = storeLogo;
-                              });
+                                  constraints: constraints,
+                                  onImageSelected: (XFile profileImage) {
+                                    loginPageController.profileImage =
+                                        profileImage;
+                                  });
                             },
                             splashRadius: 42,
                             icon: const Icon(Icons.add_a_photo_rounded),
                           ),
                           TextWidget(
-                            "Add ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Logo",
+                            "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
                             color:
                                 Theme.of(context).primaryColor.withOpacity(0.7),
                             weight: Theme.of(context)
@@ -402,13 +361,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 Theme.of(context).textTheme.bodyLarge?.fontSize,
                           )
                         ],
-                      )
-                    : Stack(
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: Center(
+                      child: Stack(
                         children: [
                           Center(
                             child: ClipOval(
                                 child: Image.file(
-                              File(loginPageController.storeLogo?.path ?? ""),
+                              File(
+                                  loginPageController.profileImage?.path ?? ""),
                               height: 96,
                               width: 96,
                               fit: BoxFit.cover,
@@ -426,20 +390,107 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               child: IconButton(
                                 onPressed: () {
                                   showImagePickerSheet(
-                                      onImageSelected: (XFile storeLogo) {
-                                    loginPageController.storeLogo = storeLogo;
-                                  });
+                                      constraints: constraints,
+                                      onImageSelected: (XFile profileImage) {
+                                        loginPageController.profileImage =
+                                            profileImage;
+                                      });
                                 },
-                                icon: Icon(
-                                  Icons.edit_rounded,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  size: 16,
-                                ),
+                                icon: Icon(Icons.edit_rounded,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    size: 16),
                               ),
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                  ),
+            !loginProvider.isFarmer
+                ? loginPageController.storeLogo == null
+                    ? Expanded(
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                iconSize: 75,
+                                color: Theme.of(context).primaryColor,
+                                onPressed: () {
+                                  showImagePickerSheet(
+                                      constraints: constraints,
+                                      onImageSelected: (XFile storeLogo) {
+                                        loginPageController.storeLogo =
+                                            storeLogo;
+                                      });
+                                },
+                                splashRadius: 42,
+                                icon: const Icon(Icons.add_a_photo_rounded),
+                              ),
+                              TextWidget(
+                                "Add ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Logo",
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.7),
+                                weight: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.fontWeight,
+                                size: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.fontSize,
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    : Expanded(
+                        child: Center(
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: ClipOval(
+                                    child: Image.file(
+                                  File(loginPageController.storeLogo?.path ??
+                                      ""),
+                                  height: 96,
+                                  width: 96,
+                                  fit: BoxFit.cover,
+                                )),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  width: 32,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      shape: BoxShape.circle),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      showImagePickerSheet(
+                                          constraints: constraints,
+                                          onImageSelected: (XFile storeLogo) {
+                                            loginPageController.storeLogo =
+                                                storeLogo;
+                                          });
+                                    },
+                                    icon: Icon(
+                                      Icons.edit_rounded,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       )
                 : const SizedBox()
           ],
@@ -526,8 +577,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     .registrationPageFormControllers['email'],
                 label: 'Email Address',
                 validator: (value) {
-                  if ((value?.contains("@") ?? false) &&
-                      (value?.contains(".") ?? false)) {
+                  if (!(value?.contains("@") ?? false) &&
+                      !(value?.contains(".") ?? false)) {
                     return snackbar(
                         context, "Please enter a valid email address");
                   }
@@ -704,41 +755,47 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ),
         ),
       ),
-      ElevatedButtonWidget(
-          onClick: () async {
-            var formValidatedState = loginPageController
-                    .registrationFormKey.currentState
-                    ?.validate() ??
-                false;
+      Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 32,
+          vertical: 16,
+        ),
+        child: ElevatedButtonWidget(
+            onClick: () async {
+              var formValidatedState = loginPageController
+                      .registrationFormKey.currentState
+                      ?.validate() ??
+                  false;
 
-            if (formValidatedState) {
-              if (loginPageController.profileImage == null) {
-                formValidatedState = false;
-                snackbar(
-                    context,
-                    "Please upload ${loginProvider.isFarmer ? "the Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "your" : "your"} image");
-              }
-              if (!loginProvider.isFarmer) {
-                if (loginPageController.storeLogo == null) {
+              if (formValidatedState) {
+                if (loginPageController.profileImage == null) {
                   formValidatedState = false;
-                  snackbar(context,
-                      "Please upload the ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"}'s logo");
+                  snackbar(
+                      context,
+                      "Please upload ${loginProvider.isFarmer ? "the Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "your" : "your"} image");
+                }
+                if (!loginProvider.isFarmer) {
+                  if (loginPageController.storeLogo == null) {
+                    formValidatedState = false;
+                    snackbar(context,
+                        "Please upload the ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"}'s logo");
+                  }
+                }
+                if (formValidatedState) {
+                  await loginPageController.pageController.animateToPage(1,
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeInOut);
                 }
               }
-              if (formValidatedState) {
-                await loginPageController.pageController.animateToPage(1,
-                    duration: const Duration(milliseconds: 400),
-                    curve: Curves.easeInOut);
-              }
-            }
-          },
-          height: getProportionateHeight(64, constraints),
-          borderRadius: 12,
-          bgColor: Theme.of(context).primaryColor,
-          textColor: Theme.of(context).colorScheme.onPrimary,
-          buttonName: "Next".toUpperCase(),
-          innerPadding: 0.02,
-          trailingIcon: Icons.arrow_forward),
+            },
+            height: getProportionateHeight(64, constraints),
+            borderRadius: 12,
+            bgColor: Theme.of(context).primaryColor,
+            textColor: Theme.of(context).colorScheme.onPrimary,
+            buttonName: "Next".toUpperCase(),
+            innerPadding: 0.02,
+            trailingIcon: Icons.arrow_forward),
+      ),
     ];
   }
 
@@ -807,10 +864,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             primary: false,
             itemCount: loginProvider.certificationList.length,
             itemBuilder: (context, index) {
+              print(loginPageController.userCertification ==
+                  loginProvider.certificationList[index]);
+
               return InkWell(
                 onTap: () {
                   setState(() {
-                    loginPageController.userCertificates[index] = [];
+                    if (loginPageController.userCertificates.isNotEmpty) {
+                      if (loginPageController
+                          .userCertificates[index].isNotEmpty) {
+                        loginPageController.userCertificates[index] = [];
+                      }
+                    }
                     loginPageController.userCertification =
                         loginProvider.certificationList[index];
                     loginPageController
@@ -824,6 +889,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ? Theme.of(context).primaryColor
                       : Colors.transparent,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -840,8 +906,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     loginProvider.certificationList[index],
                                 onChanged: (boolean) {
                                   setState(() {
-                                    loginPageController
-                                        .userCertificates[index] = [];
+                                    if (loginPageController
+                                        .userCertificates.isNotEmpty) {
+                                      if (loginPageController
+                                          .userCertificates[index].isNotEmpty) {
+                                        loginPageController
+                                            .userCertificates[index] = [];
+                                      }
+                                    }
                                     loginPageController.userCertification =
                                         loginProvider.certificationList[index];
                                     loginPageController
@@ -869,13 +941,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               index != 5 &&
                               loginPageController.userCertification ==
                                   loginProvider.certificationList[index]
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
                                   const SizedBox(
                                     width: 42,
                                   ),
                                   Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const TextWidget(
                                         "Reference Number",
@@ -895,6 +971,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             },
                                             decoration: InputDecoration(
                                                 filled: true,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8,
+                                                        horizontal: 16),
                                                 fillColor: Colors.white,
                                                 counterStyle: fonts(
                                                     Theme.of(context)
@@ -910,8 +990,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                         ?.fontSize,
                                                     FontWeight.w500,
                                                     Colors.grey[400]),
-                                                prefixIcon: const Icon(
-                                                    Icons.phone_rounded),
                                                 hintText: 'Registration Number',
                                                 border: OutlineInputBorder(
                                                   borderSide: BorderSide.none,
@@ -940,6 +1018,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     width: 20,
                                   ),
                                   Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const TextWidget(
                                         "Upload Certificate",
@@ -948,23 +1028,42 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       Row(
                                         children: [
                                           MaterialButton(
-                                              padding: const EdgeInsets.all(0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 16),
                                               color: Colors.white,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(8)),
                                               onPressed: () {
                                                 showImagePickerSheet(
-                                                    onImageSelected:
-                                                        (XFile certificate) {
-                                                  loginPageController
-                                                      .userCertificates[index]
-                                                      .add(certificate);
-                                                });
+                                                  constraints: constraints,
+                                                  onImageSelected:
+                                                      (XFile certificate) {
+                                                    if (loginPageController
+                                                        .userCertificates
+                                                        .isEmpty) {
+                                                      for (var element
+                                                          in loginProvider
+                                                              .certificationList) {
+                                                        loginPageController
+                                                            .userCertificates
+                                                            .add([]);
+                                                      }
+                                                    }
+                                                    loginPageController
+                                                        .userCertificates[index]
+                                                        .add(certificate);
+                                                  },
+                                                );
                                               },
                                               child: const TextWidget(
                                                 "Choose File",
                                               )),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
                                           Icon(
                                             Icons.archive_rounded,
                                             color: Colors.white.withAlpha(150),
@@ -973,60 +1072,71 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       )
                                     ],
                                   )
-                                ])
+                                ],
+                              ),
+                            )
                           : const SizedBox(),
                       (loginProvider.isFarmer ? index != 0 : true) &&
                               index != 5 &&
+                              loginPageController.userCertificates.isNotEmpty &&
                               loginPageController.userCertification ==
                                   loginProvider.certificationList[index] &&
                               loginPageController
                                   .userCertificates[index].isNotEmpty
-                          ? ListView.builder(
-                              itemCount: loginPageController
-                                  .userCertificates[index].length,
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              primary: false,
-                              itemBuilder: (context, imageIndex) {
-                                // print(registrationController
-                                //    .userCertificates);
-                                return Stack(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Image.file(
-                                          File(loginPageController
-                                              .userCertificates[index]
-                                                  [imageIndex]
-                                              .path),
-                                          height: 96,
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                            color: Colors.red,
-                                            shape: BoxShape.circle),
-                                        child: IconButton(
-                                          onPressed: () {
-                                            loginPageController
-                                                .userCertificates[index]
-                                                .removeAt(imageIndex);
-                                            setState(() {});
-                                          },
-                                          icon: const Icon(
-                                            Icons.delete_rounded,
-                                            color: Colors.white,
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 96),
+                              child: SizedBox(
+                                height: 120,
+                                child: ListView.builder(
+                                  itemCount: loginPageController
+                                      .userCertificates[index].length,
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  primary: false,
+                                  itemBuilder: (context, imageIndex) {
+                                    // print(registrationController
+                                    //    .userCertificates);
+                                    return Stack(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: Image.file(
+                                              File(loginPageController
+                                                  .userCertificates[index]
+                                                      [imageIndex]
+                                                  .path),
+                                              height: 96,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              })
+                                        Positioned(
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                                color: Colors.red,
+                                                shape: BoxShape.circle),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                loginPageController
+                                                    .userCertificates[index]
+                                                    .removeAt(imageIndex);
+                                                setState(() {});
+                                              },
+                                              icon: const Icon(
+                                                Icons.delete_rounded,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            )
                           : const SizedBox()
                     ],
                   ),
@@ -1035,7 +1145,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             }),
       ),
       Padding(
-        padding: const EdgeInsets.only(bottom: 27),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 32,
+          vertical: 16,
+        ),
         child: ElevatedButtonWidget(
           onClick: () async {
             var formValidatedState = loginPageController

@@ -47,7 +47,7 @@ class LoginController extends ControllerMVC {
     'storeName': TextEditingController(),
     'reg_number': TextEditingController(),
   };
-  double landInAcres = 0;
+  double landInAcres = 1;
   String userCertification = "";
 
   XFile? profileImage;
