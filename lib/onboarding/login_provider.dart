@@ -204,6 +204,7 @@ class LoginProvider extends ChangeNotifier {
       Function(String, bool, String, String) onSuccessfulLogin,
       Function(String) onError,
       Function onRegisterUser) {
+    print(response?.body);
     if (response?.statusCode == 200) {
       var decodedResponse =
           jsonDecode(response?.body ?? '{"message": {},"status": true}');
