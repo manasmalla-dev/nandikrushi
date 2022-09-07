@@ -70,25 +70,46 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
       };
       return Stack(
         children: [
-          Scaffold(
-            body: widgetOptions[_selectedIndex],
-            bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              items: navItems.entries
-                  .map((e) => BottomNavigationBarItem(
-                      icon: Icon(e.value[0]),
-                      activeIcon: Icon(e.value[1]),
-                      label: e.key))
-                  .toList(),
-              backgroundColor: Colors.white,
-              currentIndex: _selectedIndex,
-              onTap: (index) {
-                /*setState(() {
+          constraints.maxWidth < 600
+              ? Scaffold(
+                  body: widgetOptions[_selectedIndex],
+                  bottomNavigationBar: BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
+                    items: navItems.entries
+                        .map((e) => BottomNavigationBarItem(
+                            icon: Icon(e.value[0]),
+                            activeIcon: Icon(e.value[1]),
+                            label: e.key))
+                        .toList(),
+                    backgroundColor: Colors.white,
+                    currentIndex: _selectedIndex,
+                    onTap: (index) {
+                      /*setState(() {
                   _selectedIndex = index;
                 });*/
-              },
-            ),
-          ),
+                    },
+                  ),
+                )
+              : Row(
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.all(8),
+                      child: NavigationRail(
+                          groupAlignment: 0,
+                          labelType: NavigationRailLabelType.all,
+                          extended: constraints.maxWidth > 1200,
+                          destinations: navItems.entries
+                              .map((e) => NavigationRailDestination(
+                                  icon: Icon(e.value[0]),
+                                  selectedIcon: Icon(e.value[1]),
+                                  label: Text(e.key)))
+                              .toList(),
+                          selectedIndex: _selectedIndex),
+                    ),
+                    Expanded(child: widgetOptions[_selectedIndex])
+                  ],
+                ),
           Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
             return profileProvider.shouldShowLoader
                 ? LoaderScreen()
