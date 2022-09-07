@@ -184,19 +184,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Padding(
                       padding: EdgeInsets.only(
                           top: getProportionateHeight(150, constraints)),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: Column(
-                            children: registrationDetailsFirstPage(
-                                loginProvider, constraints),
-                          )),
-                          Expanded(
-                              child: Column(
-                            children: registrationDetailsSecondPage(
-                                loginProvider, constraints),
-                          )),
-                        ],
+                      child: SingleChildScrollView(
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: Column(
+                              children: registrationDetailsFirstPage(
+                                  loginProvider, constraints),
+                            )),
+                            Expanded(
+                                child: Column(
+                              children: registrationDetailsSecondPage(
+                                  loginProvider, constraints),
+                            )),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -755,47 +757,50 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ),
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 32,
-          vertical: 16,
-        ),
-        child: ElevatedButtonWidget(
-            onClick: () async {
-              var formValidatedState = loginPageController
-                      .registrationFormKey.currentState
-                      ?.validate() ??
-                  false;
+      constraints.maxWidth < 500
+          ? Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 32,
+                vertical: 16,
+              ),
+              child: ElevatedButtonWidget(
+                  onClick: () async {
+                    var formValidatedState = loginPageController
+                            .registrationFormKey.currentState
+                            ?.validate() ??
+                        false;
 
-              if (formValidatedState) {
-                if (loginPageController.profileImage == null) {
-                  formValidatedState = false;
-                  snackbar(
-                      context,
-                      "Please upload ${loginProvider.isFarmer ? "the Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "your" : "your"} image");
-                }
-                if (!loginProvider.isFarmer) {
-                  if (loginPageController.storeLogo == null) {
-                    formValidatedState = false;
-                    snackbar(context,
-                        "Please upload the ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"}'s logo");
-                  }
-                }
-                if (formValidatedState) {
-                  await loginPageController.pageController.animateToPage(1,
-                      duration: const Duration(milliseconds: 400),
-                      curve: Curves.easeInOut);
-                }
-              }
-            },
-            height: getProportionateHeight(64, constraints),
-            borderRadius: 12,
-            bgColor: Theme.of(context).primaryColor,
-            textColor: Theme.of(context).colorScheme.onPrimary,
-            buttonName: "Next".toUpperCase(),
-            innerPadding: 0.02,
-            trailingIcon: Icons.arrow_forward),
-      ),
+                    if (formValidatedState) {
+                      if (loginPageController.profileImage == null) {
+                        formValidatedState = false;
+                        snackbar(
+                            context,
+                            "Please upload ${loginProvider.isFarmer ? "the Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "your" : "your"} image");
+                      }
+                      if (!loginProvider.isFarmer) {
+                        if (loginPageController.storeLogo == null) {
+                          formValidatedState = false;
+                          snackbar(context,
+                              "Please upload the ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"}'s logo");
+                        }
+                      }
+                      if (formValidatedState) {
+                        await loginPageController.pageController.animateToPage(
+                            1,
+                            duration: const Duration(milliseconds: 400),
+                            curve: Curves.easeInOut);
+                      }
+                    }
+                  },
+                  height: getProportionateHeight(64, constraints),
+                  borderRadius: 12,
+                  bgColor: Theme.of(context).primaryColor,
+                  textColor: Theme.of(context).colorScheme.onPrimary,
+                  buttonName: "Next".toUpperCase(),
+                  innerPadding: 0.02,
+                  trailingIcon: Icons.arrow_forward),
+            )
+          : const SizedBox(),
     ];
   }
 
@@ -864,9 +869,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             primary: false,
             itemCount: loginProvider.certificationList.length,
             itemBuilder: (context, index) {
-              print(loginPageController.userCertification ==
-                  loginProvider.certificationList[index]);
-
               return InkWell(
                 onTap: () {
                   setState(() {
@@ -922,18 +924,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         ?.text = "";
                                   });
                                 }),
-                            SizedBox(
-                              width: getProportionateWidth(256, constraints),
-                              child: TextWidget(
-                                loginProvider.certificationList[index],
-                                weight: FontWeight.w500,
-                                color: loginPageController.userCertification ==
-                                        loginProvider.certificationList[index]
-                                    ? loginProvider.userAppTheme.key
-                                            .contains("Restaraunts")
-                                        ? Colors.green[900]
-                                        : Colors.white
-                                    : Colors.black,
+                            Expanded(
+                              child: SizedBox(
+                                child: TextWidget(
+                                  loginProvider.certificationList[index],
+                                  weight: FontWeight.w500,
+                                  color: loginPageController
+                                              .userCertification ==
+                                          loginProvider.certificationList[index]
+                                      ? loginProvider.userAppTheme.key
+                                              .contains("Restaraunts")
+                                          ? Colors.green[900]
+                                          : Colors.white
+                                      : Colors.black,
+                                ),
                               ),
                             )
                           ]),
@@ -949,70 +953,77 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   const SizedBox(
                                     width: 42,
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const TextWidget(
-                                        "Reference Number",
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: getProportionateWidth(
-                                            136, constraints),
-                                        child: Form(
-                                          key: loginPageController
-                                              .registrationFormSecondPageKey,
-                                          child: TextFormField(
-                                            textInputAction:
-                                                TextInputAction.done,
-                                            onChanged: (_) {
-                                              setState(() {});
-                                            },
-                                            decoration: InputDecoration(
-                                                filled: true,
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 8,
-                                                        horizontal: 16),
-                                                fillColor: Colors.white,
-                                                counterStyle: fonts(
-                                                    Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall
-                                                        ?.fontSize,
-                                                    FontWeight.normal,
-                                                    Colors.white),
-                                                hintStyle: fonts(
-                                                    Theme.of(context)
-                                                        .textTheme
-                                                        .bodyMedium
-                                                        ?.fontSize,
-                                                    FontWeight.w500,
-                                                    Colors.grey[400]),
-                                                hintText: 'Registration Number',
-                                                border: OutlineInputBorder(
-                                                  borderSide: BorderSide.none,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                ),
-                                                isDense: true,
-                                                errorBorder: InputBorder.none),
-                                            validator: (value) {
-                                              if (value?.isEmpty ?? false) {
-                                                snackbar(context,
-                                                    "Please enter a valid certificate registration number");
-                                              }
-                                              return null;
-                                            },
-                                            controller: loginPageController
-                                                    .registrationPageFormControllers[
-                                                "reg_number"],
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const TextWidget(
+                                          "Reference Number",
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          width: getProportionateWidth(
+                                              136, constraints),
+                                          child: Form(
+                                            key: loginPageController
+                                                .registrationFormSecondPageKey,
+                                            child: TextFormField(
+                                              textInputAction:
+                                                  TextInputAction.done,
+                                              onChanged: (_) {
+                                                setState(() {});
+                                              },
+                                              decoration: InputDecoration(
+                                                  filled: true,
+                                                  contentPadding:
+                                                      const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 8,
+                                                          horizontal: 16),
+                                                  fillColor: Colors.white,
+                                                  counterStyle: fonts(
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall
+                                                          ?.fontSize,
+                                                      FontWeight.normal,
+                                                      Colors.white),
+                                                  hintStyle: fonts(
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.fontSize,
+                                                      FontWeight.w500,
+                                                      Colors.grey[400]),
+                                                  hintText:
+                                                      'Registration Number',
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide.none,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                  ),
+                                                  isDense: true,
+                                                  errorBorder:
+                                                      InputBorder.none),
+                                              validator: (value) {
+                                                if (value?.isEmpty ?? false) {
+                                                  snackbar(context,
+                                                      "Please enter a valid certificate registration number");
+                                                  return " ";
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
+                                              controller: loginPageController
+                                                      .registrationPageFormControllers[
+                                                  "reg_number"],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 20,
@@ -1071,7 +1082,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         ],
                                       )
                                     ],
-                                  )
+                                  ),
+                                  const SizedBox(
+                                    width: 24,
+                                  ),
                                 ],
                               ),
                             )
@@ -1151,37 +1165,106 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
         child: ElevatedButtonWidget(
           onClick: () async {
-            var formValidatedState = loginPageController
-                    .registrationFormSecondPageKey.currentState
-                    ?.validate() ??
-                false;
+            if (constraints.maxWidth < 500) {
+              var formValidatedState = loginPageController
+                      .registrationFormSecondPageKey.currentState
+                      ?.validate() ??
+                  false;
 
-            if (formValidatedState &&
-                loginPageController.landInAcres > 1 &&
-                loginPageController.userCertification.isNotEmpty &&
-                loginPageController.userCertificates
-                    .where((element) => element.isNotEmpty)
-                    .isNotEmpty) {
-              loginProvider.registerUser(
-                  loginPageController: loginPageController,
-                  onError: (error) {
-                    snackbar(context, error);
-                  },
-                  onSuccess: (name, _, uID, cID) {
-                    snackbar(
-                        context, "Welcome to the Nandikrushi family, $name!",
-                        isError: false);
-                    loginProvider.showLoader();
-                    context.setAsReturningUser(uID, cID);
-                    Navigator.maybeOf(context)?.push(
-                      MaterialPageRoute(
-                        builder: (context) => NandikrushiNavHost(
-                          userId: uID,
-                          customerId: cID,
+              if (formValidatedState &&
+                  loginPageController.landInAcres > 1 &&
+                  loginPageController.userCertification.isNotEmpty &&
+                  loginPageController.userCertificates
+                      .where((element) => element.isNotEmpty)
+                      .isNotEmpty) {
+                loginProvider.registerUser(
+                    loginPageController: loginPageController,
+                    onError: (error) {
+                      snackbar(context, error);
+                    },
+                    onSuccess: (name, _, uID, cID) {
+                      snackbar(
+                          context, "Welcome to the Nandikrushi family, $name!",
+                          isError: false);
+                      loginProvider.showLoader();
+                      context.setAsReturningUser(uID);
+                      Navigator.maybeOf(context)?.push(
+                        MaterialPageRoute(
+                          builder: (context) => NandikrushiNavHost(
+                            userId: uID,
+                          ),
                         ),
-                      ),
-                    );
-                  });
+                      );
+                    });
+              }
+            } else {
+              var formValidatedState = loginPageController
+                      .registrationFormKey.currentState
+                      ?.validate() ??
+                  false;
+
+              if (formValidatedState) {
+                if (loginPageController.profileImage == null) {
+                  formValidatedState = false;
+                  snackbar(
+                      context,
+                      "Please upload ${loginProvider.isFarmer ? "the Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "your" : "your"} image");
+                }
+                if (!loginProvider.isFarmer) {
+                  if (loginPageController.storeLogo == null) {
+                    formValidatedState = false;
+                    snackbar(context,
+                        "Please upload the ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"}'s logo");
+                  }
+                }
+
+                if (formValidatedState) {
+                  var formValidatedState = loginPageController
+                          .registrationFormSecondPageKey.currentState
+                          ?.validate() ??
+                      true;
+
+                  if (loginPageController.landInAcres > 1) {
+                    if (formValidatedState &&
+                        loginPageController.userCertification.isNotEmpty) {
+                      if ((loginPageController.userCertification.isNotEmpty &&
+                              loginPageController.userCertificates
+                                  .where((element) => element.isNotEmpty)
+                                  .isNotEmpty) ||
+                          loginPageController
+                                  .registrationFormSecondPageKey.currentState ==
+                              null) {
+                        loginProvider.registerUser(
+                            loginPageController: loginPageController,
+                            onError: (error) {
+                              snackbar(context, error);
+                            },
+                            onSuccess: (name, _, uID, cID) {
+                              snackbar(context,
+                                  "Welcome to the Nandikrushi family, $name!",
+                                  isError: false);
+                              loginProvider.showLoader();
+                              context.setAsReturningUser(uID);
+                              Navigator.maybeOf(context)?.push(
+                                MaterialPageRoute(
+                                  builder: (context) => NandikrushiNavHost(
+                                    userId: uID,
+                                  ),
+                                ),
+                              );
+                            });
+                      } else {
+                        snackbar(context, "Please upload a valid certificate");
+                      }
+                    } else {
+                      snackbar(context, "Please select a certification type");
+                    }
+                  } else {
+                    snackbar(context,
+                        "Please select your cultivated land in acres with the slider");
+                  }
+                }
+              }
             }
           },
           height: getProportionateHeight(64, constraints),

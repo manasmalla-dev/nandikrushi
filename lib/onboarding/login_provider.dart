@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -173,6 +174,8 @@ class LoginProvider extends ChangeNotifier {
           onError("Couldn't verify your phone number, Error: $exception");
           hideLoader();
         }
+      } else {
+        hideLoader();
       }
     }
   }
@@ -204,11 +207,11 @@ class LoginProvider extends ChangeNotifier {
       Function(String, bool, String, String) onSuccessfulLogin,
       Function(String) onError,
       Function onRegisterUser) {
-    print(response?.body);
     if (response?.statusCode == 200) {
       var decodedResponse =
           jsonDecode(response?.body ?? '{"message": {},"status": true}');
-      if (decodedResponse["status"]) {
+      print(response?.body);
+      if (decodedResponse["status"].toString().contains("true")) {
         if (decodedResponse["message"].toString().contains("No Data Found")) {
           onRegisterUser();
           hideLoader();
@@ -282,13 +285,17 @@ class LoginProvider extends ChangeNotifier {
           cloudLocation: "logo");
     }
     List<String> certificatesURLs = [];
-    await Future.forEach<XFile>(
-        loginPageController.userCertificates
-            .firstWhere((element) => element.isNotEmpty), (element) async {
-      String urlData = await uploadFilesToCloud(element,
-          cloudLocation: "legal_docs", fileType: ".jpg");
-      certificatesURLs.add(urlData);
-    });
+    if (loginPageController.userCertificates
+        .where((element) => element.isEmpty)
+        .isNotEmpty) {
+      await Future.forEach<XFile>(
+          loginPageController.userCertificates
+              .firstWhere((element) => element.isNotEmpty), (element) async {
+        String urlData = await uploadFilesToCloud(element,
+            cloudLocation: "legal_docs", fileType: ".jpg");
+        certificatesURLs.add(urlData);
+      });
+    }
     Map<String, String> body = {
       "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
       "firstname": loginPageController
@@ -319,9 +326,12 @@ class LoginProvider extends ChangeNotifier {
       "seller_image": sellerImageURL.toString(),
       "additional_comments": "Farmer is the backbone of India",
       "additional_documents": loginPageController.userCertification,
-      "upload_document": certificatesURLs.first.toString(),
+      "upload_document": certificatesURLs
+          .toString(), //TODO: Check with backend on how to parse data
       "store_address": jsonEncode(userAddress),
-      "store_status": 1.toString()
+      "store_status": 1.toString(),
+      "language":
+          (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
       // "agree": "1"
     };
     if (!isFarmer) {
@@ -335,6 +345,15 @@ class LoginProvider extends ChangeNotifier {
         MapEntry(
           "store_logo",
           storeLogoURL.toString(),
+        )
+      ]);
+    } else {
+      //TODO: Check with backend
+      body.addEntries([
+        const MapEntry("seller_storename", "Farmer"),
+        MapEntry(
+          "store_logo",
+          sellerImageURL,
         )
       ]);
     }

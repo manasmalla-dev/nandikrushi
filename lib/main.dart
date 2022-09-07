@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/firebase_options.dart';
+import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/splash_screen.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +16,12 @@ Future<void> main() async {
     ChangeNotifierProvider<LoginProvider>(
       create: (context) => LoginProvider(),
     ),
-    // ChangeNotifierProvider<ProfileProvider>(
-    //   create: (context) => ProfileProvider(),
-    // ),
+    ChangeNotifierProvider<ProductProvider>(
+      create: (context) => ProductProvider(),
+    ),
+    ChangeNotifierProvider<ProfileProvider>(
+      create: (context) => ProfileProvider(),
+    ),
   ], child: const MyApp()));
 }
 
