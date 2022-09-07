@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseAuth.instance.signOut();
+  //FirebaseAuth.instance.signOut();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<LoginProvider>(
       create: (context) => LoginProvider(),
