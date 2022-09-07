@@ -13,6 +13,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(context.isDarkMode);
     LoginController loginPageController = LoginController();
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
@@ -34,7 +35,7 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: context.isDarkMode
           ? Theme.of(context).colorScheme.background
-          : Theme.of(context).backgroundColor.withOpacity(0.2),
+          : Theme.of(context).primaryColor.withOpacity(0.2),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

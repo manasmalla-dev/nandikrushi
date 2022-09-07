@@ -180,6 +180,8 @@ class LoginController extends ControllerMVC {
         log("sucess");
         log(response.body);
         List<dynamic> values = jsonDecode(response.body)["message"];
+        values.retainWhere((element) =>
+            !element["name"].toString().toLowerCase().contains("default"));
         var iterables = values.map(
           (e) => MapEntry(
             e["name"].toString(),
@@ -214,7 +216,7 @@ class LoginController extends ControllerMVC {
         return userTypeData;
       } else {
         snackbar(context, "Failed to get data!");
-        log("failure");
+        log("failure ${response.statusCode}");
         var userTypeData = {
           "Farmer": Theme.of(context).primaryColor,
           "Organic Stores": const Color(0xFF00bba8),

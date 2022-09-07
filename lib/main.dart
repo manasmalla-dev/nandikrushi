@@ -37,10 +37,11 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Nandikrushi Farmer',
         theme: ThemeData(
-          primarySwatch: createMaterialColor(loginProvider.userAppTheme.value),
-          fontFamily: "Product Sans",
-          useMaterial3: true,
-        ),
+            primarySwatch:
+                createMaterialColor(loginProvider.userAppTheme.value),
+            fontFamily: "Product Sans",
+            useMaterial3: true,
+            brightness: Brightness.light),
         darkTheme: ThemeData(
           backgroundColor: Colors.grey.shade900,
           primarySwatch: createMaterialColor(
