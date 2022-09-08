@@ -50,8 +50,9 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
   var _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+    print("Hello123");
     return Scaffold(
-      body: widgetOptions[_selectedIndex],
+      body: Text("123"),
       bottomNavigationBar: BottomNavigationBar(
         items: navItems.entries
             .map((e) => BottomNavigationBarItem(
