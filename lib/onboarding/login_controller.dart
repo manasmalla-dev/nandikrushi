@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geocoding/geocoding.dart';
@@ -13,7 +14,7 @@ import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/onboarding.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
-import 'package:nandikrushi_farmer/utils/login_utils.dart';
+
 import 'package:nandikrushi_farmer/utils/server.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -126,36 +127,52 @@ class LoginController extends ControllerMVC {
     };*/
   }
 
-  checkUser(BuildContext context,
-      {required NavigatorState navigator,
+  checkUser(
+      {required Future<bool> isReturningUserFuture,
+      required NavigatorState navigator,
       required Function(Function) onNewUser,
       required LoginProvider loginProvider}) async {
-    var isReturningUser = await context.isReturningUser;
-
-    if (FirebaseAuth.instance.currentUser != null || isReturningUser) {
+    var isReturningUser = await isReturningUserFuture;
+    if (FirebaseAuth.instance.currentUser != null && isReturningUser) {
       var appTheme = await getAppTheme();
       loginProvider.updateUserAppType(appTheme);
       Timer(const Duration(milliseconds: 2000), () async {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         var uID = sharedPreferences.getString('userID')!;
-        var cID = sharedPreferences.getString('customerID')!;
+
         navigator.pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (_) => NandikrushiNavHost(
                       userId: uID,
-                      customerId: cID,
                     )),
             (route) => false);
       });
     } else {
-      onNewUser(() {
-        Timer(const Duration(milliseconds: 1000), () async {
+      if (Platform.isAndroid || Platform.isIOS || !isReturningUser) {
+        onNewUser(() {
+          Timer(const Duration(milliseconds: 1000), () async {
+            navigator.pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+                (route) => false);
+          });
+        });
+      } else {
+        var appTheme = await getAppTheme();
+        loginProvider.updateUserAppType(appTheme);
+        Timer(const Duration(milliseconds: 2000), () async {
+          SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          var uID = sharedPreferences.getString('userID')!;
+
           navigator.pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+              MaterialPageRoute(
+                  builder: (_) => NandikrushiNavHost(
+                        userId: uID,
+                      )),
               (route) => false);
         });
-      });
+      }
     }
   }
 

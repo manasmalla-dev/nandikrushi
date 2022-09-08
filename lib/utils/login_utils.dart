@@ -5,15 +5,12 @@ extension LoginUtils on BuildContext {
   Future<bool> get isReturningUser async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString('userID') != null &&
-        sharedPreferences.getString('customerID') != null &&
-        (sharedPreferences.getString('userID')?.isNotEmpty ?? false) &&
-        (sharedPreferences.getString('customerID')?.isNotEmpty ?? false);
+        (sharedPreferences.getString('userID')?.isNotEmpty ?? false);
   }
 
-  Future<bool> setAsReturningUser(String uId, String cId) async {
+  Future<bool> setAsReturningUser(String uId) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString('userID', uId);
-    return sharedPreferences.setString('customerID', cId);
+    return sharedPreferences.setString('userID', uId);
   }
 }
 

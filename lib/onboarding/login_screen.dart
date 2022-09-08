@@ -36,12 +36,11 @@ class _LoginScreenState extends State<LoginScreen> {
           snackbar(context,
               "Welcome ${isReturningUser ? "back" : "to the Nandikrushi family"}, $name!",
               isError: false);
-          context.setAsReturningUser(uID, cID);
+          context.setAsReturningUser(uID);
           data.showLoader();
           Navigator.maybeOf(context)?.push(MaterialPageRoute(
               builder: (context) => NandikrushiNavHost(
                     userId: uID,
-                    customerId: cID,
                   )));
         }, onError: (error) {
           snackbar(context, error);
@@ -72,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: const Color(0xFFFFFDD8),
           resizeToAvoidBottomInset: false,
           body: LayoutBuilder(builder: (context, constraints) {
-            return constraints.maxWidth < 600
+            return constraints.maxWidth < 600 //Portrait
                 ? Form(
                     key: data.isEmailLogin
                         ? loginPageController.emailFormKey
@@ -229,8 +228,10 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
                 validator: (value) {
                   if (value?.length != 10) {
                     snackbar(context, "Please enter a valid mobile number");
+                    return " ";
+                  } else {
+                    return null;
                   }
-                  return null;
                 },
                 maxLength: 10,
                 keyboardType: TextInputType.phone,
@@ -349,10 +350,6 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
         ),
         ElevatedButtonWidget(
           onClick: () async {
-            //if (data.shouldShowLoader) return;
-
-            /*await loginPageController!.dataToOTP(
-                                              context, loginProvider!);*/
             widget.onLogin(widget.isEmail);
           },
           height: getProportionateHeight(64, widget.constraints),
