@@ -72,10 +72,9 @@ class ProfileProvider extends ChangeNotifier {
           .toList();
       storeName = profileJSON["store_name"];
       storeLogo = profileJSON["store_logo"];
-      // storeAddress = (json.decode(profileJSON["store_address"]
-      //         .toString()
-      //         .replaceAll("&quot;", "")) as Map<dynamic, dynamic>)
-      //     .map((key, value) => MapEntry(key.toString(), value.toString()));
+      storeAddress =
+          (json.decode(profileJSON["store_address"]) as Map<dynamic, dynamic>)
+              .map((key, value) => MapEntry(key.toString(), value.toString()));
       isDataFetched = true;
       notifyListeners();
     } else if (response.statusCode == 400) {
