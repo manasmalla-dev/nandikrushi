@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<LoginProvider>(builder: (context, loginProvider, _) {
-      List homeAseets = [
+      List destinations = [
         {
           "title": "My Products",
           "sub_title": "View your Posted Products",
@@ -36,17 +36,25 @@ class _HomeScreenState extends State<HomeScreen> {
           "sub_title": "View your Order from Buyers",
           "icon": "assets/images/orders_home.png",
         },
-        {
-          "title": "My Purchases",
-          "sub_title": "Products from Farmer",
-          "icon": "assets/images/wallet_home.png",
-        },
+      ];
+      if (!loginProvider.isFarmer) {
+        destinations.add(
+          {
+            "title": "My Purchases",
+            "sub_title": "Products from Farmer",
+            "icon": "assets/images/wallet_home.png",
+          },
+        );
+      }
+      destinations.add(
         {
           "title": "Videos",
-          "sub_title": "Request Restaurant Video",
+          "sub_title": loginProvider.isFarmer
+              ? "Recommendations for Farmers"
+              : "Request Restaurant Video",
           "icon": "assets/images/videos_home.png",
         },
-      ];
+      );
       return Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(80),
@@ -73,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisCount: widget.constraints.maxWidth > 600 ? 3 : 2,
             childAspectRatio: widget.constraints.maxWidth > 600 ? 1 : (2.5 / 3),
             shrinkWrap: true,
-            children: List.generate(homeAseets.length, (index) {
+            children: List.generate(destinations.length, (index) {
               return InkWell(
                 onTap: () {
                   // if (index == 1) {
@@ -112,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         boxShadow: [
                           BoxShadow(
                               color: Colors.grey.shade300,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                               blurRadius: 15)
                         ],
                         borderRadius: BorderRadius.circular(15)),
@@ -124,12 +132,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Flexible(
                             child: Center(
-                                child: Image.asset(homeAseets[index]['icon']))),
+                                child:
+                                    Image.asset(destinations[index]['icon']))),
                         const SizedBox(
                           height: 24,
                         ),
                         TextWidget(
-                          homeAseets[index]['title'],
+                          destinations[index]['title'],
                           size:
                               Theme.of(context).textTheme.titleLarge?.fontSize,
                           weight: Theme.of(context)
@@ -138,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ?.fontWeight,
                         ),
                         TextWidget(
-                          homeAseets[index]['sub_title'],
+                          destinations[index]['sub_title'],
                           size: Theme.of(context).textTheme.bodySmall?.fontSize,
                           weight:
                               Theme.of(context).textTheme.bodySmall?.fontWeight,

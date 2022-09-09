@@ -73,20 +73,19 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
           constraints.maxWidth < 600
               ? Scaffold(
                   body: widgetOptions[_selectedIndex],
-                  bottomNavigationBar: BottomNavigationBar(
-                    type: BottomNavigationBarType.fixed,
-                    items: navItems.entries
-                        .map((e) => BottomNavigationBarItem(
+                  bottomNavigationBar: NavigationBar(
+                    destinations: navItems.entries
+                        .map((e) => NavigationDestination(
                             icon: Icon(e.value[0]),
-                            activeIcon: Icon(e.value[1]),
+                            selectedIcon: Icon(e.value[1]),
                             label: e.key))
                         .toList(),
                     backgroundColor: Colors.white,
-                    currentIndex: _selectedIndex,
-                    onTap: (index) {
-                      /*setState(() {
-                  _selectedIndex = index;
-                });*/
+                    selectedIndex: _selectedIndex,
+                    onDestinationSelected: (index) {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
                     },
                   ),
                 )
@@ -94,10 +93,9 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
                   children: [
                     Container(
                       color: Colors.white,
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       child: NavigationRail(
                           groupAlignment: 0,
-                          labelType: NavigationRailLabelType.all,
                           extended: constraints.maxWidth > 1200,
                           destinations: navItems.entries
                               .map((e) => NavigationRailDestination(
@@ -112,8 +110,8 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
                 ),
           Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
             return profileProvider.shouldShowLoader
-                ? LoaderScreen()
-                : SizedBox();
+                ? const LoaderScreen()
+                : const SizedBox();
           }),
         ],
       );
