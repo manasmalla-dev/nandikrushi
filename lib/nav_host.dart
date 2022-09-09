@@ -6,6 +6,7 @@ import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/nav_items/search.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/loader_screen.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:provider/provider.dart';
 
 class NandikrushiNavHost extends StatefulWidget {
@@ -28,7 +29,11 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
       ProductProvider productProvider =
           Provider.of<ProductProvider>(context, listen: false);
       profileProvider.showLoader();
-      profileProvider.getProfile(userID: widget.userId);
+      profileProvider.getProfile(
+          userID: widget.userId,
+          showMessage: (_) {
+            snackbar(context, _);
+          });
     });
   }
 

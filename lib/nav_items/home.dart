@@ -59,10 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(80),
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: const EdgeInsets.only(top: 32),
               child: AppBar(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.transparent,
                 elevation: 0,
                 title: Text(
                   "Nandikrushi",

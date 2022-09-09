@@ -141,12 +141,13 @@ class LoginController extends ControllerMVC {
             await SharedPreferences.getInstance();
         var uID = sharedPreferences.getString('userID')!;
 
-        navigator.pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (_) => NandikrushiNavHost(
-                      userId: uID,
-                    )),
-            (route) => false);
+        navigator.pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => NandikrushiNavHost(
+              userId: uID,
+            ),
+          ),
+        );
       });
     } else {
       if (Platform.isAndroid || Platform.isIOS || !isReturningUser) {

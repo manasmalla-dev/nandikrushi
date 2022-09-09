@@ -328,7 +328,7 @@ class LoginProvider extends ChangeNotifier {
       "additional_documents": loginPageController.userCertification,
       "upload_document": certificatesURLs
           .toString(), //TODO: Check with backend on how to parse data
-      "store_address": jsonEncode(userAddress),
+      "store_address": userAddress.toString(),
       "store_status": 1.toString(),
       "language":
           (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
@@ -357,6 +357,7 @@ class LoginProvider extends ChangeNotifier {
         )
       ]);
     }
+
     var response = await Server()
         .postFormData(
             body: body,
