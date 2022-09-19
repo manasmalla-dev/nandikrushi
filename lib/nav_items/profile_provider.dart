@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
 
@@ -47,6 +49,12 @@ class ProfileProvider extends ChangeNotifier {
         await Server().postFormData(body: {"user_id": userID}, url: url);
     if (response == null) {
       showMessage("Failed to get a response from the server!");
+      hideLoader();
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
       return;
     }
 
@@ -79,10 +87,28 @@ class ProfileProvider extends ChangeNotifier {
       notifyListeners();
     } else if (response.statusCode == 400) {
       showMessage("Undefined parameter when calling API");
+      hideLoader();
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
     } else if (response.statusCode == 404) {
       showMessage("API not found");
+      hideLoader();
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
     } else {
       showMessage("Failed to get data!");
+      hideLoader();
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
     }
     hideLoader();
   }
