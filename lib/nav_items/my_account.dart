@@ -1,10 +1,15 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
+import 'package:nandikrushi_farmer/nav_items/profile_screen.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
+import 'package:nandikrushi_farmer/splash_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class MyAccountScreen extends StatelessWidget {
@@ -29,7 +34,7 @@ class MyAccountScreen extends StatelessWidget {
                     listTileWithouTI(context,
                         title: "Logout",
                         leading: Icons.power_settings_new, ontap: () {
-                      //TODO: signOut(context);
+                      signOut(context);
                     }),
                     const Spacer(),
                     Opacity(
@@ -71,9 +76,11 @@ class MyAccountScreen extends StatelessWidget {
           : LayoutBuilder(builder: (context, constraints) {
               return Scaffold(
                 appBar: profileScreenAppBar(
-                  userName: "Manas Malla",
-                  userPhoneNumber: "+91 90591 45216",
-                  userEmail: "manasmalla.dev@gmail.com",
+                  userName:
+                      "${profileProvider.firstName} ${profileProvider.lastName}",
+                  userPhoneNumber: profileProvider.telephone,
+                  userEmail: profileProvider.email,
+                  userImage: profileProvider.sellerImage,
                   themeData: Theme.of(context),
                 ),
                 backgroundColor: Colors.white,
@@ -89,10 +96,10 @@ class MyAccountScreen extends StatelessWidget {
                               listTileWithouST(context,
                                   title: "Profile",
                                   leading: Icons.person, ontap: () {
-                                // Navigator.maybeOf(context)?.push(
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             const ProfileScreen()));
+                                Navigator.maybeOf(context)?.push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ProfileScreen()));
                               }),
                               listTileWithouST(context,
                                   title: "Address",
@@ -179,14 +186,14 @@ class MyAccountScreen extends StatelessWidget {
                               listTileWithouTI(context,
                                   title: "Share App",
                                   leading: Icons.share, ontap: () {
-                                // Share.share(
-                                //     "Install and explore the Nandikrushi Famrer app to shop your edibles",
-                                //     subject: 'Nandikrushi Farmer app');
+                                Share.share(
+                                    "Install and explore the Nandikrushi Farmer app to shop your edibles",
+                                    subject: 'Nandikrushi Farmer');
                               }),
                               listTileWithouTI(context,
                                   title: "Logout",
                                   leading: Icons.power_settings_new, ontap: () {
-                                //signOut(context);
+                                signOut(context);
                               }),
                             ],
                           ),
@@ -313,6 +320,94 @@ class MyAccountScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Future signOut(
+  BuildContext context,
+) {
+  return showModalBottomSheet(
+      context: context,
+      elevation: 22,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 450,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(top: 30),
+                  height: 160,
+                  child: Image.asset('assets/images/farmer_ploughing.png')),
+              SizedBox(
+                height: 54,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text('Logout',
+                    style: Theme.of(context).textTheme.headlineSmall),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text('Are Sure, You Want to Leave the App?',
+                    style: Theme.of(context).textTheme.titleSmall),
+              ),
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: ElevatedButtonWidget(
+                    height: 56,
+                    textColor: Colors.white,
+                    buttonName: 'Yes, I want to leave',
+                    textStyle: FontWeight.w600,
+                    borderRadius: 5.0,
+                    borderSideColor: Colors.indigo[900],
+                    onClick: () async {
+                      await FirebaseAuth.instance
+                          .signOut()
+                          .then((action) async {
+                        SharedPreferences sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        sharedPreferences.clear().then((value) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const SplashScreen()),
+                              (route) => false);
+                        });
+                      }).catchError((e) {
+                        log(e);
+                      });
+                    }),
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
+                child: ElevatedButtonWidget(
+                  bgColor: Colors.green[50],
+                  height: 56,
+                  textColor: Colors.grey[900],
+                  buttonName: 'Close',
+                  textStyle: FontWeight.w600,
+                  borderRadius: 5.0,
+                  borderSideColor: Colors.indigo[50],
+                  onClick: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      });
 }
 
 ListTile listTileWithouST(BuildContext context,

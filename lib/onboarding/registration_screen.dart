@@ -216,7 +216,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         builder: (context) {
           return Container(
-            height: getProportionateHeight(250, constraints),
+            height: getProportionateHeight(300, constraints),
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1169,33 +1169,46 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               var formValidatedState = loginPageController
                       .registrationFormSecondPageKey.currentState
                       ?.validate() ??
-                  false;
+                  true;
 
-              if (formValidatedState &&
-                  loginPageController.landInAcres > 1 &&
-                  loginPageController.userCertification.isNotEmpty &&
-                  loginPageController.userCertificates
-                      .where((element) => element.isNotEmpty)
-                      .isNotEmpty) {
-                loginProvider.registerUser(
-                    loginPageController: loginPageController,
-                    onError: (error) {
-                      snackbar(context, error);
-                    },
-                    onSuccess: (name, _, uID, cID) {
-                      snackbar(
-                          context, "Welcome to the Nandikrushi family, $name!",
-                          isError: false);
-                      loginProvider.showLoader();
-                      context.setAsReturningUser(uID);
-                      Navigator.maybeOf(context)?.push(
-                        MaterialPageRoute(
-                          builder: (context) => NandikrushiNavHost(
-                            userId: uID,
-                          ),
-                        ),
-                      );
-                    });
+              if (loginPageController.landInAcres > 1) {
+                if (formValidatedState &&
+                    loginPageController.userCertification.isNotEmpty) {
+                  if ((loginPageController.userCertification.isNotEmpty &&
+                          loginPageController.userCertificates
+                              .where((element) => element.isNotEmpty)
+                              .isNotEmpty) ||
+                      loginPageController
+                              .registrationFormSecondPageKey.currentState ==
+                          null) {
+                    loginProvider.registerUser(
+                        loginPageController: loginPageController,
+                        onError: (error) {
+                          snackbar(context, error);
+                        },
+                        onSuccess: (name, _, uID, cID) {
+                          snackbar(context,
+                              "Welcome to the Nandikrushi family, $name!",
+                              isError: false);
+                          loginProvider.showLoader();
+                          context.setAsReturningUser(uID);
+                          Navigator.maybeOf(context)?.push(
+                            MaterialPageRoute(
+                              builder: (context) => NandikrushiNavHost(
+                                userId: uID,
+                              ),
+                            ),
+                          );
+                        });
+                  } else {
+                    snackbar(context, "Please upload a valid certificate");
+                  }
+                } else {
+                  snackbar(context, "Please select a certification type");
+                }
+              } else {
+                snackbar(context,
+                    "Please select your cultivated land in acres with the slider");
               }
             } else {
               var formValidatedState = loginPageController

@@ -209,9 +209,15 @@ class LoginProvider extends ChangeNotifier {
       Function onRegisterUser) {
     if (response?.statusCode == 200) {
       var decodedResponse =
-          jsonDecode(response?.body ?? '{"message": {},"status": true}');
+          jsonDecode(response?.body ?? '{"message": {},"success": false}');
       print(response?.body);
-      if (decodedResponse["status"].toString().contains("true")) {
+      var statusCodeBody = false;
+      if (decodedResponse["success"] != null) {
+        statusCodeBody = decodedResponse["success"];
+      } else {
+        statusCodeBody = decodedResponse["status"];
+      }
+      if (statusCodeBody) {
         if (decodedResponse["message"].toString().contains("No Data Found")) {
           onRegisterUser();
           hideLoader();
@@ -350,7 +356,12 @@ class LoginProvider extends ChangeNotifier {
     } else {
       //TODO: Check with backend
       body.addEntries([
-        const MapEntry("seller_storename", "Farmer"),
+        MapEntry(
+            "seller_storename",
+            loginPageController
+                    .registrationPageFormControllers["first_name"]?.text
+                    .toString() ??
+                "XYZ"),
         MapEntry(
           "store_logo",
           sellerImageURL,

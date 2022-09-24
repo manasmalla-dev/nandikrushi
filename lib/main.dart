@@ -18,7 +18,7 @@ Future<void> main() async {
   if (!kIsWeb) {
     if (Platform.isAndroid) {
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.white,
       ));
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     }

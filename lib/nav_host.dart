@@ -29,97 +29,104 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
       ProductProvider productProvider =
           Provider.of<ProductProvider>(context, listen: false);
       profileProvider.showLoader();
-      profileProvider.getProfile(
-          userID: widget.userId,
-          showMessage: (_) {
-            snackbar(context, _);
-          });
+      productProvider.getData(showMessage: (_) {
+        snackbar(context, _);
+      }).then((_) {
+        profileProvider.getProfile(
+            userID: widget.userId,
+            showMessage: (_) {
+              snackbar(context, _);
+            });
+      });
     });
   }
 
-  var _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      List<Widget> widgetOptions = <Widget>[
-        Center(
-          child: HomeScreen(
-            constraints: constraints,
+    return Consumer<ProductProvider>(builder: (context, productProvider, _) {
+      return LayoutBuilder(builder: (context, constraints) {
+        List<Widget> widgetOptions = <Widget>[
+          Center(
+            child: HomeScreen(
+              constraints: constraints,
+            ),
           ),
-        ),
-        const Center(child: SearchScreen()),
-        const Center(
-          child: MyAccountScreen(),
-        ),
-        const Center(
-          child: BasketScreen(),
-        ),
-      ];
-      Map<String, List<IconData>> navItems = {
-        'Home': [
-          Icons.home_outlined,
-          Icons.home,
-        ],
-        'Search': [
-          Icons.search_outlined,
-          Icons.search,
-        ],
-        'My account': [
-          Icons.person_outline,
-          Icons.person,
-        ],
-        'Basket': [
-          Icons.shopping_basket_outlined,
-          Icons.shopping_basket,
-        ]
-      };
-      return Stack(
-        children: [
-          constraints.maxWidth < 600
-              ? Scaffold(
-                  body: widgetOptions[_selectedIndex],
-                  bottomNavigationBar: NavigationBar(
-                    destinations: navItems.entries
-                        .map((e) => NavigationDestination(
-                            icon: Icon(e.value[0]),
-                            selectedIcon: Icon(e.value[1]),
-                            label: e.key))
-                        .toList(),
-                    backgroundColor: Colors.white,
-                    selectedIndex: _selectedIndex,
-                    onDestinationSelected: (index) {
-                      setState(() {
-                        _selectedIndex = index;
-                      });
-                    },
-                  ),
-                )
-              : Row(
-                  children: [
-                    Container(
-                      color: Colors.white,
-                      padding: const EdgeInsets.all(8),
-                      child: NavigationRail(
-                          groupAlignment: 0,
-                          extended: constraints.maxWidth > 1200,
-                          destinations: navItems.entries
-                              .map((e) => NavigationRailDestination(
-                                  icon: Icon(e.value[0]),
-                                  selectedIcon: Icon(e.value[1]),
-                                  label: Text(e.key)))
-                              .toList(),
-                          selectedIndex: _selectedIndex),
+          const Center(child: SearchScreen()),
+          const Center(
+            child: MyAccountScreen(),
+          ),
+          const Center(
+            child: BasketScreen(),
+          ),
+        ];
+        Map<String, List<IconData>> navItems = {
+          'Home': [
+            Icons.home_outlined,
+            Icons.home,
+          ],
+          'Search': [
+            Icons.search_outlined,
+            Icons.search,
+          ],
+          'My account': [
+            Icons.person_outline,
+            Icons.person,
+          ],
+          'Basket': [
+            Icons.shopping_basket_outlined,
+            Icons.shopping_basket,
+          ]
+        };
+        return Stack(
+          children: [
+            constraints.maxWidth < 600
+                ? Scaffold(
+                    body: widgetOptions[productProvider.selectedIndex],
+                    bottomNavigationBar: NavigationBar(
+                      destinations: navItems.entries
+                          .map((e) => NavigationDestination(
+                              icon: Icon(e.value[0]),
+                              selectedIcon: Icon(e.value[1]),
+                              label: e.key))
+                          .toList(),
+                      backgroundColor: Colors.white,
+                      selectedIndex: productProvider.selectedIndex,
+                      onDestinationSelected: (index) {
+                        productProvider.changeScreen(index);
+                      },
                     ),
-                    Expanded(child: widgetOptions[_selectedIndex])
-                  ],
-                ),
-          Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
-            return profileProvider.shouldShowLoader
-                ? const LoaderScreen()
-                : const SizedBox();
-          }),
-        ],
-      );
+                  )
+                : Row(
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.all(8),
+                        child: NavigationRail(
+                            groupAlignment: 0,
+                            extended: constraints.maxWidth > 1200,
+                            onDestinationSelected: (value) {
+                              productProvider.changeScreen(value);
+                            },
+                            destinations: navItems.entries
+                                .map((e) => NavigationRailDestination(
+                                    icon: Icon(e.value[0]),
+                                    selectedIcon: Icon(e.value[1]),
+                                    label: Text(e.key)))
+                                .toList(),
+                            selectedIndex: productProvider.selectedIndex),
+                      ),
+                      Expanded(
+                          child: widgetOptions[productProvider.selectedIndex])
+                    ],
+                  ),
+            Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
+              return profileProvider.shouldShowLoader
+                  ? const LoaderScreen()
+                  : const SizedBox();
+            }),
+          ],
+        );
+      });
     });
   }
 }

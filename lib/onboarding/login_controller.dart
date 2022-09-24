@@ -6,10 +6,12 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_host.dart';
+import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/onboarding.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
@@ -103,28 +105,6 @@ class LoginController extends ControllerMVC {
         locationGeoCoded?.first.street ?? "";
     registrationPageFormControllers["mandal"]?.text =
         locationGeoCoded?.first.subLocality ?? "";
-  }
-
-  fetchUserData(context) {
-    //TODO: Manage fetching data for update api
-    /* var provider = Provider.of<RegistrationProvider>(context, listen: false);
-    log(provider.user.toString());
-    formControllers = {
-      'first_name': TextEditingController(text: provider.user?.firstName ?? ""),
-      'house_number':
-          TextEditingController(text: provider.user?.houseNumber ?? ""),
-      'city': TextEditingController(text: provider.user?.city ?? ""),
-      'mandal': TextEditingController(text: provider.user?.mandal ?? ""),
-      'district': TextEditingController(text: provider.user?.district ?? ""),
-      'state': TextEditingController(text: provider.user?.state ?? ""),
-      'pincode': TextEditingController(text: provider.user?.pincode ?? ""),
-      'email': TextEditingController(text: provider.user?.email ?? ""),
-      'password': TextEditingController(text: provider.user?.pass ?? ""),
-      'c_password': TextEditingController(text: provider.user?.cpass ?? ""),
-      'telePhone': TextEditingController(text: provider.user?.telePhone ?? ""),
-      'storeName': TextEditingController(
-          text: provider.user?.certificationRegisterationNumber ?? ""),
-    };*/
   }
 
   checkUser(
@@ -252,5 +232,40 @@ class LoginController extends ControllerMVC {
       };
       return userTypeData;
     }
+  }
+
+  Future<void> getDataFromProvider(ProfileProvider profileProvider) async {
+    registrationPageFormControllers = {
+      'first_name': TextEditingController(text: profileProvider.firstName),
+      'last_name': TextEditingController(text: profileProvider.lastName),
+      'house_number': TextEditingController(
+          text: profileProvider.storeAddress["houseNumber"]),
+      'city': TextEditingController(text: profileProvider.storeAddress["city"]),
+      'mandal':
+          TextEditingController(text: profileProvider.storeAddress["mandal"]),
+      'district':
+          TextEditingController(text: profileProvider.storeAddress["district"]),
+      'state':
+          TextEditingController(text: profileProvider.storeAddress["state"]),
+      'pincode':
+          TextEditingController(text: profileProvider.storeAddress["pincode"]),
+      'email': TextEditingController(text: profileProvider.email),
+      'password': TextEditingController(),
+      'c_password': TextEditingController(),
+      'telePhone': TextEditingController(
+          text: profileProvider.telephone
+              .replaceAll(" ", "")
+              .replaceFirst("+91", "")),
+      'storeName': TextEditingController(text: profileProvider.storeName),
+      'reg_number': TextEditingController(),
+    };
+    print(profileProvider.landInAcres);
+    landInAcres = profileProvider.landInAcres.toDouble();
+    userCertification = profileProvider.certificationType;
+    await get(Uri.parse(profileProvider.sellerImage))
+        .then((value) => profileImage = XFile.fromData(value.bodyBytes));
+    await get(Uri.parse(profileProvider.storeLogo))
+        .then((value) => storeLogo = XFile.fromData(value.bodyBytes));
+    //TODO: Add Certificates
   }
 }

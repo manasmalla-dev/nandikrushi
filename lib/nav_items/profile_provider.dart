@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
 
 class ProfileProvider extends ChangeNotifier {
@@ -71,7 +70,7 @@ class ProfileProvider extends ChangeNotifier {
       languageID = int.tryParse(profileJSON["language_id"]) ?? 1;
       customerGroupId = profileJSON["customer_group_id"];
       sellerType = profileJSON["seller_type"];
-      landInAcres = int.tryParse(profileJSON["land"]) ?? 1;
+      landInAcres = (double.tryParse(profileJSON["land"]) ?? 1.0).ceil();
       sellerImage = profileJSON["seller_image"];
       additionalComments = profileJSON["additional_comments"];
       certificationType = profileJSON["addtional_documents"];
@@ -80,9 +79,7 @@ class ProfileProvider extends ChangeNotifier {
           .toList();
       storeName = profileJSON["store_name"];
       storeLogo = profileJSON["store_logo"];
-      storeAddress =
-          (json.decode(profileJSON["store_address"]) as Map<dynamic, dynamic>)
-              .map((key, value) => MapEntry(key.toString(), value.toString()));
+      storeAddress = jsonStringToMap(profileJSON["store_address"]);
       isDataFetched = true;
       notifyListeners();
     } else if (response.statusCode == 400) {
@@ -111,5 +108,21 @@ class ProfileProvider extends ChangeNotifier {
       }
     }
     hideLoader();
+  }
+
+  Map<String, String> jsonStringToMap(String data) {
+    List<String> str = data
+        .replaceAll("{", "")
+        .replaceAll("}", "")
+        .replaceAll("\"", "")
+        .replaceAll("'", "")
+        .split(",");
+    Map<String, dynamic> result = {};
+    for (int i = 0; i < str.length; i++) {
+      List<String> s = str[i].split(":");
+      result.putIfAbsent(s[0].trim(), () => s[1].trim());
+    }
+    return result
+        .map((key, value) => MapEntry(key.toString(), value.toString()));
   }
 }
