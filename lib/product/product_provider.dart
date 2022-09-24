@@ -54,35 +54,47 @@ class ProductProvider extends ChangeNotifier {
       List<dynamic> decodedResponse = jsonDecode(response.body)["Products"];
       // log("64${decodedResponse}");
       decodedResponse.forEach((e) {
-        print(e.toString());
-        var element = {
-          'name': e["Products"][0]["product_name"].toString(),
-          'description': e["Products"][0]["description"].toString(),
-          'price':
-              (((double.tryParse(e["Products"][0]["final_price"].toString()) ??
-                                  0.0) *
-                              100)
-                          .roundToDouble() /
-                      100)
-                  .toString(),
-          "category_id": categories.entries
-              .where(
-                  (element) => element.value == e["category"][0]["category_id"])
-              .first
-              .key,
-          'product_id': e["Products"][0]["product_id"].toString(),
-          'units':
-              '${e["Products"][0]["min_purchase"]} ${e["Products"][0]["units"]}'
-                  .toString(),
-          'place': 'Paravada, Visakhapatnam.',
-          'url': e["Products"][0]["image"].toString()
-        };
-        log(element.toString());
-        products.add(element);
+        if (categories.entries
+            .where((element) =>
+                element.value ==
+                int.tryParse(e["category"][0]["category_id"] ?? "-1"))
+            .isNotEmpty) {
+          var element = {
+            'name': e["Products"][0]["product_name"].toString(),
+            'description': e["Products"][0]["description"].toString(),
+            'price': (((double.tryParse(e["Products"][0]["final_price"]
+                                    .toString()) ??
+                                0.0) *
+                            100)
+                        .roundToDouble() /
+                    100)
+                .toString(),
+            "category_id": categories.entries
+                .where((element) =>
+                    element.value ==
+                    int.tryParse(e["category"][0]["category_id"] ?? "-1"))
+                .first
+                .key,
+            'product_id': e["Products"][0]["product_id"].toString(),
+            'units':
+                '${e["Products"][0]["min_purchase"]} ${e["Products"][0]["units"]}'
+                    .toString(),
+            'place': 'Paravada, Visakhapatnam.',
+            'url': e["Products"][0]["image"].toString()
+          };
+          products.add(element);
+        }
       });
 
-      //TODO Prepare categorized list of items
-      log(products.toString());
+      categories.keys.forEach((element) {
+        categorizedProducts[element] = [];
+        products.forEach((product) {
+          if (product["category_id"] == element) {
+            categorizedProducts[element]?.add(product);
+          }
+        });
+      });
+      print(categorizedProducts);
     } else if (response.statusCode == 400) {
       showMessage("Undefined parameter when calling API");
       if (Platform.isAndroid) {
