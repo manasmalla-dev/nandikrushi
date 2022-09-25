@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
@@ -36,7 +37,7 @@ class BasketScreen extends StatelessWidget {
               ),
               items.isNotEmpty
                   ? TextWidget(
-                      '${items.map((e) => int.tryParse(e['quantity'] ?? "0") ?? 0).reduce((value, element) => value + element)} items',
+                      '${items.length} items',
                       size: Theme.of(context).textTheme.bodySmall?.fontSize,
                       color: Colors.grey[700],
                       weight: FontWeight.w500,
@@ -46,71 +47,104 @@ class BasketScreen extends StatelessWidget {
           ),
         ),
         body: items.isNotEmpty
-            ? Column(
-                children: [
-                  const Divider(),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 16, left: 24, right: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextWidget(
-                          'Delivery Charge',
-                          weight: FontWeight.w500,
-                          size: Theme.of(context).textTheme.bodyLarge?.fontSize,
-                        ),
-                        TextWidget(
-                          (4000 -
-                                      (items
-                                          .map((e) =>
-                                              (double.tryParse(
-                                                      e['price'] ?? "0") ??
-                                                  0) *
-                                              (double.tryParse(
-                                                      e['quantity'] ?? "0") ??
-                                                  0))
-                                          .reduce(
-                                            (value, element) => value + element,
-                                          ))) <=
-                                  0
-                              ? 'N/A'
-                              : 'Rs. 100.00',
-                          weight: FontWeight.w600,
-                          size: Theme.of(context).textTheme.bodyLarge?.fontSize,
-                        ),
-                      ],
+            ? SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListView.separated(
+                      separatorBuilder: ((context, index) {
+                        return const Divider();
+                      }),
+                      primary: false,
+                      shrinkWrap: true,
+                      itemCount: items.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: ((context, index) {
+                        return ProductCard(
+                            type: CardType.product,
+                            productName: items[index]["name"] ?? "",
+                            productDescription: "",
+                            imageURL: items[index]["url"] ?? "",
+                            price:
+                                double.tryParse(items[index]["price"] ?? "") ??
+                                    0.0,
+                            units: items[index]["unit"] ?? "",
+                            location: items[index]["place"] ?? "");
+                      }),
                     ),
-                  ),
-                  (4000 -
-                              (items
-                                  .map((e) =>
-                                      (double.tryParse(e['price'] ?? "0") ??
-                                          0) *
-                                      (double.tryParse(e['quantity'] ?? "0") ??
-                                          0))
-                                  .reduce(
-                                    (value, element) => value + element,
-                                  ))) <=
-                          0
-                      ? const SizedBox()
-                      : SizedBox(
-                          child: TextWidget(
-                            '!  Add items for Rs.${(4000 - (items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
-                                  (value, element) => value + element,
-                                ) + 100.00)).toStringAsFixed(2)} or more to avoid Delivery Charges',
-                            color: Colors.red,
+                    const Divider(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 16, left: 24, right: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextWidget(
+                            'Delivery Charge',
+                            weight: FontWeight.w500,
                             size:
                                 Theme.of(context).textTheme.bodyLarge?.fontSize,
-                            weight: FontWeight.bold,
                           ),
-                        ),
-                  const Divider(),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Expanded(
-                    child: Padding(
+                          TextWidget(
+                            (4000 -
+                                        (items
+                                            .map((e) =>
+                                                (double.tryParse(
+                                                        e['price'] ?? "0") ??
+                                                    0) *
+                                                (double.tryParse(
+                                                        e['quantity'] ?? "0") ??
+                                                    0))
+                                            .reduce(
+                                              (value, element) =>
+                                                  value + element,
+                                            ))) <=
+                                    0
+                                ? 'N/A'
+                                : 'Rs. 100.00',
+                            weight: FontWeight.w600,
+                            size:
+                                Theme.of(context).textTheme.bodyLarge?.fontSize,
+                          ),
+                        ],
+                      ),
+                    ),
+                    (4000 -
+                                (items
+                                    .map((e) =>
+                                        (double.tryParse(e['price'] ?? "0") ??
+                                            0) *
+                                        (double.tryParse(
+                                                e['quantity'] ?? "0") ??
+                                            0))
+                                    .reduce(
+                                      (value, element) => value + element,
+                                    ))) <=
+                            0
+                        ? const SizedBox()
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 16),
+                            child: SizedBox(
+                              child: TextWidget(
+                                '!  Add items for Rs.${(4000 - (items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                      (value, element) => value + element,
+                                    ) + 100.00)).toStringAsFixed(2)} or more to avoid delivery charges',
+                                color: Colors.red,
+                                size: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.fontSize,
+                                weight: FontWeight.bold,
+                                flow: TextOverflow.visible,
+                              ),
+                            ),
+                          ),
+                    const Divider(),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Padding(
                       padding: const EdgeInsets.only(
                           bottom: 16, left: 24, right: 24),
                       child: Row(
@@ -134,23 +168,29 @@ class BasketScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 16, left: 24, right: 24),
-                    child: ElevatedButtonWidget(
-                      borderRadius: 8,
-                      onClick: () {},
-                      height: 54,
-                      // borderRadius: 16,
-                      bgColor: Colors.grey.shade200,
-                      textColor: Colors.grey.shade700,
-                      textStyle: FontWeight.bold,
-                      buttonName: "Confirm Order".toUpperCase(),
-                      trailingIcon: Icons.arrow_forward,
+                    SizedBox(
+                      height: 24,
                     ),
-                  ),
-                ],
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 16, left: 24, right: 24),
+                        child: ElevatedButtonWidget(
+                          borderRadius: 8,
+                          onClick: () {},
+                          height: 54,
+                          // borderRadius: 16,
+                          bgColor: Colors.grey.shade200,
+                          textColor: Colors.grey.shade700,
+                          textStyle: FontWeight.bold,
+                          buttonName: "Confirm Order".toUpperCase(),
+                          trailingIcon: Icons.arrow_forward,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               )
             : Center(
                 child: Padding(

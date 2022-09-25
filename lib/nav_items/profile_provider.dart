@@ -29,6 +29,7 @@ class ProfileProvider extends ChangeNotifier {
   List<Map<String, String>> userAddresses = [];
 
   bool isDataFetched = false;
+  //TODO: Check if status is true and we recieved the data and then put isDataFethched true
 
   showLoader() {
     shouldShowLoader = true;
@@ -46,7 +47,11 @@ class ProfileProvider extends ChangeNotifier {
         "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getparticularuser";
     var response =
         await Server().postFormData(body: {"user_id": userID}, url: url);
-    if (response == null) {
+    //TODO: Videos API needs to be integrated
+    var userAddressResponse = await Server().postFormData(body: {
+      "customer_id": sellerID.toString()
+    }, url: "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/getallAddress");
+    if (response == null || userAddressResponse == null) {
       showMessage("Failed to get a response from the server!");
       hideLoader();
       if (Platform.isAndroid) {
@@ -57,7 +62,6 @@ class ProfileProvider extends ChangeNotifier {
       return;
     }
 
-    //TODO: Check if status is true and we recieved the data and then put isDataFethched true
     if (response.statusCode == 200) {
       Map<String, dynamic> profileJSON = jsonDecode(response.body)["message"];
       log(profileJSON.toString());
@@ -80,7 +84,33 @@ class ProfileProvider extends ChangeNotifier {
       storeName = profileJSON["store_name"];
       storeLogo = profileJSON["store_logo"];
       storeAddress = jsonStringToMap(profileJSON["store_address"]);
-      isDataFetched = true;
+      if (userAddressResponse.statusCode == 200) {
+        //TODO: Add to userAddress list
+      } else if (response.statusCode == 400) {
+        showMessage("Undefined parameter when calling API");
+        hideLoader();
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else if (Platform.isIOS) {
+          exit(0);
+        }
+      } else if (response.statusCode == 404) {
+        showMessage("API not found");
+        hideLoader();
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else if (Platform.isIOS) {
+          exit(0);
+        }
+      } else {
+        showMessage("Failed to get data!");
+        hideLoader();
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else if (Platform.isIOS) {
+          exit(0);
+        }
+      }
       notifyListeners();
     } else if (response.statusCode == 400) {
       showMessage("Undefined parameter when calling API");
@@ -107,7 +137,6 @@ class ProfileProvider extends ChangeNotifier {
         exit(0);
       }
     }
-    hideLoader();
   }
 
   Map<String, String> jsonStringToMap(String data) {

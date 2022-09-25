@@ -11,7 +11,7 @@ enum CardType {
 class ProductCard extends StatefulWidget {
   final CardType type;
   final String productName;
-  final String productDescription;
+  final String? productDescription;
   final String imageURL;
   final double price;
   final String units;
@@ -22,7 +22,7 @@ class ProductCard extends StatefulWidget {
       {Key? key,
       required this.type,
       required this.productName,
-      required this.productDescription,
+      this.productDescription,
       required this.imageURL,
       required this.price,
       required this.units,
@@ -49,7 +49,9 @@ class _ProductCardState extends State<ProductCard> {
                   widget.productName,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                TextWidget(widget.productDescription),
+                widget.productDescription != null
+                    ? TextWidget(widget.productDescription)
+                    : SizedBox(),
                 Row(
                   children: [
                     Image.network(

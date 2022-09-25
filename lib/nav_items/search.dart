@@ -60,6 +60,7 @@ class _SearchScreenState extends State<SearchScreen>
               ),
             ])),
             SliverAppBar(
+              leading: SizedBox(),
               toolbarHeight: 30,
               backgroundColor: Colors.white,
               flexibleSpace: Center(

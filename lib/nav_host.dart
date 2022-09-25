@@ -29,11 +29,15 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
       ProductProvider productProvider =
           Provider.of<ProductProvider>(context, listen: false);
       profileProvider.showLoader();
-      productProvider.getData(showMessage: (_) {
-        snackbar(context, _);
-      }).then((_) {
-        profileProvider.getProfile(
-            userID: widget.userId,
+      profileProvider
+          .getProfile(
+              userID: widget.userId,
+              showMessage: (_) {
+                snackbar(context, _);
+              })
+          .then((value) {
+        productProvider.getData(
+            profileProvider: profileProvider,
             showMessage: (_) {
               snackbar(context, _);
             });

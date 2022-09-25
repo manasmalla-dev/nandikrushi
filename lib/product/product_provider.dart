@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 
 import '../utils/server.dart';
 
@@ -33,9 +34,12 @@ class ProductProvider extends ChangeNotifier {
 
   List<Map<String, String>> cart = [];
   List<Map<String, String>> products = [];
+  List<Map<String, String>> orders = [];
   Map<String, List<Map<String, String>>> categorizedProducts = {};
 
-  getData({required Function(String) showMessage}) async {
+  getData(
+      {required Function(String) showMessage,
+      required ProfileProvider profileProvider}) async {
     var url =
         "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getallproducts";
     var response = await Server().getMethodParams(url);
@@ -94,7 +98,119 @@ class ProductProvider extends ChangeNotifier {
           }
         });
       });
-      print(categorizedProducts);
+      var ordersData = await Server().postFormData(
+          url:
+              "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getorders",
+          body: {"customer_id": profileProvider.sellerID.toString()});
+      if (ordersData == null) {
+        showMessage("Failed to get a response from the server!");
+        //hideLoader();
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else if (Platform.isIOS) {
+          exit(0);
+        }
+        return;
+      }
+      if (ordersData.statusCode == 200) {
+        if (!ordersData.body.contains('"status":false')) {
+          var orderJSONResponse = jsonDecode(ordersData.body);
+          log(orderJSONResponse.toString());
+          //TODO: Work with this data to add to orders list
+        }
+        var cartData = await Server().postFormData(
+            url:
+                "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/products",
+            body: {
+              "customer_id": profileProvider.sellerID.toString(),
+            });
+        if (cartData == null) {
+          showMessage("Failed to get a response from the server!");
+          //hideLoader();
+          if (Platform.isAndroid) {
+            SystemNavigator.pop();
+          } else if (Platform.isIOS) {
+            exit(0);
+          }
+          return;
+        }
+        if (cartData.statusCode == 200) {
+          if (!cartData.body.contains('"status":false')) {
+            List<dynamic> cartJSONResponse =
+                jsonDecode(cartData.body)["products"];
+            cart = cartJSONResponse.map((cartItem) {
+              var productCartItem = products
+                  .where((element) =>
+                      element["product_id"] ==
+                      (cartItem["product_id"].toString()))
+                  .first;
+              return {
+                "cart_id": cartItem["cart_id"].toString(),
+                "name": cartItem["name"].toString(),
+                'unit': productCartItem["units"].toString(),
+                "product_id": cartItem["product_id"].toString(),
+                "quantity": cartItem['quantity'].toString(),
+                'price': cartItem['price']
+                    .toString()
+                    .replaceFirst("\$", "")
+                    .toString(),
+                'place': productCartItem["place"].toString(),
+                'url': productCartItem["url"].toString()
+              };
+            }).toList();
+            log("CART: " + cart.toString());
+          }
+          //TODO: Add the my products API, purchases API, units API, subcategories API.
+          profileProvider.isDataFetched = true;
+          profileProvider.hideLoader();
+        } else if (cartData.statusCode == 400) {
+          showMessage("Undefined parameter when calling API");
+          if (Platform.isAndroid) {
+            SystemNavigator.pop();
+          } else if (Platform.isIOS) {
+            exit(0);
+          }
+        } else if (cartData.statusCode == 404) {
+          showMessage("API not found");
+          if (Platform.isAndroid) {
+            SystemNavigator.pop();
+          } else if (Platform.isIOS) {
+            exit(0);
+          }
+        } else {
+          showMessage("Failed to get data!");
+          if (Platform.isAndroid) {
+            SystemNavigator.pop();
+          } else if (Platform.isIOS) {
+            exit(0);
+          }
+        }
+        //TODO: Add the cart API,my products API, purchases API, search API, units API, subcategories API.
+        profileProvider.isDataFetched = true;
+        log(ordersData.body.toString());
+        profileProvider.hideLoader();
+      } else if (ordersData.statusCode == 400) {
+        showMessage("Undefined parameter when calling API");
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else if (Platform.isIOS) {
+          exit(0);
+        }
+      } else if (ordersData.statusCode == 404) {
+        showMessage("API not found");
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else if (Platform.isIOS) {
+          exit(0);
+        }
+      } else {
+        showMessage("Failed to get data!");
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else if (Platform.isIOS) {
+          exit(0);
+        }
+      }
     } else if (response.statusCode == 400) {
       showMessage("Undefined parameter when calling API");
       if (Platform.isAndroid) {
