@@ -98,7 +98,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 32),
                               padding:
-                                  const EdgeInsets.only(top: 8, bottom: 125),
+                                  const EdgeInsets.only(top: 8, bottom: 12),
                               decoration: BoxDecoration(
                                   color: Theme.of(context)
                                       .primaryColor
@@ -812,7 +812,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 185),
+                          padding: const EdgeInsets.all(16),
                           child: ElevatedButtonWidget(
                             onClick: () async {
                               List<String> urls = [];
