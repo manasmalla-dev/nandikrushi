@@ -46,171 +46,175 @@ class _SearchScreenState extends State<SearchScreen>
     return Consumer<ProductProvider>(builder: (context, productProvider, _) {
       return SafeArea(
         bottom: false,
-        child: CustomScrollView(
-          slivers: [
-            SliverList(
-                delegate: SliverChildListDelegate([
-              const SizedBox(
-                height: 280,
-                child: MapsContainer(),
-              ),
-              Container(
-                color: Colors.grey,
-                height: 2,
-              ),
-            ])),
-            SliverAppBar(
-              leading: SizedBox(),
-              toolbarHeight: 30,
-              backgroundColor: Colors.white,
-              flexibleSpace: Center(
-                child: TabBar(
-                  indicatorColor: Theme.of(context).primaryColor,
-                  controller: _controller,
-                  isScrollable: true,
-                  tabs: [
-                    Tab(
-                      child: TextWidget(
-                        tabs[0].toUpperCase(),
-                        weight: getTabBarTextFontWeight(0),
-                        color: getTabBarTextColor(0),
-                      ),
-                    ),
-                    Tab(
-                      child: TextWidget(
-                        tabs[1].toUpperCase(),
-                        weight: getTabBarTextFontWeight(1),
-                        color: getTabBarTextColor(1),
-                      ),
-                    ),
-                    Tab(
-                      child: TextWidget(
-                        tabs[2].toUpperCase(),
-                        weight: getTabBarTextFontWeight(2),
-                        color: getTabBarTextColor(2),
-                      ),
-                    ),
-                    Tab(
-                      child: TextWidget(
-                        tabs[3].toUpperCase(),
-                        weight: getTabBarTextFontWeight(3),
-                        color: getTabBarTextColor(3),
-                      ),
-                    ),
-                    Tab(
-                      child: TextWidget(
-                        tabs[4].toUpperCase(),
-                        weight: getTabBarTextFontWeight(4),
-                        color: getTabBarTextColor(4),
-                      ),
-                    ),
-                    Tab(
-                      child: TextWidget(
-                        tabs[5].toUpperCase(),
-                        weight: getTabBarTextFontWeight(5),
-                        color: getTabBarTextColor(5),
-                      ),
-                    ),
-                  ],
+        child: Material(
+          child: CustomScrollView(
+            slivers: [
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                const SizedBox(
+                  height: 280,
+                  child: MapsContainer(),
                 ),
-              ),
-              floating: false,
-              pinned: true,
-            ),
-            SliverFillRemaining(
-              child: Row(
-                children: [
-                  Container(
-                    height: double.infinity,
-                    color: Colors.grey.shade200,
-                    alignment: Alignment.center,
-                    width: 24,
-                    child: RotatedBox(
-                      quarterTurns: -1,
-                      child: TextWidget(
-                        tabs[_controller.index].toUpperCase(),
-                        weight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 72,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                          child: TextFieldWidget(
-                            onChanged: (_) {
-                              setState(() {});
-                            },
-                            onSubmitField: () {
-                              setState(() {});
-                            },
-                            textInputAction: TextInputAction.search,
-                            controller: searchController,
-                            label: "Search",
-                            style: Theme.of(context).textTheme.titleMedium,
-                            suffix: Container(
-                              margin: const EdgeInsets.all(12),
-                              child: ClipOval(
-                                  child: Container(
-                                      color: Theme.of(context).primaryColor,
-                                      padding: const EdgeInsets.all(0),
-                                      child: const Icon(
-                                        Icons.search_rounded,
-                                        color: Colors.white,
-                                      ))),
-                            ),
-                          ),
+                Container(
+                  color: Colors.grey,
+                  height: 2,
+                ),
+              ])),
+              SliverAppBar(
+                leading: SizedBox(),
+                toolbarHeight: 30,
+                backgroundColor: Colors.white,
+                flexibleSpace: Center(
+                  child: TabBar(
+                    indicatorColor: Theme.of(context).primaryColor,
+                    controller: _controller,
+                    isScrollable: true,
+                    tabs: [
+                      Tab(
+                        child: TextWidget(
+                          tabs[0].toUpperCase(),
+                          weight: getTabBarTextFontWeight(0),
+                          color: getTabBarTextColor(0),
                         ),
                       ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: _controller,
-                          children: List.generate(
-                              tabs.length,
-                              (tabIndex) => ListView.builder(
-                                    itemBuilder: (context, index) {
-                                      return ProductCard(
-                                          type: CardType.product,
-                                          productName:
-                                              productProvider.categorizedProducts[tabs[tabIndex]]
-                                                      ?[index]["name"] ??
-                                                  "Name",
-                                          productDescription:
-                                              productProvider.categorizedProducts[tabs[tabIndex]]
-                                                      ?[index]["description"] ??
-                                                  "Description",
-                                          imageURL: productProvider.categorizedProducts[tabs[tabIndex]]
-                                                  ?[index]["url"] ??
-                                              "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
-                                          price: double.tryParse(productProvider.categorizedProducts[tabs[tabIndex]]?[index]["price"] ?? "00.00") ??
-                                              00.00,
-                                          units: productProvider.categorizedProducts[tabs[tabIndex]]
-                                                  ?[index]["units"] ??
-                                              "1 unit",
-                                          location: productProvider.categorizedProducts[tabs[tabIndex]]?[index]["place"] ?? "Visakhapatnam");
-                                    },
-                                    itemCount: productProvider
-                                        .categorizedProducts[tabs[tabIndex]]
-                                        ?.length,
-                                    primary: false,
-                                    shrinkWrap: true,
-                                  )),
+                      Tab(
+                        child: TextWidget(
+                          tabs[1].toUpperCase(),
+                          weight: getTabBarTextFontWeight(1),
+                          color: getTabBarTextColor(1),
+                        ),
+                      ),
+                      Tab(
+                        child: TextWidget(
+                          tabs[2].toUpperCase(),
+                          weight: getTabBarTextFontWeight(2),
+                          color: getTabBarTextColor(2),
+                        ),
+                      ),
+                      Tab(
+                        child: TextWidget(
+                          tabs[3].toUpperCase(),
+                          weight: getTabBarTextFontWeight(3),
+                          color: getTabBarTextColor(3),
+                        ),
+                      ),
+                      Tab(
+                        child: TextWidget(
+                          tabs[4].toUpperCase(),
+                          weight: getTabBarTextFontWeight(4),
+                          color: getTabBarTextColor(4),
+                        ),
+                      ),
+                      Tab(
+                        child: TextWidget(
+                          tabs[5].toUpperCase(),
+                          weight: getTabBarTextFontWeight(5),
+                          color: getTabBarTextColor(5),
                         ),
                       ),
                     ],
-                  )),
-                ],
+                  ),
+                ),
+                floating: false,
+                pinned: true,
               ),
-            )
-          ],
+              SliverFillRemaining(
+                child: Row(
+                  children: [
+                    Container(
+                      height: double.infinity,
+                      color: Colors.grey.shade200,
+                      alignment: Alignment.center,
+                      width: 24,
+                      child: RotatedBox(
+                        quarterTurns: -1,
+                        child: TextWidget(
+                          tabs[_controller.index].toUpperCase(),
+                          weight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                        child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 72,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 24.0),
+                            child: TextFieldWidget(
+                              onChanged: (_) {
+                                setState(() {});
+                              },
+                              onSubmitField: () {
+                                setState(() {});
+                              },
+                              textInputAction: TextInputAction.search,
+                              controller: searchController,
+                              label: "Search",
+                              style: Theme.of(context).textTheme.titleMedium,
+                              suffix: Container(
+                                margin: const EdgeInsets.all(12),
+                                child: ClipOval(
+                                    child: Container(
+                                        color: Theme.of(context).primaryColor,
+                                        padding: const EdgeInsets.all(0),
+                                        child: const Icon(
+                                          Icons.search_rounded,
+                                          color: Colors.white,
+                                        ))),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            controller: _controller,
+                            children: List.generate(
+                                tabs.length,
+                                (tabIndex) => ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return ProductCard(
+                                            type: CardType.product,
+                                            productId: productProvider.categorizedProducts[tabs[tabIndex]]
+                                                    ?[index]["product_id"] ?? "XYZ",
+                                            productName: productProvider.categorizedProducts[tabs[tabIndex]]
+                                                    ?[index]["name"] ??
+                                                "Name",
+                                            productDescription: productProvider
+                                                        .categorizedProducts[tabs[tabIndex]]
+                                                    ?[index]["description"] ??
+                                                "Description",
+                                            imageURL: productProvider.categorizedProducts[tabs[tabIndex]]
+                                                    ?[index]["url"] ??
+                                                "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
+                                            price: double.tryParse(productProvider.categorizedProducts[tabs[tabIndex]]?[index]["price"] ?? "00.00") ??
+                                                00.00,
+                                            units: productProvider.categorizedProducts[tabs[tabIndex]]
+                                                    ?[index]["units"] ??
+                                                "1 unit",
+                                            location: productProvider.categorizedProducts[tabs[tabIndex]]?[index]["place"] ?? "Visakhapatnam");
+                                      },
+                                      itemCount: productProvider
+                                          .categorizedProducts[tabs[tabIndex]]
+                                          ?.length,
+                                      primary: false,
+                                      shrinkWrap: true,
+                                    )),
+                          ),
+                        ),
+                      ],
+                    )),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       );
     });

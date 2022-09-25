@@ -234,4 +234,16 @@ class ProductProvider extends ChangeNotifier {
       }
     }
   }
+
+  Future<void> addProductToCart(
+      {required String productID, required Function() onSuccessful}) async {
+    print("Add - $productID");
+    //TODO: Call the update cart api or add cart api and update cart, after that call getData function again
+  }
+
+  Future<void> removeProductFromCart(
+      {required String productID, required Function() onSuccessful}) async {
+    print("Remove - $productID");
+    //TODO: Call the update cart api or add cart api and update cart, after that call getData function again
+  }
 }

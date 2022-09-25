@@ -62,6 +62,7 @@ class BasketScreen extends StatelessWidget {
                       itemBuilder: ((context, index) {
                         return ProductCard(
                             type: CardType.product,
+                            productId: items[index]["product_id"] ?? "",
                             productName: items[index]["name"] ?? "",
                             productDescription: "",
                             imageURL: items[index]["url"] ?? "",

@@ -113,7 +113,8 @@ class LoginController extends ControllerMVC {
       required Function(Function) onNewUser,
       required LoginProvider loginProvider}) async {
     var isReturningUser = await isReturningUserFuture;
-    if (FirebaseAuth.instance.currentUser != null && isReturningUser) {
+    //TODO: Change it back to &&
+    if (FirebaseAuth.instance.currentUser != null || isReturningUser) {
       var appTheme = await getAppTheme();
       loginProvider.updateUserAppType(appTheme);
       Timer(const Duration(milliseconds: 2000), () async {
