@@ -4,8 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
+import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/success_screen.dart';
+import 'package:nandikrushi_farmer/utils/server.dart';
 import 'package:provider/provider.dart';
 
 class ProductController extends ControllerMVC {
@@ -22,7 +25,13 @@ class ProductController extends ControllerMVC {
   String? selectedUnits;
   String? selectedSubCategory;
 
-  addProduct(context, List<String> image, List<String> unitsList) async {
+  addProduct(
+      context,
+      List<String> image,
+      List<String> unitsList,
+      Function(String) showMessage,
+      ProductProvider productProvider,
+      ProfileProvider profileProvider) async {
     var data = {
       "name": formControllers['product-name']?.text,
       "category": selectedCategory,
@@ -67,29 +76,28 @@ class ProductController extends ControllerMVC {
       "description": description.toString(),
       "units": (unitsList.indexOf(units) + 1).toString(),
       //"category_id": product.category.toString(),
-      "category_id": "33", //categories[category].toString(),
+      "category_id": productProvider.categories[category].toString(),
       "seller_id": FirebaseAuth.instance.currentUser?.uid.toString() ?? "92",
     };
     image.asMap().entries.forEach((_) {
       body.addEntries([MapEntry("product_image[$_.key]", _.value)]);
     });
-
-    log(body.toString());
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SuccessScreen(
-                  body: body,
-                  isSuccess: true,
-                )));
-
-    /*Server()
-        .postMethodParems(body, API.addSellerProduct)
+    Server()
+        .postFormData(
+            body: body,
+            url:
+                "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/addsellerproduct")
         .then((response) async {
+      if (response == null) {
+        showMessage("Failed to get a response from the server!");
+        //hideLoader();
+        return;
+      }
       if (response.statusCode == 200) {
         log("sucess");
         log(response.body);
-        universalProvider.fetchData(context);
+        productProvider.getData(
+            showMessage: showMessage, profileProvider: profileProvider);
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -109,6 +117,7 @@ class ProductController extends ControllerMVC {
             "Unable to connect to the server! Error code: ${response.statusCode}");
         log("failure");
       }
-    });*/
+    });
+    log(body.toString());
   }
 }

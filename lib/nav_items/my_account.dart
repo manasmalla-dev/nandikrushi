@@ -457,7 +457,7 @@ listTileWithouTI(BuildContext context, {title, leading, VoidCallback? ontap}) {
 }
 
 dialCall() async {
-  const url = "tel:08341980196";
+  const url = "tel:8341980196";
   if (await canLaunchUrlString(url)) {
     await launchUrlString(url);
   } else {

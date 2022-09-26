@@ -179,30 +179,46 @@ class _SearchScreenState extends State<SearchScreen>
                                 tabs.length,
                                 (tabIndex) => ListView.builder(
                                       itemBuilder: (context, index) {
+                                        var product = productProvider
+                                            .categorizedProducts[tabs[tabIndex]]
+                                            ?.where((element) =>
+                                                element["name"]
+                                                    ?.toLowerCase()
+                                                    .contains(searchController
+                                                        .text
+                                                        .toLowerCase()) ??
+                                                true)
+                                            .toList()[index];
                                         return ProductCard(
                                             type: CardType.product,
-                                            productId: productProvider.categorizedProducts[tabs[tabIndex]]
-                                                    ?[index]["product_id"] ?? "XYZ",
-                                            productName: productProvider.categorizedProducts[tabs[tabIndex]]
-                                                    ?[index]["name"] ??
-                                                "Name",
-                                            productDescription: productProvider
-                                                        .categorizedProducts[tabs[tabIndex]]
-                                                    ?[index]["description"] ??
-                                                "Description",
-                                            imageURL: productProvider.categorizedProducts[tabs[tabIndex]]
-                                                    ?[index]["url"] ??
+                                            productId:
+                                                product?["product_id"] ?? "XYZ",
+                                            productName:
+                                                product?["name"] ?? "Name",
+                                            productDescription:
+                                                product?["description"] ??
+                                                    "Description",
+                                            imageURL: product?["url"] ??
                                                 "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
-                                            price: double.tryParse(productProvider.categorizedProducts[tabs[tabIndex]]?[index]["price"] ?? "00.00") ??
+                                            price: double.tryParse(
+                                                    product?["price"] ??
+                                                        "00.00") ??
                                                 00.00,
-                                            units: productProvider.categorizedProducts[tabs[tabIndex]]
-                                                    ?[index]["units"] ??
-                                                "1 unit",
-                                            location: productProvider.categorizedProducts[tabs[tabIndex]]?[index]["place"] ?? "Visakhapatnam");
+                                            units:
+                                                product?["units"] ?? "1 unit",
+                                            location: product?["place"] ??
+                                                "Visakhapatnam");
                                       },
                                       itemCount: productProvider
                                           .categorizedProducts[tabs[tabIndex]]
-                                          ?.length,
+                                          ?.where((element) =>
+                                              element["name"]
+                                                  ?.toLowerCase()
+                                                  .contains(searchController
+                                                      .text
+                                                      .toLowerCase()) ??
+                                              true)
+                                          .length,
                                       primary: false,
                                       shrinkWrap: true,
                                     )),

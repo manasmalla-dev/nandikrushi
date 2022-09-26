@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushi_farmer/nav_items/videos_screen.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/product/add_product.dart';
+import 'package:nandikrushi_farmer/product/my_products_page.dart';
+import 'package:nandikrushi_farmer/product/orders_page.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/utils/size_config.dart';
 import 'package:provider/provider.dart';
@@ -62,15 +65,18 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               color: Colors.transparent,
               padding: const EdgeInsets.only(top: 32),
-              child: AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                title: Text(
-                  "Nandikrushi",
-                  style: TextStyle(
-                      color: const Color(0xFF006838),
-                      fontFamily: 'Samarkan',
-                      fontSize: getProportionateHeight(32, widget.constraints)),
+              child: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Text(
+                    "Nandikrushi",
+                    style: TextStyle(
+                        color: const Color(0xFF006838),
+                        fontFamily: 'Samarkan',
+                        fontSize:
+                            getProportionateHeight(32, widget.constraints)),
+                  ),
                 ),
               ),
             ),
@@ -92,26 +98,27 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const AddProductScreen()));
-                      // } else if (index == 0) {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => const MyProductsScreen()));
-                      // } else if (index == 2) {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => const OrdersScreen()));
-                      // } else if (index == 3) {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => const PurchasesScreen()));
-                      // } else if (index == 4) {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => const VideosScreen()));
+                    } else if (index == 0) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MyProductsPage()));
+                    } else if (index == 2) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const OrdersPage()));
+                    } else if (index == 3 && !loginProvider.isFarmer) {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const PurchasesScreen()));
+                    } else if (index == 4 ||
+                        (loginProvider.isFarmer && index == 3)) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const VideosScreen()));
                     }
                   },
                   child: Padding(

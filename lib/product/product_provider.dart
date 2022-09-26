@@ -57,7 +57,7 @@ class ProductProvider extends ChangeNotifier {
       //  log(response.body);
       List<dynamic> decodedResponse = jsonDecode(response.body)["Products"];
       // log("64${decodedResponse}");
-      decodedResponse.forEach((e) {
+      for (var e in decodedResponse) {
         if (categories.entries
             .where((element) =>
                 element.value ==
@@ -88,16 +88,16 @@ class ProductProvider extends ChangeNotifier {
           };
           products.add(element);
         }
-      });
+      }
 
-      categories.keys.forEach((element) {
+      for (var element in categories.keys) {
         categorizedProducts[element] = [];
-        products.forEach((product) {
+        for (var product in products) {
           if (product["category_id"] == element) {
             categorizedProducts[element]?.add(product);
           }
-        });
-      });
+        }
+      }
       var ordersData = await Server().postFormData(
           url:
               "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getorders",
@@ -185,10 +185,6 @@ class ProductProvider extends ChangeNotifier {
             exit(0);
           }
         }
-        //TODO: Add the cart API,my products API, purchases API, search API, units API, subcategories API.
-        profileProvider.isDataFetched = true;
-        log(ordersData.body.toString());
-        profileProvider.hideLoader();
       } else if (ordersData.statusCode == 400) {
         showMessage("Undefined parameter when calling API");
         if (Platform.isAndroid) {
@@ -242,60 +238,73 @@ class ProductProvider extends ChangeNotifier {
       required ProfileProvider profileProvider}) async {
     var cartElementExists =
         cart.where((element) => element["product_id"] == productID).isNotEmpty;
-    String apiURL = cartElementExists
-        ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update"
-        : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/add";
-    var cartData = await Server().postFormData(url: apiURL, body: {
-      "customer_id": profileProvider.sellerID,
-      "product_id": productID,
-      "quantity": cartElementExists
-          ? ((int.tryParse(cart
-                              .where((element) =>
-                                  element["product_id"] == productID)
-                              .first["quantity"] ??
-                          "") ??
-                      0) +
-                  1)
-              .toString()
-          : 1.toString(),
-    });
-    if (cartData == null) {
-      showMessage("Failed to get a response from the server!");
-      //hideLoader();
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
-      return;
-    }
-    if (cartData.statusCode == 200) {
-      if (!cartData.body.contains('"status":false')) {
-        getData(showMessage: showMessage, profileProvider: profileProvider);
-      }
-      profileProvider.isDataFetched = true;
+    profileProvider.showLoader();
+    if (cartElementExists) {
+      //TODO: Show BS
+
+      // String apiURL =
+      //     "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update";
+      // var cartData = await Server().postFormData(url: apiURL, body: {
+      //   "customer_id": profileProvider.sellerID,
+      //   "product_id": productID,
+      //   "quantity": ((int.tryParse(cart
+      //                       .where(
+      //                           (element) => element["product_id"] == productID)
+      //                       .first["quantity"] ??
+      //                   "") ??
+      //               0) +
+      //           1)
+      //       .toString()
+      // });
+      // if (cartData == null) {
+      //   showMessage("Failed to get a response from the server!");
+      //   //hideLoader();
+      //   if (Platform.isAndroid) {
+      //     SystemNavigator.pop();
+      //   } else if (Platform.isIOS) {
+      //     exit(0);
+      //   }
+      //   return;
+      // }
+      // if (cartData.statusCode == 200) {
+      //   if (!cartData.body.contains('"status":false')) {
+      //     getData(showMessage: showMessage, profileProvider: profileProvider);
+      //   }
+      //   profileProvider.isDataFetched = true;
+      // } else if (cartData.statusCode == 400) {
+      //   showMessage("Undefined parameter when calling API");
+      // } else if (cartData.statusCode == 404) {
+      //   showMessage("API not found");
+      // } else {
+      //   showMessage("Failed to get data!");
+      // }
       profileProvider.hideLoader();
-    } else if (cartData.statusCode == 400) {
-      showMessage("Undefined parameter when calling API");
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
-    } else if (cartData.statusCode == 404) {
-      showMessage("API not found");
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
     } else {
-      showMessage("Failed to get data!");
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
+      String apiURL =
+          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/add";
+      var cartData = await Server().postFormData(url: apiURL, body: {
+        "customer_id": profileProvider.sellerID,
+        "product_id": productID,
+        "quantity": 1.toString(),
+      });
+      if (cartData == null) {
+        showMessage("Failed to get a response from the server!");
+        profileProvider.hideLoader();
+        return;
       }
+      if (cartData.statusCode == 200) {
+        if (!cartData.body.contains('"status":false')) {
+          getData(showMessage: showMessage, profileProvider: profileProvider);
+        }
+        profileProvider.isDataFetched = true;
+      } else if (cartData.statusCode == 400) {
+        showMessage("Undefined parameter when calling API");
+      } else if (cartData.statusCode == 404) {
+        showMessage("API not found");
+      } else {
+        showMessage("Failed to get data!");
+      }
+      profileProvider.hideLoader();
     }
   }
 
@@ -310,63 +319,72 @@ class ProductProvider extends ChangeNotifier {
                 "") ??
             0) >
         1;
-    String apiURL = cartElementExists
-        ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update"
-        : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove";
-    var body = {
-      "customer_id": profileProvider.sellerID,
-      "product_id": productID,
-    };
+    profileProvider.showLoader();
     if (cartElementExists) {
-      body.addAll({
-        "quantity": ((int.tryParse(cart
-                            .where(
-                                (element) => element["product_id"] == productID)
-                            .first["quantity"] ??
-                        "") ??
-                    0) -
-                1)
-            .toString()
-      });
-    }
-    var cartData = await Server().postFormData(url: apiURL, body: body);
-    if (cartData == null) {
-      showMessage("Failed to get a response from the server!");
-      //hideLoader();
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
-      return;
-    }
-    if (cartData.statusCode == 200) {
-      if (!cartData.body.contains('"status":false')) {
-        getData(showMessage: showMessage, profileProvider: profileProvider);
-      }
-      profileProvider.isDataFetched = true;
+      //TODO: Show BS
+
+      // String apiURL =
+      //     "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update";
+      // var body = {
+      //   "customer_id": profileProvider.sellerID,
+      //   "product_id": productID,
+      //   "quantity": ((int.tryParse(cart
+      //                       .where(
+      //                           (element) => element["product_id"] == productID)
+      //                       .first["quantity"] ??
+      //                   "") ??
+      //               0) -
+      //           1)
+      //       .toString()
+      // };
+
+      // var cartData = await Server().postFormData(url: apiURL, body: body);
+      // if (cartData == null) {
+      //   showMessage("Failed to get a response from the server!");
+      //   profileProvider.hideLoader();
+      //   return;
+      // }
+      // if (cartData.statusCode == 200) {
+      //   if (!cartData.body.contains('"status":false')) {
+      //     getData(showMessage: showMessage, profileProvider: profileProvider);
+      //   }
+      //   profileProvider.isDataFetched = true;
+      //   profileProvider.hideLoader();
+      // } else if (cartData.statusCode == 400) {
+      //   showMessage("Undefined parameter when calling API");
+      // } else if (cartData.statusCode == 404) {
+      //   showMessage("API not found");
+      // } else {
+      //   showMessage("Failed to get data!");
+      // }
       profileProvider.hideLoader();
-    } else if (cartData.statusCode == 400) {
-      showMessage("Undefined parameter when calling API");
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
-    } else if (cartData.statusCode == 404) {
-      showMessage("API not found");
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
     } else {
-      showMessage("Failed to get data!");
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
+      String apiURL =
+          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove";
+      var body = {
+        "customer_id": profileProvider.sellerID,
+        "product_id": productID,
+      };
+
+      var cartData = await Server().postFormData(url: apiURL, body: body);
+      if (cartData == null) {
+        showMessage("Failed to get a response from the server!");
+        profileProvider.hideLoader();
+        return;
       }
+      if (cartData.statusCode == 200) {
+        if (!cartData.body.contains('"status":false')) {
+          getData(showMessage: showMessage, profileProvider: profileProvider);
+        }
+        profileProvider.isDataFetched = true;
+      } else if (cartData.statusCode == 400) {
+        showMessage("Undefined parameter when calling API");
+      } else if (cartData.statusCode == 404) {
+        showMessage("API not found");
+      } else {
+        showMessage("Failed to get data!");
+      }
+      profileProvider.hideLoader();
     }
   }
 }
