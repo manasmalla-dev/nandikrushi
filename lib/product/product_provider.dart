@@ -236,14 +236,137 @@ class ProductProvider extends ChangeNotifier {
   }
 
   Future<void> addProductToCart(
-      {required String productID, required Function() onSuccessful}) async {
-    print("Add - $productID");
-    //TODO: Call the update cart api or add cart api and update cart, after that call getData function again
+      {required String productID,
+      required Function() onSuccessful,
+      required Function(String) showMessage,
+      required ProfileProvider profileProvider}) async {
+    var cartElementExists =
+        cart.where((element) => element["product_id"] == productID).isNotEmpty;
+    String apiURL = cartElementExists
+        ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update"
+        : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/add";
+    var cartData = await Server().postFormData(url: apiURL, body: {
+      "customer_id": profileProvider.sellerID,
+      "product_id": productID,
+      "quantity": cartElementExists
+          ? ((int.tryParse(cart
+                              .where((element) =>
+                                  element["product_id"] == productID)
+                              .first["quantity"] ??
+                          "") ??
+                      0) +
+                  1)
+              .toString()
+          : 1.toString(),
+    });
+    if (cartData == null) {
+      showMessage("Failed to get a response from the server!");
+      //hideLoader();
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+      return;
+    }
+    if (cartData.statusCode == 200) {
+      if (!cartData.body.contains('"status":false')) {
+        getData(showMessage: showMessage, profileProvider: profileProvider);
+      }
+      profileProvider.isDataFetched = true;
+      profileProvider.hideLoader();
+    } else if (cartData.statusCode == 400) {
+      showMessage("Undefined parameter when calling API");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    } else if (cartData.statusCode == 404) {
+      showMessage("API not found");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    } else {
+      showMessage("Failed to get data!");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    }
   }
 
   Future<void> removeProductFromCart(
-      {required String productID, required Function() onSuccessful}) async {
-    print("Remove - $productID");
-    //TODO: Call the update cart api or add cart api and update cart, after that call getData function again
+      {required String productID,
+      required Function() onSuccessful,
+      required Function(String) showMessage,
+      required ProfileProvider profileProvider}) async {
+    var cartElementExists = (int.tryParse(cart
+                    .where((element) => element["product_id"] == productID)
+                    .first["quantity"] ??
+                "") ??
+            0) >
+        1;
+    String apiURL = cartElementExists
+        ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update"
+        : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove";
+    var body = {
+      "customer_id": profileProvider.sellerID,
+      "product_id": productID,
+    };
+    if (cartElementExists) {
+      body.addAll({
+        "quantity": ((int.tryParse(cart
+                            .where(
+                                (element) => element["product_id"] == productID)
+                            .first["quantity"] ??
+                        "") ??
+                    0) -
+                1)
+            .toString()
+      });
+    }
+    var cartData = await Server().postFormData(url: apiURL, body: body);
+    if (cartData == null) {
+      showMessage("Failed to get a response from the server!");
+      //hideLoader();
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+      return;
+    }
+    if (cartData.statusCode == 200) {
+      if (!cartData.body.contains('"status":false')) {
+        getData(showMessage: showMessage, profileProvider: profileProvider);
+      }
+      profileProvider.isDataFetched = true;
+      profileProvider.hideLoader();
+    } else if (cartData.statusCode == 400) {
+      showMessage("Undefined parameter when calling API");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    } else if (cartData.statusCode == 404) {
+      showMessage("API not found");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    } else {
+      showMessage("Failed to get data!");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    }
   }
 }
