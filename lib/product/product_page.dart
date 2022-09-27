@@ -5,6 +5,7 @@ import 'package:nandikrushi_farmer/nav_items/my_account.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,194 @@ class _ProductPageState extends State<ProductPage> {
             elevation: 0,
             actions: [
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  var items = productProvider.cart;
+                  showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) {
+                        return StatefulBuilder(
+                            builder: (context, setSheetState) {
+                          return Container(
+                            height: 600,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16)),
+                            child: items.isNotEmpty
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextWidget(
+                                        'Basket',
+                                        size: Theme.of(context)
+                                            .textTheme
+                                            .headlineSmall
+                                            ?.fontSize,
+                                        color: Colors.grey[900],
+                                        weight: FontWeight.w700,
+                                      ),
+                                      items.isNotEmpty
+                                          ? TextWidget(
+                                              '${items.length} items',
+                                              size: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.fontSize,
+                                              color: Colors.grey[700],
+                                              weight: FontWeight.w500,
+                                            )
+                                          : const SizedBox(),
+                                      Expanded(
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ListView.separated(
+                                                separatorBuilder:
+                                                    ((context, index) {
+                                                  return const Divider();
+                                                }),
+                                                primary: false,
+                                                shrinkWrap: true,
+                                                itemCount: items.length,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemBuilder: ((context, index) {
+                                                  return ProductCard(
+                                                      type: CardType.product,
+                                                      productId: items[index]
+                                                              ["product_id"] ??
+                                                          "",
+                                                      productName: items[index]
+                                                              ["name"] ??
+                                                          "",
+                                                      productDescription: "",
+                                                      imageURL: items[index]
+                                                              ["url"] ??
+                                                          "",
+                                                      price: double.tryParse(
+                                                              items[index]["price"] ??
+                                                                  "") ??
+                                                          0.0,
+                                                      units: items[index]
+                                                              ["unit"] ??
+                                                          "",
+                                                      location: items[index]
+                                                              ["place"] ??
+                                                          "");
+                                                }),
+                                              ),
+                                              const SizedBox(
+                                                height: 12,
+                                              ),
+                                              Flexible(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 16,
+                                                          left: 24,
+                                                          right: 24),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      ElevatedButtonWidget(
+                                                        borderRadius: 8,
+                                                        onClick: () {},
+                                                        height: 54,
+                                                        // borderRadius: 16,
+                                                        bgColor: Colors
+                                                            .grey.shade200,
+                                                        textColor: Colors
+                                                            .grey.shade700,
+                                                        textStyle:
+                                                            FontWeight.bold,
+                                                        buttonName:
+                                                            "Select Address"
+                                                                .toUpperCase(),
+                                                        trailingIcon:
+                                                            Icons.arrow_forward,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(24.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Image(
+                                              image: AssetImage(
+                                                  'assets/images/empty_basket.png')),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          TextWidget(
+                                            'Basket Is Empty',
+                                            weight: FontWeight.w800,
+                                            size: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge
+                                                ?.fontSize,
+                                            color: Colors.grey.shade800,
+                                          ),
+                                          const SizedBox(
+                                            height: 12,
+                                          ),
+                                          TextWidget(
+                                            'Looks like you have no items in your shopping basket',
+                                            weight: FontWeight.w600,
+                                            color: Colors.grey,
+                                            flow: TextOverflow.visible,
+                                            align: TextAlign.center,
+                                            size: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.fontSize,
+                                          ),
+                                          const SizedBox(
+                                            height: 40,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 42),
+                                            child: ElevatedButtonWidget(
+                                              bgColor: Theme.of(context)
+                                                  .primaryColor,
+                                              trailingIcon: Icons.add_rounded,
+                                              buttonName:
+                                                  'Shop Items'.toUpperCase(),
+                                              textColor: Colors.white,
+                                              textStyle: FontWeight.w800,
+                                              borderRadius: 8,
+                                              innerPadding: 0.03,
+                                              onClick: () {
+                                                productProvider.changeScreen(1);
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                          );
+                        });
+                      });
+                },
                 child: SizedBox(
                   width: 50,
                   child: Stack(
@@ -164,94 +352,53 @@ class _ProductPageState extends State<ProductPage> {
                                         e["product_id"] ==
                                         widget.productDetails["product_id"])
                                     .isNotEmpty
-                                ? Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      OutlinedButton(
-                                        style: OutlinedButton.styleFrom(
-                                            tapTargetSize: MaterialTapTargetSize
-                                                .shrinkWrap,
-                                            minimumSize: Size.zero, // Set this
-                                            padding: const EdgeInsets.all(
-                                                4), // and this
-                                            side: const BorderSide(width: 1),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        100))),
-                                        onPressed: () {
-                                          productProvider.removeProductFromCart(
-                                              productID: widget.productDetails[
-                                                      "product_id"] ??
-                                                  "",
-                                              onSuccessful: () => null,
-                                              showMessage: (_) {
-                                                snackbar(context, _);
-                                              },
-                                              profileProvider: profileProvider);
-                                        },
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 4.0, vertical: 2),
-                                          child: Icon(
-                                            Icons.remove_rounded,
+                                ? OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        minimumSize: Size.zero, // Set this
+                                        padding:
+                                            const EdgeInsets.all(4), // and this
+                                        side: const BorderSide(width: 1),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(100))),
+                                    onPressed: () {
+                                      productProvider.modifyProductToCart(
+                                          context: context,
+                                          productID: widget.productDetails[
+                                                  "product_id"] ??
+                                              "",
+                                          onSuccessful: () => null,
+                                          showMessage: (_) {
+                                            snackbar(context, _);
+                                          },
+                                          profileProvider: profileProvider);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0, vertical: 2),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.edit,
                                             size: 14,
                                             color: Colors.black,
                                           ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text(
-                                        productProvider.cart
-                                                .where((e) =>
-                                                    e["product_id"] ==
-                                                    widget.productDetails[
-                                                        "product_id"])
-                                                .first["quantity"] ??
-                                            "0",
-                                        style:
-                                            Theme.of(context).textTheme.button,
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      OutlinedButton(
-                                        style: OutlinedButton.styleFrom(
-                                            tapTargetSize: MaterialTapTargetSize
-                                                .shrinkWrap,
-                                            minimumSize: Size.zero, // Set this
-                                            padding: const EdgeInsets.all(
-                                                4), // and this
-                                            side: const BorderSide(width: 1),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        100))),
-                                        onPressed: () {
-                                          productProvider.addProductToCart(
-                                              productID: widget.productDetails[
-                                                      "product_id"] ??
-                                                  "",
-                                              onSuccessful: () => null,
-                                              showMessage: (_) {
-                                                snackbar(context, _);
-                                              },
-                                              profileProvider: profileProvider);
-                                        },
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 4.0, vertical: 2),
-                                          child: Icon(
-                                            Icons.add,
-                                            size: 14,
-                                            color: Colors.black,
+                                          const SizedBox(
+                                            width: 6,
                                           ),
-                                        ),
+                                          TextWidget("Modify".toUpperCase(),
+                                              weight: FontWeight.bold,
+                                              size: Theme.of(context)
+                                                  .textTheme
+                                                  .button
+                                                  ?.fontSize),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   )
                                 : OutlinedButton(
                                     style: OutlinedButton.styleFrom(
@@ -266,6 +413,7 @@ class _ProductPageState extends State<ProductPage> {
                                                 BorderRadius.circular(100))),
                                     onPressed: () {
                                       productProvider.addProductToCart(
+                                          context: context,
                                           productID: widget.productDetails[
                                                   "product_id"] ??
                                               "",

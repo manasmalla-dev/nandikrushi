@@ -126,96 +126,7 @@ class _ProductCardState extends State<ProductCard> {
                           //A product card for search, and suggestions page and basket
                           Consumer<ProductProvider>(
                               builder: (context, productProvider, _) {
-                            return
-                                // ? Column(children: [
-                                //     Row(
-                                //       mainAxisAlignment:
-                                //           MainAxisAlignment.spaceEvenly,
-                                //       children: [
-                                //         OutlinedButton(
-                                //           style: OutlinedButton.styleFrom(
-                                //               tapTargetSize:
-                                //                   MaterialTapTargetSize
-                                //                       .shrinkWrap,
-                                //               minimumSize:
-                                //                   Size.zero, // Set this
-                                //               padding: const EdgeInsets.all(
-                                //                   4), // and this
-                                //               side: const BorderSide(width: 1),
-                                //               shape: RoundedRectangleBorder(
-                                //                   borderRadius:
-                                //                       BorderRadius.circular(
-                                //                           100))),
-                                //           onPressed: () {
-                                //             productProvider
-                                //                 .removeProductFromCart(
-                                //                     productID: widget.productId,
-                                //                     onSuccessful: () => null,
-                                //                     showMessage: (_) {
-                                //                       snackbar(context, _);
-                                //                     },
-                                //                     profileProvider:
-                                //                         profileProvider);
-                                //           },
-                                //           child: const Padding(
-                                //             padding: EdgeInsets.symmetric(
-                                //                 horizontal: 4.0, vertical: 2),
-                                //             child: Icon(
-                                //               Icons.remove_rounded,
-                                //               size: 14,
-                                //               color: Colors.black,
-                                //             ),
-                                //           ),
-                                //         ),
-                                //         Text(
-                                //           productProvider.cart
-                                //                   .where((e) =>
-                                //                       e["product_id"] ==
-                                //                       widget.productId)
-                                //                   .first["quantity"] ??
-                                //               "0",
-                                //           style: Theme.of(context)
-                                //               .textTheme
-                                //               .button,
-                                //         ),
-                                //         OutlinedButton(
-                                //           style: OutlinedButton.styleFrom(
-                                //               tapTargetSize:
-                                //                   MaterialTapTargetSize
-                                //                       .shrinkWrap,
-                                //               minimumSize:
-                                //                   Size.zero, // Set this
-                                //               padding: const EdgeInsets.all(
-                                //                   4), // and this
-                                //               side: const BorderSide(width: 1),
-                                //               shape: RoundedRectangleBorder(
-                                //                   borderRadius:
-                                //                       BorderRadius.circular(
-                                //                           100))),
-                                //           onPressed: () {
-                                //             productProvider.addProductToCart(
-                                //                 productID: widget.productId,
-                                //                 onSuccessful: () => null,
-                                //                 showMessage: (_) {
-                                //                   snackbar(context, _);
-                                //                 },
-                                //                 profileProvider:
-                                //                     profileProvider);
-                                //           },
-                                //           child: const Padding(
-                                //             padding: EdgeInsets.symmetric(
-                                //                 horizontal: 4.0, vertical: 2),
-                                //             child: Icon(
-                                //               Icons.add,
-                                //               size: 14,
-                                //               color: Colors.black,
-                                //             ),
-                                //           ),
-                                //         ),
-                                //       ],
-                                //     )
-                                //   ])
-                                IntrinsicWidth(
+                            return IntrinsicWidth(
                               child: Column(
                                 children: [
                                   productProvider.cart
@@ -238,7 +149,8 @@ class _ProductCardState extends State<ProductCard> {
                                                       BorderRadius.circular(
                                                           100))),
                                           onPressed: () {
-                                            productProvider.addProductToCart(
+                                            productProvider.modifyProductToCart(
+                                                context: context,
                                                 productID: widget.productId,
                                                 onSuccessful: () => null,
                                                 showMessage: (_) {
@@ -289,6 +201,7 @@ class _ProductCardState extends State<ProductCard> {
                                                           100))),
                                           onPressed: () {
                                             productProvider.addProductToCart(
+                                                context: context,
                                                 productID: widget.productId,
                                                 onSuccessful: () => null,
                                                 showMessage: (_) {

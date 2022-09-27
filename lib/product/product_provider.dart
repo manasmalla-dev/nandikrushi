@@ -4,7 +4,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 
 import '../utils/server.dart';
 
@@ -232,7 +235,8 @@ class ProductProvider extends ChangeNotifier {
   }
 
   Future<void> addProductToCart(
-      {required String productID,
+      {required BuildContext context,
+      required String productID,
       required Function() onSuccessful,
       required Function(String) showMessage,
       required ProfileProvider profileProvider}) async {
@@ -240,6 +244,12 @@ class ProductProvider extends ChangeNotifier {
         cart.where((element) => element["product_id"] == productID).isNotEmpty;
     profileProvider.showLoader();
     if (cartElementExists) {
+      modifyProductToCart(
+          context: context,
+          productID: productID,
+          onSuccessful: onSuccessful,
+          showMessage: showMessage,
+          profileProvider: profileProvider);
       //TODO: Show BS
 
       // String apiURL =
@@ -308,8 +318,210 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> modifyProductToCart(
+      {required BuildContext context,
+      required String productID,
+      required Function() onSuccessful,
+      required Function(String) showMessage,
+      required ProfileProvider profileProvider}) async {
+    profileProvider.showLoader();
+    var productDetails =
+        products.where((e) => e["product_id"] == productID).first;
+    var initialCartIems = int.tryParse(cart
+                .where((e) => e["product_id"] == productDetails["product_id"])
+                .first["quantity"] ??
+            "0") ??
+        0;
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setSheetState) {
+            return Container(
+              height: 300,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(16)),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          productDetails["name"] ?? "Product Name",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Text(
+                          productDetails["category_id"] ?? "Category",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        productDetails["description"] != null
+                            ? SizedBox(
+                                width: double.infinity,
+                                child: TextWidget(
+                                  productDetails["description"],
+                                  flow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            : const SizedBox(),
+                        TextWidget(
+                            "Rs. ${double.tryParse(productDetails["price"] ?? "")?.toStringAsFixed(2) ?? ""}"),
+                        TextWidget(productDetails["units"] ?? "1 unit"),
+                        Row(
+                          children: [
+                            const Icon(Icons.location_on_rounded),
+                            Expanded(
+                              child: TextWidget(
+                                productDetails["place"] ?? "Visakhapatnam",
+                                size: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  minimumSize: Size.zero, // Set this
+                                  padding: const EdgeInsets.all(4), // and this
+                                  side: const BorderSide(width: 1),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(100))),
+                              onPressed: () {
+                                setSheetState(() {
+                                  initialCartIems--;
+                                });
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 4.0, vertical: 2),
+                                child: Icon(
+                                  Icons.remove_rounded,
+                                  size: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 24,
+                            ),
+                            Text(
+                              initialCartIems.toString(),
+                              style: Theme.of(context).textTheme.button,
+                            ),
+                            const SizedBox(
+                              width: 24,
+                            ),
+                            OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  minimumSize: Size.zero, // Set this
+                                  padding: const EdgeInsets.all(4), // and this
+                                  side: const BorderSide(width: 1),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(100))),
+                              onPressed: () {
+                                setSheetState(() {
+                                  initialCartIems++;
+                                });
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 4.0, vertical: 2),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        ElevatedButtonWidget(
+                          onClick: () async {
+                            String apiURL = initialCartIems == 0
+                                ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove"
+                                : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update";
+                            var updateCartBody = {
+                              "customer_id": profileProvider.sellerID,
+                              "product_id": productID,
+                            };
+                            if (initialCartIems != 0) {
+                              updateCartBody.addAll({
+                                "quantity": initialCartIems.toString(),
+                              });
+                            }
+                            var cartData = await Server().postFormData(
+                                url: apiURL, body: updateCartBody);
+                            if (cartData == null) {
+                              showMessage(
+                                  "Failed to get a response from the server!");
+                              //hideLoader();
+                              if (Platform.isAndroid) {
+                                SystemNavigator.pop();
+                              } else if (Platform.isIOS) {
+                                exit(0);
+                              }
+                              return;
+                            }
+                            if (cartData.statusCode == 200) {
+                              if (!cartData.body.contains('"status":false')) {
+                                getData(
+                                    showMessage: showMessage,
+                                    profileProvider: profileProvider);
+                              }
+                              profileProvider.isDataFetched = true;
+                            } else if (cartData.statusCode == 400) {
+                              showMessage(
+                                  "Undefined parameter when calling API");
+                            } else if (cartData.statusCode == 404) {
+                              showMessage("API not found");
+                            } else {
+                              showMessage("Failed to get data!");
+                            }
+                            profileProvider.hideLoader();
+                          },
+                          height: 54,
+                          borderRadius: 8,
+                          bgColor: Theme.of(context).primaryColor,
+                          textColor: Colors.white,
+                          buttonName: "Update".toUpperCase(),
+                          innerPadding: 0.02,
+                          // textStyle: FontWeight.bold,
+                          trailingIcon: Icons.auto_fix_high_rounded,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Image.network(
+                      productDetails["url"] ?? "",
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+        });
+  }
+
   Future<void> removeProductFromCart(
-      {required String productID,
+      {required BuildContext context,
+      required String productID,
       required Function() onSuccessful,
       required Function(String) showMessage,
       required ProfileProvider profileProvider}) async {
@@ -322,7 +534,12 @@ class ProductProvider extends ChangeNotifier {
     profileProvider.showLoader();
     if (cartElementExists) {
       //TODO: Show BS
-
+      modifyProductToCart(
+          context: context,
+          productID: productID,
+          onSuccessful: onSuccessful,
+          showMessage: showMessage,
+          profileProvider: profileProvider);
       // String apiURL =
       //     "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update";
       // var body = {
