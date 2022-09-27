@@ -34,9 +34,11 @@ class TextFieldWidget extends StatelessWidget {
   final bool shouldShowCurreny;
   final bool obscureText;
   final String? Function(String?)? validator;
+  final bool shouldShowBorder;
 
   const TextFieldWidget({
     Key? key,
+    this.shouldShowBorder = true,
     this.text,
     this.hint,
     this.keyboardType,
@@ -91,13 +93,17 @@ class TextFieldWidget extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(vertical: 8),
         counterText: showCounter ? null : '',
         isDense: true,
-        focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Theme.of(context).primaryColor)),
-        border: UnderlineInputBorder(
-            borderSide: BorderSide(
-              color: borderColor ?? Colors.grey.shade500,
-            ),
-            borderRadius: BorderRadius.circular(borderRadius ?? 0)),
+        focusedBorder: shouldShowBorder
+            ? UnderlineInputBorder(
+                borderSide: BorderSide(color: Theme.of(context).primaryColor))
+            : InputBorder.none,
+        border: shouldShowBorder
+            ? UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: borderColor ?? Colors.grey.shade500,
+                ),
+                borderRadius: BorderRadius.circular(borderRadius ?? 0))
+            : InputBorder.none,
         hintStyle: fonts(Theme.of(context).textTheme.bodyMedium?.fontSize,
             FontWeight.w400, Colors.grey[400]),
         hintText: hint ?? '',

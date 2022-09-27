@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
@@ -30,53 +31,53 @@ class _AddProductScreenState extends State<AddProductScreen> {
       return LayoutBuilder(builder: (context, constraints) {
         return Scaffold(
           resizeToAvoidBottomInset: true,
-          body: Stack(children: [
-            const Positioned(
-              top: -30,
-              left: 200,
-              child: Image(
-                image: AssetImage("assets/images/ic_farmer.png"),
-              ),
-            ),
-            SizedBox(
-              height: 140,
-              child: Container(
-                margin: const EdgeInsets.only(top: 72),
-                padding: const EdgeInsets.symmetric(horizontal: 42),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Nandikrushi",
-                      style: TextStyle(
-                          color: calculateContrast(
-                                      const Color(0xFF769F77),
-                                      createMaterialColor(Theme.of(context)
-                                              .colorScheme
-                                              .primary)
-                                          .shade700) >
-                                  3
-                              ? createMaterialColor(
-                                      Theme.of(context).colorScheme.primary)
-                                  .shade700
-                              : createMaterialColor(
-                                      Theme.of(context).colorScheme.primary)
-                                  .shade100,
-                          fontFamily: 'Samarkan',
-                          fontSize: getProportionateHeight(32, constraints)),
-                    ),
-                    TextWidget(
-                      "Add Product".toUpperCase(),
-                      color: const Color(0xFF006838),
-                      weight: FontWeight.bold,
-                      size: Theme.of(context).textTheme.titleSmall?.fontSize,
-                    ),
-                  ],
+          body: SingleChildScrollView(
+            child: Stack(children: [
+              const Positioned(
+                top: -30,
+                left: 200,
+                child: Image(
+                  image: AssetImage("assets/images/ic_farmer.png"),
                 ),
               ),
-            ),
-            SingleChildScrollView(
-              child: Column(
+              SizedBox(
+                height: 140,
+                child: Container(
+                  margin: const EdgeInsets.only(top: 72),
+                  padding: const EdgeInsets.symmetric(horizontal: 42),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Nandikrushi",
+                        style: TextStyle(
+                            color: calculateContrast(
+                                        const Color(0xFF769F77),
+                                        createMaterialColor(Theme.of(context)
+                                                .colorScheme
+                                                .primary)
+                                            .shade700) >
+                                    3
+                                ? createMaterialColor(
+                                        Theme.of(context).colorScheme.primary)
+                                    .shade700
+                                : createMaterialColor(
+                                        Theme.of(context).colorScheme.primary)
+                                    .shade100,
+                            fontFamily: 'Samarkan',
+                            fontSize: getProportionateHeight(32, constraints)),
+                      ),
+                      TextWidget(
+                        "Add Product".toUpperCase(),
+                        color: const Color(0xFF006838),
+                        weight: FontWeight.bold,
+                        size: Theme.of(context).textTheme.titleSmall?.fontSize,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(
@@ -797,8 +798,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     height: 150,
-                                    padding: const EdgeInsets.all(4),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 6),
                                     child: TextFieldWidget(
+                                      hint: "Please share about your product",
+                                      shouldShowBorder: false,
                                       keyboardType: TextInputType.text,
                                       controller: addProductController
                                           .formControllers['description'],
@@ -811,8 +815,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             )
                           ],
                         ),
-                        Padding(
+                        Container(
                           padding: const EdgeInsets.all(16),
+                          margin: const EdgeInsets.only(bottom: 16),
                           child: ElevatedButtonWidget(
                             onClick: () async {
                               List<String> urls = [];
@@ -826,8 +831,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 urls.add(urlData);
                               });
                               if (urls.isNotEmpty) {
-                                addProductController.addProduct(context, urls,
-                                    productProvider.units.values.toList());
+                                ProfileProvider profileProvider =
+                                    Provider.of(context, listen: false);
+                                addProductController.addProduct(
+                                  context,
+                                  urls,
+                                  productProvider.units.values.toList(),
+                                  (_) {
+                                    snackbar(context, _);
+                                  },
+                                  productProvider,
+                                  profileProvider,
+                                );
                               } else {
                                 snackbar(context,
                                     "Please upload a picture of the product!");
@@ -849,8 +864,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ],
               ),
-            ),
-          ]),
+            ]),
+          ),
         );
       });
     });

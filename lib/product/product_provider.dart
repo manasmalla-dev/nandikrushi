@@ -57,7 +57,7 @@ class ProductProvider extends ChangeNotifier {
       //  log(response.body);
       List<dynamic> decodedResponse = jsonDecode(response.body)["Products"];
       // log("64${decodedResponse}");
-      decodedResponse.forEach((e) {
+      for (var e in decodedResponse) {
         if (categories.entries
             .where((element) =>
                 element.value ==
@@ -88,16 +88,16 @@ class ProductProvider extends ChangeNotifier {
           };
           products.add(element);
         }
-      });
+      }
 
-      categories.keys.forEach((element) {
+      for (var element in categories.keys) {
         categorizedProducts[element] = [];
-        products.forEach((product) {
+        for (var product in products) {
           if (product["category_id"] == element) {
             categorizedProducts[element]?.add(product);
           }
-        });
-      });
+        }
+      }
       var ordersData = await Server().postFormData(
           url:
               "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getorders",
@@ -185,10 +185,6 @@ class ProductProvider extends ChangeNotifier {
             exit(0);
           }
         }
-        //TODO: Add the cart API,my products API, purchases API, search API, units API, subcategories API.
-        profileProvider.isDataFetched = true;
-        log(ordersData.body.toString());
-        profileProvider.hideLoader();
       } else if (ordersData.statusCode == 400) {
         showMessage("Undefined parameter when calling API");
         if (Platform.isAndroid) {
@@ -236,14 +232,159 @@ class ProductProvider extends ChangeNotifier {
   }
 
   Future<void> addProductToCart(
-      {required String productID, required Function() onSuccessful}) async {
-    print("Add - $productID");
-    //TODO: Call the update cart api or add cart api and update cart, after that call getData function again
+      {required String productID,
+      required Function() onSuccessful,
+      required Function(String) showMessage,
+      required ProfileProvider profileProvider}) async {
+    var cartElementExists =
+        cart.where((element) => element["product_id"] == productID).isNotEmpty;
+    profileProvider.showLoader();
+    if (cartElementExists) {
+      //TODO: Show BS
+
+      // String apiURL =
+      //     "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update";
+      // var cartData = await Server().postFormData(url: apiURL, body: {
+      //   "customer_id": profileProvider.sellerID,
+      //   "product_id": productID,
+      //   "quantity": ((int.tryParse(cart
+      //                       .where(
+      //                           (element) => element["product_id"] == productID)
+      //                       .first["quantity"] ??
+      //                   "") ??
+      //               0) +
+      //           1)
+      //       .toString()
+      // });
+      // if (cartData == null) {
+      //   showMessage("Failed to get a response from the server!");
+      //   //hideLoader();
+      //   if (Platform.isAndroid) {
+      //     SystemNavigator.pop();
+      //   } else if (Platform.isIOS) {
+      //     exit(0);
+      //   }
+      //   return;
+      // }
+      // if (cartData.statusCode == 200) {
+      //   if (!cartData.body.contains('"status":false')) {
+      //     getData(showMessage: showMessage, profileProvider: profileProvider);
+      //   }
+      //   profileProvider.isDataFetched = true;
+      // } else if (cartData.statusCode == 400) {
+      //   showMessage("Undefined parameter when calling API");
+      // } else if (cartData.statusCode == 404) {
+      //   showMessage("API not found");
+      // } else {
+      //   showMessage("Failed to get data!");
+      // }
+      profileProvider.hideLoader();
+    } else {
+      String apiURL =
+          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/add";
+      var cartData = await Server().postFormData(url: apiURL, body: {
+        "customer_id": profileProvider.sellerID,
+        "product_id": productID,
+        "quantity": 1.toString(),
+      });
+      if (cartData == null) {
+        showMessage("Failed to get a response from the server!");
+        profileProvider.hideLoader();
+        return;
+      }
+      if (cartData.statusCode == 200) {
+        if (!cartData.body.contains('"status":false')) {
+          getData(showMessage: showMessage, profileProvider: profileProvider);
+        }
+        profileProvider.isDataFetched = true;
+      } else if (cartData.statusCode == 400) {
+        showMessage("Undefined parameter when calling API");
+      } else if (cartData.statusCode == 404) {
+        showMessage("API not found");
+      } else {
+        showMessage("Failed to get data!");
+      }
+      profileProvider.hideLoader();
+    }
   }
 
   Future<void> removeProductFromCart(
-      {required String productID, required Function() onSuccessful}) async {
-    print("Remove - $productID");
-    //TODO: Call the update cart api or add cart api and update cart, after that call getData function again
+      {required String productID,
+      required Function() onSuccessful,
+      required Function(String) showMessage,
+      required ProfileProvider profileProvider}) async {
+    var cartElementExists = (int.tryParse(cart
+                    .where((element) => element["product_id"] == productID)
+                    .first["quantity"] ??
+                "") ??
+            0) >
+        1;
+    profileProvider.showLoader();
+    if (cartElementExists) {
+      //TODO: Show BS
+
+      // String apiURL =
+      //     "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update";
+      // var body = {
+      //   "customer_id": profileProvider.sellerID,
+      //   "product_id": productID,
+      //   "quantity": ((int.tryParse(cart
+      //                       .where(
+      //                           (element) => element["product_id"] == productID)
+      //                       .first["quantity"] ??
+      //                   "") ??
+      //               0) -
+      //           1)
+      //       .toString()
+      // };
+
+      // var cartData = await Server().postFormData(url: apiURL, body: body);
+      // if (cartData == null) {
+      //   showMessage("Failed to get a response from the server!");
+      //   profileProvider.hideLoader();
+      //   return;
+      // }
+      // if (cartData.statusCode == 200) {
+      //   if (!cartData.body.contains('"status":false')) {
+      //     getData(showMessage: showMessage, profileProvider: profileProvider);
+      //   }
+      //   profileProvider.isDataFetched = true;
+      //   profileProvider.hideLoader();
+      // } else if (cartData.statusCode == 400) {
+      //   showMessage("Undefined parameter when calling API");
+      // } else if (cartData.statusCode == 404) {
+      //   showMessage("API not found");
+      // } else {
+      //   showMessage("Failed to get data!");
+      // }
+      profileProvider.hideLoader();
+    } else {
+      String apiURL =
+          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove";
+      var body = {
+        "customer_id": profileProvider.sellerID,
+        "product_id": productID,
+      };
+
+      var cartData = await Server().postFormData(url: apiURL, body: body);
+      if (cartData == null) {
+        showMessage("Failed to get a response from the server!");
+        profileProvider.hideLoader();
+        return;
+      }
+      if (cartData.statusCode == 200) {
+        if (!cartData.body.contains('"status":false')) {
+          getData(showMessage: showMessage, profileProvider: profileProvider);
+        }
+        profileProvider.isDataFetched = true;
+      } else if (cartData.statusCode == 400) {
+        showMessage("Undefined parameter when calling API");
+      } else if (cartData.statusCode == 404) {
+        showMessage("API not found");
+      } else {
+        showMessage("Failed to get data!");
+      }
+      profileProvider.hideLoader();
+    }
   }
 }
