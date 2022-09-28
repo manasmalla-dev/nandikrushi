@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/my_account.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
+import 'package:nandikrushi_farmer/product/address_bottom_sheet.dart';
 import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
@@ -32,7 +33,6 @@ class _ProductPageState extends State<ProductPage> {
             actions: [
               InkWell(
                 onTap: () {
-                  var items = productProvider.cart;
                   showModalBottomSheet(
                       context: context,
                       backgroundColor: Colors.transparent,
@@ -45,8 +45,9 @@ class _ProductPageState extends State<ProductPage> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(16)),
-                            child: items.isNotEmpty
+                            child: productProvider.cart.isNotEmpty
                                 ? Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
@@ -59,9 +60,9 @@ class _ProductPageState extends State<ProductPage> {
                                         color: Colors.grey[900],
                                         weight: FontWeight.w700,
                                       ),
-                                      items.isNotEmpty
+                                      productProvider.cart.isNotEmpty
                                           ? TextWidget(
-                                              '${items.length} items',
+                                              '${productProvider.cart.length} items',
                                               size: Theme.of(context)
                                                   .textTheme
                                                   .bodySmall
@@ -82,82 +83,105 @@ class _ProductPageState extends State<ProductPage> {
                                                 }),
                                                 primary: false,
                                                 shrinkWrap: true,
-                                                itemCount: items.length,
+                                                itemCount:
+                                                    productProvider.cart.length,
                                                 physics:
                                                     const NeverScrollableScrollPhysics(),
                                                 itemBuilder: ((context, index) {
                                                   return ProductCard(
                                                       type: CardType.product,
-                                                      productId: items[index]
+                                                      productId: productProvider
+                                                                  .cart[index]
                                                               ["product_id"] ??
                                                           "",
-                                                      productName: items[index]
-                                                              ["name"] ??
-                                                          "",
+                                                      productName:
+                                                          productProvider.cart[index]
+                                                                  ["name"] ??
+                                                              "",
                                                       productDescription: "",
-                                                      imageURL: items[index]
+                                                      imageURL: productProvider
+                                                                  .cart[index]
                                                               ["url"] ??
                                                           "",
-                                                      price: double.tryParse(
-                                                              items[index]["price"] ??
-                                                                  "") ??
+                                                      price: double.tryParse(productProvider.cart[index]["price"] ?? "") ??
                                                           0.0,
-                                                      units: items[index]
+                                                      units: productProvider
+                                                                  .cart[index]
                                                               ["unit"] ??
                                                           "",
-                                                      location: items[index]
-                                                              ["place"] ??
-                                                          "");
+                                                      location: productProvider.cart[index]["place"] ?? "");
                                                 }),
-                                              ),
-                                              const SizedBox(
-                                                height: 12,
-                                              ),
-                                              Flexible(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 16,
-                                                          left: 24,
-                                                          right: 24),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      ElevatedButtonWidget(
-                                                        borderRadius: 8,
-                                                        onClick: () {},
-                                                        height: 54,
-                                                        // borderRadius: 16,
-                                                        bgColor: Colors
-                                                            .grey.shade200,
-                                                        textColor: Colors
-                                                            .grey.shade700,
-                                                        textStyle:
-                                                            FontWeight.bold,
-                                                        buttonName:
-                                                            "Select Address"
-                                                                .toUpperCase(),
-                                                        trailingIcon:
-                                                            Icons.arrow_forward,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
                                               ),
                                             ],
                                           ),
                                         ),
                                       ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextWidget(
+                                                'Total'.toUpperCase(),
+                                                weight: FontWeight.w600,
+                                                size: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.fontSize,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                              TextWidget(
+                                                'Rs. ${(productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                                      (value, element) =>
+                                                          value + element,
+                                                    ) + 100.00).toStringAsFixed(2)}',
+                                                weight: FontWeight.w700,
+                                                size: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.fontSize,
+                                              ),
+                                            ],
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 16,
+                                                  left: 24,
+                                                  right: 24),
+                                              child: ElevatedButtonWidget(
+                                                iconColor: Colors.grey.shade700,
+                                                borderRadius: 8,
+                                                onClick: () {
+                                                  showAddressesBottomSheet(
+                                                      context,
+                                                      profileProvider,
+                                                      Theme.of(context));
+                                                },
+                                                height: 54,
+                                                // borderRadius: 16,
+                                                bgColor: Colors.grey.shade200,
+                                                textColor: Colors.grey.shade700,
+                                                textStyle: FontWeight.bold,
+                                                buttonName: "Select Address"
+                                                    .toUpperCase(),
+                                                trailingIcon:
+                                                    Icons.arrow_forward,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   )
                                 : Center(
                                     child: Padding(
-                                      padding: const EdgeInsets.all(24.0),
+                                      padding: const EdgeInsets.all(16.0),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [

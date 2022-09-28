@@ -21,6 +21,7 @@ class ProductProvider extends ChangeNotifier {
     "Milliliter": "ml",
     "Dozen": "dz"
   };
+
   changeScreen(int _) {
     selectedIndex = _;
     notifyListeners();
@@ -38,6 +39,7 @@ class ProductProvider extends ChangeNotifier {
   List<Map<String, String>> cart = [];
   List<Map<String, String>> products = [];
   List<Map<String, String>> orders = [];
+  List<Map<String, String>> coupons = [];
   Map<String, List<Map<String, String>>> categorizedProducts = {};
 
   getData(
@@ -165,6 +167,7 @@ class ProductProvider extends ChangeNotifier {
           }
           //TODO: Add the my products API, purchases API, units API, subcategories API.
           profileProvider.isDataFetched = true;
+          notifyListeners();
           profileProvider.hideLoader();
         } else if (cartData.statusCode == 400) {
           showMessage("Undefined parameter when calling API");
@@ -324,7 +327,6 @@ class ProductProvider extends ChangeNotifier {
       required Function() onSuccessful,
       required Function(String) showMessage,
       required ProfileProvider profileProvider}) async {
-    profileProvider.showLoader();
     var productDetails =
         products.where((e) => e["product_id"] == productID).first;
     var initialCartIems = int.tryParse(cart
@@ -453,6 +455,7 @@ class ProductProvider extends ChangeNotifier {
                         ),
                         ElevatedButtonWidget(
                           onClick: () async {
+                            profileProvider.showLoader();
                             String apiURL = initialCartIems == 0
                                 ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove"
                                 : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update";
@@ -493,6 +496,7 @@ class ProductProvider extends ChangeNotifier {
                             } else {
                               showMessage("Failed to get data!");
                             }
+                            Navigator.of(context).pop();
                             profileProvider.hideLoader();
                           },
                           height: 54,

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
+import 'package:nandikrushi_farmer/utils/login_utils.dart';
 
 class ProfileProvider extends ChangeNotifier {
   bool shouldShowLoader = false;
@@ -27,6 +28,7 @@ class ProfileProvider extends ChangeNotifier {
   String storeLogo = "";
   Map<String, String> storeAddress = {};
   List<Map<String, String>> userAddresses = [];
+  String userIdForAddress = "";
 
   bool isDataFetched = false;
   //TODO: Check if status is true and we recieved the data and then put isDataFethched true
@@ -43,15 +45,14 @@ class ProfileProvider extends ChangeNotifier {
 
   Future<void> getProfile(
       {required String userID, required Function(String) showMessage}) async {
+    userIdForAddress = userID;
     var url =
         "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getparticularuser";
     var response =
         await Server().postFormData(body: {"user_id": userID}, url: url);
     //TODO: Videos API needs to be integrated
-    var userAddressResponse = await Server().postFormData(body: {
-      "customer_id": sellerID.toString()
-    }, url: "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/getallAddress");
-    if (response == null || userAddressResponse == null) {
+
+    if (response == null) {
       showMessage("Failed to get a response from the server!");
       hideLoader();
       if (Platform.isAndroid) {
@@ -84,8 +85,35 @@ class ProfileProvider extends ChangeNotifier {
       storeName = profileJSON["store_name"];
       storeLogo = profileJSON["store_logo"];
       storeAddress = jsonStringToMap(profileJSON["store_address"]);
+      var userAddressResponse = await Server().postFormData(body: {
+        "customer_id": sellerID.toString()
+      }, url: "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/getallAddress");
+      if (userAddressResponse == null) {
+        showMessage("Failed to get a response from the server!");
+        hideLoader();
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else if (Platform.isIOS) {
+          exit(0);
+        }
+        return;
+      }
       if (userAddressResponse.statusCode == 200) {
+        print(userAddressResponse.body);
+        if (jsonDecode(userAddressResponse.body)["status"]) {
+          var userAddressJSON =
+              jsonDecode(userAddressResponse.body)["message"].values.first;
+          //log(userAddressJSON.toString());
+          Map<String, String> body = {};
+          userAddressJSON.forEach((key, value) {
+            body.addAll({key: value.toString()});
+          });
+          userAddresses.add(body);
+          log(userAddresses.toString());
+        }
+
         //TODO: Add to userAddress list
+
       } else if (response.statusCode == 400) {
         showMessage("Undefined parameter when calling API");
         hideLoader();
@@ -103,6 +131,7 @@ class ProfileProvider extends ChangeNotifier {
           exit(0);
         }
       } else {
+        print("Error: ${response.statusCode}");
         showMessage("Failed to get data!");
         hideLoader();
         if (Platform.isAndroid) {
@@ -153,5 +182,48 @@ class ProfileProvider extends ChangeNotifier {
     }
     return result
         .map((key, value) => MapEntry(key.toString(), value.toString()));
+  }
+
+  Future<void> createAddress(NavigatorState navigatorState,
+      Map<String, String> addressList, Function(String) showMessage) async {
+    //Send this data to the server
+    var response = await Server().postFormData(
+        url:
+            "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/add",
+        body: {
+          "customer_id": sellerID,
+          "firstname": firstName,
+          "lastname": lastName,
+          "company": addressList["address_type"] ?? "",
+          "address_1": addressList["landmark"] ?? "",
+          "address_2": addressList["full_address"] ?? "",
+          "city": addressList["city"] ?? "",
+          "country": addressList["state"] ?? "",
+          "state": addressList["country"] ?? "",
+          "default": 1.toString(),
+          "postcode": addressList["pincode"] ?? "",
+        });
+    if (response == null) {
+      showMessage("Failed to get a response from the server!");
+      hideLoader();
+      return;
+    }
+
+    if (response.statusCode == 200) {
+      getProfile(userID: userIdForAddress, showMessage: showMessage);
+      hideLoader();
+      notifyListeners();
+    } else if (response.statusCode == 400) {
+      showMessage("Undefined parameter when calling API");
+      hideLoader();
+    } else if (response.statusCode == 404) {
+      showMessage("API not found");
+      hideLoader();
+    } else {
+      showMessage("Failed to get data!");
+      hideLoader();
+    }
+
+    navigatorState.pop();
   }
 }

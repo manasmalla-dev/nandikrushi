@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
+import 'package:nandikrushi_farmer/product/address_bottom_sheet.dart';
 import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
@@ -177,17 +179,23 @@ class BasketScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(
                             bottom: 16, left: 24, right: 24),
-                        child: ElevatedButtonWidget(
-                          borderRadius: 8,
-                          onClick: () {},
-                          height: 54,
-                          // borderRadius: 16,
-                          bgColor: Colors.grey.shade200,
-                          textColor: Colors.grey.shade700,
-                          textStyle: FontWeight.bold,
-                          buttonName: "Confirm Order".toUpperCase(),
-                          trailingIcon: Icons.arrow_forward,
-                        ),
+                        child: Consumer<ProfileProvider>(
+                            builder: (context, profileProvider, _) {
+                          return ElevatedButtonWidget(
+                            borderRadius: 8,
+                            onClick: () {
+                              showAddressesBottomSheet(
+                                  context, profileProvider, Theme.of(context));
+                            },
+                            height: 54,
+                            // borderRadius: 16,
+                            bgColor: Colors.grey.shade200,
+                            textColor: Colors.grey.shade700,
+                            textStyle: FontWeight.bold,
+                            buttonName: "Confirm Order".toUpperCase(),
+                            trailingIcon: Icons.arrow_forward,
+                          );
+                        }),
                       ),
                     ),
                   ],

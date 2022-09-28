@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_screen.dart';
+import 'package:nandikrushi_farmer/product/address_bottom_sheet.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/splash_screen.dart';
@@ -104,9 +105,9 @@ class MyAccountScreen extends StatelessWidget {
                               listTileWithouST(context,
                                   title: "Address",
                                   leading: Icons.location_on, ontap: () {
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (context) =>
-                                //         const AddressScreen()));
+                                showAddressesBottomSheet(
+                                    context, profileProvider, Theme.of(context),
+                                    isOrderWorkflow: false);
                               }),
                               const Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8),

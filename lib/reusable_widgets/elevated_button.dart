@@ -18,10 +18,12 @@ class ElevatedButtonWidget extends StatelessWidget {
   final double? innerPadding;
   final bool? center;
   final Color? borderSideColor;
+  final Color? iconColor;
 
   const ElevatedButtonWidget(
       {Key? key,
       this.buttonName,
+      this.iconColor,
       this.bgColor,
       this.textColor,
       this.borderSideColor,
@@ -109,7 +111,8 @@ class ElevatedButtonWidget extends StatelessWidget {
                       if (trailingIcon != null)
                         buildTrailingIcon(Icon(
                           trailingIcon,
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: iconColor ??
+                              Theme.of(context).colorScheme.onPrimary,
                           size: Theme.of(context).textTheme.button?.fontSize,
                         )),
                       if (center == true)
