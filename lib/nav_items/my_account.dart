@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
+import 'package:nandikrushi_farmer/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -185,7 +188,16 @@ class MyAccountScreen extends StatelessWidget {
                               }),
                               listTileWithouTI(context,
                                   title: "Logout",
-                                  leading: Icons.power_settings_new, ontap: () {
+                                  leading: Icons.power_settings_new,
+                                  ontap: () async {
+                                FirebaseAuth.instance.signOut();
+                                SharedPreferences sharedPreferences =
+                                    await SharedPreferences.getInstance();
+                                sharedPreferences.clear();
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            SplashScreen())));
                                 //signOut(context);
                               }),
                             ],
