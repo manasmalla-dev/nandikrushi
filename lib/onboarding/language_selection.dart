@@ -31,7 +31,7 @@ class LanguageSelectionScreen extends StatelessWidget {
                       top: getProportionateWidth(18, constraints),
                       bottom: getProportionateWidth(12, constraints),
                     ),
-                    height: getProportionateHeight(463, constraints),
+                    height: getProportionateHeight(500, constraints),
                     decoration: BoxDecoration(
                         //color: Color(0xffF2F5F4),
                         color: Colors.white,
@@ -78,7 +78,7 @@ Widget languageSelection(
           ),
         ),
         SizedBox(
-          height: getProportionateHeight(72, constraints),
+          height: getProportionateHeight(64, constraints),
         ),
         ListView.separated(
           shrinkWrap: true,
@@ -111,11 +111,13 @@ Widget languageSelection(
           separatorBuilder: (context, index) {
             return SizedBox(
               height:
-                  getProportionateHeight(isLargeScreen ? 56 : 56, constraints),
+                  getProportionateHeight(isLargeScreen ? 56 : 40, constraints),
             );
           },
         ),
-        const Spacer(),
+        const SizedBox(
+          height: 16,
+        ),
         ElevatedButtonWidget(
           onClick: () {
             if (loginProvider.usersLanguage.key.isNotEmpty) {
@@ -131,7 +133,7 @@ Widget languageSelection(
           borderRadius: getProportionateHeight(24, constraints),
           minWidth: double.infinity,
           height:
-              getProportionateHeight(isLargeScreen ? 125 : 120, constraints),
+              getProportionateHeight(isLargeScreen ? 125 : 125, constraints),
           buttonName: "NEXT",
           trailingIcon: Icons.arrow_forward,
         ),

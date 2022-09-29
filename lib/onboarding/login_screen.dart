@@ -257,7 +257,7 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
                 validator: (value) {
                   if (value == null ||
                       !value.characters.contains("@") ||
-                      !value.contains(".com")) {
+                      !value.contains(".")) {
                     return "Please enter a valid email address";
                   }
                   return null;
@@ -559,7 +559,7 @@ void showForgotPasswordDialog(
                     validator: (value) {
                       if (value == null ||
                           !value.characters.contains("@") ||
-                          !value.contains(".com")) {
+                          !value.contains(".")) {
                         return "Please enter a valid email address";
                       }
                       return null;
@@ -641,7 +641,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                       validator: (value) {
                         if (value == null ||
                             !value.characters.contains("@") ||
-                            !value.contains(".com")) {
+                            !value.contains(".")) {
                           return "Please enter a valid email address";
                         }
                         return null;

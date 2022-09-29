@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nandikrushi_farmer/nav_items/videos_screen.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/product/add_product.dart';
+import 'package:nandikrushi_farmer/product/my_products_page.dart';
+import 'package:nandikrushi_farmer/product/orders_page.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/utils/size_config.dart';
 import 'package:provider/provider.dart';
@@ -59,17 +63,20 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(80),
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: const EdgeInsets.only(top: 32),
-              child: AppBar(
-                backgroundColor: Colors.white,
-                elevation: 0,
-                title: Text(
-                  "Nandikrushi",
-                  style: TextStyle(
-                      color: const Color(0xFF006838),
-                      fontFamily: 'Samarkan',
-                      fontSize: getProportionateHeight(32, widget.constraints)),
+              child: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Text(
+                    "Nandikrushi",
+                    style: TextStyle(
+                        color: const Color(0xFF006838),
+                        fontFamily: 'Samarkan',
+                        fontSize:
+                            getProportionateHeight(32, widget.constraints)),
+                  ),
                 ),
               ),
             ),
@@ -82,80 +89,95 @@ class _HomeScreenState extends State<HomeScreen> {
             childAspectRatio: widget.constraints.maxWidth > 600 ? 1 : (2.5 / 3),
             shrinkWrap: true,
             children: List.generate(destinations.length, (index) {
-              return InkWell(
-                onTap: () {
-                  // if (index == 1) {
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => const AddProductScreen()));
-                  // } else if (index == 0) {
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => const MyProductsScreen()));
-                  // } else if (index == 2) {
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => const OrdersScreen()));
-                  // } else if (index == 3) {
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => const PurchasesScreen()));
-                  // } else if (index == 4) {
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => const VideosScreen()));
-                  // }
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(
-                      widget.constraints.maxWidth > 800 ? 18.0 : 10),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey.shade300,
-                              offset: const Offset(0, 3),
-                              blurRadius: 15)
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: InkWell(
+                  onTap: () {
+                    if (index == 1) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AddProductScreen()));
+                    } else if (index == 0) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MyProductsPage()));
+                    } else if (index == 2) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const OrdersPage()));
+                    } else if (index == 3 && !loginProvider.isFarmer) {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const PurchasesScreen()));
+                    } else if (index == 4 ||
+                        (loginProvider.isFarmer && index == 3)) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const VideosScreen()));
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(
+                        widget.constraints.maxWidth > 800 ? 18.0 : 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.shade300,
+                                offset: const Offset(0, 3),
+                                blurRadius: 15)
+                          ],
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 32,
+                          ),
+                          Flexible(
+                              child: Center(
+                                  child: Image.asset(
+                                      destinations[index]['icon']))),
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          TextWidget(
+                            destinations[index]['title'],
+                            size: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.fontSize,
+                            weight: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.fontWeight,
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: TextWidget(
+                              destinations[index]['sub_title'],
+                              size: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.fontSize,
+                              weight: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.fontWeight,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 32,
+                          ),
                         ],
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          height: 32,
-                        ),
-                        Flexible(
-                            child: Center(
-                                child:
-                                    Image.asset(destinations[index]['icon']))),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        TextWidget(
-                          destinations[index]['title'],
-                          size:
-                              Theme.of(context).textTheme.titleLarge?.fontSize,
-                          weight: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.fontWeight,
-                        ),
-                        TextWidget(
-                          destinations[index]['sub_title'],
-                          size: Theme.of(context).textTheme.bodySmall?.fontSize,
-                          weight:
-                              Theme.of(context).textTheme.bodySmall?.fontWeight,
-                        ),
-                        const SizedBox(
-                          height: 32,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),

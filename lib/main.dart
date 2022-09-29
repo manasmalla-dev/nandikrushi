@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nandikrushi_farmer/firebase_options.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
@@ -7,10 +11,17 @@ import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/splash_screen.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
 import 'package:provider/provider.dart';
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  if (!kIsWeb) {
+    if (Platform.isAndroid) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.white,
+      ));
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    }
+  }
   //FirebaseAuth.instance.signOut();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<LoginProvider>(
@@ -41,10 +52,11 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Nandikrushi Farmer',
         theme: ThemeData(
-          primarySwatch: createMaterialColor(loginProvider.userAppTheme.value),
-          fontFamily: "Product Sans",
-          useMaterial3: true,
-        ),
+            primarySwatch:
+                createMaterialColor(loginProvider.userAppTheme.value),
+            fontFamily: "Product Sans",
+            useMaterial3: true,
+            brightness: Brightness.light),
         darkTheme: ThemeData(
           backgroundColor: Colors.grey.shade900,
           primarySwatch: createMaterialColor(

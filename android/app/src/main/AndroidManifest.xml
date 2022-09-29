@@ -6,6 +6,9 @@
         android:label="Nandikrushi Farmer"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyC4EBjoJGPsl_w7Kyd8D75AP4nWjgin_sc"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
