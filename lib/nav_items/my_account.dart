@@ -9,13 +9,9 @@ import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/splash_screen.dart';
 import 'package:provider/provider.dart';
-<<<<<<< HEAD
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-=======
 import 'package:share/share.dart';
-import 'package:shared_preferences/shared_preferences.dart';
->>>>>>> 24b77b58a7487f11f780ea049597c2447e0ce24a
 import 'package:url_launcher/url_launcher_string.dart';
 
 class MyAccountScreen extends StatelessWidget {
