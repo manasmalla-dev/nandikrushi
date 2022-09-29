@@ -155,6 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
       return Consumer<LoginProvider>(builder: (context, loginProvider, _) {
+        var phoneNumberController = TextEditingController();
         return Stack(
           children: [
             LayoutBuilder(builder: (context, constraints) {
@@ -463,6 +464,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: 8,
                                       )
                                     : const SizedBox(),
+                                FirebaseAuth.instance.currentUser
+                                                ?.phoneNumber ==
+                                            null ||
+                                        (FirebaseAuth.instance.currentUser
+                                                ?.phoneNumber?.isEmpty ??
+                                            false)
+                                    ? TextFieldWidget(
+                                        controller: phoneNumberController,
+                                        label: 'Phone Number',
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.isEmpty ||
+                                              value.length != 10) {
+                                            return snackbar(context,
+                                                "Please enter a valid phone number");
+                                          }
+                                          return null;
+                                        },
+                                      )
+                                    : SizedBox(),
                                 TextFieldWidget(
                                   controller: loginPageController
                                       .registrationPageFormControllers['email'],
@@ -1285,9 +1306,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   });
                                                 }
                                                 Map<String, String> body = {
-                                                  "seller_id": profileProvider
-                                                      .sellerID
-                                                      .toString(),
+                                                  "user_id": profileProvider
+                                                      .userIdForAddress,
                                                   "firstname": loginPageController
                                                           .registrationPageFormControllers[
                                                               "first_name"]
@@ -1306,15 +1326,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           ?.text
                                                           .toString() ??
                                                       "",
-                                                  "telephone":
-                                                      loginProvider.phoneNumber,
+                                                  "telephone": FirebaseAuth
+                                                          .instance
+                                                          .currentUser
+                                                          ?.phoneNumber ??
+                                                      phoneNumberController
+                                                          .text,
                                                   "password": loginPageController
                                                           .registrationPageFormControllers[
                                                               "password"]
                                                           ?.text
                                                           .toString() ??
                                                       "",
-                                                  "seller_type": 1.toString(),
+                                                  "customer_group_id":
+                                                      loginProvider
+                                                          .userAppTheme.key
+                                                          .toString(),
                                                   "land": loginPageController
                                                       .landInAcres
                                                       .toString(),
@@ -1458,7 +1485,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ));
             }),
-            loginProvider.shouldShowLoader
+            profileProvider.shouldShowLoader
                 ? const LoaderScreen()
                 : const SizedBox(),
           ],

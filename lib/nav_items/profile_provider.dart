@@ -70,7 +70,7 @@ class ProfileProvider extends ChangeNotifier {
       telephone =
           "+91 ${profileJSON["telephone"].toString().substring(0, 5)} ${profileJSON["telephone"].toString().substring(5, 10)}";
       languageID = int.tryParse(profileJSON["language_id"]) ?? 1;
-      customerGroupId = profileJSON["customer_group_id"];
+      customerGroupId = profileJSON["customer_group_id"] ?? "Farmer";
       sellerType = profileJSON["seller_type"];
       landInAcres = (double.tryParse(profileJSON["land"]) ?? 1.0).ceil();
       sellerImage = profileJSON["seller_image"];

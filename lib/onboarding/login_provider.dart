@@ -153,14 +153,6 @@ class LoginProvider extends ChangeNotifier {
             codeAutoRetrievalTimeout: (String verificationId) {
               firebaseVerificationID = verificationId;
               showMessage("OTP sent successfully");
-              //Navigate to OTP page
-              navigateToOTPScreen((String otp) async {
-                PhoneAuthCredential phoneAuthCredential =
-                    PhoneAuthProvider.credential(
-                        verificationId: verificationId, smsCode: otp);
-                onLoginWithCredential(phoneAuthCredential, loginController,
-                    onSuccessfulLogin, onError, onRegisterUser);
-              });
             },
             forceResendingToken: _resendToken,
             timeout: const Duration(
