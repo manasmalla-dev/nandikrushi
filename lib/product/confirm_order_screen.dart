@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nandikrushi_farmer/product/order_successful.dart';
@@ -110,6 +112,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
         builder: (BuildContext context) {
           return Consumer<ProductProvider>(
               builder: (context, productProvider, _) {
+            log(productProvider.cart.toString());
             return SizedBox(
               width: 428,
               child: AlertDialog(
@@ -253,7 +256,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                 ?.fontSize,
                           ),
                           TextWidget(
-                            'Rs. ${productProvider.cart.map((e) => (int.tryParse(e['price'] ?? "0") ?? 0) * (int.tryParse(e['quantity'] ?? "0") ?? 0)).reduce((value, element) => value + element)}',
+                            'Rs. ${productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (int.tryParse(e['quantity'] ?? "0") ?? 0)).reduce((value, element) => value + element)}',
                             size: Theme.of(context)
                                 .textTheme
                                 .titleSmall
@@ -302,7 +305,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                   ],
                                 ),
                                 TextWidget(
-                                  "Rs. ${((int.tryParse(productProvider.cart[index]['price'] ?? "0") ?? 0) * (int.tryParse(productProvider.cart[index]['quantity'] ?? "0") ?? 0)).toStringAsFixed(2)}",
+                                  "Rs. ${(double.tryParse(productProvider.cart[index]["price"] ?? "") ?? 0) * (int.tryParse(productProvider.cart[index]["quantity"] ?? "") ?? 0)}",
                                   size: Theme.of(context)
                                       .textTheme
                                       .titleSmall
