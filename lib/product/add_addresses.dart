@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_log
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -61,7 +62,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
     }
 
     permissionGranted = await Geolocator.checkPermission();
-    log(permissionGranted);
+    log(permissionGranted.name.toString());
     if (permissionGranted == LocationPermission.denied) {
       permissionGranted = await Geolocator.requestPermission();
       if (permissionGranted != location.PermissionStatus.granted) {
@@ -70,7 +71,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
     }
 
     userLocation = await Geolocator.getCurrentPosition();
-    log(userLocation);
+    log(userLocation.toString());
 
     gmw.GoogleMapsPlaces places =
         gmw.GoogleMapsPlaces(apiKey: PlacesAPISDK.apiKey);
@@ -90,7 +91,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
       await get(Uri.parse(request)).then((value) {
         List<dynamic> address =
             jsonDecode(value.body)["result"]["address_components"];
-        log(address);
+        log(address.toString());
         var postalCode = address.firstWhere((value) {
           List<dynamic> types = value["types"];
           var isPCorPremise = types.contains("postal_code");
@@ -133,7 +134,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
               types.contains("administrative_area_level_2") ||
               types.contains("administrative_area_level_1") ||
               types.contains("country");
-          log(isPCorPremise);
+          log(isPCorPremise.toString());
           return !isPCorPremise;
         });
         var tempData = address

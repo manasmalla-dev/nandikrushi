@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 extension LoginUtils on BuildContext {
   Future<bool> get isReturningUser async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    log(sharedPreferences.getString('userID'));
+    log(sharedPreferences.getString('userID') ?? "");
     return sharedPreferences.getString('userID') != null &&
         (sharedPreferences.getString('userID')?.isNotEmpty ?? false);
   }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
@@ -11,7 +13,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log(context.isDarkMode);
+    log(context.isDarkMode.toString());
     LoginController loginPageController = LoginController();
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
