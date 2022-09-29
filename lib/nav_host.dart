@@ -21,7 +21,6 @@ class NandikrushiNavHost extends StatefulWidget {
 class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ProfileProvider profileProvider =

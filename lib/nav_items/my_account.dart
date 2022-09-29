@@ -347,7 +347,7 @@ Future signOut(
                   padding: const EdgeInsets.only(top: 30),
                   height: 160,
                   child: Image.asset('assets/images/farmer_ploughing.png')),
-              SizedBox(
+              const SizedBox(
                 height: 54,
               ),
               Padding(

@@ -113,8 +113,7 @@ class LoginController extends ControllerMVC {
       required Function(Function) onNewUser,
       required LoginProvider loginProvider}) async {
     var isReturningUser = await isReturningUserFuture;
-    //TODO: Change it back to &&
-    if (FirebaseAuth.instance.currentUser != null || isReturningUser) {
+    if (FirebaseAuth.instance.currentUser != null && isReturningUser) {
       var appTheme = await getAppTheme();
       loginProvider.updateUserAppType(appTheme);
       Timer(const Duration(milliseconds: 2000), () async {
@@ -260,7 +259,7 @@ class LoginController extends ControllerMVC {
       'storeName': TextEditingController(text: profileProvider.storeName),
       'reg_number': TextEditingController(),
     };
-    print(profileProvider.landInAcres);
+    log(profileProvider.landInAcres.toString());
     landInAcres = profileProvider.landInAcres.toDouble();
     userCertification = profileProvider.certificationType;
     await get(Uri.parse(profileProvider.sellerImage))

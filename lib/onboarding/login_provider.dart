@@ -208,7 +208,7 @@ class LoginProvider extends ChangeNotifier {
     if (response?.statusCode == 200) {
       var decodedResponse =
           jsonDecode(response?.body ?? '{"message": {},"success": false}');
-      print(response?.body);
+      log(response?.body ?? "");
       var statusCodeBody = false;
       if (decodedResponse["success"] != null) {
         statusCodeBody = decodedResponse["success"];

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_log
 
 import 'dart:convert';
 
@@ -61,7 +61,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
     }
 
     permissionGranted = await Geolocator.checkPermission();
-    print(permissionGranted);
+    log(permissionGranted);
     if (permissionGranted == LocationPermission.denied) {
       permissionGranted = await Geolocator.requestPermission();
       if (permissionGranted != location.PermissionStatus.granted) {
@@ -70,7 +70,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
     }
 
     userLocation = await Geolocator.getCurrentPosition();
-    print(userLocation);
+    log(userLocation);
 
     gmw.GoogleMapsPlaces places =
         gmw.GoogleMapsPlaces(apiKey: PlacesAPISDK.apiKey);
@@ -90,7 +90,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
       await get(Uri.parse(request)).then((value) {
         List<dynamic> address =
             jsonDecode(value.body)["result"]["address_components"];
-        print(address);
+        log(address);
         var postalCode = address.firstWhere((value) {
           List<dynamic> types = value["types"];
           var isPCorPremise = types.contains("postal_code");
@@ -133,7 +133,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
               types.contains("administrative_area_level_2") ||
               types.contains("administrative_area_level_1") ||
               types.contains("country");
-          print(isPCorPremise);
+          log(isPCorPremise);
           return !isPCorPremise;
         });
         var tempData = address
@@ -144,7 +144,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
             .toList();
         tempData.insert(0, e.name);
         var data = tempData.join(", ");
-        //print(data);
+        //log(data);
         var geolocatedLocationAddress = {
           "name": e.name,
           "address": data.toString(),
@@ -169,7 +169,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getLocationAndPermission();
-      //print(userLocation);
+      //log(userLocation);
     });
   }
 

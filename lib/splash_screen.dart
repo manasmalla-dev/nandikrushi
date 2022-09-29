@@ -11,7 +11,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(context.isDarkMode);
+    log(context.isDarkMode);
     LoginController loginPageController = LoginController();
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);

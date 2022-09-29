@@ -1108,7 +1108,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   shrinkWrap: true,
                                   primary: false,
                                   itemBuilder: (context, imageIndex) {
-                                    // print(registrationController
+                                    // log(registrationController
                                     //    .userCertificates);
                                     return Stack(
                                       children: [

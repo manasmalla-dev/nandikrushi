@@ -9,7 +9,6 @@ import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/success_screen.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
-import 'package:provider/provider.dart';
 
 class ProductController extends ControllerMVC {
   List<XFile?> productImage = [];

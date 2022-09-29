@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/my_account.dart';

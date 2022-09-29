@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
-import 'package:nandikrushi_farmer/utils/login_utils.dart';
 
 class ProfileProvider extends ChangeNotifier {
   bool shouldShowLoader = false;
@@ -31,8 +30,6 @@ class ProfileProvider extends ChangeNotifier {
   String userIdForAddress = "";
 
   bool isDataFetched = false;
-  //TODO: Check if status is true and we recieved the data and then put isDataFethched true
-
   showLoader() {
     shouldShowLoader = true;
     notifyListeners();
@@ -99,21 +96,19 @@ class ProfileProvider extends ChangeNotifier {
         return;
       }
       if (userAddressResponse.statusCode == 200) {
-        print(userAddressResponse.body);
+        log(userAddressResponse.body);
         if (jsonDecode(userAddressResponse.body)["status"]) {
           var userAddressJSON =
               jsonDecode(userAddressResponse.body)["message"].values.first;
           //log(userAddressJSON.toString());
           Map<String, String> body = {};
+          userAddresses = [];
           userAddressJSON.forEach((key, value) {
             body.addAll({key: value.toString()});
           });
           userAddresses.add(body);
           log(userAddresses.toString());
         }
-
-        //TODO: Add to userAddress list
-
       } else if (response.statusCode == 400) {
         showMessage("Undefined parameter when calling API");
         hideLoader();
@@ -131,7 +126,7 @@ class ProfileProvider extends ChangeNotifier {
           exit(0);
         }
       } else {
-        print("Error: ${response.statusCode}");
+        log("Error: ${response.statusCode}");
         showMessage("Failed to get data!");
         hideLoader();
         if (Platform.isAndroid) {

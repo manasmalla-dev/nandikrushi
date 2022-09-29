@@ -1037,7 +1037,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 primary: false,
                                                 itemBuilder:
                                                     (context, imageIndex) {
-                                                  // print(registrationController
+                                                  // log(registrationController
                                                   //    .userCertificates);
                                                   return Stack(
                                                     children: [

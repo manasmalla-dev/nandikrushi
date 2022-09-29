@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/product/add_addresses.dart';
+import 'package:nandikrushi_farmer/product/confirm_order_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 
@@ -61,7 +62,8 @@ showAddressesBottomSheet(
                             innerPadding: 0.03,
                             onClick: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => AddAddressesScreen()));
+                                  builder: (context) =>
+                                      const AddAddressesScreen()));
                             },
                           ),
                         )
@@ -69,29 +71,32 @@ showAddressesBottomSheet(
                     ),
                   ),
                 )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextWidget(
-                      isOrderWorkflow ? 'Delivery Address' : "Your Addresses",
-                      weight: FontWeight.w800,
-                      size: themeData.textTheme.titleLarge?.fontSize,
-                      color: Colors.grey.shade800,
-                    ),
-                    isOrderWorkflow
-                        ? TextWidget(
-                            'Choose the delivery address for this order',
-                            color: Colors.grey,
-                            flow: TextOverflow.visible,
-                            align: TextAlign.center,
-                            size: themeData.textTheme.bodyMedium?.fontSize,
-                          )
-                        : SizedBox(),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Expanded(
-                      child: ListView.separated(
+              : SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextWidget(
+                        isOrderWorkflow ? 'Delivery Address' : "Your Addresses",
+                        weight: FontWeight.w800,
+                        size: themeData.textTheme.titleLarge?.fontSize,
+                        color: Colors.grey.shade800,
+                      ),
+                      isOrderWorkflow
+                          ? TextWidget(
+                              'Choose the delivery address for this order',
+                              color: Colors.grey,
+                              flow: TextOverflow.visible,
+                              align: TextAlign.center,
+                              size: themeData.textTheme.bodyMedium?.fontSize,
+                            )
+                          : const SizedBox(),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        primary: false,
                         separatorBuilder: (context, _) {
                           return const Divider();
                         },
@@ -99,7 +104,9 @@ showAddressesBottomSheet(
                         itemBuilder: (context, item) {
                           return InkWell(
                             onTap: () {
-                              print("Address selected");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ConfirmOrderScreen()));
                             },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,6 +114,7 @@ showAddressesBottomSheet(
                                 Expanded(
                                   child: ListView.builder(
                                     shrinkWrap: true,
+                                    primary: false,
                                     itemBuilder: ((context, index) {
                                       var data = [
                                         profileProvider.userAddresses[item]
@@ -158,39 +166,40 @@ showAddressesBottomSheet(
                           );
                         },
                       ),
-                    ),
-                    Center(
-                      child: TextWidget(
-                        '-------------- or --------------',
-                        color: Colors.grey,
-                        flow: TextOverflow.visible,
-                        align: TextAlign.center,
-                        size: themeData.textTheme.bodyMedium?.fontSize,
+                      Center(
+                        child: TextWidget(
+                          '-------------- or --------------',
+                          color: Colors.grey,
+                          flow: TextOverflow.visible,
+                          align: TextAlign.center,
+                          size: themeData.textTheme.bodyMedium?.fontSize,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    ElevatedButtonWidget(
-                      bgColor: themeData.primaryColor,
-                      trailingIcon: Icons.add_rounded,
-                      buttonName: 'Add Address'.toUpperCase(),
-                      textColor: Colors.white,
-                      textStyle: FontWeight.w800,
-                      borderRadius: 8,
-                      onClick: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AddAddressesScreen()));
-                      },
-                    )
-                  ],
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      ElevatedButtonWidget(
+                        bgColor: themeData.primaryColor,
+                        trailingIcon: Icons.add_rounded,
+                        buttonName: 'Add Address'.toUpperCase(),
+                        textColor: Colors.white,
+                        textStyle: FontWeight.w800,
+                        borderRadius: 8,
+                        onClick: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  const AddAddressesScreen()));
+                        },
+                      )
+                    ],
+                  ),
                 ),
         );
       });
 }
 
 Widget addressRow(String addres, double size) {
-  var title = '';
+  // var title = '';
   // switch (index) {
   //   case 0:
   //     title = 'House/Flat No.';

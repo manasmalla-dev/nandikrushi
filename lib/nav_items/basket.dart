@@ -171,7 +171,7 @@ class BasketScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 24,
                     ),
                     Align(

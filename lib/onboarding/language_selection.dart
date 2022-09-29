@@ -115,7 +115,7 @@ Widget languageSelection(
             );
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         ElevatedButtonWidget(
