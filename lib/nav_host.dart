@@ -88,11 +88,17 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
                     bottomNavigationBar: NavigationBar(
                       destinations: navItems.entries
                           .map((e) => NavigationDestination(
-                              icon: Icon(e.value[0]),
-                              selectedIcon: Icon(e.value[1]),
+                              icon: Icon(
+                                e.value[0],
+                              ),
+                              selectedIcon: Icon(
+                                e.value[1],
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                              ),
                               label: e.key))
                           .toList(),
-                      backgroundColor: Colors.white,
                       selectedIndex: productProvider.selectedIndex,
                       onDestinationSelected: (index) {
                         productProvider.changeScreen(index);

@@ -28,7 +28,6 @@ class MyAccountScreen extends StatelessWidget {
                 userEmail: " ",
                 themeData: Theme.of(context),
               ),
-              backgroundColor: Colors.white,
               body: SafeArea(
                 bottom: false,
                 child: Column(
@@ -85,7 +84,6 @@ class MyAccountScreen extends StatelessWidget {
                   userImage: profileProvider.sellerImage,
                   themeData: Theme.of(context),
                 ),
-                backgroundColor: Colors.white,
                 body: SafeArea(
                   bottom: false,
                   child: SingleChildScrollView(
@@ -110,11 +108,11 @@ class MyAccountScreen extends StatelessWidget {
                                     context, profileProvider, Theme.of(context),
                                     isOrderWorkflow: false);
                               }),
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
                                 child: Divider(
                                   thickness: 0.5,
-                                  color: Color(0xFF007D08),
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                               Theme(
@@ -123,23 +121,17 @@ class MyAccountScreen extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     ExpansionTile(
-                                      backgroundColor: Colors.white,
-                                      collapsedBackgroundColor: Colors.white,
-                                      textColor: Theme.of(context).primaryColor,
-                                      iconColor: Theme.of(context).primaryColor,
-                                      collapsedIconColor: Colors.grey,
-                                      collapsedTextColor: Colors.grey[900],
-                                      title: TextWidget(
+                                      collapsedIconColor: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withOpacity(0.6),
+                                      iconColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      title: Text(
                                         "Support",
-                                        size: Theme.of(context)
+                                        style: Theme.of(context)
                                             .textTheme
-                                            .titleMedium
-                                            ?.fontSize,
-                                        weight: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium
-                                            ?.fontWeight,
-                                        color: Colors.grey[900],
+                                            .titleMedium,
                                       ),
                                       leading: SizedBox(
                                         height: double.infinity,
@@ -149,6 +141,9 @@ class MyAccountScreen extends StatelessWidget {
                                               .textTheme
                                               .titleMedium
                                               ?.fontSize,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         ),
                                       ),
                                       children: [
@@ -178,11 +173,11 @@ class MyAccountScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
                                 child: Divider(
                                   thickness: 0.5,
-                                  color: Color(0xFF007D08),
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                               listTileWithouTI(context,
@@ -308,20 +303,22 @@ class MyAccountScreen extends StatelessWidget {
                   TextWidget(
                     userName,
                     size: themeData.textTheme.headlineMedium?.fontSize,
-                    color: const Color(0xFF007D08),
+                    color: themeData.colorScheme.primary,
                     height: 1,
                   ),
                   TextWidget(
                     userPhoneNumber,
                     weight: FontWeight.w500,
-                    color: const Color(0xFF007D08).withOpacity(0.5),
+                    color: themeData.colorScheme.primary.withOpacity(0.5),
                     size: themeData.textTheme.titleMedium?.fontSize,
                   ),
-                  TextWidget(
-                    userEmail,
-                    weight: FontWeight.w500,
-                    size: themeData.textTheme.bodySmall?.fontSize,
-                    color: Colors.grey.shade900.withOpacity(0.5),
+                  Opacity(
+                    opacity: 0.5,
+                    child: TextWidget(
+                      userEmail,
+                      weight: FontWeight.w500,
+                      size: themeData.textTheme.bodySmall?.fontSize,
+                    ),
                   ),
                 ],
               )
@@ -428,20 +425,17 @@ ListTile listTileWithouST(BuildContext context,
       title,
       size: Theme.of(context).textTheme.titleMedium?.fontSize,
       weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
-      color: Colors.grey[900],
     ),
     leading: SizedBox(
       height: double.infinity,
       child: Icon(
         leading,
         size: Theme.of(context).textTheme.titleMedium?.fontSize,
-        color: Colors.grey,
       ),
     ),
     trailing: Icon(
       Icons.arrow_forward_ios,
       size: Theme.of(context).textTheme.titleMedium?.fontSize,
-      color: Colors.grey,
     ),
     onTap: ontap,
   );
@@ -453,14 +447,12 @@ listTileWithouTI(BuildContext context, {title, leading, VoidCallback? ontap}) {
       title,
       size: Theme.of(context).textTheme.titleMedium?.fontSize,
       weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
-      color: Colors.grey[900],
     ),
     leading: SizedBox(
       height: double.infinity,
       child: Icon(
         leading,
         size: Theme.of(context).textTheme.titleMedium?.fontSize,
-        color: Colors.grey,
       ),
     ),
     onTap: ontap,

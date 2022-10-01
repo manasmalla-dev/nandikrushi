@@ -1338,10 +1338,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           ?.text
                                                           .toString() ??
                                                       "",
-                                                  "customer_group_id":
-                                                      loginProvider
-                                                          .userAppTheme.key
-                                                          .toString(),
+                                                  "seller_type": loginProvider
+                                                      .userAppTheme.key
+                                                      .toString(),
                                                   "land": loginPageController
                                                       .landInAcres
                                                       .toString(),
@@ -1428,8 +1427,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                             "status"];
                                                   }
                                                   if (statusCodeBody) {
-                                                    log("Successful login");
-                                                    log("User ID: ${decodedResponse["message"]["user_id"]}, Seller ID: ${decodedResponse["message"]["customer_id"]}");
+                                                    log("Successful update");
                                                     snackbar(context,
                                                         "Successfully updated your profile",
                                                         isError: false);

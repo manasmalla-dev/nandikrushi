@@ -24,15 +24,15 @@ class TextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(text.toString(),
-        overflow: flow ?? TextOverflow.ellipsis,
-        textAlign: align ?? TextAlign.start,
+        overflow: flow,
+        textAlign: align,
         style: TextStyle(
             fontFamily: 'Product Sans',
             // fontFamily: 'Roboto',
-            letterSpacing: lSpace ?? 0,
-            fontSize: size ?? 14,
-            color: color ?? Colors.grey.shade900,
-            fontWeight: weight ?? FontWeight.normal,
+            letterSpacing: lSpace,
+            fontSize: size,
+            color: color,
+            fontWeight: weight,
             height: height));
   }
 }

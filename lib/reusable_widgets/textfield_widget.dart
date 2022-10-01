@@ -95,21 +95,20 @@ class TextFieldWidget extends StatelessWidget {
         isDense: true,
         focusedBorder: shouldShowBorder
             ? UnderlineInputBorder(
-                borderSide: BorderSide(color: Theme.of(context).primaryColor))
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.primary))
             : InputBorder.none,
         border: shouldShowBorder
             ? UnderlineInputBorder(
                 borderSide: BorderSide(
-                  color: borderColor ?? Colors.grey.shade500,
+                  color: borderColor ?? Theme.of(context).colorScheme.outline,
                 ),
                 borderRadius: BorderRadius.circular(borderRadius ?? 0))
             : InputBorder.none,
-        hintStyle: fonts(Theme.of(context).textTheme.bodyMedium?.fontSize,
-            FontWeight.w400, Colors.grey[400]),
+        hintStyle: Theme.of(context).textTheme.bodyMedium,
         hintText: hint ?? '',
         labelText: label,
-        labelStyle: fonts(Theme.of(context).textTheme.bodyMedium?.fontSize,
-            FontWeight.w400, Theme.of(context).primaryColor),
+        labelStyle: Theme.of(context).textTheme.bodyMedium,
       ),
       validator: validator,
       style: style,

@@ -16,7 +16,8 @@ showAddressesBottomSheet(
           height: 600,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(16)),
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(16)),
           child: profileProvider.userAddresses.isEmpty
               ? Center(
                   child: Padding(
@@ -80,15 +81,16 @@ showAddressesBottomSheet(
                         isOrderWorkflow ? 'Delivery Address' : "Your Addresses",
                         weight: FontWeight.w800,
                         size: themeData.textTheme.titleLarge?.fontSize,
-                        color: Colors.grey.shade800,
                       ),
                       isOrderWorkflow
-                          ? TextWidget(
-                              'Choose the delivery address for this order',
-                              color: Colors.grey,
-                              flow: TextOverflow.visible,
-                              align: TextAlign.center,
-                              size: themeData.textTheme.bodyMedium?.fontSize,
+                          ? Opacity(
+                              opacity: 0.7,
+                              child: TextWidget(
+                                'Choose the delivery address for this order',
+                                flow: TextOverflow.visible,
+                                align: TextAlign.center,
+                                size: themeData.textTheme.bodyMedium?.fontSize,
+                              ),
                             )
                           : const SizedBox(),
                       const SizedBox(
@@ -157,7 +159,7 @@ showAddressesBottomSheet(
                                       const EdgeInsets.symmetric(vertical: 12),
                                   child: IconButton(
                                     onPressed: () {},
-                                    color: Colors.red.shade300,
+                                    color: Theme.of(context).colorScheme.error,
                                     icon: const Icon(Icons.delete_rounded),
                                   ),
                                 ),
@@ -179,10 +181,11 @@ showAddressesBottomSheet(
                         height: 12,
                       ),
                       ElevatedButtonWidget(
-                        bgColor: themeData.primaryColor,
+                        bgColor: Theme.of(context).colorScheme.surfaceVariant,
                         trailingIcon: Icons.add_rounded,
                         buttonName: 'Add Address'.toUpperCase(),
-                        textColor: Colors.white,
+                        textColor:
+                            Theme.of(context).colorScheme.onSurfaceVariant,
                         textStyle: FontWeight.w800,
                         borderRadius: 8,
                         onClick: () {

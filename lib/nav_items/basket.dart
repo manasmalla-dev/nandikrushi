@@ -15,10 +15,8 @@ class BasketScreen extends StatelessWidget {
     return Consumer<ProductProvider>(builder: (context, productProvider, _) {
       var items = productProvider.cart;
       return Scaffold(
-        backgroundColor: items.isNotEmpty ? null : Colors.white,
         appBar: AppBar(
           toolbarHeight: kToolbarHeight,
-          backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
               onPressed: () {
@@ -26,7 +24,6 @@ class BasketScreen extends StatelessWidget {
               },
               icon: Icon(
                 Icons.shopping_basket_rounded,
-                color: Colors.grey[900],
               )),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,14 +31,12 @@ class BasketScreen extends StatelessWidget {
               TextWidget(
                 'Basket',
                 size: Theme.of(context).textTheme.titleMedium?.fontSize,
-                color: Colors.grey[900],
                 weight: FontWeight.w700,
               ),
               items.isNotEmpty
                   ? TextWidget(
                       '${items.length} items',
                       size: Theme.of(context).textTheme.bodySmall?.fontSize,
-                      color: Colors.grey[700],
                       weight: FontWeight.w500,
                     )
                   : const SizedBox(),
@@ -133,7 +128,7 @@ class BasketScreen extends StatelessWidget {
                                 '!  Add items for Rs.${(4000 - (items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                       (value, element) => value + element,
                                     ) + 100.00)).toStringAsFixed(2)} or more to avoid delivery charges',
-                                color: Colors.red,
+                                color: Theme.of(context).colorScheme.error,
                                 size: Theme.of(context)
                                     .textTheme
                                     .bodyLarge
@@ -189,8 +184,6 @@ class BasketScreen extends StatelessWidget {
                             },
                             height: 54,
                             // borderRadius: 16,
-                            bgColor: Colors.grey.shade200,
-                            textColor: Colors.grey.shade700,
                             textStyle: FontWeight.bold,
                             buttonName: "Confirm Order".toUpperCase(),
                             trailingIcon: Icons.arrow_forward,
@@ -216,7 +209,6 @@ class BasketScreen extends StatelessWidget {
                         'Basket Is Empty',
                         weight: FontWeight.w800,
                         size: Theme.of(context).textTheme.titleLarge?.fontSize,
-                        color: Colors.grey.shade800,
                       ),
                       const SizedBox(
                         height: 12,
@@ -224,7 +216,6 @@ class BasketScreen extends StatelessWidget {
                       TextWidget(
                         'Looks like you have no items in your shopping basket',
                         weight: FontWeight.w600,
-                        color: Colors.grey,
                         flow: TextOverflow.visible,
                         align: TextAlign.center,
                         size: Theme.of(context).textTheme.bodyMedium?.fontSize,
@@ -235,10 +226,8 @@ class BasketScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 42),
                         child: ElevatedButtonWidget(
-                          bgColor: Theme.of(context).primaryColor,
                           trailingIcon: Icons.add_rounded,
                           buttonName: 'Shop Items'.toUpperCase(),
-                          textColor: Colors.white,
                           textStyle: FontWeight.w800,
                           borderRadius: 8,
                           innerPadding: 0.03,

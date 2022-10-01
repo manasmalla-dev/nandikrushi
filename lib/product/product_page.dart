@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/my_account.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
@@ -24,10 +23,8 @@ class _ProductPageState extends State<ProductPage> {
     return Consumer<ProductProvider>(builder: (context, productProvider, _) {
       return Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
         return Scaffold(
-          backgroundColor: Colors.white,
           appBar: AppBar(
             toolbarHeight: kToolbarHeight,
-            backgroundColor: Colors.white,
             elevation: 0,
             actions: [
               InkWell(
@@ -42,7 +39,7 @@ class _ProductPageState extends State<ProductPage> {
                             height: 600,
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(16)),
                             child: productProvider.cart.isNotEmpty
                                 ? Column(
@@ -56,7 +53,6 @@ class _ProductPageState extends State<ProductPage> {
                                             .textTheme
                                             .headlineSmall
                                             ?.fontSize,
-                                        color: Colors.grey[900],
                                         weight: FontWeight.w700,
                                       ),
                                       productProvider.cart.isNotEmpty
@@ -66,7 +62,6 @@ class _ProductPageState extends State<ProductPage> {
                                                   .textTheme
                                                   .bodySmall
                                                   ?.fontSize,
-                                              color: Colors.grey[700],
                                               weight: FontWeight.w500,
                                             )
                                           : const SizedBox(),
@@ -132,7 +127,8 @@ class _ProductPageState extends State<ProductPage> {
                                                     .bodyMedium
                                                     ?.fontSize,
                                                 color: Theme.of(context)
-                                                    .primaryColor,
+                                                    .colorScheme
+                                                    .primary,
                                               ),
                                               TextWidget(
                                                 'Rs. ${(productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
@@ -154,7 +150,9 @@ class _ProductPageState extends State<ProductPage> {
                                                   left: 24,
                                                   right: 24),
                                               child: ElevatedButtonWidget(
-                                                iconColor: Colors.grey.shade700,
+                                                iconColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
                                                 borderRadius: 8,
                                                 onClick: () {
                                                   showAddressesBottomSheet(
@@ -164,8 +162,12 @@ class _ProductPageState extends State<ProductPage> {
                                                 },
                                                 height: 54,
                                                 // borderRadius: 16,
-                                                bgColor: Colors.grey.shade200,
-                                                textColor: Colors.grey.shade700,
+                                                bgColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .surfaceVariant,
+                                                textColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
                                                 textStyle: FontWeight.bold,
                                                 buttonName: "Select Address"
                                                     .toUpperCase(),
@@ -247,16 +249,15 @@ class _ProductPageState extends State<ProductPage> {
                   child: Stack(
                     children: [
                       const Positioned(
-                        top: 12,
+                        top: 16,
                         child: Icon(
                           Icons.shopping_basket_outlined,
-                          color: Colors.black,
-                          size: 32,
+                          size: 24,
                         ),
                       ),
                       productProvider.cart.isNotEmpty
                           ? Positioned(
-                              top: 4,
+                              top: 8,
                               right: 12,
                               child: ClipOval(
                                 child: Container(
@@ -267,7 +268,7 @@ class _ProductPageState extends State<ProductPage> {
                                     child: TextWidget(
                                       productProvider.cart.length.toString(),
                                       color: Colors.white,
-                                      size: 12,
+                                      size: 10,
                                     ),
                                   ),
                                 ),
@@ -333,7 +334,7 @@ class _ProductPageState extends State<ProductPage> {
                                   .headlineLarge
                                   ?.fontSize,
                               weight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                             TextWidget(
                               double.tryParse(
@@ -345,7 +346,7 @@ class _ProductPageState extends State<ProductPage> {
                                   .headlineLarge
                                   ?.fontSize,
                               weight: FontWeight.w800,
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ],
                         ),
@@ -382,7 +383,11 @@ class _ProductPageState extends State<ProductPage> {
                                         minimumSize: Size.zero, // Set this
                                         padding:
                                             const EdgeInsets.all(4), // and this
-                                        side: const BorderSide(width: 1),
+                                        side: BorderSide(
+                                            width: 1,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .outline),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(100))),
@@ -408,7 +413,6 @@ class _ProductPageState extends State<ProductPage> {
                                           const Icon(
                                             Icons.edit,
                                             size: 14,
-                                            color: Colors.black,
                                           ),
                                           const SizedBox(
                                             width: 6,
@@ -482,7 +486,9 @@ class _ProductPageState extends State<ProductPage> {
                                   padding: const EdgeInsets.all(4), // and this
                                   side: BorderSide(
                                       width: 1,
-                                      color: Theme.of(context).primaryColor),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(100))),
@@ -612,7 +618,7 @@ class _ProductPageState extends State<ProductPage> {
                                       .button
                                       ?.fontSize,
                                   weight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ),
@@ -652,7 +658,7 @@ class _ProductPageState extends State<ProductPage> {
                             TextWidget(
                               'Self Declared National Farmer.',
                               weight: FontWeight.w500,
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ],
                         ),

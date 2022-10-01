@@ -143,7 +143,12 @@ class _ProductCardState extends State<ProductCard> {
                                                   Size.zero, // Set this
                                               padding: const EdgeInsets.all(
                                                   4), // and this
-                                              side: const BorderSide(width: 1),
+                                              side: BorderSide(
+                                                width: 1,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -169,7 +174,6 @@ class _ProductCardState extends State<ProductCard> {
                                                 const Icon(
                                                   Icons.edit,
                                                   size: 14,
-                                                  color: Colors.black,
                                                 ),
                                                 const SizedBox(
                                                   width: 6,
@@ -194,7 +198,12 @@ class _ProductCardState extends State<ProductCard> {
                                                   Size.zero, // Set this
                                               padding: const EdgeInsets.all(
                                                   4), // and this
-                                              side: const BorderSide(width: 1),
+                                              side: BorderSide(
+                                                width: 1,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -220,7 +229,6 @@ class _ProductCardState extends State<ProductCard> {
                                                 const Icon(
                                                   Icons.add,
                                                   size: 14,
-                                                  color: Colors.black,
                                                 ),
                                                 const SizedBox(
                                                   width: 6,
@@ -246,9 +254,11 @@ class _ProductCardState extends State<ProductCard> {
                                         padding:
                                             const EdgeInsets.all(4), // and this
                                         side: BorderSide(
-                                            width: 1,
-                                            color:
-                                                Theme.of(context).primaryColor),
+                                          width: 1,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                        ),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(100))),
@@ -266,13 +276,11 @@ class _ProductCardState extends State<ProductCard> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  TextWidget(
+                                                  Text(
                                                     "Contact Us",
-                                                    size: Theme.of(context)
+                                                    style: Theme.of(context)
                                                         .textTheme
-                                                        .titleLarge
-                                                        ?.fontSize,
-                                                    weight: FontWeight.bold,
+                                                        .titleLarge,
                                                   ),
                                                   const SizedBox(
                                                     height: 8,
@@ -315,19 +323,14 @@ class _ProductCardState extends State<ProductCard> {
                                                       Expanded(
                                                         flex: 3,
                                                         child: ElevatedButton(
-                                                          style: ElevatedButton.styleFrom(
-                                                              primary: Theme.of(
-                                                                      context)
-                                                                  .primaryColor,
-                                                              shape: RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8)),
-                                                              onPrimary: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .onPrimary),
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8)),
+                                                          ),
                                                           onPressed: () async {
                                                             launchEmail();
                                                           },
@@ -377,7 +380,6 @@ class _ProductCardState extends State<ProductCard> {
                                             .button
                                             ?.fontSize,
                                         weight: FontWeight.bold,
-                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
                                   ),

@@ -23,7 +23,10 @@ coupons(BuildContext context) {
         return Consumer<ProductProvider>(
             builder: (context, productProvider, _) {
           return Dialog(
-            backgroundColor: const Color(0xFF07263A),
+            backgroundColor: ElevationOverlay.colorWithOverlay(
+                Theme.of(context).colorScheme.surface,
+                Theme.of(context).colorScheme.primary,
+                3.0),
             insetPadding: const EdgeInsets.symmetric(horizontal: 42),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
@@ -39,7 +42,6 @@ coupons(BuildContext context) {
                       "Coupons",
                       weight: FontWeight.w900,
                       size: Theme.of(context).textTheme.titleMedium?.fontSize,
-                      color: const Color(0xFFDCB666),
                     ),
                     const SizedBox(
                       height: 16,
@@ -192,10 +194,8 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
 
     return Consumer<ProductProvider>(builder: (context, productProvider, _) {
       return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
           toolbarHeight: kToolbarHeight,
-          backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
               onPressed: () {
@@ -203,12 +203,10 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
               },
               icon: Icon(
                 Icons.shopping_basket_rounded,
-                color: Colors.grey[900],
               )),
           title: TextWidget(
             'Confirm Order',
             size: Theme.of(context).textTheme.titleMedium?.fontSize,
-            color: Colors.grey[900],
             weight: FontWeight.w700,
           ),
         ),
@@ -224,9 +222,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                     coupons(context);
                   },
                   height: 56,
-                  bgColor: Theme.of(context).primaryColor,
                   buttonName: "Apply Coupon",
-                  textColor: Colors.white,
                   textStyle: FontWeight.w600,
                   trailingIcon: Icons.chevron_right_rounded,
                 ),
@@ -295,12 +291,15 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                           .titleSmall
                                           ?.fontSize,
                                     ),
-                                    TextWidget(
-                                      productProvider.cart[index]['unit'],
-                                      size: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.fontSize,
+                                    Opacity(
+                                      opacity: 0.7,
+                                      child: TextWidget(
+                                        productProvider.cart[index]['unit'],
+                                        size: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.fontSize,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -314,6 +313,9 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                               ],
                             );
                           }),
+                      SizedBox(
+                        height: 16,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -335,9 +337,12 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: 8,
+                      ),
                       TextWidget(
                         '!  Add items for Rs.300.00 or more to avoid Delivery Charges',
-                        color: Colors.red,
+                        color: Theme.of(context).colorScheme.error,
                         size: Theme.of(context).textTheme.bodyMedium?.fontSize,
                         weight: FontWeight.bold,
                       ),
@@ -380,7 +385,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                       ListTile(
                         title: const Text('Pay Online'),
                         leading: Radio(
-                            activeColor: Theme.of(context).primaryColor,
+                            activeColor: Theme.of(context).colorScheme.primary,
                             value: true,
                             groupValue: radioState,
                             onChanged: (bool? value) {
@@ -392,7 +397,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                       ListTile(
                         title: const Text('Pay on Delivery'),
                         leading: Radio(
-                            activeColor: Theme.of(context).primaryColor,
+                            activeColor: Theme.of(context).colorScheme.primary,
                             value: false,
                             groupValue: radioState,
                             onChanged: (bool? value) {
@@ -402,7 +407,6 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                             }),
                       ),
                       ElevatedButtonWidget(
-                        bgColor: Theme.of(context).primaryColor,
                         leadingIcon: Icons.arrow_forward_rounded,
                         buttonName:
                             'PAY Rs. ${(productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
@@ -476,12 +480,12 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                     duration: const Duration(milliseconds: 300),
                     decoration: BoxDecoration(
                         color: index == selectedIndex
-                            ? Theme.of(context).primaryColor
+                            ? Theme.of(context).colorScheme.primary
                             : Colors.transparent,
                         border: Border.all(
                           color: index == selectedIndex
                               ? Colors.transparent
-                              : Theme.of(context).primaryColor,
+                              : Theme.of(context).colorScheme.primary,
                         ),
                         borderRadius: BorderRadius.circular(16)),
                     child: Column(
@@ -499,9 +503,10 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                                 )
                                 .toUpperCase(),
                             color: index == selectedIndex
-                                ? Theme.of(context).colorScheme.onPrimary
+                                ? null
                                 : Theme.of(context)
-                                    .primaryColor
+                                    .colorScheme
+                                    .primary
                                     .withOpacity(0.7)),
                         TextWidget(
                           DateTime.now()
@@ -509,8 +514,11 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                               .day
                               .toString(),
                           color: index == selectedIndex
-                              ? Theme.of(context).colorScheme.onPrimary
-                              : Theme.of(context).primaryColor.withOpacity(0.7),
+                              ? null
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.7),
                           size:
                               Theme.of(context).textTheme.titleSmall?.fontSize,
                           weight: FontWeight.w800,
@@ -518,9 +526,10 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                         TextWidget(
                             index % 2 == 0 ? '7 AM - 11 AM' : '11 AM - 3 PM',
                             color: index == selectedIndex
-                                ? Theme.of(context).colorScheme.onPrimary
+                                ? null
                                 : Theme.of(context)
-                                    .primaryColor
+                                    .colorScheme
+                                    .primary
                                     .withOpacity(0.7)),
                       ],
                     ),

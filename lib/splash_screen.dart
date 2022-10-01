@@ -33,25 +33,24 @@ class SplashScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      body: Container(
-        color: context.isDarkMode
-            ? Theme.of(context).colorScheme.background
-            : Theme.of(context).backgroundColor.withOpacity(0.2),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset("assets/images/logo.png"),
-              TextWidget(
-                "Farmer".toUpperCase(),
-                size: 12,
-                lSpace: 16,
-                color: context.isDarkMode
-                    ? Theme.of(context).colorScheme.onBackground
-                    : Theme.of(context).colorScheme.primary,
-              )
-            ],
-          ),
+      backgroundColor: ElevationOverlay.colorWithOverlay(
+          Theme.of(context).colorScheme.surface,
+          Theme.of(context).primaryColor,
+          3.0),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset("assets/images/logo.png"),
+            TextWidget(
+              "Farmer".toUpperCase(),
+              size: 12,
+              lSpace: 16,
+              color: context.isDarkMode
+                  ? Theme.of(context).colorScheme.onBackground
+                  : Theme.of(context).colorScheme.primary,
+            )
+          ],
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/textfield_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -26,10 +27,10 @@ class _SearchScreenState extends State<SearchScreen>
     searchController = TextEditingController();
   }
 
-  Color getTabBarTextColor(int i) {
+  Color? getTabBarTextColor(int i) {
     return _controller.index == i
-        ? Theme.of(context).primaryColor
-        : Colors.black;
+        ? Theme.of(context).colorScheme.primary
+        : null;
   }
 
   FontWeight getTabBarTextFontWeight(int i) {
@@ -56,14 +57,13 @@ class _SearchScreenState extends State<SearchScreen>
                   child: MapsContainer(),
                 ),
                 Container(
-                  color: Colors.grey,
+                  color: Theme.of(context).colorScheme.surfaceVariant,
                   height: 2,
                 ),
               ])),
               SliverAppBar(
                 leading: const SizedBox(),
                 toolbarHeight: 30,
-                backgroundColor: Colors.white,
                 flexibleSpace: Center(
                   child: TabBar(
                     indicatorColor: Theme.of(context).primaryColor,
@@ -123,7 +123,7 @@ class _SearchScreenState extends State<SearchScreen>
                   children: [
                     Container(
                       height: double.infinity,
-                      color: Colors.grey.shade200,
+                      color: Theme.of(context).colorScheme.surfaceVariant,
                       alignment: Alignment.center,
                       width: 24,
                       child: RotatedBox(
@@ -244,7 +244,8 @@ class MapsContainer extends StatefulWidget {
   State<MapsContainer> createState() => _MapsContainerState();
 }
 
-class _MapsContainerState extends State<MapsContainer> {
+class _MapsContainerState extends State<MapsContainer>
+    with WidgetsBindingObserver {
   late GoogleMapController mapController;
 
   final LatLng _center = const LatLng(17.7410573, 83.3093624);
@@ -252,9 +253,53 @@ class _MapsContainerState extends State<MapsContainer> {
     "Spotmies": const LatLng(17.744257, 83.3106602),
     "Manas's Residence": const LatLng(17.7410573, 83.3093624)
   };
+  late String _darkMapStyle;
+  Future _loadMapStyles() async {
+    _darkMapStyle =
+        await rootBundle.loadString('assets/map_styles/dark_theme.json');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _loadMapStyles();
+  }
+
+  Future _setMapStyle() async {
+    final controller = await mapController;
+    final theme = WidgetsBinding.instance.window.platformBrightness;
+    print(theme);
+    if (theme == Brightness.dark) {
+      controller.setMapStyle(_darkMapStyle);
+    } else {
+      controller.setMapStyle(null);
+    }
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    // TODO: implement didChangePlatformBrightness
+    super.didChangePlatformBrightness();
+    setState(() {
+      _setMapStyle();
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+    WidgetsBinding.instance.removeObserver(this);
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    setState(() {
+      _setMapStyle();
+    });
     setState(() {
       _markers.clear();
       for (final office in markerLocations.entries) {

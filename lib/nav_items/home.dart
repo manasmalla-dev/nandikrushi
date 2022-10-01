@@ -60,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       );
       return Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(80),
             child: Container(
@@ -72,7 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text(
                     "Nandikrushi",
                     style: TextStyle(
-                        color: const Color(0xFF006838),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? 0.5
+                                    : 1),
                         fontFamily: 'Samarkan',
                         fontSize:
                             getProportionateHeight(32, widget.constraints)),
@@ -126,13 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         widget.constraints.maxWidth > 800 ? 18.0 : 10),
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey.shade300,
-                                offset: const Offset(0, 3),
-                                blurRadius: 15)
-                          ],
+                          color: Theme.of(context).colorScheme.surfaceVariant,
                           borderRadius: BorderRadius.circular(15)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -161,16 +162,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: TextWidget(
+                            child: Text(
                               destinations[index]['sub_title'],
-                              size: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.fontSize,
-                              weight: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.fontWeight,
+                              style: Theme.of(context).textTheme.bodySmall,
+                              textAlign: TextAlign.center,
                             ),
                           ),
                           const SizedBox(
