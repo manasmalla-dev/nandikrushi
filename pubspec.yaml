@@ -53,6 +53,7 @@ dependencies:
   flutter_google_places: ^0.3.0
   location: ^4.4.0
   uuid: ^3.0.6
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

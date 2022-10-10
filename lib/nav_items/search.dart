@@ -30,7 +30,7 @@ class _SearchScreenState extends State<SearchScreen>
   Color? getTabBarTextColor(int i) {
     return _controller.index == i
         ? Theme.of(context).colorScheme.primary
-        : null;
+        : Theme.of(context).colorScheme.onSurface;
   }
 
   FontWeight getTabBarTextFontWeight(int i) {

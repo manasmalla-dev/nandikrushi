@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
@@ -106,8 +107,11 @@ class MyProductsPage extends StatelessWidget {
                     units: product["quantity"] ?? "1 unit",
                     location: product["place"] ?? "Visakhapatnam",
                     additionalInformation: {
-                      "date":
-                          "22-08-2022", //productProvider.orders[itemIndex]["date"],
+                      "date": DateFormat('dd-MM-yyyy, hh:mm a').format(
+                          DateTime.fromMillisecondsSinceEpoch((int.tryParse(
+                                      product["date_added"] ?? "0") ??
+                                  0) *
+                              1000)), //productProvider.orders[itemIndex]["date"],
                       "in_stock": product["in_stock"],
                     },
                   );

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
 
 class ProfileProvider extends ChangeNotifier {
@@ -183,8 +184,11 @@ class ProfileProvider extends ChangeNotifier {
         .map((key, value) => MapEntry(key.toString(), value.toString()));
   }
 
-  Future<void> createAddress(NavigatorState navigatorState,
-      Map<String, String> addressList, Function(String) showMessage) async {
+  Future<void> createAddress(
+      NavigatorState navigatorState,
+      Map<String, String> addressList,
+      Position? location,
+      Function(String) showMessage) async {
     //Send this data to the server
     var response = await Server().postFormData(
         url:
@@ -197,10 +201,13 @@ class ProfileProvider extends ChangeNotifier {
           "address_1": addressList["landmark"] ?? "",
           "address_2": addressList["full_address"] ?? "",
           "city": addressList["city"] ?? "",
-          "country": addressList["state"] ?? "",
-          "state": addressList["country"] ?? "",
+          "state": addressList["state"] ?? "",
+          "country": addressList["country"] ?? "",
           "default": 1.toString(),
           "postcode": addressList["pincode"] ?? "",
+          "coordinates": [
+            {"longitude": location?.longitude, "latitude": location?.latitude}
+          ].toString()
         });
     if (response == null) {
       showMessage("Failed to get a response from the server!");
