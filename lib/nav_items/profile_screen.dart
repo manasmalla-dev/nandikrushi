@@ -388,6 +388,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                SizedBox(
+                                  height: 24,
+                                  child: ListView.builder(
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        return RadioListTile<String>(
+                                          value: loginProvider
+                                              .availableUserTypes.keys
+                                              .toList()[index],
+                                          groupValue:
+                                              loginProvider.userAppTheme.key,
+                                          onChanged: (_) {
+                                            loginProvider.updateUserAppType(
+                                                loginProvider
+                                                    .availableUserTypes.entries
+                                                    .elementAt(index));
+                                          },
+                                          title: Text(loginProvider
+                                              .availableUserTypes.keys
+                                              .toList()[index]),
+                                        );
+                                      },
+                                      scrollDirection: Axis.horizontal),
+                                ),
+                                SizedBox(height: 16),
                                 TextWidget(
                                   "${loginProvider.isFarmer ? "Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Information",
                                   color: Colors.grey.shade800,

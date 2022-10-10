@@ -94,7 +94,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     ),
                                     TextWidget(
                                       "Create Account".toUpperCase(),
-                                      color: const Color(0xFF006838),
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       weight: FontWeight.bold,
                                       size: Theme.of(context)
                                           .textTheme
@@ -171,7 +172,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           TextWidget(
                             "Create Account".toUpperCase(),
-                            color: const Color(0xFF006838),
+                            color: Theme.of(context).colorScheme.primary,
                             weight: FontWeight.bold,
                             size: Theme.of(context)
                                 .textTheme
@@ -258,7 +259,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       flex: 3,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).primaryColor,
+                            primary: Theme.of(context).colorScheme.primary,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
                             onPrimary: Theme.of(context).colorScheme.onPrimary),
@@ -288,7 +289,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       flex: 3,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).primaryColor,
+                            primary: Theme.of(context).colorScheme.primary,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
                             onPrimary: Theme.of(context).colorScheme.onPrimary),
@@ -326,7 +327,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         margin: const EdgeInsets.all(32),
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor.withOpacity(0.2),
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -339,7 +340,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         children: [
                           IconButton(
                             iconSize: 75,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                             onPressed: () {
                               showImagePickerSheet(
                                   constraints: constraints,
@@ -353,8 +354,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           TextWidget(
                             "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0.7),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.7),
                             weight: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
@@ -387,7 +390,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               width: 32,
                               height: 32,
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).colorScheme.primary,
                                   shape: BoxShape.circle),
                               child: IconButton(
                                 onPressed: () {
@@ -418,7 +421,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             children: [
                               IconButton(
                                 iconSize: 75,
-                                color: Theme.of(context).primaryColor,
+                                color: Theme.of(context).colorScheme.primary,
                                 onPressed: () {
                                   showImagePickerSheet(
                                       constraints: constraints,
@@ -433,7 +436,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               TextWidget(
                                 "Add ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Logo",
                                 color: Theme.of(context)
-                                    .primaryColor
+                                    .colorScheme
+                                    .primary
                                     .withOpacity(0.7),
                                 weight: Theme.of(context)
                                     .textTheme
@@ -469,7 +473,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   width: 32,
                                   height: 32,
                                   decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       shape: BoxShape.circle),
                                   child: IconButton(
                                     onPressed: () {
@@ -509,7 +514,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             children: [
               TextWidget(
                 "${loginProvider.isFarmer ? "Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Information",
-                color: Colors.grey.shade800,
                 weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
                 size: Theme.of(context).textTheme.titleMedium?.fontSize,
               ),
@@ -634,7 +638,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               TextWidget(
                 "Location Details",
-                color: Colors.grey.shade800,
                 weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
                 size: Theme.of(context).textTheme.titleMedium?.fontSize,
               ),
@@ -794,8 +797,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   },
                   height: getProportionateHeight(64, constraints),
                   borderRadius: 12,
-                  bgColor: Theme.of(context).primaryColor,
-                  textColor: Theme.of(context).colorScheme.onPrimary,
                   buttonName: "Next".toUpperCase(),
                   innerPadding: 0.02,
                   trailingIcon: Icons.arrow_forward),
@@ -816,7 +817,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             loginProvider.isFarmer
                 ? TextWidget(
                     "Cultivated Land Area (in acres)",
-                    color: Colors.grey.shade800,
                     weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
                     size: Theme.of(context).textTheme.titleMedium?.fontSize,
                   )
@@ -834,8 +834,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     child: Slider(
                         divisions: 30,
-                        thumbColor: Theme.of(context).primaryColor,
-                        activeColor: Theme.of(context).primaryColor,
+                        thumbColor: Theme.of(context).colorScheme.primary,
+                        activeColor: Theme.of(context).colorScheme.primary,
                         inactiveColor: const Color(0x16006838),
                         value: loginPageController.landInAcres,
                         max: 30,
@@ -855,7 +855,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             TextWidget(
               "Select Certification Details",
-              color: Colors.grey.shade800,
               weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
               size: Theme.of(context).textTheme.titleMedium?.fontSize,
             ),
@@ -888,7 +887,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 child: Container(
                   color: loginPageController.userCertification ==
                           loginProvider.certificationList[index]
-                      ? Theme.of(context).primaryColor
+                      ? Theme.of(context).colorScheme.primary
                       : Colors.transparent,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -901,9 +900,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     borderRadius: BorderRadius.circular(3.5)),
                                 activeColor: loginProvider.userAppTheme.key
                                         .contains("Restaraunts")
-                                    ? Colors.green[900]
+                                    ? Theme.of(context).colorScheme.primary
                                     : Colors.white,
-                                checkColor: Theme.of(context).primaryColor,
+                                checkColor:
+                                    Theme.of(context).colorScheme.primary,
                                 value: loginPageController.userCertification ==
                                     loginProvider.certificationList[index],
                                 onChanged: (boolean) {
@@ -934,9 +934,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           loginProvider.certificationList[index]
                                       ? loginProvider.userAppTheme.key
                                               .contains("Restaraunts")
-                                          ? Colors.green[900]
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
                                           : Colors.white
-                                      : Colors.black,
+                                      : null,
                                 ),
                               ),
                             )
@@ -958,9 +960,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const TextWidget(
+                                        TextWidget(
                                           "Reference Number",
-                                          color: Colors.white,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                         ),
                                         SizedBox(
                                           width: getProportionateWidth(
@@ -981,14 +985,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                               .symmetric(
                                                           vertical: 8,
                                                           horizontal: 16),
-                                                  fillColor: Colors.white,
+                                                  fillColor: Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary,
                                                   counterStyle: fonts(
                                                       Theme.of(context)
                                                           .textTheme
                                                           .bodySmall
                                                           ?.fontSize,
                                                       FontWeight.normal,
-                                                      Colors.white),
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary),
                                                   hintStyle: fonts(
                                                       Theme.of(context)
                                                           .textTheme
@@ -1032,9 +1040,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const TextWidget(
+                                      TextWidget(
                                         "Upload Certificate",
-                                        color: Colors.white,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
                                       ),
                                       Row(
                                         children: [
@@ -1282,8 +1292,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           },
           height: getProportionateHeight(64, constraints),
           borderRadius: 12,
-          bgColor: Theme.of(context).primaryColor,
-          textColor: Theme.of(context).colorScheme.onPrimary,
           buttonName: "Submit".toUpperCase(),
           trailingIcon: Icons.check_rounded,
         ),

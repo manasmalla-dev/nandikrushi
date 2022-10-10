@@ -106,9 +106,17 @@ showAddressesBottomSheet(
                         itemBuilder: (context, item) {
                           return InkWell(
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ConfirmOrderScreen()));
+                              isOrderWorkflow
+                                  ? Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ConfirmOrderScreen(
+                                                addressID: profileProvider
+                                                            .userAddresses[item]
+                                                        ["address_id"] ??
+                                                    "",
+                                              )))
+                                  : () {};
                             },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,

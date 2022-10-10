@@ -93,7 +93,7 @@ class OnboardingPageScreen extends StatelessWidget {
                     data["title"],
                     size: Theme.of(context).textTheme.displaySmall?.fontSize,
                     align: TextAlign.start,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                     weight: FontWeight.w700,
                   ),
                 ),
@@ -125,7 +125,6 @@ class OnboardingPageScreen extends StatelessWidget {
                                 .bodyMedium
                                 ?.fontSize,
                             align: TextAlign.start,
-                            color: Colors.grey[900],
                             weight: FontWeight.w400,
                             flow: TextOverflow.visible,
                           ),

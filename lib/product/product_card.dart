@@ -26,6 +26,7 @@ class ProductCard extends StatefulWidget {
   final String? poster;
   final String location;
   final bool includeHorizontalPadding;
+  final Map<String, dynamic> additionalInformation;
   //final bool? isStockAvailable;
   ///[poster] - If its is product posted by farmer, then his details, or else the details of the person who gave order
   const ProductCard(
@@ -39,7 +40,8 @@ class ProductCard extends StatefulWidget {
       required this.units,
       this.poster,
       required this.location,
-      this.includeHorizontalPadding = true})
+      this.includeHorizontalPadding = true,
+      this.additionalInformation = const {}})
       : super(key: key);
 
   @override
@@ -128,6 +130,7 @@ class _ProductCardState extends State<ProductCard> {
                               builder: (context, productProvider, _) {
                             return IntrinsicWidth(
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   productProvider.cart
                                           .where((e) =>
@@ -391,12 +394,199 @@ class _ProductCardState extends State<ProductCard> {
                       : widget.type == CardType.myProducts
                           ? [
                               //A product card for my products page
+                              Text(
+                                  'Posted on: ${widget.additionalInformation["date"]}'),
+                              const SizedBox(height: 8),
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    minimumSize: Size.zero, // Set this
+                                    padding:
+                                        const EdgeInsets.all(4), // and this
+                                    side: BorderSide(
+                                      width: 1,
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100))),
+                                onPressed: () {},
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 2),
+                                  child: TextWidget(
+                                    (widget.additionalInformation["in_stock"]
+                                                    .toString() ==
+                                                "1"
+                                            ? "In Stock"
+                                            : "Out of Stock")
+                                        .toUpperCase(),
+                                    size: Theme.of(context)
+                                        .textTheme
+                                        .button
+                                        ?.fontSize,
+                                    weight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ]
                           : widget.type == CardType.myPurchases
                               ? [
                                   //A product card for my purchases page
                                 ]
                               : [
+                                  Text(
+                                      'Delivery order by: ${widget.additionalInformation["date"]}'),
+                                  const SizedBox(height: 8),
+                                  OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        minimumSize: Size.zero, // Set this
+                                        padding:
+                                            const EdgeInsets.all(4), // and this
+                                        side: BorderSide(
+                                          width: 1,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(100))),
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12)),
+                                          builder: (context) {
+                                            return Container(
+                                              height: 250,
+                                              padding: const EdgeInsets.all(16),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Contact Us",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleLarge,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  TextWidget(
+                                                    "Choose one of the following sources to get support",
+                                                    flow: TextOverflow.visible,
+                                                    size: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge
+                                                        ?.fontSize,
+                                                    weight: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge
+                                                        ?.fontWeight,
+                                                  ),
+                                                  const Spacer(),
+                                                  Row(
+                                                    children: const [
+                                                      Expanded(
+                                                        flex: 3,
+                                                        child: Icon(
+                                                            Icons.email_rounded,
+                                                            size: 48),
+                                                      ),
+                                                      Spacer(),
+                                                      Expanded(
+                                                        flex: 3,
+                                                        child: Icon(
+                                                            Icons.phone_rounded,
+                                                            size: 48),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 3,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8)),
+                                                          ),
+                                                          onPressed: () async {
+                                                            launchEmail();
+                                                          },
+                                                          child: const Text(
+                                                            "Email",
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const Spacer(),
+                                                      Expanded(
+                                                        flex: 3,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(
+                                                              primary: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8)),
+                                                              onPrimary: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .onPrimary),
+                                                          onPressed: () async {
+                                                            dialCall();
+                                                          },
+                                                          child: const Text(
+                                                              "Phone"),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          });
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0, vertical: 2),
+                                      child: TextWidget(
+                                        "Contact".toUpperCase(),
+                                        size: Theme.of(context)
+                                            .textTheme
+                                            .button
+                                            ?.fontSize,
+                                        weight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  TextWidget(
+                                    widget.additionalInformation["status"] == 0
+                                        ? "Order Accepted".toUpperCase()
+                                        : "Order Cancelled".toUpperCase(),
+                                    size: Theme.of(context)
+                                        .textTheme
+                                        .button
+                                        ?.fontSize,
+                                    weight: FontWeight.bold,
+                                  ),
                                   //A product card for orders page
                                 ],
                 ),

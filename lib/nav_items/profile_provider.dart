@@ -61,6 +61,7 @@ class ProfileProvider extends ChangeNotifier {
     }
 
     if (response.statusCode == 200) {
+      print(response.body);
       Map<String, dynamic> profileJSON = jsonDecode(response.body)["message"];
       log(profileJSON.toString());
       sellerID = profileJSON["seller_id"];
@@ -76,9 +77,9 @@ class ProfileProvider extends ChangeNotifier {
       sellerImage = profileJSON["seller_image"];
       additionalComments = profileJSON["additional_comments"];
       certificationType = profileJSON["addtional_documents"];
-      certificates = (json.decode(profileJSON["document"]) as List<dynamic>)
-          .map((e) => e.toString())
-          .toList();
+      certificates = profileJSON["document"].runtimeType == String
+          ? [profileJSON["document"]].map((e) => e.toString()).toList()
+          : profileJSON["document"].map((e) => e.toString()).toList();
       storeName = profileJSON["store_name"];
       storeLogo = profileJSON["store_logo"];
       storeAddress = jsonStringToMap(profileJSON["store_address"]);
@@ -98,15 +99,18 @@ class ProfileProvider extends ChangeNotifier {
       if (userAddressResponse.statusCode == 200) {
         log(userAddressResponse.body);
         if (jsonDecode(userAddressResponse.body)["status"]) {
-          var userAddressJSON =
-              jsonDecode(userAddressResponse.body)["message"].values.first;
+          List<dynamic> userAddressJSON =
+              await jsonDecode(userAddressResponse.body)["message"];
           //log(userAddressJSON.toString());
           Map<String, String> body = {};
           userAddresses = [];
-          userAddressJSON.forEach((key, value) {
-            body.addAll({key: value.toString()});
+          userAddressJSON.forEach((map) {
+            body = {};
+            map.forEach((key, value) {
+              body.addAll({key: value.toString()});
+            });
+            userAddresses.add(body);
           });
-          userAddresses.add(body);
           log(userAddresses.toString());
         }
       } else if (response.statusCode == 400) {

@@ -34,7 +34,7 @@ class UserTypeScreen extends StatelessWidget {
                     height: getProportionateHeight(463, constraints),
                     decoration: BoxDecoration(
                         //color: Color(0xffF2F5F4),
-                        color: Colors.white,
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         boxShadow: [
                           BoxShadow(
                             offset: Offset(
@@ -72,7 +72,8 @@ Widget userTypesSelection(
                 ? Theme.of(context).textTheme.titleMedium?.fontSize
                 : Theme.of(context).textTheme.titleSmall?.fontSize,
             weight: FontWeight.w800,
-            color: createMaterialColor(Theme.of(context).primaryColor).shade600,
+            color: createMaterialColor(Theme.of(context).colorScheme.primary)
+                .shade600,
             align: TextAlign.start,
             lSpace: 2.5,
           ),
@@ -92,14 +93,15 @@ Widget userTypesSelection(
               height: getProportionateHeight(100, constraints),
               bgColor: loginProvider.userAppTheme.key ==
                       userTypeData.keys.toList()[index]
-                  ? Theme.of(context).primaryColor
+                  ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.surface,
               borderSideColor:
-                  createMaterialColor(Theme.of(context).primaryColor).shade600,
+                  createMaterialColor(Theme.of(context).colorScheme.primary)
+                      .shade600,
               textColor: loginProvider.userAppTheme.key ==
                       userTypeData.keys.toList()[index]
                   ? Theme.of(context).colorScheme.onPrimary
-                  : Theme.of(context).primaryColor,
+                  : Theme.of(context).colorScheme.primary,
               buttonName:
                   userTypeData.keys.toList()[index].toString().toUpperCase(),
               center: true,

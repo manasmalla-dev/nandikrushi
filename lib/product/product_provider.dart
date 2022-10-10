@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
@@ -37,7 +38,8 @@ class ProductProvider extends ChangeNotifier {
 
   List<Map<String, String>> cart = [];
   List<Map<String, String>> products = [];
-  List<Map<String, String>> orders = [];
+  List<Map<String, String>> myProducts = [];
+  List<Map<String, dynamic>> orders = [];
   List<Map<String, String>> coupons = [];
   Map<String, List<Map<String, String>>> categorizedProducts = {};
 
@@ -102,10 +104,15 @@ class ProductProvider extends ChangeNotifier {
           }
         }
       }
-      var ordersData = await Server().postFormData(
-          url:
-              "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getorders",
-          body: {"customer_id": profileProvider.sellerID.toString()});
+      var ordersData = await post(
+        Uri.parse(
+            "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getorders"),
+        body: jsonEncode({"customer_id": profileProvider.sellerID.toString()}),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+      );
       if (ordersData == null) {
         showMessage("Failed to get a response from the server!");
         //hideLoader();
@@ -117,10 +124,46 @@ class ProductProvider extends ChangeNotifier {
         return;
       }
       if (ordersData.statusCode == 200) {
+        orders = [];
         if (!ordersData.body.contains('"status":false')) {
-          var orderJSONResponse = jsonDecode(ordersData.body);
-          log(orderJSONResponse.toString());
-          //TODO: Work with this data to add to orders list
+          List<dynamic> orderJSONResponse =
+              jsonDecode(ordersData.body)["order"];
+          orderJSONResponse.forEach((element) {
+            var orderData = {"order_id": element["order_id"]};
+            (element["product_details"] as List<dynamic>)
+                .forEach((productOrderDetails) {
+              orderData["products"] = [];
+              (orderData["products"]).add({
+                "product_name": productOrderDetails["product_name"],
+                "description": products
+                    .where((e) =>
+                        e["product_id"] == productOrderDetails["product_id"])
+                    .first["description"]
+                    .toString(),
+                "url": products
+                    .where((e) =>
+                        e["product_id"] == productOrderDetails["product_id"])
+                    .first["url"]
+                    .toString(),
+                "price": productOrderDetails["price"],
+                "product_id": productOrderDetails["product_id"],
+                "quantity": productOrderDetails["quantity"],
+                "units": products
+                    .where((e) =>
+                        e["product_id"] == productOrderDetails["product_id"])
+                    .first["units"]
+                    .toString(),
+                "place": element["shipping_details"][0]["shipping_city"],
+              });
+            });
+            orderData.addAll({
+              "customer_name":
+                  "${element["customer_details"][0]["firstname"]} ${element["customer_details"][0]["lastname"]}",
+              "date": element["delivery_details"][0]["delivery_date"]
+            });
+            orders.add(orderData);
+          });
+          log(orders.toString());
         }
         var cartData = await Server().postFormData(
             url:
@@ -141,7 +184,7 @@ class ProductProvider extends ChangeNotifier {
         if (cartData.statusCode == 200) {
           if (!cartData.body.contains('"status":false')) {
             List<dynamic> cartJSONResponse =
-                jsonDecode(cartData.body)["products"];
+                jsonDecode(cartData.body)["cart_products"];
             cart = cartJSONResponse.map((cartItem) {
               var productCartItem = products
                   .where((element) =>
@@ -150,11 +193,11 @@ class ProductProvider extends ChangeNotifier {
                   .first;
               return {
                 "cart_id": cartItem["cart_id"].toString(),
-                "name": cartItem["name"].toString(),
+                "name": productCartItem["name"].toString(),
                 'unit': productCartItem["units"].toString(),
                 "product_id": cartItem["product_id"].toString(),
                 "quantity": cartItem['quantity'].toString(),
-                'price': cartItem['price']
+                'price': productCartItem['price']
                     .toString()
                     .replaceFirst("\$", "")
                     .toString(),
@@ -164,10 +207,79 @@ class ProductProvider extends ChangeNotifier {
             }).toList();
             log("CART: " + cart.toString());
           }
-          //TODO: Add the my products API, purchases API, units API, subcategories API.
-          profileProvider.isDataFetched = true;
-          notifyListeners();
-          profileProvider.hideLoader();
+          var myProductsData = await Server().postFormData(
+              url:
+                  "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerproduct/GetSellerproductdata",
+              body: {
+                "user_id": profileProvider.userIdForAddress,
+              });
+          if (myProductsData == null) {
+            showMessage("Failed to get a response from the server!");
+            //hideLoader();
+            if (Platform.isAndroid) {
+              SystemNavigator.pop();
+            } else if (Platform.isIOS) {
+              exit(0);
+            }
+            return;
+          }
+          if (myProductsData.statusCode == 200) {
+            if (!myProductsData.body.contains('"status":false')) {
+              List<dynamic> myProductsJSONResponse =
+                  jsonDecode(myProductsData.body)["message"];
+              myProducts = myProductsJSONResponse
+                  .map((e) => (e as Map<String, dynamic>)
+                      .map((key, value) => MapEntry(key, value.toString())))
+                  .toList();
+              log(myProducts.toString());
+              // cart = cartJSONResponse.map((cartItem) {
+              //   var productCartItem = products
+              //       .where((element) =>
+              //           element["product_id"] ==
+              //           (cartItem["product_id"].toString()))
+              //       .first;
+              //   return {
+              //     "cart_id": cartItem["cart_id"].toString(),
+              //     "name": productCartItem["name"].toString(),
+              //     'unit': productCartItem["units"].toString(),
+              //     "product_id": cartItem["product_id"].toString(),
+              //     "quantity": cartItem['quantity'].toString(),
+              //     'price': productCartItem['price']
+              //         .toString()
+              //         .replaceFirst("\$", "")
+              //         .toString(),
+              //     'place': productCartItem["place"].toString(),
+              //     'url': productCartItem["url"].toString()
+              //   };
+              // }).toList();
+              // log("My Products: " + cart.toString());
+            }
+            //TODO: Add the my products API, purchases API, units API, subcategories API.
+            profileProvider.isDataFetched = true;
+            notifyListeners();
+            profileProvider.hideLoader();
+          } else if (myProductsData.statusCode == 400) {
+            showMessage("Undefined parameter when calling API");
+            if (Platform.isAndroid) {
+              SystemNavigator.pop();
+            } else if (Platform.isIOS) {
+              exit(0);
+            }
+          } else if (myProductsData.statusCode == 404) {
+            showMessage("API not found");
+            if (Platform.isAndroid) {
+              SystemNavigator.pop();
+            } else if (Platform.isIOS) {
+              exit(0);
+            }
+          } else {
+            showMessage("Failed to get data!");
+            if (Platform.isAndroid) {
+              SystemNavigator.pop();
+            } else if (Platform.isIOS) {
+              exit(0);
+            }
+          }
         } else if (cartData.statusCode == 400) {
           showMessage("Undefined parameter when calling API");
           if (Platform.isAndroid) {
@@ -306,6 +418,7 @@ class ProductProvider extends ChangeNotifier {
       }
       if (cartData.statusCode == 200) {
         if (!cartData.body.contains('"status":false')) {
+          //TODO add to cart manually and then notifyListener
           getData(showMessage: showMessage, profileProvider: profileProvider);
         }
         profileProvider.isDataFetched = true;
@@ -482,6 +595,7 @@ class ProductProvider extends ChangeNotifier {
                             }
                             if (cartData.statusCode == 200) {
                               if (!cartData.body.contains('"status":false')) {
+                                //TODO update to cart manually and then notifyListener
                                 getData(
                                     showMessage: showMessage,
                                     profileProvider: profileProvider);
@@ -594,6 +708,7 @@ class ProductProvider extends ChangeNotifier {
       }
       if (cartData.statusCode == 200) {
         if (!cartData.body.contains('"status":false')) {
+          //TODO add to cart manually and then notifyListener
           getData(showMessage: showMessage, profileProvider: profileProvider);
         }
         profileProvider.isDataFetched = true;

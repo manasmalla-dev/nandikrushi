@@ -159,15 +159,15 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
               : null,
           decoration: widget.isEmail
               ? BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.8),
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
                   borderRadius: BorderRadius.circular(10))
               : null,
           child: TextWidget(
             !widget.isEmail
                 ? "Enter your mobile number"
                 : "Enter the credentials to login",
-            color: calculateContrast(
-                        Theme.of(context).primaryColor, Colors.grey.shade900) >
+            color: calculateContrast(Theme.of(context).colorScheme.primary,
+                        Theme.of(context).scaffoldBackgroundColor) <
                     3
                 ? Colors.grey[900]
                 : Colors.white,
@@ -189,7 +189,7 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
                 },
                 decoration: InputDecoration(
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: Theme.of(context).scaffoldBackgroundColor,
                     prefix: AnimatedContainer(
                       width: widget.loginPageController.phoneTextEditController
                               .text.isNotEmpty
@@ -242,7 +242,7 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
                 onFieldSubmitted: (_) {},
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).scaffoldBackgroundColor,
                   isDense: true,
                   prefixIcon: const Icon(Icons.email_rounded),
                   hintStyle: fonts(
@@ -297,7 +297,7 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
                     ),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).scaffoldBackgroundColor,
                   isDense: true,
                   prefixIcon: const Icon(Icons.lock_rounded),
                   hintStyle: fonts(
@@ -330,14 +330,14 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
                   const Spacer(),
                   TextButton(
                     style: TextButton.styleFrom(
-                        primary: Theme.of(context).primaryColor),
+                        primary: Theme.of(context).colorScheme.primary),
                     onPressed: () {
                       showForgotPasswordDialog(context, widget.constraints,
                           widget.loginPageController, false);
                     },
                     child: TextWidget(
                       "Forgot Password",
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                       weight: FontWeight.bold,
                     ),
                   ),
@@ -353,8 +353,8 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
             widget.onLogin(widget.isEmail);
           },
           height: getProportionateHeight(64, widget.constraints),
-          bgColor: Theme.of(context).primaryColor,
-          borderSideColor: Theme.of(context).primaryColor,
+          bgColor: Theme.of(context).colorScheme.primary,
+          borderSideColor: Theme.of(context).colorScheme.primary,
           buttonName: widget.isEmail ? "Login" : "Get OTP".toUpperCase(),
           borderRadius: 12,
           trailingIcon: Icons.arrow_forward,
@@ -365,7 +365,7 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
         Platform.isAndroid || Platform.isIOS
             ? TextButton(
                 style: TextButton.styleFrom(
-                    primary: Theme.of(context).primaryColor),
+                    primary: Theme.of(context).colorScheme.primary),
                 onPressed: () {
                   widget.onChangeLoginMethod();
                 },
@@ -454,9 +454,9 @@ void showForgotPasswordDialog(
               height: getProportionateHeight(48, constraints),
               minWidth: getProportionateWidth(150, constraints),
               bgColor: Colors.transparent,
-              borderSideColor: Theme.of(context).primaryColor,
+              borderSideColor: Theme.of(context).colorScheme.primary,
               buttonName: "Cancel".toUpperCase(),
-              textColor: Theme.of(context).primaryColor,
+              textColor: Theme.of(context).colorScheme.primary,
               textStyle: FontWeight.w600,
               borderRadius: 12,
               center: true,
@@ -476,7 +476,7 @@ void showForgotPasswordDialog(
               },
               height: getProportionateHeight(48, constraints),
               minWidth: getProportionateWidth(150, constraints),
-              bgColor: Theme.of(context).primaryColor,
+              bgColor: Theme.of(context).colorScheme.primary,
               buttonName: "Send".toUpperCase(),
               borderRadius: 12,
               textColor: Colors.white,
@@ -503,7 +503,7 @@ void showForgotPasswordDialog(
                       fontFamily: 'Samarkan',
                       fontSize: getProportionateHeight(34, constraints),
                       fontWeight: FontWeight.w500,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -524,7 +524,7 @@ void showForgotPasswordDialog(
                 TextWidget(
                   'To help keep your account safe, Nandikrushi wants to make sure that\'s really you trying to sign in',
                   size: Theme.of(context).textTheme.bodyLarge?.fontSize,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.primary,
                   weight: Theme.of(context).textTheme.bodyLarge?.fontWeight,
                   flow: TextOverflow.visible,
                   align: TextAlign.center,
@@ -552,8 +552,8 @@ void showForgotPasswordDialog(
                           Colors.grey[400]),
                       hintText: 'Email Address',
                       border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).primaryColor),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
                           borderRadius: BorderRadius.circular(16)),
                     ),
                     validator: (value) {
@@ -635,7 +635,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                         hintText: 'Email Address',
                         border: OutlineInputBorder(
                             borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor),
+                                color: Theme.of(context).colorScheme.primary),
                             borderRadius: BorderRadius.circular(16)),
                       ),
                       validator: (value) {
@@ -660,7 +660,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                       },
                       decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: Theme.of(context).scaffoldBackgroundColor,
                           prefix: AnimatedContainer(
                             width: widget.loginPageController
                                     .phoneTextEditController.text.isNotEmpty
@@ -683,7 +683,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                           counterStyle: fonts(
                               Theme.of(context).textTheme.bodySmall?.fontSize,
                               FontWeight.normal,
-                              Theme.of(context).primaryColor),
+                              Theme.of(context).colorScheme.primary),
                           hintStyle: fonts(
                               Theme.of(context).textTheme.bodyMedium?.fontSize,
                               FontWeight.w500,
@@ -692,7 +692,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                           hintText: 'Phone number',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor),
+                                color: Theme.of(context).colorScheme.primary),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           isDense: true,
@@ -748,7 +748,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                         hintText: 'Password',
                         border: OutlineInputBorder(
                             borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor),
+                                color: Theme.of(context).colorScheme.primary),
                             borderRadius: BorderRadius.circular(16)),
                       ),
                       validator: (value) {
@@ -772,7 +772,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                         const Spacer(),
                         TextButton(
                           style: TextButton.styleFrom(
-                              primary: Theme.of(context).primaryColor),
+                              primary: Theme.of(context).colorScheme.primary),
                           onPressed: () {
                             showForgotPasswordDialog(
                               context,
@@ -783,7 +783,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                           },
                           child: TextWidget(
                             "Forgot Password",
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                             weight: FontWeight.bold,
                           ),
                         ),
@@ -802,8 +802,8 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                 minWidth: double.infinity,
                 height: getProportionateHeight(75, widget.constraints),
                 borderRadius: 10,
-                bgColor: Theme.of(context).primaryColor,
-                borderSideColor: Theme.of(context).primaryColor,
+                bgColor: Theme.of(context).colorScheme.primary,
+                borderSideColor: Theme.of(context).colorScheme.primary,
                 textColor: Colors.white,
                 buttonName: widget.isEmail ? "Login" : "Get OTP".toUpperCase(),
                 trailingIcon: Icons.arrow_forward,
@@ -816,7 +816,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
               Platform.isAndroid || Platform.isIOS
                   ? TextButton(
                       style: TextButton.styleFrom(
-                          primary: Theme.of(context).primaryColor),
+                          primary: Theme.of(context).colorScheme.primary),
                       onPressed: () {
                         widget.onChangeLoginMethod();
                       },
@@ -824,7 +824,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                         widget.isEmail
                             ? "or, Login With Mobile"
                             : "or, Login With Email",
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).colorScheme.primary,
                         weight: FontWeight.bold,
                       ),
                     )
@@ -841,7 +841,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
               Text(
                 "Nandikrushi",
                 style: TextStyle(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                     fontFamily: 'Samarkan',
                     fontSize: getProportionateHeight(32, widget.constraints)),
               ),

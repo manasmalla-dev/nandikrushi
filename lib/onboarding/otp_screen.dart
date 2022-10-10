@@ -43,7 +43,6 @@ class _OTPScreenState extends State<OTPScreen> {
         return constraints.maxWidth < 600
             ? Scaffold(
                 appBar: AppBar(
-                    backgroundColor: Colors.white,
                     elevation: 0,
                     leading: IconButton(
                         onPressed: () {
@@ -51,7 +50,6 @@ class _OTPScreenState extends State<OTPScreen> {
                         },
                         icon: Icon(
                           Icons.arrow_back,
-                          color: Colors.grey[900],
                         ))),
                 body: SingleChildScrollView(
                   child: Padding(
@@ -74,7 +72,6 @@ class _OTPScreenState extends State<OTPScreen> {
                           children: [
                             TextWidget(
                               "Please enter the OTP",
-                              color: Colors.black,
                               weight: FontWeight.w500,
                               size: Theme.of(context)
                                   .textTheme
@@ -89,7 +86,6 @@ class _OTPScreenState extends State<OTPScreen> {
                               children: [
                                 TextWidget(
                                   "sent to your mobile number",
-                                  color: Colors.black,
                                   weight: FontWeight.w500,
                                   size: Theme.of(context)
                                       .textTheme
@@ -107,7 +103,6 @@ class _OTPScreenState extends State<OTPScreen> {
                                 ),
                                 TextWidget(
                                   widget.phoneNumber,
-                                  color: Colors.black,
                                   weight: FontWeight.w800,
                                   size: Theme.of(context)
                                       .textTheme
@@ -133,7 +128,9 @@ class _OTPScreenState extends State<OTPScreen> {
                               height: 60,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    width: 2, color: Colors.grey.shade600),
+                                    width: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.outline),
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(8)),
                               ),
@@ -178,14 +175,18 @@ class _OTPScreenState extends State<OTPScreen> {
                           bgColor: loginPageController
                                       .otpTextEditController.text.length ==
                                   6
-                              ? Theme.of(context).primaryColor
-                              : Colors.grey.shade400,
-                          borderSideColor: loginPageController
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.surfaceVariant,
+                          textColor: loginPageController
                                       .otpTextEditController.text.length ==
                                   6
-                              ? Theme.of(context).primaryColor
-                              : Colors.grey.shade500,
-                          textColor: Colors.white,
+                              ? Theme.of(context).colorScheme.onPrimary
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
+                          iconColor: loginPageController
+                                      .otpTextEditController.text.length ==
+                                  6
+                              ? Theme.of(context).colorScheme.onPrimary
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
                           buttonName: "VERIFY OTP",
                           borderRadius: 12,
                           trailingIcon: Icons.arrow_forward,
@@ -211,9 +212,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               child: TextWidget(
                                 "Resend".toUpperCase(),
                                 weight: FontWeight.w700,
-                                color: canResendSMS
-                                    ? Colors.grey.shade900
-                                    : Colors.grey,
+                                color: canResendSMS ? null : Colors.grey,
                               ),
                             ),
                           ],

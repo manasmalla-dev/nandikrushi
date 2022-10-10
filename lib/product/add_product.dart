@@ -69,7 +69,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ),
                       TextWidget(
                         "Add Product".toUpperCase(),
-                        color: const Color(0xFF006838),
+                        color: Theme.of(context).colorScheme.primary,
                         weight: FontWeight.bold,
                         size: Theme.of(context).textTheme.titleSmall?.fontSize,
                       ),
@@ -102,7 +102,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   const EdgeInsets.only(top: 8, bottom: 12),
                               decoration: BoxDecoration(
                                   color: Theme.of(context)
-                                      .primaryColor
+                                      .colorScheme
+                                      .primary
                                       .withOpacity(0.2),
                                   borderRadius: BorderRadius.circular(18)),
                               child: addProductController.productImage.isEmpty
@@ -111,7 +112,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       children: [
                                         IconButton(
                                           iconSize: 64,
-                                          color: Theme.of(context).primaryColor,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           onPressed: () {
                                             showModalBottomSheet(
                                                 context: context,
@@ -156,7 +159,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                 style: ElevatedButton.styleFrom(
                                                                     primary: Theme.of(
                                                                             context)
-                                                                        .primaryColor,
+                                                                        .colorScheme
+                                                                        .primary,
                                                                     shape: RoundedRectangleBorder(
                                                                         borderRadius:
                                                                             BorderRadius.circular(
@@ -200,7 +204,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                 style: ElevatedButton.styleFrom(
                                                                     primary: Theme.of(
                                                                             context)
-                                                                        .primaryColor,
+                                                                        .colorScheme
+                                                                        .primary,
                                                                     shape: RoundedRectangleBorder(
                                                                         borderRadius:
                                                                             BorderRadius.circular(
@@ -248,7 +253,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                         TextWidget(
                                           "Add Product Image",
                                           color: Theme.of(context)
-                                              .primaryColor
+                                              .colorScheme
+                                              .primary
                                               .withOpacity(0.7),
                                           weight: FontWeight.w500,
                                           size: 18,
@@ -318,7 +324,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                 decoration: BoxDecoration(
                                                                     color: Theme.of(
                                                                             context)
-                                                                        .primaryColor,
+                                                                        .colorScheme
+                                                                        .primary,
                                                                     shape: BoxShape
                                                                         .circle),
                                                                 child:
@@ -362,7 +369,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                     Expanded(
                                                                                       flex: 3,
                                                                                       child: ElevatedButton(
-                                                                                        style: ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), onPrimary: Colors.white),
+                                                                                        style: ElevatedButton.styleFrom(primary: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), onPrimary: Colors.white),
                                                                                         onPressed: () async {
                                                                                           var image = await ImagePicker().pickImage(source: ImageSource.gallery);
                                                                                           if (image != null) {
@@ -383,7 +390,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                     Expanded(
                                                                                       flex: 3,
                                                                                       child: ElevatedButton(
-                                                                                        style: ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), onPrimary: Colors.white),
+                                                                                        style: ElevatedButton.styleFrom(primary: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), onPrimary: Colors.white),
                                                                                         onPressed: () async {
                                                                                           var image = await ImagePicker().pickImage(source: ImageSource.camera);
                                                                                           if (image != null) {
@@ -422,7 +429,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                             Container(
                                               decoration: BoxDecoration(
                                                   color: Theme.of(context)
-                                                      .primaryColor,
+                                                      .colorScheme
+                                                      .primary,
                                                   shape: BoxShape.circle),
                                               child: IconButton(
                                                 onPressed: () {
@@ -473,7 +481,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                         ElevatedButton(
                                                                       style: ElevatedButton.styleFrom(
                                                                           primary: Theme.of(context)
-                                                                              .primaryColor,
+                                                                              .colorScheme
+                                                                              .primary,
                                                                           shape:
                                                                               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                                           onPrimary: Colors.white),
@@ -509,7 +518,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                         ElevatedButton(
                                                                       style: ElevatedButton.styleFrom(
                                                                           primary: Theme.of(context)
-                                                                              .primaryColor,
+                                                                              .colorScheme
+                                                                              .primary,
                                                                           shape:
                                                                               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                                           onPrimary: Colors.white),
@@ -567,7 +577,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       children: [
                                         TextWidget(
                                           "Product Information",
-                                          color: Colors.grey.shade800,
                                           weight: FontWeight.bold,
                                           size: 18,
                                         ),
@@ -578,8 +587,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                           controller: addProductController
                                               .formControllers['product-name'],
                                           label: 'Product Name',
-                                          style: fonts(15.0, FontWeight.w500,
-                                              Colors.black),
                                         ),
                                         const SizedBox(
                                           height: 12,
@@ -595,28 +602,28 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                 .symmetric(
                                                             vertical: 16),
                                                     focusedBorder:
-                                                        const UnderlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color: Color(
-                                                                    0xFF006838))),
-                                                    border:
                                                         UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Colors
-                                                            .grey.shade500,
-                                                      ),
-                                                    ),
+                                                            borderSide: BorderSide(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary)),
                                                   ),
                                                   isExpanded: true,
-                                                  style: fonts(
-                                                      20.0,
-                                                      FontWeight.w500,
-                                                      Colors.black),
                                                   hint: TextWidget(
                                                     'Category',
                                                     size: 20,
-                                                    color: Colors.grey.shade600,
                                                   ),
+                                                  dropdownColor:
+                                                      ElevationOverlay
+                                                          .colorWithOverlay(
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .surface,
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
+                                                              2.0),
                                                   value: addProductController
                                                       .selectedCategory,
                                                   items: productProvider
@@ -651,24 +658,22 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                             borderSide: BorderSide(
                                                                 color: Color(
                                                                     0xFF006838))),
-                                                    border:
-                                                        UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Colors
-                                                            .grey.shade500,
-                                                      ),
-                                                    ),
                                                   ),
                                                   isExpanded: true,
-                                                  style: fonts(
-                                                      20.0,
-                                                      FontWeight.w500,
-                                                      Colors.black),
                                                   hint: TextWidget(
                                                     'Sub-Category',
                                                     size: 20,
-                                                    color: Colors.grey.shade600,
                                                   ),
+                                                  dropdownColor:
+                                                      ElevationOverlay
+                                                          .colorWithOverlay(
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .surface,
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
+                                                              2.0),
                                                   value: addProductController
                                                       .selectedSubCategory,
                                                   items: [
@@ -710,23 +715,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                             borderSide: BorderSide(
                                                                 color: Color(
                                                                     0xFF006838))),
-                                                    border:
-                                                        UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Colors
-                                                            .grey.shade500,
-                                                      ),
-                                                    ),
                                                   ),
+                                                  dropdownColor:
+                                                      ElevationOverlay
+                                                          .colorWithOverlay(
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .surface,
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
+                                                              2.0),
                                                   isExpanded: true,
-                                                  style: fonts(
-                                                      20.0,
-                                                      FontWeight.w500,
-                                                      Colors.black),
                                                   hint: TextWidget(
                                                     'Units',
                                                     size: 20,
-                                                    color: Colors.grey.shade600,
                                                   ),
                                                   value: addProductController
                                                       .selectedUnits,
@@ -758,10 +761,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                         .formControllers[
                                                     'quantity'],
                                                 label: 'Quantity',
-                                                style: fonts(
-                                                    15.0,
-                                                    FontWeight.w500,
-                                                    Colors.black),
                                               ),
                                             ),
                                           ],
@@ -775,15 +774,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     controller: addProductController
                                         .formControllers['price'],
                                     label: 'Price',
-                                    style: fonts(
-                                        20.0, FontWeight.w500, Colors.black),
                                   ),
                                   const SizedBox(
                                     height: 27,
                                   ),
                                   TextWidget(
                                     "Product Description",
-                                    color: Colors.grey.shade800,
                                     weight: FontWeight.bold,
                                     size: 18,
                                   ),
@@ -793,7 +789,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   Container(
                                     decoration: BoxDecoration(
                                       color: Theme.of(context)
-                                          .primaryColor
+                                          .colorScheme
+                                          .primary
                                           .withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
@@ -806,8 +803,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       keyboardType: TextInputType.text,
                                       controller: addProductController
                                           .formControllers['description'],
-                                      style: fonts(
-                                          16.0, FontWeight.w400, Colors.black),
                                     ),
                                   ),
                                 ],
@@ -851,8 +846,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                             height: 54,
                             borderRadius: 8,
-                            bgColor: Theme.of(context).primaryColor,
-                            textColor: Colors.white,
                             buttonName: "Submit".toUpperCase(),
                             innerPadding: 0.02,
                             // textStyle: FontWeight.bold,

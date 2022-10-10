@@ -5,12 +5,14 @@ snackbar(BuildContext context, description,
     {bool isError = true, bool isMssg = true}) {
   final snackBar = SnackBar(
     backgroundColor: isError
-        ? const Color(0xFFB31412)
+        ? Theme.of(context).colorScheme.errorContainer
         : isMssg
-            ? Theme.of(context).primaryColor
+            ? Theme.of(context).colorScheme.primary
             : null,
-    content:
-        TextWidget(description, color: Theme.of(context).colorScheme.onPrimary),
+    content: TextWidget(description,
+        color: isError
+            ? Theme.of(context).colorScheme.onErrorContainer
+            : Theme.of(context).colorScheme.onPrimary),
     action: SnackBarAction(
       textColor:
           isError ? Colors.white : Theme.of(context).colorScheme.onPrimary,

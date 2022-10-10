@@ -28,10 +28,13 @@ class LoginBG extends StatelessWidget {
                   child: Container(
                     width: getProportionateWidth(428, constraints),
                     height: getProportionateHeight(926, constraints),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                         image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage('assets/images/login_BG.png'),
+                      image: AssetImage(
+                          Theme.of(context).brightness == Brightness.dark
+                              ? 'assets/images/login_BG_night.png'
+                              : 'assets/images/login_BG.png'),
                     )),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,7 +61,8 @@ class LoginBG extends StatelessWidget {
                                       fontSize: getProportionateHeight(
                                           34, constraints),
                                       fontWeight: FontWeight.w500,
-                                      color: Theme.of(context).primaryColor,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                     textAlign: TextAlign.start,
                                   ),
@@ -69,7 +73,6 @@ class LoginBG extends StatelessWidget {
                                     size:
                                         getProportionateHeight(25, constraints),
                                     weight: FontWeight.w600,
-                                    color: Colors.grey[900],
                                     align: TextAlign.start,
                                     lSpace: 1.2,
                                   ),
@@ -80,7 +83,6 @@ class LoginBG extends StatelessWidget {
                                     size:
                                         getProportionateHeight(10, constraints),
                                     weight: FontWeight.w600,
-                                    color: Colors.grey[900],
                                     align: TextAlign.start,
                                     lSpace: 2.5,
                                   ),
@@ -135,7 +137,7 @@ class LoginBG extends StatelessWidget {
                                   color: Colors.black.withOpacity(0.2),
                                 ),
                               ],
-                              color: Colors.white,
+                              color: Theme.of(context).scaffoldBackgroundColor,
                               borderRadius: const BorderRadius.horizontal(
                                   left: Radius.circular(32)),
                             ),
@@ -196,7 +198,7 @@ class WelcomeToNandikrushi extends StatelessWidget {
               fontFamily: 'Samarkan',
               fontSize: getProportionateHeight(48, constraints),
               fontWeight: FontWeight.w500,
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.primary,
             ),
             textAlign: TextAlign.start,
           ),
@@ -206,7 +208,6 @@ class WelcomeToNandikrushi extends StatelessWidget {
             'WELCOME',
             size: getProportionateHeight(32, constraints),
             weight: FontWeight.w600,
-            color: Colors.grey[900],
             align: TextAlign.start,
             lSpace: 1.2,
           ),
@@ -216,7 +217,6 @@ class WelcomeToNandikrushi extends StatelessWidget {
             "Let's get started",
             size: getProportionateHeight(14, constraints),
             weight: FontWeight.w500,
-            color: Colors.grey[900],
             align: TextAlign.start,
             lSpace: 2.5,
           ),

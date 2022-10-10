@@ -111,7 +111,7 @@ class LoginProvider extends ChangeNotifier {
               "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/emaillogin",
         );
 
-        onLoginWithServer(response, onSuccessfulLogin, onError, () {
+        onLoginWithServer(response, null, onSuccessfulLogin, onError, () {
           onError(
               "Oops! Can't register on this device. Please try on a mobile.");
         });
@@ -188,12 +188,14 @@ class LoginProvider extends ChangeNotifier {
         url:
             "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerlogin/verify_mobile",
       );
-      onLoginWithServer(response, onSuccessfulLogin, onError, onRegisterUser);
+      onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
+          onSuccessfulLogin, onError, onRegisterUser);
     }
   }
 
   onLoginWithServer(
       Response? response,
+      String? uid,
       Function(String, bool, String, String) onSuccessfulLogin,
       Function(String) onError,
       Function onRegisterUser) {
@@ -203,9 +205,9 @@ class LoginProvider extends ChangeNotifier {
       log(response?.body ?? "");
       var statusCodeBody = false;
       if (decodedResponse["success"] != null) {
-        statusCodeBody = decodedResponse["success"];
+        statusCodeBody = decodedResponse["success"].toString().contains("true");
       } else {
-        statusCodeBody = decodedResponse["status"];
+        statusCodeBody = decodedResponse["status"].toString().contains("true");
       }
       if (statusCodeBody) {
         if (decodedResponse["message"].toString().contains("No Data Found")) {
@@ -213,7 +215,7 @@ class LoginProvider extends ChangeNotifier {
           hideLoader();
         } else {
           log("Successful login");
-          log("User ID: ${decodedResponse["message"]["user_id"]}, Seller ID: ${decodedResponse["message"]["customer_id"]}");
+          log("User ID: ${uid ?? decodedResponse["message"]["user_id"]}, Seller ID: ${decodedResponse["message"]["customer_id"]}");
           onSuccessfulLogin(
               capitalize(decodedResponse["message"]["firstname"]),
               true,
@@ -344,14 +346,9 @@ class LoginProvider extends ChangeNotifier {
         )
       ]);
     } else {
-      //TODO: Check with backend
       body.addEntries([
-        MapEntry(
-            "seller_storename",
-            loginPageController
-                    .registrationPageFormControllers["first_name"]?.text
-                    .toString() ??
-                "XYZ"),
+        MapEntry("seller_storename",
+            "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}"),
         MapEntry(
           "store_logo",
           sellerImageURL,
@@ -367,6 +364,7 @@ class LoginProvider extends ChangeNotifier {
         .catchError((e) {
       log("64$e");
     });
-    onLoginWithServer(response, onSuccess, onError, () {});
+    onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
+        onSuccess, onError, () {});
   }
 }

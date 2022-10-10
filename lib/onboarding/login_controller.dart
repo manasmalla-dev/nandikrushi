@@ -113,6 +113,7 @@ class LoginController extends ControllerMVC {
       required Function(Function) onNewUser,
       required LoginProvider loginProvider}) async {
     var isReturningUser = await isReturningUserFuture;
+    log("123->${isReturningUser}");
     if (FirebaseAuth.instance.currentUser != null && isReturningUser) {
       var appTheme = await getAppTheme();
       loginProvider.updateUserAppType(appTheme);
@@ -130,7 +131,7 @@ class LoginController extends ControllerMVC {
         );
       });
     } else {
-      if (Platform.isAndroid || Platform.isIOS || !isReturningUser) {
+      if ((Platform.isAndroid || Platform.isIOS) && !isReturningUser) {
         onNewUser(() {
           Timer(const Duration(milliseconds: 1000), () async {
             navigator.pushAndRemoveUntil(
@@ -165,7 +166,7 @@ class LoginController extends ControllerMVC {
     )
         .timeout(const Duration(seconds: 5), onTimeout: () {
       var userTypeData = {
-        "Farmer": Theme.of(context).primaryColor,
+        "Farmer": const Color(0xFF006838),
         "Organic Stores": const Color(0xFF00bba8),
         "Organic Restaurants": const Color(0xFFffd500),
       };
@@ -185,7 +186,7 @@ class LoginController extends ControllerMVC {
             e["name"].toString(),
             //TODO: Use dynamic color instead of this logic
             e["name"].toString().contains("Farmer")
-                ? Theme.of(context).primaryColor
+                ? const Color(0xFF006838)
                 : e["name"].toString().contains("Store")
                     ? const Color(0xFF00bba8)
                     : const Color(0xFFffd500),
@@ -198,7 +199,7 @@ class LoginController extends ControllerMVC {
         snackbar(context, "Undefined Parameter when calling API");
         log("Undefined Parameter");
         var userTypeData = {
-          "Farmer": Theme.of(context).primaryColor,
+          "Farmer": const Color(0xFF006838),
           "Organic Stores": const Color(0xFF00bba8),
           "Organic Restaurants": const Color(0xFFffd500),
         };
@@ -207,7 +208,7 @@ class LoginController extends ControllerMVC {
         snackbar(context, "API Not found");
         log("Not found");
         var userTypeData = {
-          "Farmer": Theme.of(context).primaryColor,
+          "Farmer": const Color(0xFF006838),
           "Organic Stores": const Color(0xFF00bba8),
           "Organic Restaurants": const Color(0xFFffd500),
         };
@@ -216,7 +217,7 @@ class LoginController extends ControllerMVC {
         snackbar(context, "Failed to get data!");
         log("failure ${response.statusCode}");
         var userTypeData = {
-          "Farmer": Theme.of(context).primaryColor,
+          "Farmer": const Color(0xFF006838),
           "Organic Stores": const Color(0xFF00bba8),
           "Organic Restaurants": const Color(0xFFffd500),
         };
@@ -226,7 +227,7 @@ class LoginController extends ControllerMVC {
       snackbar(context, "Failed to get data!");
       log("failure");
       var userTypeData = {
-        "Farmer": Theme.of(context).primaryColor,
+        "Farmer": const Color(0xFF006838),
         "Organic Stores": const Color(0xFF00bba8),
         "Organic Restaurants": const Color(0xFFffd500),
       };

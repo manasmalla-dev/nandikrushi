@@ -30,15 +30,12 @@ class _VideosScreenState extends State<VideosScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         toolbarHeight: kToolbarHeight,
-        backgroundColor: Colors.white,
         elevation: 0,
         title: TextWidget(
           'Videos',
           size: Theme.of(context).textTheme.titleMedium?.fontSize,
-          color: Colors.grey[900],
           weight: FontWeight.w700,
         ),
       ),
@@ -60,18 +57,18 @@ class _VideosScreenState extends State<VideosScreen>
                       'Oops!',
                       weight: FontWeight.w800,
                       size: Theme.of(context).textTheme.titleLarge?.fontSize,
-                      color: Colors.grey.shade800,
                     ),
                     const SizedBox(
                       height: 12,
                     ),
-                    TextWidget(
-                      'We don\'t have any recommended videos for you at this moment',
-                      weight: FontWeight.w600,
-                      color: Colors.grey,
-                      flow: TextOverflow.visible,
-                      align: TextAlign.center,
-                      size: Theme.of(context).textTheme.bodyMedium?.fontSize,
+                    Opacity(
+                      opacity: 0.7,
+                      child: TextWidget(
+                        'We don\'t have any recommended videos for you at this moment',
+                        flow: TextOverflow.visible,
+                        align: TextAlign.center,
+                        size: Theme.of(context).textTheme.bodyMedium?.fontSize,
+                      ),
                     ),
                     const SizedBox(
                       height: 40,
@@ -79,10 +76,8 @@ class _VideosScreenState extends State<VideosScreen>
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
                       child: ElevatedButtonWidget(
-                        bgColor: Theme.of(context).primaryColor,
                         trailingIcon: Icons.ios_share_rounded,
                         buttonName: 'Recommend your Farm'.toUpperCase(),
-                        textColor: Colors.white,
                         textStyle: FontWeight.w800,
                         borderRadius: 8,
                         innerPadding: 0.03,
