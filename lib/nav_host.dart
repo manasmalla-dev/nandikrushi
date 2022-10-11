@@ -35,7 +35,6 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
                 snackbar(context, _);
               })
           .then((value) {
-        print("Getting next data");
         productProvider.getData(
             profileProvider: profileProvider,
             showMessage: (_) {

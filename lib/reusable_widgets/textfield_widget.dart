@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final String? text;

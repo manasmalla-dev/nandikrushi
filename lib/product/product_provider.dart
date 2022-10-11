@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -62,6 +64,7 @@ class ProductProvider extends ChangeNotifier {
     if (response.statusCode == 200) {
       //  log(response.body);
       List<dynamic> decodedResponse = jsonDecode(response.body)["Products"];
+      products = [];
       // log("64${decodedResponse}");
       for (var e in decodedResponse) {
         if (categories.entries
@@ -90,7 +93,12 @@ class ProductProvider extends ChangeNotifier {
                 '${e["Products"][0]["min_purchase"]} ${e["Products"][0]["units"]}'
                     .toString(),
             'place': 'Paravada, Visakhapatnam.',
-            'url': e["Products"][0]["image"].toString()
+            'url': Uri.tryParse(e["Products"][0]["image"].toString())
+                        ?.host
+                        .isNotEmpty ??
+                    false
+                ? e["Products"][0]["image"].toString()
+                : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
           };
           products.add(element);
         }
@@ -128,10 +136,10 @@ class ProductProvider extends ChangeNotifier {
         if (!ordersData.body.contains('"status":false')) {
           List<dynamic> orderJSONResponse =
               jsonDecode(ordersData.body)["order"];
-          orderJSONResponse.forEach((element) {
+          for (var element in orderJSONResponse) {
             var orderData = {"order_id": element["order_id"]};
-            (element["product_details"] as List<dynamic>)
-                .forEach((productOrderDetails) {
+            for (var productOrderDetails
+                in (element["product_details"] as List<dynamic>)) {
               orderData["products"] = [];
               (orderData["products"]).add({
                 "product_name": productOrderDetails["product_name"],
@@ -155,14 +163,14 @@ class ProductProvider extends ChangeNotifier {
                     .toString(),
                 "place": element["shipping_details"][0]["shipping_city"],
               });
-            });
+            }
             orderData.addAll({
               "customer_name":
                   "${element["customer_details"][0]["firstname"]} ${element["customer_details"][0]["lastname"]}",
               "date": element["delivery_details"][0]["delivery_date"]
             });
             orders.add(orderData);
-          });
+          }
           log(orders.toString());
         }
         var cartData = await Server().postFormData(
@@ -205,7 +213,7 @@ class ProductProvider extends ChangeNotifier {
                 'url': productCartItem["url"].toString()
               };
             }).toList();
-            log("CART: " + cart.toString());
+            log("CART: $cart");
           }
           var myProductsData = await Server().postFormData(
               url:
@@ -364,7 +372,6 @@ class ProductProvider extends ChangeNotifier {
           onSuccessful: onSuccessful,
           showMessage: showMessage,
           profileProvider: profileProvider);
-      //TODO: Show BS
 
       // String apiURL =
       //     "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update";
@@ -650,7 +657,6 @@ class ProductProvider extends ChangeNotifier {
         1;
     profileProvider.showLoader();
     if (cartElementExists) {
-      //TODO: Show BS
       modifyProductToCart(
           context: context,
           productID: productID,

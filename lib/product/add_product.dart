@@ -575,7 +575,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        TextWidget(
+                                        const TextWidget(
                                           "Product Information",
                                           weight: FontWeight.bold,
                                           size: 18,
@@ -610,7 +610,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                     .primary)),
                                                   ),
                                                   isExpanded: true,
-                                                  hint: TextWidget(
+                                                  hint: const TextWidget(
                                                     'Category',
                                                     size: 20,
                                                   ),
@@ -648,19 +648,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                             Expanded(
                                               child: DropdownButtonFormField<
                                                       String>(
-                                                  decoration: InputDecoration(
+                                                  decoration:
+                                                      const InputDecoration(
                                                     contentPadding:
-                                                        const EdgeInsets
-                                                                .symmetric(
+                                                        EdgeInsets.symmetric(
                                                             vertical: 16),
                                                     focusedBorder:
-                                                        const UnderlineInputBorder(
+                                                        UnderlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color: Color(
                                                                     0xFF006838))),
                                                   ),
                                                   isExpanded: true,
-                                                  hint: TextWidget(
+                                                  hint: const TextWidget(
                                                     'Sub-Category',
                                                     size: 20,
                                                   ),
@@ -705,13 +705,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                             Expanded(
                                               child: DropdownButtonFormField<
                                                       String>(
-                                                  decoration: InputDecoration(
+                                                  decoration:
+                                                      const InputDecoration(
                                                     contentPadding:
-                                                        const EdgeInsets
-                                                                .symmetric(
+                                                        EdgeInsets.symmetric(
                                                             vertical: 18),
                                                     focusedBorder:
-                                                        const UnderlineInputBorder(
+                                                        UnderlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color: Color(
                                                                     0xFF006838))),
@@ -727,7 +727,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                   .primary,
                                                               2.0),
                                                   isExpanded: true,
-                                                  hint: TextWidget(
+                                                  hint: const TextWidget(
                                                     'Units',
                                                     size: 20,
                                                   ),
@@ -778,7 +778,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   const SizedBox(
                                     height: 27,
                                   ),
-                                  TextWidget(
+                                  const TextWidget(
                                     "Product Description",
                                     weight: FontWeight.bold,
                                     size: 18,

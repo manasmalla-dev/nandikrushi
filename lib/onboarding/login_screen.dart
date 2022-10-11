@@ -378,7 +378,7 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
                               createMaterialColor(
                                       Theme.of(context).colorScheme.primary)
                                   .shade700) >
-                          3
+                          1.5
                       ? createMaterialColor(
                               Theme.of(context).colorScheme.primary)
                           .shade700
@@ -412,7 +412,7 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
                               createMaterialColor(
                                       Theme.of(context).colorScheme.primary)
                                   .shade700) >
-                          3
+                          1.5
                       ? createMaterialColor(
                               Theme.of(context).colorScheme.primary)
                           .shade700

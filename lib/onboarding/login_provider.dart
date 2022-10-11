@@ -215,12 +215,14 @@ class LoginProvider extends ChangeNotifier {
           hideLoader();
         } else {
           log("Successful login");
-          log("User ID: ${uid ?? decodedResponse["message"]["user_id"]}, Seller ID: ${decodedResponse["message"]["customer_id"]}");
+          print(
+              "User ID: ${uid ?? decodedResponse["message"]["user_id"]}, Seller ID: ${decodedResponse["message"]?["customer_id"] ?? decodedResponse["customer_id"]}");
           onSuccessfulLogin(
               capitalize(decodedResponse["message"]["firstname"]),
               true,
               decodedResponse["message"]["user_id"],
-              decodedResponse["message"]["customer_id"]);
+              decodedResponse["message"]?["customer_id"] ??
+                  decodedResponse["customer_id"]);
           hideLoader();
         }
       } else {

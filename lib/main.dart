@@ -125,7 +125,7 @@ class _MyAppState extends State<MyApp> {
           ),
           fontFamily: "Product Sans",
           useMaterial3: true,
-          scaffoldBackgroundColor: Color(0xFF191C19),
+          scaffoldBackgroundColor: const Color(0xFF191C19),
         ),
         home: const SplashScreen(),
       );

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -10,9 +12,7 @@ import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/loader_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
-import 'package:nandikrushi_farmer/reusable_widgets/success_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
-import 'package:nandikrushi_farmer/utils/server.dart';
 import 'package:provider/provider.dart';
 
 class ConfirmOrderScreen extends StatefulWidget {
@@ -145,32 +145,39 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                     ElevatedButtonWidget(
                       onClick: () async {
                         var placeOrderBody = {
-                          "user_id":
-                              profileProvider.userIdForAddress.toString(),
+                          "user_id": "kEquHVu4GxOwVDBbehuoHkRf7BG2",
                           "payment_method":
                               radioState ? "" : "Cash On Delivery",
                           "payment_type": radioState ? "" : "Cash On Delivery",
                           "address_id": widget.addressID,
+                          "coupon_code": "5555",
                           "time_slot": "1",
-                          "schedule": "2022-10-05",
+                          "schedule": DateTime.now()
+                              .add(const Duration(days: 1))
+                              .millisecondsSinceEpoch,
                           "orders": productProvider.cart
                               .map((e) => {"cart_id": e["cart_id"]})
                               .toList()
-                              .toString(),
                         };
-                        print(placeOrderBody);
+                        log(placeOrderBody.toString());
                         var response = await post(
-                            Uri.tryParse(
-                                "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/placeorder")!,
-                            body: placeOrderBody);
+                          Uri.parse(
+                              "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/placeorder"),
+                          body: jsonEncode(placeOrderBody),
+                          headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                          },
+                        );
                         if (response == null) {
                           profileProvider.hideLoader();
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => OrderSuccessfulScreen()));
+                              builder: (context) =>
+                                  const OrderSuccessfulScreen()));
                           return;
                         }
                         if (response.statusCode == 200) {
-                          print(response.body);
+                          log(response.body.toString());
                           if (jsonDecode(response.body)["status"]) {
                             log(response.body);
                             profileProvider.hideLoader();
@@ -263,7 +270,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.shopping_basket_rounded,
                     )),
                 title: TextWidget(
@@ -379,7 +386,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                     ],
                                   );
                                 }),
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             ),
                             Row(
@@ -403,11 +410,13 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             TextWidget(
-                              '!  Add items for Rs.300.00 or more to avoid Delivery Charges',
+                              '!  Add items for Rs.${(4000 - (productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                    (value, element) => value + element,
+                                  ) + 100.00)).toStringAsFixed(2)} or more to avoid Delivery Charges',
                               color: Theme.of(context).colorScheme.error,
                               size: Theme.of(context)
                                   .textTheme
@@ -583,7 +592,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                                 )
                                 .toUpperCase(),
                             color: index == selectedIndex
-                                ? null
+                                ? Theme.of(context).colorScheme.onPrimary
                                 : Theme.of(context)
                                     .colorScheme
                                     .primary
@@ -594,7 +603,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                               .day
                               .toString(),
                           color: index == selectedIndex
-                              ? null
+                              ? Theme.of(context).colorScheme.onPrimary
                               : Theme.of(context)
                                   .colorScheme
                                   .primary
@@ -606,7 +615,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                         TextWidget(
                             index % 2 == 0 ? '7 AM - 11 AM' : '11 AM - 3 PM',
                             color: index == selectedIndex
-                                ? null
+                                ? Theme.of(context).colorScheme.onPrimary
                                 : Theme.of(context)
                                     .colorScheme
                                     .primary

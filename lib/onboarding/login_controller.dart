@@ -263,10 +263,12 @@ class LoginController extends ControllerMVC {
     log(profileProvider.landInAcres.toString());
     landInAcres = profileProvider.landInAcres.toDouble();
     userCertification = profileProvider.certificationType;
-    await get(Uri.parse(profileProvider.sellerImage))
+    log(profileProvider.sellerImage + " =123");
+    get(Uri.parse(profileProvider.sellerImage))
         .then((value) => profileImage = XFile.fromData(value.bodyBytes));
-    await get(Uri.parse(profileProvider.storeLogo))
+    get(Uri.parse(profileProvider.storeLogo))
         .then((value) => storeLogo = XFile.fromData(value.bodyBytes));
+    notifyListeners();
     //TODO: Add Certificates
   }
 }

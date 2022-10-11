@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +12,6 @@ import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -109,7 +110,8 @@ class MyAccountScreen extends StatelessWidget {
                                     isOrderWorkflow: false);
                               }),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
                                 child: Divider(
                                   thickness: 0.5,
                                   color: Theme.of(context).colorScheme.primary,
@@ -174,7 +176,8 @@ class MyAccountScreen extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
                                 child: Divider(
                                   thickness: 0.5,
                                   color: Theme.of(context).colorScheme.primary,
@@ -198,7 +201,7 @@ class MyAccountScreen extends StatelessWidget {
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: ((context) =>
-                                            SplashScreen())));
+                                            const SplashScreen())));
                                 //signOut(context);
                               }),
                             ],

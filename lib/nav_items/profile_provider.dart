@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
 
 class ProfileProvider extends ChangeNotifier {
@@ -62,7 +63,7 @@ class ProfileProvider extends ChangeNotifier {
     }
 
     if (response.statusCode == 200) {
-      print(response.body);
+      log(response.body.toString());
       Map<String, dynamic> profileJSON = jsonDecode(response.body)["message"];
       log(profileJSON.toString());
       sellerID = profileJSON["seller_id"];
@@ -98,21 +99,21 @@ class ProfileProvider extends ChangeNotifier {
         return;
       }
       if (userAddressResponse.statusCode == 200) {
-        log(userAddressResponse.body);
         if (jsonDecode(userAddressResponse.body)["status"]) {
           List<dynamic> userAddressJSON =
               await jsonDecode(userAddressResponse.body)["message"];
           //log(userAddressJSON.toString());
           Map<String, String> body = {};
           userAddresses = [];
-          userAddressJSON.forEach((map) {
+          for (var map in userAddressJSON) {
             body = {};
             map.forEach((key, value) {
               body.addAll({key: value.toString()});
             });
             userAddresses.add(body);
-          });
+          }
           log(userAddresses.toString());
+          notifyListeners();
         }
       } else if (response.statusCode == 400) {
         showMessage("Undefined parameter when calling API");
@@ -190,25 +191,30 @@ class ProfileProvider extends ChangeNotifier {
       Position? location,
       Function(String) showMessage) async {
     //Send this data to the server
-    var response = await Server().postFormData(
-        url:
-            "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/add",
-        body: {
-          "customer_id": sellerID,
-          "firstname": firstName,
-          "lastname": lastName,
-          "company": addressList["address_type"] ?? "",
-          "address_1": addressList["landmark"] ?? "",
-          "address_2": addressList["full_address"] ?? "",
-          "city": addressList["city"] ?? "",
-          "state": addressList["state"] ?? "",
-          "country": addressList["country"] ?? "",
-          "default": 1.toString(),
-          "postcode": addressList["pincode"] ?? "",
-          "coordinates": [
-            {"longitude": location?.longitude, "latitude": location?.latitude}
-          ].toString()
-        });
+    var response = await post(
+      Uri.parse(
+          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/add"),
+      body: jsonEncode({
+        "customer_id": sellerID,
+        "firstname": firstName,
+        "lastname": lastName,
+        "company": addressList["address_type"] ?? "",
+        "address_1": addressList["landmark"] ?? "",
+        "address_2": addressList["full_address"] ?? "",
+        "city": addressList["city"] ?? "",
+        "state": addressList["state"] ?? "",
+        "country": addressList["country"] ?? "",
+        "default": 1.toString(),
+        "postcode": addressList["pincode"] ?? "",
+        "coordinates": [
+          {"longitude": location?.longitude, "latitude": location?.latitude}
+        ]
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+    );
     if (response == null) {
       showMessage("Failed to get a response from the server!");
       hideLoader();
@@ -216,6 +222,7 @@ class ProfileProvider extends ChangeNotifier {
     }
 
     if (response.statusCode == 200) {
+      log(response.body);
       getProfile(userID: userIdForAddress, showMessage: showMessage);
       hideLoader();
       notifyListeners();

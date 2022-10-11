@@ -20,7 +20,7 @@ class MyProductsPage extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.sort_rounded,
               ))
         ],
@@ -117,7 +117,7 @@ class MyProductsPage extends StatelessWidget {
                   );
                 },
                 separatorBuilder: (context, _) {
-                  return Divider();
+                  return const Divider();
                 },
                 itemCount: productProvider.myProducts.length);
       }),

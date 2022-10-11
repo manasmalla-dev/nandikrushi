@@ -22,7 +22,7 @@ class BasketScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.shopping_basket_rounded,
               )),
           title: Column(
@@ -66,7 +66,8 @@ class BasketScreen extends StatelessWidget {
                             price:
                                 double.tryParse(items[index]["price"] ?? "") ??
                                     0.0,
-                            units: items[index]["unit"] ?? "",
+                            units:
+                                "${(items[index]["quantity"] ?? "")} ${(items[index]["unit"] ?? "").replaceFirst("1", "")}${(items[index]["quantity"] ?? "") != "1" ? "s" : ""}",
                             location: items[index]["place"] ?? "");
                       }),
                     ),

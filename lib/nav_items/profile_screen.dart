@@ -47,109 +47,117 @@ class _ProfileScreenState extends State<ProfileScreen> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           builder: (context) {
-            return Container(
-              height: getProportionateHeight(300, constraints),
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextWidget(
-                    "Choose Profile Picture",
-                    size: Theme.of(context).textTheme.titleLarge?.fontSize,
-                    weight: FontWeight.bold,
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  TextWidget(
-                    "Choose an image as a profile picture from one of the following sources",
-                    flow: TextOverflow.visible,
-                    size: Theme.of(context).textTheme.bodyLarge?.fontSize,
-                    weight: Theme.of(context).textTheme.bodyLarge?.fontWeight,
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: const [
-                      Expanded(
-                        flex: 3,
-                        child: Icon(Icons.photo_library_rounded, size: 48),
-                      ),
-                      Spacer(),
-                      Expanded(
-                        flex: 3,
-                        child: Icon(Icons.camera_alt_rounded, size: 48),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
+            return StatefulBuilder(builder: (context, setState) {
+              return Consumer<ProfileProvider>(
+                  builder: (context, profileProvider, _) {
+                return Container(
+                  height: getProportionateHeight(300, constraints),
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        flex: 3,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).primaryColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              onPrimary:
-                                  Theme.of(context).colorScheme.onPrimary),
-                          onPressed: () async {
-                            var pickedImage = await ImagePicker()
-                                .pickImage(source: ImageSource.gallery);
-                            setState(() {
-                              Navigator.of(context).pop();
-                              if (pickedImage != null) {
-                                onImageSelected(pickedImage);
-                              } else {
-                                Future.delayed(
-                                    const Duration(milliseconds: 300), () {
-                                  snackbar(context,
-                                      "The image you selected is empty or you didn't select an image.");
-                                });
-                              }
-                            });
-                          },
-                          child: const Text(
-                            "Gallery",
-                          ),
-                        ),
+                      TextWidget(
+                        "Choose Profile Picture",
+                        size: Theme.of(context).textTheme.titleLarge?.fontSize,
+                        weight: FontWeight.bold,
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextWidget(
+                        "Choose an image as a profile picture from one of the following sources",
+                        flow: TextOverflow.visible,
+                        size: Theme.of(context).textTheme.bodyLarge?.fontSize,
+                        weight:
+                            Theme.of(context).textTheme.bodyLarge?.fontWeight,
                       ),
                       const Spacer(),
-                      Expanded(
-                        flex: 3,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).primaryColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              onPrimary:
-                                  Theme.of(context).colorScheme.onPrimary),
-                          onPressed: () async {
-                            var pickedImage = await ImagePicker()
-                                .pickImage(source: ImageSource.camera);
-                            setState(() {
-                              Navigator.of(context).pop();
-                              if (pickedImage != null) {
-                                onImageSelected(pickedImage);
-                              } else {
-                                Future.delayed(
-                                    const Duration(milliseconds: 300), () {
-                                  snackbar(context,
-                                      "The image you selected is empty or you didn't select an image.");
+                      Row(
+                        children: const [
+                          Expanded(
+                            flex: 3,
+                            child: Icon(Icons.photo_library_rounded, size: 48),
+                          ),
+                          Spacer(),
+                          Expanded(
+                            flex: 3,
+                            child: Icon(Icons.camera_alt_rounded, size: 48),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary:
+                                      Theme.of(context).colorScheme.primary,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                  onPrimary:
+                                      Theme.of(context).colorScheme.onPrimary),
+                              onPressed: () async {
+                                var pickedImage = await ImagePicker()
+                                    .pickImage(source: ImageSource.gallery);
+                                setState(() {
+                                  Navigator.of(context).pop();
+                                  if (pickedImage != null) {
+                                    onImageSelected(pickedImage);
+                                  } else {
+                                    Future.delayed(
+                                        const Duration(milliseconds: 300), () {
+                                      snackbar(context,
+                                          "The image you selected is empty or you didn't select an image.");
+                                    });
+                                  }
                                 });
-                              }
-                            });
-                          },
-                          child: const Text("Camera"),
-                        ),
+                              },
+                              child: const Text(
+                                "Gallery",
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          Expanded(
+                            flex: 3,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary:
+                                      Theme.of(context).colorScheme.primary,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                  onPrimary:
+                                      Theme.of(context).colorScheme.onPrimary),
+                              onPressed: () async {
+                                var pickedImage = await ImagePicker()
+                                    .pickImage(source: ImageSource.camera);
+                                setState(() {
+                                  Navigator.of(context).pop();
+                                  if (pickedImage != null) {
+                                    onImageSelected(pickedImage);
+                                  } else {
+                                    Future.delayed(
+                                        const Duration(milliseconds: 300), () {
+                                      snackbar(context,
+                                          "The image you selected is empty or you didn't select an image.");
+                                    });
+                                  }
+                                });
+                              },
+                              child: const Text("Camera"),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            );
+                );
+              });
+            });
           });
     }
 
@@ -162,12 +170,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return Scaffold(
                   appBar: AppBar(
                     toolbarHeight: kToolbarHeight,
-                    backgroundColor: Colors.white,
                     elevation: 0,
+                    leading: const Icon(Icons.person_pin_rounded),
                     title: TextWidget(
                       'Profile',
                       size: Theme.of(context).textTheme.titleMedium?.fontSize,
-                      color: Colors.grey[900],
                       weight: FontWeight.w700,
                     ),
                   ),
@@ -182,8 +189,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           margin: const EdgeInsets.all(32),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0.2),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.2),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
@@ -197,7 +206,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             IconButton(
                                               iconSize: 75,
                                               color: Theme.of(context)
-                                                  .primaryColor,
+                                                  .colorScheme
+                                                  .primary,
                                               onPressed: () {
                                                 showImagePickerSheet(
                                                     constraints: constraints,
@@ -215,7 +225,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             TextWidget(
                                               "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
                                               color: Theme.of(context)
-                                                  .primaryColor
+                                                  .colorScheme
+                                                  .primary
                                                   .withOpacity(0.7),
                                               weight: Theme.of(context)
                                                   .textTheme
@@ -253,7 +264,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 height: 32,
                                                 decoration: BoxDecoration(
                                                     color: Theme.of(context)
-                                                        .primaryColor,
+                                                        .colorScheme
+                                                        .primary,
                                                     shape: BoxShape.circle),
                                                 child: IconButton(
                                                   onPressed: () {
@@ -289,7 +301,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 IconButton(
                                                   iconSize: 75,
                                                   color: Theme.of(context)
-                                                      .primaryColor,
+                                                      .colorScheme
+                                                      .primary,
                                                   onPressed: () {
                                                     showImagePickerSheet(
                                                         constraints:
@@ -308,7 +321,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 TextWidget(
                                                   "Add ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Logo",
                                                   color: Theme.of(context)
-                                                      .primaryColor
+                                                      .colorScheme
+                                                      .primary
                                                       .withOpacity(0.7),
                                                   weight: Theme.of(context)
                                                       .textTheme
@@ -346,7 +360,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     height: 32,
                                                     decoration: BoxDecoration(
                                                         color: Theme.of(context)
-                                                            .primaryColor,
+                                                            .colorScheme
+                                                            .primary,
                                                         shape: BoxShape.circle),
                                                     child: IconButton(
                                                       onPressed: () {
@@ -388,32 +403,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                const Text("Please select your role"),
                                 SizedBox(
-                                  height: 24,
+                                  height: 50,
                                   child: ListView.builder(
                                       primary: false,
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) {
-                                        return RadioListTile<String>(
-                                          value: loginProvider
-                                              .availableUserTypes.keys
-                                              .toList()[index],
-                                          groupValue:
-                                              loginProvider.userAppTheme.key,
-                                          onChanged: (_) {
-                                            loginProvider.updateUserAppType(
-                                                loginProvider
-                                                    .availableUserTypes.entries
-                                                    .elementAt(index));
-                                          },
-                                          title: Text(loginProvider
-                                              .availableUserTypes.keys
-                                              .toList()[index]),
+                                        loginProvider
+                                            .availableUserTypes = loginProvider
+                                                .availableUserTypes.isEmpty
+                                            ? {
+                                                "Farmer":
+                                                    const Color(0xFF006838),
+                                                "Organic Stores":
+                                                    const Color(0xFF00bba8),
+                                                "Organic Restaurants":
+                                                    const Color(0xFFffd500),
+                                              }
+                                            : loginProvider.availableUserTypes;
+                                        return Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Flexible(
+                                              child: Radio<String>(
+                                                value: loginProvider
+                                                    .availableUserTypes.keys
+                                                    .toList()[index],
+                                                groupValue: loginProvider
+                                                    .userAppTheme.key,
+                                                onChanged: (_) {
+                                                  loginProvider
+                                                      .updateUserAppType(
+                                                          loginProvider
+                                                              .availableUserTypes
+                                                              .entries
+                                                              .elementAt(
+                                                                  index));
+                                                },
+                                              ),
+                                            ),
+                                            Text(loginProvider
+                                                .availableUserTypes.keys
+                                                .toList()[index]),
+                                          ],
                                         );
                                       },
-                                      scrollDirection: Axis.horizontal),
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: 3),
                                 ),
-                                SizedBox(height: 16),
+                                const SizedBox(height: 16),
                                 TextWidget(
                                   "${loginProvider.isFarmer ? "Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Information",
                                   color: Colors.grey.shade800,
@@ -509,7 +548,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           return null;
                                         },
                                       )
-                                    : SizedBox(),
+                                    : const SizedBox(),
                                 TextFieldWidget(
                                   controller: loginPageController
                                       .registrationPageFormControllers['email'],
@@ -746,10 +785,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                       child: Slider(
                                           divisions: 30,
-                                          thumbColor:
-                                              Theme.of(context).primaryColor,
-                                          activeColor:
-                                              Theme.of(context).primaryColor,
+                                          thumbColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          activeColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           inactiveColor:
                                               const Color(0x16006838),
                                           value:
@@ -815,12 +856,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     });
                                   },
                                   child: Container(
-                                    color:
-                                        loginPageController.userCertification ==
-                                                loginProvider
-                                                    .certificationList[index]
-                                            ? Theme.of(context).primaryColor
-                                            : Colors.transparent,
+                                    color: loginPageController
+                                                .userCertification ==
+                                            loginProvider
+                                                .certificationList[index]
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Colors.transparent,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -841,7 +882,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       ? Colors.green[900]
                                                       : Colors.white,
                                                   checkColor: Theme.of(context)
-                                                      .primaryColor,
+                                                      .colorScheme
+                                                      .primary,
                                                   value: loginPageController
                                                           .userCertification ==
                                                       loginProvider
@@ -1435,10 +1477,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 });
                                                 if (response?.statusCode ==
                                                     200) {
-                                                  var decodedResponse =
-                                                      jsonDecode(response
-                                                              ?.body ??
-                                                          '{"message": {},"success": false}');
+                                                  var decodedResponse = jsonDecode(response
+                                                          ?.body
+                                                          .replaceFirst(
+                                                              '<b>Notice</b>: Undefined index: customer_group_id in\n<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>',
+                                                              '')
+                                                          .replaceFirst(
+                                                              "<b>Notice</b>: Undefined index: customer_group_id in<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>",
+                                                              "") ??
+                                                      '{"message": {},"success": false}');
                                                   log(response?.body ?? "");
                                                   var statusCodeBody = false;
                                                   if (decodedResponse[
@@ -1490,7 +1537,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     height:
                                         getProportionateHeight(64, constraints),
                                     borderRadius: 12,
-                                    bgColor: Theme.of(context).primaryColor,
+                                    bgColor:
+                                        Theme.of(context).colorScheme.primary,
                                     textColor:
                                         Theme.of(context).colorScheme.onPrimary,
                                     buttonName: "Update".toUpperCase(),

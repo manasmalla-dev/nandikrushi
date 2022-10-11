@@ -180,10 +180,8 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
       return Stack(
         children: [
           Scaffold(
-            backgroundColor: Colors.white,
             appBar: AppBar(
               toolbarHeight: kToolbarHeight,
-              backgroundColor: Colors.white,
               elevation: 0,
               leading: IconButton(
                   onPressed: () {
@@ -191,12 +189,10 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                   },
                   icon: Icon(
                     Icons.location_searching_rounded,
-                    color: Colors.grey[900],
                   )),
               title: TextWidget(
                 'Add Address',
                 size: Theme.of(context).textTheme.titleMedium?.fontSize,
-                color: Colors.grey[900],
                 weight: FontWeight.w700,
               ),
             ),
@@ -234,8 +230,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                     margin: const EdgeInsets.all(12),
                                     child: ClipOval(
                                         child: Container(
-                                            color:
-                                                Theme.of(context).primaryColor,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             padding: const EdgeInsets.all(0),
                                             child: const Icon(
                                               Icons.search_rounded,
@@ -291,11 +288,11 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                                       width: 8,
                                                     ),
                                                     Icon(
-                                                      Icons
-                                                          .location_on_outlined,
-                                                      color: Theme.of(context)
-                                                          .primaryColor,
-                                                    ),
+                                                        Icons
+                                                            .location_on_outlined,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary),
                                                     const SizedBox(
                                                       width: 24,
                                                     ),
@@ -357,7 +354,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                                       .textTheme
                                                       .titleLarge
                                                       ?.fontSize,
-                                                  color: Colors.grey.shade800,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary,
                                                 ),
                                                 const SizedBox(
                                                   height: 12,
@@ -386,8 +385,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                             CrossAxisAlignment.center,
                                         children: [
                                           CircularProgressIndicator(
-                                            color:
-                                                Theme.of(context).primaryColor,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                           ),
                                           const SizedBox(
                                             height: 27,
@@ -400,8 +400,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                                 .textTheme
                                                 .bodyLarge
                                                 ?.fontSize,
-                                            color:
-                                                Theme.of(context).primaryColor,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                           ),
                                         ],
                                       ),
@@ -438,10 +439,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                               controller: formControllers[
                                                   'house_number'],
                                               label: 'House / Flat No.',
-                                              style: fonts(
-                                                  18.0,
-                                                  FontWeight.w500,
-                                                  Colors.black),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
                                               validator: (_) {
                                                 if (_ == null || _.isEmpty) {
                                                   return "Please enter your valid house number";
@@ -458,10 +458,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                               controller:
                                                   formControllers['landmark'],
                                               label: 'Landmark',
-                                              style: fonts(
-                                                  18.0,
-                                                  FontWeight.w500,
-                                                  Colors.black),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
                                               validator: (_) {
                                                 if (_ == null || _.isEmpty) {
                                                   return "Please enter a valid landmark";
@@ -479,8 +478,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                         controller:
                                             formControllers['full_address'],
                                         label: 'Address',
-                                        style: fonts(18.0, FontWeight.w500,
-                                            Colors.black),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
                                         validator: (_) {
                                           if (_ == null || _.isEmpty) {
                                             return "Please enter your valid address";
@@ -498,10 +498,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                               controller:
                                                   formControllers['city'],
                                               label: 'City',
-                                              style: fonts(
-                                                  18.0,
-                                                  FontWeight.w500,
-                                                  Colors.black),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
                                               validator: (_) {
                                                 if (_ == null || _.isEmpty) {
                                                   return "Please enter a valid city";
@@ -518,10 +517,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                               controller:
                                                   formControllers['state'],
                                               label: 'State',
-                                              style: fonts(
-                                                  18.0,
-                                                  FontWeight.w500,
-                                                  Colors.black),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
                                               validator: (_) {
                                                 if (_ == null || _.isEmpty) {
                                                   return "Please enter a valid state";
@@ -542,10 +540,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                               controller:
                                                   formControllers['country'],
                                               label: 'Country',
-                                              style: fonts(
-                                                  18.0,
-                                                  FontWeight.w500,
-                                                  Colors.black),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
                                               validator: (_) {
                                                 if (_ == null || _.isEmpty) {
                                                   return "Please enter a valid country";
@@ -564,10 +561,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                               label: 'Pincode',
                                               showCounter: false,
                                               maxLength: 6,
-                                              style: fonts(
-                                                  18.0,
-                                                  FontWeight.w500,
-                                                  Colors.black),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
                                               validator: (_) {
                                                 if (_ == null ||
                                                     _.isEmpty ||
@@ -605,10 +601,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                                 }
                                                 return null;
                                               },
-                                              style: fonts(
-                                                  18.0,
-                                                  FontWeight.w500,
-                                                  Colors.black),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
                                             ),
                                           ),
                                           const Spacer(),
@@ -629,9 +624,12 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                       },
                                       child: Chip(
                                         backgroundColor: chipSelection == 0
-                                            ? Theme.of(context).primaryColor
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .primary
                                             : Theme.of(context)
-                                                .primaryColor
+                                                .colorScheme
+                                                .primary
                                                 .withOpacity(0.5),
                                         avatar: const Icon(
                                           Icons.home_rounded,
@@ -652,9 +650,12 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                       },
                                       child: Chip(
                                         backgroundColor: chipSelection == 1
-                                            ? Theme.of(context).primaryColor
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .primary
                                             : Theme.of(context)
-                                                .primaryColor
+                                                .colorScheme
+                                                .primary
                                                 .withOpacity(0.5),
                                         avatar: const Icon(
                                           Icons.work_rounded,
@@ -677,9 +678,12 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                           },
                                           child: Chip(
                                             backgroundColor: chipSelection == 2
-                                                ? Theme.of(context).primaryColor
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
                                                 : Theme.of(context)
-                                                    .primaryColor
+                                                    .colorScheme
+                                                    .primary
                                                     .withOpacity(0.5),
                                             avatar: const Icon(
                                               Icons.place_rounded,
@@ -713,8 +717,9 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                               return null;
                                             },
                                             hint: 'Other',
-                                            style: fonts(10.0, FontWeight.w500,
-                                                Colors.black),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
                                           ),
                                         ),
                                       ],
@@ -727,6 +732,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                   alignment: Alignment.center,
                                   child: ElevatedButtonWidget(
                                     onClick: () {
+                                      profileProvider.showLoader();
                                       var validateForm = addressFormKey
                                               .currentState
                                               ?.validate() ??
@@ -744,7 +750,6 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                                   : otherController.text
                                                       .toString()
                                         });
-                                        profileProvider.showLoader();
 
                                         //TODO: widget.onSaveAddress(addressList);
                                         profileProvider.createAddress(
@@ -753,6 +758,8 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                             userLocation, (_) {
                                           snackbar(context, _);
                                         });
+                                      } else {
+                                        profileProvider.hideLoader();
                                       }
                                     },
                                     height: 56,
