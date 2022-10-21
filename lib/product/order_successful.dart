@@ -62,7 +62,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                   size: Theme.of(context).textTheme.titleMedium?.fontSize,
                   flow: TextOverflow.visible,
                 ),
-                const SizedBox(
+                const SizedBox( 
                   height: 20,
                 ),
                 TextWidget(
