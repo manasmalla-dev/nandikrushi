@@ -79,12 +79,13 @@ class LoginController extends ControllerMVC {
         geocodeLocation();
       } else {
         log("open settings");
-        await Geolocator.openLocationSettings();
-        checkLocationPermissionAndGetLocation();
+        if (await Geolocator.openLocationSettings()) {
+          checkLocationPermissionAndGetLocation();
+        }
       }
     } else {
       log("Entered location requester");
-      Geolocator.requestPermission();
+      await Geolocator.requestPermission();
       checkLocationPermissionAndGetLocation();
     }
   }

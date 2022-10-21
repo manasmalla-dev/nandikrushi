@@ -6,7 +6,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
@@ -44,6 +46,7 @@ class ProductProvider extends ChangeNotifier {
   List<Map<String, dynamic>> orders = [];
   List<Map<String, String>> coupons = [];
   Map<String, List<Map<String, String>>> categorizedProducts = {};
+  Map<String, String> appliedCoupon = {};
 
   getData(
       {required Function(String) showMessage,
@@ -65,6 +68,7 @@ class ProductProvider extends ChangeNotifier {
       //  log(response.body);
       List<dynamic> decodedResponse = jsonDecode(response.body)["Products"];
       products = [];
+
       // log("64${decodedResponse}");
       for (var e in decodedResponse) {
         if (categories.entries
@@ -72,6 +76,14 @@ class ProductProvider extends ChangeNotifier {
                 element.value ==
                 int.tryParse(e["category"][0]["category_id"] ?? "-1"))
             .isNotEmpty) {
+          var locationGeoCoded = await placemarkFromCoordinates(
+              double.tryParse(e["vendor_details"][0]["location"]["lagtitude"]
+                      .toString()) ??
+                  17.7003844,
+              double.tryParse(e["vendor_details"][0]["location"]["latitude"]
+                      .toString()) ??
+                  83.1016542);
+
           var element = {
             'name': e["Products"][0]["product_name"].toString(),
             'description': e["Products"][0]["description"].toString(),
@@ -99,7 +111,22 @@ class ProductProvider extends ChangeNotifier {
                     false
                 ? e["Products"][0]["image"].toString()
                 : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
+            'seller_name':
+                (e["vendor_details"][0]["name"] ?? "Farmer").toString(),
+            'seller_place':
+                "${locationGeoCoded.first.subLocality ?? "Paravada"}, ${locationGeoCoded.first.subAdministrativeArea ?? "Visakhapatnam"}",
+            'seller_certificate': (e["vendor_details"][0]["certificates"] ??
+                    "Organic Certification")
+                .toString(),
+            'rating': (((double.tryParse(e["Products"][0]["aggregateRating"]
+                                    .toString()) ??
+                                0) *
+                            2)
+                        .round() /
+                    2)
+                .toString(),
           };
+          log("12Prod->$element ,; $e");
           products.add(element);
         }
       }
@@ -112,6 +139,7 @@ class ProductProvider extends ChangeNotifier {
           }
         }
       }
+      notifyListeners();
       var ordersData = await post(
         Uri.parse(
             "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getorders"),
@@ -148,11 +176,22 @@ class ProductProvider extends ChangeNotifier {
                         e["product_id"] == productOrderDetails["product_id"])
                     .first["description"]
                     .toString(),
-                "url": products
-                    .where((e) =>
-                        e["product_id"] == productOrderDetails["product_id"])
-                    .first["url"]
-                    .toString(),
+                "url": (Uri.tryParse(products
+                                .where((e) =>
+                                    e["product_id"] ==
+                                    productOrderDetails["product_id"])
+                                .first["url"]
+                                .toString())
+                            ?.host
+                            .isNotEmpty ??
+                        false)
+                    ? products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .first["url"]
+                        .toString()
+                    : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
                 "price": productOrderDetails["price"],
                 "product_id": productOrderDetails["product_id"],
                 "quantity": productOrderDetails["quantity"],
@@ -172,6 +211,7 @@ class ProductProvider extends ChangeNotifier {
             orders.add(orderData);
           }
           log(orders.toString());
+          notifyListeners();
         }
         var cartData = await Server().postFormData(
             url:
@@ -210,10 +250,16 @@ class ProductProvider extends ChangeNotifier {
                     .replaceFirst("\$", "")
                     .toString(),
                 'place': productCartItem["place"].toString(),
-                'url': productCartItem["url"].toString()
+                'url': (Uri.tryParse(productCartItem["url"].toString())
+                            ?.host
+                            .isNotEmpty ??
+                        false)
+                    ? productCartItem["url"].toString()
+                    : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
               };
             }).toList();
             log("CART: $cart");
+            notifyListeners();
           }
           var myProductsData = await Server().postFormData(
               url:
@@ -240,32 +286,63 @@ class ProductProvider extends ChangeNotifier {
                       .map((key, value) => MapEntry(key, value.toString())))
                   .toList();
               log(myProducts.toString());
-              // cart = cartJSONResponse.map((cartItem) {
-              //   var productCartItem = products
-              //       .where((element) =>
-              //           element["product_id"] ==
-              //           (cartItem["product_id"].toString()))
-              //       .first;
-              //   return {
-              //     "cart_id": cartItem["cart_id"].toString(),
-              //     "name": productCartItem["name"].toString(),
-              //     'unit': productCartItem["units"].toString(),
-              //     "product_id": cartItem["product_id"].toString(),
-              //     "quantity": cartItem['quantity'].toString(),
-              //     'price': productCartItem['price']
-              //         .toString()
-              //         .replaceFirst("\$", "")
-              //         .toString(),
-              //     'place': productCartItem["place"].toString(),
-              //     'url': productCartItem["url"].toString()
-              //   };
-              // }).toList();
-              // log("My Products: " + cart.toString());
+              var couponsData = await Server().getMethodParams(
+                  "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/coupon/getcoupon");
+              if (couponsData == null) {
+                showMessage("Failed to get a response from the server!");
+                //hideLoader();
+                if (Platform.isAndroid) {
+                  SystemNavigator.pop();
+                } else if (Platform.isIOS) {
+                  exit(0);
+                }
+                return;
+              }
+              if (couponsData.statusCode == 200) {
+                if (!couponsData.body.contains('"status":false')) {
+                  List<dynamic> couponsJSONResponse =
+                      jsonDecode(couponsData.body)["message"];
+                  coupons = couponsJSONResponse
+                      .map((e) => (e as Map<String, dynamic>)
+                          .map((key, value) => MapEntry(key, value.toString())))
+                      .toList();
+                  coupons.retainWhere((e) {
+                    return DateFormat("yyyy-MM-dd")
+                            .parse(e["date_end"].toString())
+                            .isAfter(DateTime.now()) &&
+                        DateFormat("yyyy-MM-dd")
+                            .parse(e["date_start"].toString())
+                            .isBefore(DateTime.now());
+                  });
+                  log(coupons.toString());
+                }
+                //TODO: Add the my products API, purchases API, units API, subcategories API.
+                profileProvider.isDataFetched = true;
+                notifyListeners();
+                profileProvider.hideLoader();
+              } else if (couponsData.statusCode == 400) {
+                showMessage("Undefined parameter when calling API");
+                if (Platform.isAndroid) {
+                  SystemNavigator.pop();
+                } else if (Platform.isIOS) {
+                  exit(0);
+                }
+              } else if (couponsData.statusCode == 404) {
+                showMessage("API not found");
+                if (Platform.isAndroid) {
+                  SystemNavigator.pop();
+                } else if (Platform.isIOS) {
+                  exit(0);
+                }
+              } else {
+                showMessage("Failed to get data!");
+                if (Platform.isAndroid) {
+                  SystemNavigator.pop();
+                } else if (Platform.isIOS) {
+                  exit(0);
+                }
+              }
             }
-            //TODO: Add the my products API, purchases API, units API, subcategories API.
-            profileProvider.isDataFetched = true;
-            notifyListeners();
-            profileProvider.hideLoader();
           } else if (myProductsData.statusCode == 400) {
             showMessage("Undefined parameter when calling API");
             if (Platform.isAndroid) {
@@ -709,6 +786,7 @@ class ProductProvider extends ChangeNotifier {
       var cartData = await Server().postFormData(url: apiURL, body: body);
       if (cartData == null) {
         showMessage("Failed to get a response from the server!");
+        notifyListeners();
         profileProvider.hideLoader();
         return;
       }
@@ -718,6 +796,7 @@ class ProductProvider extends ChangeNotifier {
           getData(showMessage: showMessage, profileProvider: profileProvider);
         }
         profileProvider.isDataFetched = true;
+        notifyListeners();
       } else if (cartData.statusCode == 400) {
         showMessage("Undefined parameter when calling API");
       } else if (cartData.statusCode == 404) {
@@ -726,6 +805,12 @@ class ProductProvider extends ChangeNotifier {
         showMessage("Failed to get data!");
       }
       profileProvider.hideLoader();
+      notifyListeners();
     }
+  }
+
+  updateCoupon(Map<String, String> _) {
+    appliedCoupon = _;
+    notifyListeners();
   }
 }

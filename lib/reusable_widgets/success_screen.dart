@@ -37,77 +37,87 @@ class _SuccessScreenState extends State<SuccessScreen> {
             ),
           ),
         ),
-        SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.check_circle_rounded,
-                size: 140,
-                color: Color(0xFF009906),
-              ),
-              const SizedBox(
-                height: 9,
-              ),
-              TextWidget(
-                widget.isSuccess ? "SUCCESS" : "Failure",
-                size: 48,
-                weight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
-              ),
-              TextWidget(
-                "${widget.isSuccess ? 'Added' : 'Failed adding'} your product: ${widget.body["name"]}",
-                size: 20,
-                weight: FontWeight.w500,
-                color: Theme.of(context).primaryColor,
-              ),
-              const SizedBox(
-                height: 140,
-              ),
-              ElevatedButtonWidget(
-                onClick: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddProductScreen()),
-                      (route) => false);
-                },
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.check_circle_rounded,
+                  size: 140,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(
+                  height: 9,
+                ),
+                TextWidget(
+                  widget.isSuccess ? "SUCCESS" : "Failure",
+                  size: 48,
+                  weight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: TextWidget(
+                    "${widget.isSuccess ? 'Added' : 'Failed adding'} your product:\n${widget.body["name"]}",
+                    size: 20,
+                    weight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor,
+                    align: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(
+                  height: 140,
+                ),
+                ElevatedButtonWidget(
+                  onClick: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddProductScreen()),
+                        (route) => false);
+                  },
 
-                height: 56,
-                borderRadius: 0,
-                bgColor: Theme.of(context).primaryColor,
-                textColor: Colors.white,
-                buttonName: widget.isSuccess
-                    ? "Sell Another Product".toUpperCase()
-                    : "Try Again".toUpperCase(),
-                innerPadding: 0.02,
-                // textStyle: FontWeight.bold,
-                leadingIcon: Icons.arrow_back_rounded,
-              ),
-              ElevatedButtonWidget(
-                onClick: () async {
-                  var navigator = Navigator.of(context);
-                  SharedPreferences sharedPreferences =
-                      await SharedPreferences.getInstance();
-                  var uID = sharedPreferences.getString('userID')!;
-                  navigator.pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              NandikrushiNavHost(userId: uID)),
-                      (route) => false);
-                },
-                height: 56,
-                borderRadius: 0,
-                bgColor: Theme.of(context).primaryColor,
-                textColor: Colors.white,
-                buttonName: "Home".toUpperCase(),
-                innerPadding: 0.02,
-                // textStyle: FontWeight.bold,
-                leadingIcon: Icons.arrow_back_rounded,
-              ),
-            ],
+                  height: 56,
+                  borderRadius: 12,
+                  bgColor: Theme.of(context).primaryColor,
+                  textColor: Colors.white,
+                  buttonName: widget.isSuccess
+                      ? "Sell Another Product".toUpperCase()
+                      : "Try Again".toUpperCase(),
+                  innerPadding: 0.02,
+                  // textStyle: FontWeight.bold,
+                  leadingIcon: Icons.arrow_back_rounded,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                ElevatedButtonWidget(
+                  onClick: () async {
+                    var navigator = Navigator.of(context);
+                    SharedPreferences sharedPreferences =
+                        await SharedPreferences.getInstance();
+                    var uID = sharedPreferences.getString('userID')!;
+                    navigator.pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                NandikrushiNavHost(userId: uID)),
+                        (route) => false);
+                  },
+                  height: 56,
+                  borderRadius: 12,
+                  bgColor: Theme.of(context).primaryColor,
+                  textColor: Colors.white,
+                  buttonName: "Home".toUpperCase(),
+                  innerPadding: 0.02,
+                  // textStyle: FontWeight.bold,
+                  trailingIcon: Icons.home,
+                ),
+              ],
+            ),
           ),
         ),
       ]),

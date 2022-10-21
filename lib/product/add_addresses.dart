@@ -746,7 +746,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                           "address_type": chipSelection == 0
                                               ? "Home"
                                               : chipSelection == 1
-                                                  ? "Store"
+                                                  ? "Office"
                                                   : otherController.text
                                                       .toString()
                                         });

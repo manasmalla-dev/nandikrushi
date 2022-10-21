@@ -1,11 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_host.dart';
+import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
+import 'package:provider/provider.dart';
+
+import '../nav_items/profile_provider.dart';
 
 class OrderSuccessfulScreen extends StatefulWidget {
-  const OrderSuccessfulScreen({Key? key}) : super(key: key);
+  final String name;
+  final String deliverySlot;
+  final String orderNumber;
+  const OrderSuccessfulScreen(
+      {Key? key,
+      required this.name,
+      required this.deliverySlot,
+      required this.orderNumber})
+      : super(key: key);
 
   @override
   State<OrderSuccessfulScreen> createState() => _OrderSuccessfulScreenState();
@@ -20,7 +33,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
           const Expanded(
             flex: 3,
             child: Image(
-              image: AssetImage('assets/png/order_success.png'),
+              image: AssetImage('assets/images/order_success.png'),
             ),
           ),
           Container(
@@ -31,7 +44,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextWidget(
-                  'Hi Rahul,',
+                  'Hi ${widget.name},',
                   weight: FontWeight.w800,
                   size: Theme.of(context).textTheme.titleLarge?.fontSize,
                 ),
@@ -59,35 +72,49 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                 ),
                 const Divider(),
                 TextWidget(
-                  'Order Number: xxxxxxxxxx\nDelivery Slot : Thu, 16 Sep(07:00AM - 11:00AM)',
+                  'Order Number: xxxxxxxxxx\nDelivery Slot : ${widget.deliverySlot}',
                   size: Theme.of(context).textTheme.bodySmall?.fontSize,
                   flow: TextOverflow.visible,
                 ),
                 const SizedBox(
                   height: 30,
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 16, left: 24, right: 24),
-                  child: ElevatedButtonWidget(
-                    borderRadius: 8,
-                    onClick: () {
-                      //TODO: Update later to use dynamic uid that is fetched from repository
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((context) => NandikrushiNavHost(
-                              userId: FirebaseAuth.instance.currentUser?.uid ??
-                                  "")),
-                        ),
-                      );
-                    },
-                    height: 64,
-                    textColor: Colors.white,
-                    buttonName: "Home",
-                    trailingIcon: Icons.arrow_forward,
-                  ),
-                ),
+                Consumer<ProfileProvider>(
+                    builder: (context, profileProvider, _) {
+                  return Consumer<ProductProvider>(
+                      builder: (context, productProvider, _) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 16, left: 24, right: 24),
+                      child: ElevatedButtonWidget(
+                        borderRadius: 8,
+                        onClick: () async {
+                          profileProvider.showLoader();
+                          productProvider.getData(
+                              showMessage: (_) {
+                                snackbar(context, _, isError: false);
+                              },
+                              profileProvider: profileProvider);
+
+                          //TODO: Update later to use dynamic uid that is fetched from repository
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => NandikrushiNavHost(
+                                  userId:
+                                      FirebaseAuth.instance.currentUser?.uid ??
+                                          "")),
+                            ),
+                          );
+                        },
+                        height: 64,
+                        textColor: Colors.white,
+                        buttonName: "Home",
+                        trailingIcon: Icons.arrow_forward,
+                      ),
+                    );
+                  });
+                }),
                 const SizedBox(
                   height: 27,
                 ),

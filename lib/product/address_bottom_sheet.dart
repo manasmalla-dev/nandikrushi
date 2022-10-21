@@ -136,7 +136,7 @@ showAddressesBottomSheet(
                                         itemBuilder: ((context, index) {
                                           var data = [
                                             profileProvider.userAddresses[item]
-                                                ["company"],
+                                                ["address_title"],
                                             profileProvider.userAddresses[item]
                                                 ["address_1"],
                                             profileProvider.userAddresses[item]

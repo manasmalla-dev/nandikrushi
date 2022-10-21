@@ -42,7 +42,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ? Stack(
                   children: [
                     PageView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
                       controller: loginPageController.pageController,
                       itemCount: 2,
                       itemBuilder: (context, pageIndex) {
@@ -1181,7 +1180,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ?.validate() ??
                   true;
 
-              if (loginPageController.landInAcres > 1) {
+              if (loginPageController.landInAcres > 1 ||
+                  !loginProvider.isFarmer) {
                 if (formValidatedState &&
                     loginPageController.userCertification.isNotEmpty) {
                   if ((loginPageController.userCertification.isNotEmpty &&
@@ -1247,7 +1247,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ?.validate() ??
                       true;
 
-                  if (loginPageController.landInAcres > 1) {
+                  if (loginPageController.landInAcres > 1 ||
+                      !loginProvider.isFarmer) {
                     if (formValidatedState &&
                         loginPageController.userCertification.isNotEmpty) {
                       if ((loginPageController.userCertification.isNotEmpty &&

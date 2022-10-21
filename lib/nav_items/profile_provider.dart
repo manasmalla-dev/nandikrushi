@@ -196,16 +196,23 @@ class ProfileProvider extends ChangeNotifier {
           "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/add"),
       body: jsonEncode({
         "customer_id": sellerID,
+        "address_title": addressList["address_type"] ?? "",
         "firstname": firstName,
         "lastname": lastName,
-        "company": addressList["address_type"] ?? "",
-        "address_1": addressList["landmark"] ?? "",
-        "address_2": addressList["full_address"] ?? "",
+        "company": "Nandikrushi",
+        "flat_no": addressList["house_number"] ?? "",
+        "landmark": addressList["landmark"] ?? "",
+        "address_1":
+            "${(addressList["full_address"] ?? "").split(",")[0]},${(addressList["full_address"] ?? "").split(",")[1]}",
+        "address_2": (addressList["full_address"] ?? "").replaceFirst(
+            "${(addressList["full_address"] ?? "").split(",")[0]},${(addressList["full_address"] ?? "").split(",")[1]},",
+            ""),
         "city": addressList["city"] ?? "",
         "state": addressList["state"] ?? "",
         "country": addressList["country"] ?? "",
         "default": 1.toString(),
         "postcode": addressList["pincode"] ?? "",
+        "alternative_number": addressList["alternate_mobile_number"] ?? "",
         "coordinates": [
           {"longitude": location?.longitude, "latitude": location?.latitude}
         ]

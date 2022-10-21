@@ -76,11 +76,13 @@ class ProductController extends ControllerMVC {
       "units": (unitsList.indexOf(units) + 1).toString(),
       //"category_id": product.category.toString(),
       "category_id": productProvider.categories[category].toString(),
-      "seller_id": FirebaseAuth.instance.currentUser?.uid.toString() ?? "92",
+      "seller_id": profileProvider.sellerID,
     };
     image.asMap().entries.forEach((_) {
-      body.addEntries([MapEntry("product_image[$_.key]", _.value)]);
+      body.addAll({"product_image[${_.key}]": _.value});
     });
+    log(image.asMap().entries.toString());
+    log(body.toString());
     Server()
         .postFormData(
             body: body,
@@ -89,7 +91,7 @@ class ProductController extends ControllerMVC {
         .then((response) async {
       if (response == null) {
         showMessage("Failed to get a response from the server!");
-        //hideLoader();
+        profileProvider.hideLoader();
         return;
       }
       if (response.statusCode == 200) {
@@ -106,14 +108,17 @@ class ProductController extends ControllerMVC {
                     )));
       } else if (response.statusCode == 400) {
         snackbar(context, "Undefined Parameter when calling API");
+        profileProvider.hideLoader();
         log("Undefined Parameter");
       } else if (response.statusCode == 404) {
         snackbar(context, "API Not found");
+        profileProvider.hideLoader();
         log("Not found");
       } else {
         log(response.statusCode.toString());
         snackbar(context,
             "Unable to connect to the server! Error code: ${response.statusCode}");
+        profileProvider.hideLoader();
         log("failure");
       }
     });

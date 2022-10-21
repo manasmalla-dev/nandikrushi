@@ -216,14 +216,20 @@ class LoginProvider extends ChangeNotifier {
         } else {
           log("Successful login");
           print(
-              "User ID: ${uid ?? decodedResponse["message"]["user_id"]}, Seller ID: ${decodedResponse["message"]?["customer_id"] ?? decodedResponse["customer_id"]}");
+              "User ID: ${decodedResponse["message"].toString().contains("user_id") ? decodedResponse["message"]["user_id"] : decodedResponse["customer_details"]["user_id"]}, Seller ID: ${decodedResponse["message"].toString().contains("customer_id") ? (decodedResponse["message"]?["customer_id"] ?? decodedResponse["customer_id"]) : decodedResponse["customer_details"]["customer_id"]}");
           onSuccessfulLogin(
-              capitalize(decodedResponse["message"]["firstname"]),
+              capitalize(
+                  decodedResponse["message"].toString().contains("firstname")
+                      ? decodedResponse["message"]["firstname"]
+                      : decodedResponse["customer_details"]["firstname"]),
               true,
-              decodedResponse["message"]["user_id"],
-              decodedResponse["message"]?["customer_id"] ??
-                  decodedResponse["customer_id"]);
-          hideLoader();
+              decodedResponse["message"].toString().contains("user_id")
+                  ? decodedResponse["message"]["user_id"]
+                  : decodedResponse["customer_details"]["user_id"],
+              decodedResponse["message"].toString().contains("customer_id")
+                  ? (decodedResponse["message"]?["customer_id"] ??
+                      decodedResponse["customer_id"])
+                  : decodedResponse["customer_details"]["customer_id"]);
         }
       } else {
         if (decodedResponse["message"].toString().contains("No Data Found")) {
@@ -296,7 +302,7 @@ class LoginProvider extends ChangeNotifier {
         certificatesURLs.add(urlData);
       });
     }
-    Map<String, String> body = {
+    /*Map<String, String> body = {
       "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
       "firstname": loginPageController
               .registrationPageFormControllers["first_name"]?.text
@@ -333,7 +339,34 @@ class LoginProvider extends ChangeNotifier {
       "language":
           (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
       // "agree": "1"
+    };*/
+    var body = {
+      "user_id": "eebRSIhd4dM3wKYml7vFT4Xyx4p1",
+      "firstname": "Madhava",
+      "lastname": "Murari",
+      "email": "madhavamurari@universe.com",
+      "telephone": "2222222222",
+      "password": "123456789",
+      "confirm": "123456789",
+      "agree": "1",
+      "become_seller": "1",
+      "seller_type": "Farmers",
+      "land": "20",
+      "seller_image":
+          "https://firebasestorage.googleapis.com/v0/b/nandikrushi-35ddb.appspot.com/o/profile_pics%2F2022-10-21%2021%3A06%3A38.897369.png?alt=media&token=a0364eb3-189a-4849-91a4-9dc4dd562597",
+      "additional_comments": "Farmer is the backbone of India",
+      "additional_documents": "Self Declared Natural Farmer",
+      "upload_document":
+          "https://firebasestorage.googleapis.com/v0/b/nandikrushi-35ddb.appspot.com/o/profile_pics%2F2022-10-21%2021%3A06%3A38.897369.png?alt=media&token=a0364eb3-189a-4849-91a4-9dc4dd562597",
+      "seller_storename": "Spot124Manas",
+      "store_logo":
+          "https://firebasestorage.googleapis.com/v0/b/nandikrushi-35ddb.appspot.com/o/profile_pics%2F2022-10-21%2021%3A06%3A38.897369.png?alt=media&token=a0364eb3-189a-4849-91a4-9dc4dd562597",
+      "store_address":
+          "{coordinates-x: 17.741, coordinates-y: 83.30, houseNumber: 50-103, city: Vizag, mandal: Sethamadhara, district: VSP, state: AP, pincode: 530012}",
+      "store_status": "1",
+      "language": "1"
     };
+    /*
     if (!isFarmer) {
       body.addEntries([
         MapEntry(
@@ -356,13 +389,11 @@ class LoginProvider extends ChangeNotifier {
           sellerImageURL,
         )
       ]);
-    }
-
+    }*/
+    var registrationURL =
+        "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/register";
     var response = await Server()
-        .postFormData(
-            body: body,
-            url:
-                "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/register")
+        .postFormData(body: body, url: registrationURL)
         .catchError((e) {
       log("64$e");
     });

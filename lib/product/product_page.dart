@@ -5,9 +5,12 @@ import 'package:nandikrushi_farmer/product/address_bottom_sheet.dart';
 import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/rating_widget.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/login_utils.dart';
 
 class ProductPage extends StatefulWidget {
   final Map<String, String> productDetails;
@@ -22,6 +25,8 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(builder: (context, productProvider, _) {
       return Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
+        double rating =
+            (double.tryParse(widget.productDetails["rating"] ?? "0.0") ?? 0);
         return Scaffold(
           appBar: AppBar(
             toolbarHeight: kToolbarHeight,
@@ -351,23 +356,44 @@ class _ProductPageState extends State<ProductPage> {
                           ],
                         ),
                         const SizedBox(
-                          height: 12,
+                          height: 8,
                         ),
-                        // Row(
-                        //   children: const [
-                        //     FixedRatingStar(),
-                        //     FixedRatingStar(),
-                        //     FixedRatingStar(),
-                        //     FixedRatingStar(
-                        //       value: 0.5,
-                        //     ),
-                        //     FixedRatingStar(
-                        //       value: 0,
-                        //     ),
-                        //   ],
-                        // ),
+                        Row(
+                          children: [
+                            FixedRatingStar(
+                                value: rating < 0.5
+                                    ? 0
+                                    : rating == 0.5
+                                        ? 0.5
+                                        : 1),
+                            FixedRatingStar(
+                                value: rating < 1.5
+                                    ? 0
+                                    : rating == 1.5
+                                        ? 0.5
+                                        : 1),
+                            FixedRatingStar(
+                                value: rating < 2.5
+                                    ? 0
+                                    : rating == 2.5
+                                        ? 0.5
+                                        : 1),
+                            FixedRatingStar(
+                                value: rating < 3.5
+                                    ? 0
+                                    : rating == 3.5
+                                        ? 0.5
+                                        : 1),
+                            FixedRatingStar(
+                                value: rating < 4.5
+                                    ? 0
+                                    : rating == 4.5
+                                        ? 0.5
+                                        : 1),
+                          ],
+                        ),
                         const SizedBox(
-                          height: 12,
+                          height: 16,
                         ),
                         Row(
                           children: [
@@ -641,8 +667,8 @@ class _ProductPageState extends State<ProductPage> {
                           weight: FontWeight.w800,
                           size: 18,
                         ),
-                        const TextWidget(
-                          'Farmer Name: Rahul Varma',
+                        TextWidget(
+                          'Farmer Name: ${capitalize(widget.productDetails["seller_name"] ?? "")}',
                           weight: FontWeight.w500,
                         ),
                         TextWidget(
@@ -656,7 +682,7 @@ class _ProductPageState extends State<ProductPage> {
                               weight: FontWeight.w500,
                             ),
                             TextWidget(
-                              'Self Declared National Farmer.',
+                              widget.productDetails["seller_certificate"] ?? "",
                               weight: FontWeight.w500,
                               color: Theme.of(context).colorScheme.primary,
                             ),

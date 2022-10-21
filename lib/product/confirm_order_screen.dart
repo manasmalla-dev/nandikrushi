@@ -61,28 +61,33 @@ coupons(BuildContext context) {
                         itemCount: productProvider.coupons.length,
                         itemBuilder: (context, index) {
                           dynamic list = productProvider.coupons[index];
-
                           return ListTile(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                              productProvider.appliedCoupon.isEmpty
+                                  ? 0
+                                  : productProvider.appliedCoupon == list
+                                      ? 12
+                                      : 0,
+                            )),
+                            tileColor: productProvider.appliedCoupon.isEmpty
+                                ? null
+                                : productProvider.appliedCoupon == list
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer
+                                    : null,
                             onTap: () async {
-                              var body = {
-                                "_id": list["coupon_id"].toString(),
-                                "code": list["code"].toString(),
-                                "name": list["name"].toString(),
-                                "discount": list["discount"].toString(),
-                              };
-                              /* await productProvider.updateCoupon(body, () {
-                                Navigator.maybeOf(context)?.maybePop();
-                              }, () {
-                                snackbar(context, "Something went wrong");*/
-
+                              if (productProvider.appliedCoupon.isEmpty) {
+                                productProvider.updateCoupon(list);
+                              } else if (productProvider.appliedCoupon ==
+                                  list) {
+                                productProvider.updateCoupon({});
+                              } else {
+                                snackbar(context,
+                                    "Only one coupon can be applied per order!");
+                              }
                               Navigator.maybeOf(context)?.maybePop();
-                              //});
-                              // cart.calculateTotal();
-                              // list["discountType"] == "percentage"
-                              //     ? cart.applyPerDiscount(
-                              //         list["discount"], cartStatus)
-                              //     : cart.applyAmtDiscount(
-                              //         list["discount"], cartStatus);
                             },
                             title: Text(
                               list["code"].toString(),
@@ -96,10 +101,18 @@ coupons(BuildContext context) {
                                   ?.fontSize,
                               align: TextAlign.start,
                             ),
-                            trailing: Text(
-                              "Apply",
-                              style: Theme.of(context).textTheme.button,
-                            ),
+                            trailing: productProvider.appliedCoupon.isEmpty
+                                ? Text(
+                                    "Apply",
+                                    style: Theme.of(context).textTheme.button,
+                                  )
+                                : productProvider.appliedCoupon == list
+                                    ? Icon(
+                                        Icons.bookmark_remove_rounded,
+                                        color:
+                                            Theme.of(context).colorScheme.error,
+                                      )
+                                    : null,
                           );
                         })
                   ]),
@@ -112,8 +125,8 @@ coupons(BuildContext context) {
 class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
   var radioState = false;
 
-  // ignore: prefer_typing_uninitialized_variables
   var selected;
+  int deliverySlot = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -121,133 +134,184 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
       selected = await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Consumer<ProfileProvider>(
-              builder: (context, profileProvider, _) {
-            return Consumer<ProductProvider>(
-                builder: (context, productProvider, _) {
-              log(productProvider.cart.toString());
-              return SizedBox(
-                width: 428,
-                child: AlertDialog(
-                  actionsAlignment: MainAxisAlignment.spaceEvenly,
-                  actions: [
-                    ElevatedButtonWidget(
-                      onClick: () {
-                        Navigator.pop(context);
-                      },
-                      height: 56,
-                      bgColor: Colors.white,
-                      buttonName: "Cancel".toUpperCase(),
-                      textColor: Colors.grey[900],
-                      textStyle: FontWeight.w600,
-                      center: true,
-                    ),
-                    ElevatedButtonWidget(
-                      onClick: () async {
-                        var placeOrderBody = {
-                          "user_id": "kEquHVu4GxOwVDBbehuoHkRf7BG2",
-                          "payment_method":
-                              radioState ? "" : "Cash On Delivery",
-                          "payment_type": radioState ? "" : "Cash On Delivery",
-                          "address_id": widget.addressID,
-                          "coupon_code": "5555",
-                          "time_slot": "1",
-                          "schedule": DateTime.now()
-                              .add(const Duration(days: 1))
-                              .millisecondsSinceEpoch,
-                          "orders": productProvider.cart
-                              .map((e) => {"cart_id": e["cart_id"]})
-                              .toList()
-                        };
-                        log(placeOrderBody.toString());
-                        var response = await post(
-                          Uri.parse(
-                              "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/placeorder"),
-                          body: jsonEncode(placeOrderBody),
-                          headers: {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json",
+          return SizedBox(
+            width: 428,
+            height: 428,
+            child: Consumer<ProfileProvider>(
+                builder: (context, profileProvider, _) {
+              return Consumer<ProductProvider>(
+                  builder: (context, productProvider, _) {
+                log(productProvider.cart.toString());
+                return SizedBox(
+                  width: 428,
+                  child: AlertDialog(
+                    actionsAlignment: MainAxisAlignment.spaceEvenly,
+                    actions: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 428,
+                        margin: EdgeInsets.all(8),
+                        child: ElevatedButtonWidget(
+                          onClick: () {
+                            Navigator.pop(context);
                           },
-                        );
-                        if (response == null) {
-                          profileProvider.hideLoader();
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  const OrderSuccessfulScreen()));
-                          return;
-                        }
-                        if (response.statusCode == 200) {
-                          log(response.body.toString());
-                          if (jsonDecode(response.body)["status"]) {
-                            log(response.body);
-                            profileProvider.hideLoader();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const OrderSuccessfulScreen()));
-                          }
-                        } else if (response.statusCode == 400) {
-                          snackbar(
-                              context, "Undefined parameter when calling API");
-                          profileProvider.hideLoader();
-                          Navigator.of(context).pop();
-                        } else if (response.statusCode == 404) {
-                          snackbar(context, "API not found");
-                          profileProvider.hideLoader();
-                          Navigator.of(context).pop();
-                        } else {
-                          log("Error: ${response.statusCode}");
-                          snackbar(context, "Failed to get data!");
-                          profileProvider.hideLoader();
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      height: 56,
-                      bgColor: Theme.of(context).primaryColor,
-                      buttonName: "Continue".toUpperCase(),
-                      borderRadius: 8,
-                      textColor: Colors.white,
-                      textStyle: FontWeight.w600,
-                      center: true,
+                          height: 56,
+                          bgColor: Colors.white,
+                          buttonName: "Cancel".toUpperCase(),
+                          textColor: Colors.grey[900],
+                          textStyle: FontWeight.w600,
+                          borderRadius: 12,
+                          borderSideColor:
+                              Theme.of(context).colorScheme.primary,
+                          center: true,
+                        ),
+                      ),
+                      Container(
+                        width: 428,
+                        margin: EdgeInsets.all(8),
+                        child: ElevatedButtonWidget(
+                          onClick: () async {
+                            var placeOrderBody = {
+                              "user_id": profileProvider.userIdForAddress,
+                              "payment_method":
+                                  radioState ? "" : "Cash On Delivery",
+                              "payment_type":
+                                  radioState ? "" : "Cash On Delivery",
+                              "address_id": widget.addressID,
+                              "coupon_code": "2222",
+                              "time_slot": "1",
+                              "schedule": DateTime.now()
+                                  .add(const Duration(days: 1))
+                                  .millisecondsSinceEpoch,
+                              "orders": productProvider.cart
+                                  .map((e) => {"cart_id": e["cart_id"]})
+                                  .toList()
+                            };
+                            log(placeOrderBody.toString());
+                            Navigator.of(context).pop();
+                            if (!profileProvider.shouldShowLoader) {
+                              profileProvider.showLoader();
+                              var response = await post(
+                                Uri.parse(
+                                    "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/placeorder"),
+                                body: jsonEncode(placeOrderBody),
+                                headers: {
+                                  "Content-Type": "application/json",
+                                  "Accept": "application/json",
+                                },
+                              );
+                              if (response == null) {
+                                profileProvider.hideLoader();
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => OrderSuccessfulScreen(
+                                          name: profileProvider.firstName,
+                                          deliverySlot:
+                                              "${DateFormat('dd EEE, MMM').format(
+                                                    DateTime.now().add(
+                                                      Duration(
+                                                        days: deliverySlot ~/ 2,
+                                                      ),
+                                                    ),
+                                                  ).toUpperCase()} ${deliverySlot % 2 == 0 ? '7 AM - 11 AM' : '11 AM - 3 PM'}",
+                                          orderNumber: "XXXXXXXXXXX",
+                                        )));
+                                return;
+                              }
+                              log(response.statusCode.toString());
+                              if (response.statusCode == 200) {
+                                log(response.body.toString());
+                                if (jsonDecode(response.body)["status"]) {
+                                  log(response.body);
+                                  profileProvider.hideLoader();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              OrderSuccessfulScreen(
+                                                name: profileProvider.firstName,
+                                                deliverySlot:
+                                                    "${DateFormat('EEE, dd MMM').format(
+                                                          DateTime.now().add(
+                                                            Duration(
+                                                              days:
+                                                                  deliverySlot ~/
+                                                                      2,
+                                                            ),
+                                                          ),
+                                                        ).toUpperCase()} (${deliverySlot % 2 == 0 ? '7 AM - 11 AM' : '11 AM - 3 PM'})",
+                                                orderNumber: "XXXXXXXXXXX",
+                                              )));
+                                }
+                              } else if (response.statusCode == 400) {
+                                snackbar(context,
+                                    "Undefined parameter when calling API");
+                                profileProvider.hideLoader();
+                                Navigator.of(context).pop();
+                              } else if (response.statusCode == 404) {
+                                snackbar(context, "API not found");
+                                profileProvider.hideLoader();
+                                Navigator.of(context).pop();
+                              } else {
+                                log("Error: ${response.statusCode}");
+                                snackbar(context, "Failed to get data!");
+                                profileProvider.hideLoader();
+                                Navigator.of(context).pop();
+                              }
+                            } else {
+                              snackbar(
+                                  context, "Your request is being processed",
+                                  isError: false);
+                            }
+                          },
+                          height: 56,
+                          bgColor: Theme.of(context).primaryColor,
+                          buttonName: "Continue".toUpperCase(),
+                          borderRadius: 8,
+                          textColor: Colors.white,
+                          textStyle: FontWeight.w600,
+                          center: true,
+                        ),
+                      ),
+                    ],
+                    content: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TextWidget(
+                            'Order Total',
+                          ),
+                          TextWidget(
+                            'Rs. ${(productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                  (value, element) => value + element,
+                                ) + 100).toStringAsFixed(2)}',
+                            size: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.fontSize,
+                            color: Theme.of(context).primaryColor,
+                            weight: FontWeight.w700,
+                          ),
+                          TextWidget(
+                            'You have chosen to pay for this order ${radioState ? 'online' : 'on delivery'}',
+                            flow: TextOverflow.visible,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          const TextWidget(
+                            'Please CONFIRM to place the order.',
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                  content: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const TextWidget(
-                          'Order Total',
-                        ),
-                        TextWidget(
-                          'Rs. ${(productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
-                                (value, element) => value + element,
-                              ) + 100).toStringAsFixed(2)}',
-                          size:
-                              Theme.of(context).textTheme.titleMedium?.fontSize,
-                          color: Theme.of(context).primaryColor,
-                          weight: FontWeight.w700,
-                        ),
-                        TextWidget(
-                          'You have chosen to pay for this order ${radioState ? 'online' : 'on delivery'}',
-                          flow: TextOverflow.visible,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        const TextWidget(
-                          'Please CONFIRM to place the order.',
-                        ),
-                      ],
-                    ),
+                    elevation: 10,
                   ),
-                  elevation: 10,
-                ),
-              );
-            });
-          });
+                );
+              });
+            }),
+          );
         },
       );
 
@@ -285,7 +349,14 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const DeliverySlotChooser(),
+                      DeliverySlotChooser(
+                        deliverySlot: deliverySlot,
+                        setDeliverySlot: (_) {
+                          setState(() {
+                            deliverySlot = _;
+                          });
+                        },
+                      ),
                       ElevatedButtonWidget(
                         onClick: () {
                           coupons(context);
@@ -524,14 +595,17 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
 }
 
 class DeliverySlotChooser extends StatefulWidget {
-  const DeliverySlotChooser({Key? key}) : super(key: key);
+  final int deliverySlot;
+  final Function(int) setDeliverySlot;
+  const DeliverySlotChooser(
+      {Key? key, required this.deliverySlot, required this.setDeliverySlot})
+      : super(key: key);
 
   @override
   State<DeliverySlotChooser> createState() => _DeliverySlotChooserState();
 }
 
 class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
-  var selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -558,9 +632,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    setState(() {
-                      selectedIndex = index;
-                    });
+                    widget.setDeliverySlot(index);
                   },
                   child: AnimatedContainer(
                     margin: EdgeInsets.only(
@@ -568,11 +640,11 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                     padding: const EdgeInsets.all(8),
                     duration: const Duration(milliseconds: 300),
                     decoration: BoxDecoration(
-                        color: index == selectedIndex
+                        color: index == widget.deliverySlot
                             ? Theme.of(context).colorScheme.primary
                             : Colors.transparent,
                         border: Border.all(
-                          color: index == selectedIndex
+                          color: index == widget.deliverySlot
                               ? Colors.transparent
                               : Theme.of(context).colorScheme.primary,
                         ),
@@ -591,7 +663,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                                   ),
                                 )
                                 .toUpperCase(),
-                            color: index == selectedIndex
+                            color: index == widget.deliverySlot
                                 ? Theme.of(context).colorScheme.onPrimary
                                 : Theme.of(context)
                                     .colorScheme
@@ -602,7 +674,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                               .add(Duration(days: index ~/ 2))
                               .day
                               .toString(),
-                          color: index == selectedIndex
+                          color: index == widget.deliverySlot
                               ? Theme.of(context).colorScheme.onPrimary
                               : Theme.of(context)
                                   .colorScheme
@@ -614,7 +686,7 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
                         ),
                         TextWidget(
                             index % 2 == 0 ? '7 AM - 11 AM' : '11 AM - 3 PM',
-                            color: index == selectedIndex
+                            color: index == widget.deliverySlot
                                 ? Theme.of(context).colorScheme.onPrimary
                                 : Theme.of(context)
                                     .colorScheme

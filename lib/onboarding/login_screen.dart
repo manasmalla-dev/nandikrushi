@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
               isError: false);
           context.setAsReturningUser(uID);
           data.showLoader();
-          Navigator.maybeOf(context)?.push(MaterialPageRoute(
+          Navigator.maybeOf(context)?.pushReplacement(MaterialPageRoute(
               builder: (context) => NandikrushiNavHost(
                     userId: uID,
                   )));
