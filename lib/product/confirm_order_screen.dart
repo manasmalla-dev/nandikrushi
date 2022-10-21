@@ -134,6 +134,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
       selected = await showDialog(
         context: context,
         builder: (BuildContext context) {
+          NavigatorState navigatorState = Navigator.of(context);
           return SizedBox(
             width: 428,
             height: 428,
@@ -220,11 +221,13 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                               log(response.statusCode.toString());
                               if (response.statusCode == 200) {
                                 log(response.body.toString());
-                                if (jsonDecode(response.body)["status"]) {
+                                if (jsonDecode(response.body)["status"] ||
+                                    jsonDecode(response.body)["status"]
+                                        .toString()
+                                        .contains("true")) {
                                   log(response.body);
-                                  profileProvider.hideLoader();
-                                  Navigator.push(
-                                      context,
+                                  
+                                     navigatorState.push(
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               OrderSuccessfulScreen(
@@ -240,7 +243,8 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                                           ),
                                                         ).toUpperCase()} (${deliverySlot % 2 == 0 ? '7 AM - 11 AM' : '11 AM - 3 PM'})",
                                                 orderNumber: "XXXXXXXXXXX",
-                                              )));
+                                              )),);
+                                  profileProvider.hideLoader();
                                 }
                               } else if (response.statusCode == 400) {
                                 snackbar(context,

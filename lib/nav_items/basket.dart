@@ -13,7 +13,7 @@ class BasketScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(builder: (context, productProvider, _) {
-      var items = productProvider.cart;
+      print(productProvider.cart);
       return Scaffold(
         appBar: AppBar(
           toolbarHeight: kToolbarHeight,
@@ -33,9 +33,9 @@ class BasketScreen extends StatelessWidget {
                 size: Theme.of(context).textTheme.titleMedium?.fontSize,
                 weight: FontWeight.w700,
               ),
-              items.isNotEmpty
+              productProvider.cart.isNotEmpty
                   ? TextWidget(
-                      '${items.length} items',
+                      '${productProvider.cart.length} items',
                       size: Theme.of(context).textTheme.bodySmall?.fontSize,
                       weight: FontWeight.w500,
                     )
@@ -43,7 +43,7 @@ class BasketScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: items.isNotEmpty
+        body: productProvider.cart.isNotEmpty
             ? SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -54,21 +54,25 @@ class BasketScreen extends StatelessWidget {
                       }),
                       primary: false,
                       shrinkWrap: true,
-                      itemCount: items.length,
+                      itemCount: productProvider.cart.length,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: ((context, index) {
                         return ProductCard(
                             type: CardType.product,
-                            productId: items[index]["product_id"] ?? "",
-                            productName: items[index]["name"] ?? "",
+                            productId:
+                                productProvider.cart[index]["product_id"] ?? "",
+                            productName:
+                                productProvider.cart[index]["name"] ?? "",
                             productDescription: "",
-                            imageURL: items[index]["url"] ?? "",
-                            price:
-                                double.tryParse(items[index]["price"] ?? "") ??
-                                    0.0,
+                            imageURL: productProvider.cart[index]["url"] ?? "",
+                            price: double.tryParse(productProvider.cart[index]
+                                        ["price"] ??
+                                    "") ??
+                                0.0,
                             units:
-                                "${(items[index]["quantity"] ?? "")} ${(items[index]["unit"] ?? "").replaceFirst("1", "")}${(items[index]["quantity"] ?? "") != "1" ? "s" : ""}",
-                            location: items[index]["place"] ?? "");
+                                "${(productProvider.cart[index]["quantity"] ?? "")} ${(productProvider.cart[index]["unit"] ?? "").replaceFirst("1", "")}${(productProvider.cart[index]["quantity"] ?? "") != "1" ? "s" : ""}",
+                            location:
+                                productProvider.cart[index]["place"] ?? "");
                       }),
                     ),
                     const Divider(),
@@ -86,7 +90,7 @@ class BasketScreen extends StatelessWidget {
                           ),
                           TextWidget(
                             (4000 -
-                                        (items
+                                        (productProvider.cart
                                             .map((e) =>
                                                 (double.tryParse(
                                                         e['price'] ?? "0") ??
@@ -109,7 +113,7 @@ class BasketScreen extends StatelessWidget {
                       ),
                     ),
                     (4000 -
-                                (items
+                                (productProvider.cart
                                     .map((e) =>
                                         (double.tryParse(e['price'] ?? "0") ??
                                             0) *
@@ -126,7 +130,7 @@ class BasketScreen extends StatelessWidget {
                                 vertical: 4.0, horizontal: 16),
                             child: SizedBox(
                               child: TextWidget(
-                                '!  Add items for Rs.${(4000 - (items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                '!  Add items for Rs.${(4000 - (productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                       (value, element) => value + element,
                                     ) + 100.00)).toStringAsFixed(2)} or more to avoid delivery charges',
                                 color: Theme.of(context).colorScheme.error,
@@ -157,7 +161,7 @@ class BasketScreen extends StatelessWidget {
                                 Theme.of(context).textTheme.bodyLarge?.fontSize,
                           ),
                           TextWidget(
-                            'Rs. ${(items.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                            'Rs. ${(productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                   (value, element) => value + element,
                                 ) + 100.00).toStringAsFixed(2)}',
                             weight: FontWeight.w700,

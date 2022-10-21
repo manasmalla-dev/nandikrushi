@@ -231,6 +231,7 @@ class ProductProvider extends ChangeNotifier {
         }
         if (cartData.statusCode == 200) {
           if (!cartData.body.contains('"status":false')) {
+            cart = [];
             List<dynamic> cartJSONResponse =
                 jsonDecode(cartData.body)["cart_products"];
             cart = cartJSONResponse.map((cartItem) {

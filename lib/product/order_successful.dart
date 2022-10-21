@@ -95,17 +95,9 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                                 snackbar(context, _, isError: false);
                               },
                               profileProvider: profileProvider);
-
-                          //TODO: Update later to use dynamic uid that is fetched from repository
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((context) => NandikrushiNavHost(
-                                  userId:
-                                      FirebaseAuth.instance.currentUser?.uid ??
-                                          "")),
-                            ),
-                          );
+                          productProvider.changeScreen(0);
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
                         },
                         height: 64,
                         textColor: Colors.white,
