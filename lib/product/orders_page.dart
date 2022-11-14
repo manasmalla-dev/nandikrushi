@@ -68,23 +68,23 @@ class OrdersPage extends StatelessWidget {
                                   ?.fontSize,
                             ),
                           ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 42),
-                            child: ElevatedButtonWidget(
-                              trailingIcon: Icons.add_rounded,
-                              buttonName: 'Order Now'.toUpperCase(),
-                              textStyle: FontWeight.w800,
-                              borderRadius: 8,
-                              innerPadding: 0.03,
-                              onClick: () {
-                                productProvider.changeScreen(1);
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          )
+                          // const SizedBox(
+                          //   height: 40,
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(horizontal: 42),
+                          //   child: ElevatedButtonWidget(
+                          //     trailingIcon: Icons.add_rounded,
+                          //     buttonName: 'Order Now'.toUpperCase(),
+                          //     textStyle: FontWeight.w800,
+                          //     borderRadius: 8,
+                          //     innerPadding: 0.03,
+                          //     onClick: () {
+                          //       productProvider.changeScreen(1);
+                          //       Navigator.of(context).pop();
+                          //     },
+                          //   ),
+                          // )
                         ],
                       ),
                     ),
@@ -93,25 +93,44 @@ class OrdersPage extends StatelessWidget {
               ])
             : ListView.separated(
                 itemBuilder: (context, itemIndex) {
-                  var product =
-                      productProvider.orders[itemIndex]["products"][0];
-                  return ProductCard(
-                    type: CardType.orders,
-                    productId: product["product_id"] ?? "XYZ",
-                    productName: product["product_name"] ?? "Name",
-                    productDescription: product["description"] ?? "Description",
-                    imageURL: product["url"] ??
-                        "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
-                    price:
-                        double.tryParse(product["price"] ?? "00.00") ?? 00.00,
-                    units:
-                        "${product["quantity"]} ${product["units"]?.toString().replaceFirst("1", "") ?? " unit"}${(int.tryParse(product["quantity"]) ?? 1) > 1 ? "s" : ""}",
-                    location: product["place"] ?? "Visakhapatnam",
-                    poster: productProvider.orders[itemIndex]["customer_name"],
-                    additionalInformation: {
-                      "date": productProvider.orders[itemIndex]["date"],
-                      "status": 0
-                    },
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceVariant,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: ListView.separated(
+                        primary: false,
+                        shrinkWrap: true,
+                        separatorBuilder: (_, __) {
+                          return Divider();
+                        },
+                        itemCount: productProvider
+                            .orders[itemIndex]["products"].length,
+                        itemBuilder: (context, productOrderIndex) {
+                          var product = productProvider.orders[itemIndex]
+                              ["products"][productOrderIndex];
+                          return ProductCard(
+                            type: CardType.orders,
+                            productId: product["product_id"] ?? "XYZ",
+                            productName: product["product_name"] ?? "Name",
+                            productDescription:
+                                product["description"] ?? "Description",
+                            imageURL: product["url"] ??
+                                "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
+                            price:
+                                double.tryParse(product["price"] ?? "00.00") ??
+                                    00.00,
+                            units:
+                                "${product["quantity"]} ${product["units"]?.toString().replaceFirst("1", "") ?? " unit"}${(int.tryParse(product["quantity"]) ?? 1) > 1 ? "s" : ""}",
+                            location: product["place"] ?? "Visakhapatnam",
+                            poster: productProvider.orders[itemIndex]
+                                ["customer_name"],
+                            additionalInformation: {
+                              "date": productProvider.orders[itemIndex]["date"],
+                              "status": 0
+                            },
+                          );
+                        }),
                   );
                 },
                 separatorBuilder: (context, _) {

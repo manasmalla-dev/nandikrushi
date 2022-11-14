@@ -76,7 +76,7 @@ class TextFieldWidget extends StatelessWidget {
     return TextFormField(
       inputFormatters: formatter,
       controller: controller,
-      cursorColor: Theme.of(context).primaryColor,
+      cursorColor: Theme.of(context).colorScheme.primary,
       obscureText: obscureText,
       readOnly: readOnly,
       decoration: InputDecoration(

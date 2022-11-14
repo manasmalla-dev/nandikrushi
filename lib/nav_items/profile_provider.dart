@@ -7,6 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
+import 'package:provider/provider.dart';
+
+import '../onboarding/login_provider.dart';
 
 class ProfileProvider extends ChangeNotifier {
   bool shouldShowLoader = false;
@@ -43,10 +46,16 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   Future<void> getProfile(
-      {required String userID, required Function(String) showMessage}) async {
+      {required LoginProvider loginProvider,
+      required String userID,
+      required Function(String) showMessage}) async {
     userIdForAddress = userID;
-    var url =
-        "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getparticularuser";
+
+    var url = loginProvider.isFarmer
+        ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getparticularuser"
+        : loginProvider.isStore
+            ? "https://nkweb.sweken.com/ index.php?route=extension/account/purpletree_multivendor/api/storeregistration/getparticularorganicstore"
+            : "";
     var response =
         await Server().postFormData(body: {"user_id": userID}, url: url);
     //TODO: Videos API needs to be integrated
@@ -189,7 +198,8 @@ class ProfileProvider extends ChangeNotifier {
       NavigatorState navigatorState,
       Map<String, String> addressList,
       Position? location,
-      Function(String) showMessage) async {
+      Function(String) showMessage,
+      LoginProvider loginProvider) async {
     //Send this data to the server
     var response = await post(
       Uri.parse(
@@ -222,15 +232,13 @@ class ProfileProvider extends ChangeNotifier {
         "Accept": "application/json",
       },
     );
-    if (response == null) {
-      showMessage("Failed to get a response from the server!");
-      hideLoader();
-      return;
-    }
 
     if (response.statusCode == 200) {
       log(response.body);
-      getProfile(userID: userIdForAddress, showMessage: showMessage);
+      getProfile(
+          userID: userIdForAddress,
+          showMessage: showMessage,
+          loginProvider: loginProvider);
       hideLoader();
       notifyListeners();
     } else if (response.statusCode == 400) {

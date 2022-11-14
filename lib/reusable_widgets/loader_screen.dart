@@ -19,7 +19,7 @@ class LoaderScreen extends StatelessWidget {
             return CircleAvatar(
               radius: getProportionateHeight(170, constraints),
               backgroundColor:
-                  createMaterialColor(loginProvider.userAppTheme.value)
+                  createMaterialColor(Theme.of(context).colorScheme.primary)
                       .shade100
                       .withOpacity(constraints.maxWidth < 600 ? 0.9 : 0.8),
               child: Column(

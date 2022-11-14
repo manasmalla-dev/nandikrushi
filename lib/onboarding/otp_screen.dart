@@ -303,7 +303,9 @@ class _OTPScreenState extends State<OTPScreen> {
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                       width: 2,
-                                      color: Theme.of(context).primaryColor),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(8)),
                                 ),
@@ -314,7 +316,9 @@ class _OTPScreenState extends State<OTPScreen> {
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                       width: 2,
-                                      color: Theme.of(context).primaryColor),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(8)),
                                 ),
@@ -325,7 +329,9 @@ class _OTPScreenState extends State<OTPScreen> {
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                       width: 2,
-                                      color: Theme.of(context).primaryColor),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(8)),
                                 ),
@@ -381,12 +387,12 @@ class _OTPScreenState extends State<OTPScreen> {
                             bgColor: loginPageController
                                         .otpTextEditController.text.length ==
                                     6
-                                ? Theme.of(context).primaryColor
+                                ? Theme.of(context).colorScheme.primary
                                 : Colors.grey.shade400,
                             borderSideColor: loginPageController
                                         .otpTextEditController.text.length ==
                                     6
-                                ? Theme.of(context).primaryColor
+                                ? Theme.of(context).colorScheme.primary
                                 : Colors.grey.shade500,
                             textColor: Colors.white,
                             buttonName: "VERIFY OTP",

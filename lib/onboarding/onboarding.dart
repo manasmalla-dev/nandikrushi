@@ -104,7 +104,10 @@ class OnboardingPageScreen extends StatelessWidget {
                       separatorBuilder: (context, index) {
                         return Divider(
                           thickness: 1.5,
-                          color: const Color(0x50006838),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.3),
                           indent: getProportionateWidth(8, constraints),
                           endIndent: getProportionateWidth(8, constraints),
                         );

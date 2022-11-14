@@ -35,7 +35,7 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: ElevationOverlay.colorWithOverlay(
           Theme.of(context).colorScheme.surface,
-          Theme.of(context).primaryColor,
+          Theme.of(context).colorScheme.primary,
           3.0),
       body: Center(
         child: Column(

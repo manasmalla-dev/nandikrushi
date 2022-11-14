@@ -86,8 +86,12 @@ Widget userTypesSelection(
           itemBuilder: (context, index) {
             return ElevatedButtonWidget(
               onClick: () {
-                loginProvider
-                    .updateUserAppType(userTypeData.entries.elementAt(index));
+                if (index != 2) {
+                  loginProvider
+                      .updateUserAppType(userTypeData.entries.elementAt(index));
+                } else {
+                  snackbar(context, "Coming soon!");
+                }
               },
               minWidth: getProportionateWidth(345, constraints),
               height: getProportionateHeight(100, constraints),

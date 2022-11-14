@@ -7,13 +7,17 @@ import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:provider/provider.dart';
 
-class BasketScreen extends StatelessWidget {
+class BasketScreen extends StatefulWidget {
   const BasketScreen({Key? key}) : super(key: key);
 
   @override
+  State<BasketScreen> createState() => _BasketScreenState();
+}
+
+class _BasketScreenState extends State<BasketScreen> {
+  @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(builder: (context, productProvider, _) {
-      print(productProvider.cart);
       return Scaffold(
         appBar: AppBar(
           toolbarHeight: kToolbarHeight,

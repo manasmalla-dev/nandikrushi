@@ -1,16 +1,12 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
+import 'package:nandikrushi_farmer/product/add_product.dart';
 import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
-import 'package:nandikrushi_farmer/utils/server.dart';
 import 'package:provider/provider.dart';
 
 import '../reusable_widgets/loader_screen.dart';
@@ -58,7 +54,7 @@ class MyProductsPage extends StatelessWidget {
                                 height: 20,
                               ),
                               TextWidget(
-                                'Oops!',
+                                productProvider.myProductsMessage,
                                 weight: FontWeight.w800,
                                 size: Theme.of(context)
                                     .textTheme
@@ -93,8 +89,10 @@ class MyProductsPage extends StatelessWidget {
                                   borderRadius: 8,
                                   innerPadding: 0.03,
                                   onClick: () {
-                                    productProvider.changeScreen(1);
-                                    Navigator.of(context).pop();
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const AddProductScreen()));
                                   },
                                 ),
                               )
@@ -114,9 +112,9 @@ class MyProductsPage extends StatelessWidget {
                               builder: (context) {
                                 return Center(
                                   child: Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 32),
-                                    padding: EdgeInsets.all(24),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 32),
+                                    padding: const EdgeInsets.all(24),
                                     decoration: BoxDecoration(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -128,12 +126,12 @@ class MyProductsPage extends StatelessWidget {
                                       children: [
                                         ClipOval(
                                           child: Container(
-                                            child: Icon(Icons.delete),
-                                            padding: EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(8.0),
                                             color: Colors.red.shade200,
+                                            child: const Icon(Icons.delete),
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 24,
                                         ),
                                         Text(
@@ -142,11 +140,11 @@ class MyProductsPage extends StatelessWidget {
                                               .textTheme
                                               .titleLarge,
                                         ),
-                                        Text(
+                                        const Text(
                                           "Confirm to delete the product. \nNote, this change can't be reverted.",
                                           textAlign: TextAlign.center,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 24,
                                         ),
                                         ElevatedButtonWidget(
@@ -164,7 +162,7 @@ class MyProductsPage extends StatelessWidget {
                                             Navigator.of(context).pop();
                                           },
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 12,
                                         ),
                                         Consumer<ProfileProvider>(builder:
@@ -176,72 +174,74 @@ class MyProductsPage extends StatelessWidget {
                                             bgColor: Colors.red.shade400,
                                             onClick: () async {
                                               Navigator.of(context).pop();
-                                              profileProvider.showLoader();
-                                              var response = await Server()
-                                                  .postFormData(
-                                                      url:
-                                                          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/deletesellerproduct",
-                                                      body: {
-                                                    "user_id": profileProvider
-                                                        .userIdForAddress,
-                                                    "product_id":
-                                                        product["product_id"]
-                                                            .toString()
-                                                  });
-                                              if (response == null) {
-                                                snackbar(context,
-                                                    "Failed to get a response from the server!");
-                                                profileProvider.hideLoader();
-                                                //hideLoader();
-                                                if (Platform.isAndroid) {
-                                                  SystemNavigator.pop();
-                                                } else if (Platform.isIOS) {
-                                                  exit(0);
-                                                }
-                                                return;
-                                              }
-                                              if (response.statusCode == 200) {
-                                                if (!response.body.contains(
-                                                    '"status":false')) {
-                                                  productProvider.getData(
-                                                      showMessage: (_) {
-                                                        snackbar(context, _);
-                                                      },
-                                                      profileProvider:
-                                                          profileProvider);
-                                                } else if (response
-                                                        .statusCode ==
-                                                    400) {
-                                                  snackbar(context,
-                                                      "Undefined parameter when calling API");
-                                                  profileProvider.hideLoader();
-                                                  if (Platform.isAndroid) {
-                                                    SystemNavigator.pop();
-                                                  } else if (Platform.isIOS) {
-                                                    exit(0);
-                                                  }
-                                                } else if (response
-                                                        .statusCode ==
-                                                    404) {
-                                                  snackbar(
-                                                      context, "API not found");
-                                                  profileProvider.hideLoader();
-                                                  if (Platform.isAndroid) {
-                                                    SystemNavigator.pop();
-                                                  } else if (Platform.isIOS) {
-                                                    exit(0);
-                                                  }
-                                                } else {
-                                                  snackbar(context,
-                                                      "Failed to get data!");
-                                                  profileProvider.hideLoader();
-                                                  if (Platform.isAndroid) {
-                                                    SystemNavigator.pop();
-                                                  } else if (Platform.isIOS) {
-                                                    exit(0);
-                                                  }
-                                                }
-                                              }
+                                              snackbar(context,
+                                                  "Feature coming soon!");
+                                              // profileProvider.showLoader();
+                                              // var response = await Server()
+                                              //     .postFormData(
+                                              //         url:
+                                              //             "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/deletesellerproduct",
+                                              //         body: {
+                                              //       "user_id": profileProvider
+                                              //           .userIdForAddress,
+                                              //       "product_id":
+                                              //           product["product_id"]
+                                              //               .toString()
+                                              //     });
+                                              // if (response == null) {
+                                              //   snackbar(context,
+                                              //       "Failed to get a response from the server!");
+                                              //   profileProvider.hideLoader();
+                                              //   //hideLoader();
+                                              //   if (Platform.isAndroid) {
+                                              //     SystemNavigator.pop();
+                                              //   } else if (Platform.isIOS) {
+                                              //     exit(0);
+                                              //   }
+                                              //   return;
+                                              // }
+                                              // if (response.statusCode == 200) {
+                                              //   if (!response.body.contains(
+                                              //       '"status":false')) {
+                                              //     productProvider.getData(
+                                              //         showMessage: (_) {
+                                              //           snackbar(context, _);
+                                              //         },
+                                              //         profileProvider:
+                                              //             profileProvider);
+                                              //   } else if (response
+                                              //           .statusCode ==
+                                              //       400) {
+                                              //     snackbar(context,
+                                              //         "Undefined parameter when calling API");
+                                              //     profileProvider.hideLoader();
+                                              //     if (Platform.isAndroid) {
+                                              //       SystemNavigator.pop();
+                                              //     } else if (Platform.isIOS) {
+                                              //       exit(0);
+                                              //     }
+                                              //   } else if (response
+                                              //           .statusCode ==
+                                              //       404) {
+                                              //     snackbar(
+                                              //         context, "API not found");
+                                              //     profileProvider.hideLoader();
+                                              //     if (Platform.isAndroid) {
+                                              //       SystemNavigator.pop();
+                                              //     } else if (Platform.isIOS) {
+                                              //       exit(0);
+                                              //     }
+                                              //   } else {
+                                              //     snackbar(context,
+                                              //         "Failed to get data!");
+                                              //     profileProvider.hideLoader();
+                                              //     if (Platform.isAndroid) {
+                                              //       SystemNavigator.pop();
+                                              //     } else if (Platform.isIOS) {
+                                              //       exit(0);
+                                              //     }
+                                              //   }
+                                              // }
                                             },
                                           );
                                         })
@@ -266,7 +266,8 @@ class MyProductsPage extends StatelessWidget {
                               : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
                           price: double.tryParse(product["price"] ?? "00.00") ??
                               00.00,
-                          units: product["quantity"] ?? "1 unit",
+                          units:
+                              "${product["quantity"] ?? "1"} ${product["units"] ?? "unit"}",
                           location: product["place"] ?? "Visakhapatnam",
                           additionalInformation: {
                             "date": DateFormat('dd-MM-yyyy, hh:mm a').format(

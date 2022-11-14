@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nandikrushi_farmer/nav_host.dart';
 import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
@@ -51,9 +52,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               Positioned(
                                 top: -(getProportionateHeight(28, constraints)),
                                 left: getProportionateWidth(210, constraints),
-                                child: const Image(
-                                  image:
-                                      AssetImage("assets/images/ic_farmer.png"),
+                                child: Image(
+                                  image: AssetImage(
+                                      "assets/images/${loginProvider.isFarmer ? "ic_farmer" : loginProvider.userAppTheme.key.contains("Store") ? "ic_store" : "ic_restaurant"}.png"),
                                 ),
                               ),
                               Container(
@@ -134,8 +135,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Positioned(
                       top: -(getProportionateHeight(28, constraints)),
                       left: getProportionateWidth(210, constraints),
-                      child: const Image(
-                        image: AssetImage("assets/images/ic_farmer.png"),
+                      child: Image(
+                        image: AssetImage(
+                            "assets/images/${loginProvider.isFarmer ? "ic_farmer" : loginProvider.userAppTheme.key.contains("Store") ? "ic_store" : "ic_restaurant"}.png"),
                       ),
                     ),
                     Container(
@@ -211,6 +213,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void showImagePickerSheet(
       {required Function(XFile) onImageSelected,
       required BoxConstraints constraints}) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+      currentFocus.focusedChild?.unfocus();
+    }
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -331,67 +339,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
         child: Row(
           children: [
-            loginPageController.profileImage == null
-                ? Expanded(
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            iconSize: 75,
-                            color: Theme.of(context).colorScheme.primary,
-                            onPressed: () {
-                              showImagePickerSheet(
-                                  constraints: constraints,
-                                  onImageSelected: (XFile profileImage) {
-                                    loginPageController.profileImage =
-                                        profileImage;
-                                  });
-                            },
-                            splashRadius: 42,
-                            icon: const Icon(Icons.add_a_photo_rounded),
-                          ),
-                          TextWidget(
-                            "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.7),
-                            weight: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.fontWeight,
-                            size:
-                                Theme.of(context).textTheme.bodyLarge?.fontSize,
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                : Expanded(
-                    child: Center(
-                      child: Stack(
-                        children: [
-                          Center(
-                            child: ClipOval(
-                                child: Image.file(
-                              File(
-                                  loginPageController.profileImage?.path ?? ""),
-                              height: 96,
-                              width: 96,
-                              fit: BoxFit.cover,
-                            )),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  shape: BoxShape.circle),
-                              child: IconButton(
+            loginProvider.isFarmer
+                ? loginPageController.profileImage == null
+                    ? Expanded(
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                iconSize: 75,
+                                color: Theme.of(context).colorScheme.primary,
                                 onPressed: () {
                                   showImagePickerSheet(
                                       constraints: constraints,
@@ -400,17 +357,75 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             profileImage;
                                       });
                                 },
-                                icon: Icon(Icons.edit_rounded,
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    size: 16),
+                                splashRadius: 42,
+                                icon: const Icon(Icons.add_a_photo_rounded),
                               ),
-                            ),
+                              TextWidget(
+                                "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withOpacity(0.7),
+                                weight: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.fontWeight,
+                                size: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.fontSize,
+                              )
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
+                        ),
+                      )
+                    : Expanded(
+                        child: Center(
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: ClipOval(
+                                    child: Image.file(
+                                  File(loginPageController.profileImage?.path ??
+                                      ""),
+                                  height: 96,
+                                  width: 96,
+                                  fit: BoxFit.cover,
+                                )),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  width: 32,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      shape: BoxShape.circle),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      showImagePickerSheet(
+                                          constraints: constraints,
+                                          onImageSelected:
+                                              (XFile profileImage) {
+                                            loginPageController.profileImage =
+                                                profileImage;
+                                          });
+                                    },
+                                    icon: Icon(Icons.edit_rounded,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        size: 16),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                : const SizedBox(),
             !loginProvider.isFarmer
                 ? loginPageController.storeLogo == null
                     ? Expanded(
@@ -503,8 +518,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.all(
-          32,
+        padding: const EdgeInsets.only(
+          left: 32,
+          right: 32,
+          bottom: 24,
+          top: 8,
         ),
         child: Form(
           key: loginPageController.registrationFormKey,
@@ -519,43 +537,45 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               const SizedBox(
                 height: 16,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFieldWidget(
-                      controller: loginPageController
-                          .registrationPageFormControllers['first_name'],
-                      label:
-                          "${loginProvider.isFarmer ? "Farmer's" : ""} First Name",
-                      validator: (value) {
-                        if (value?.isEmpty ?? false) {
-                          return snackbar(
-                              context, "Please enter a valid first name");
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 24),
-                  Expanded(
-                    child: TextFieldWidget(
-                      controller: loginPageController
-                          .registrationPageFormControllers['last_name'],
-                      label:
-                          "${loginProvider.isFarmer ? "Farmer's" : ""} Last Name",
-                      validator: (value) {
-                        if (value?.isEmpty ?? false) {
-                          return snackbar(
-                              context, "Please enter a valid last name");
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 8,
+              loginProvider.isFarmer
+                  ? Row(
+                      children: [
+                        Expanded(
+                          child: TextFieldWidget(
+                            controller: loginPageController
+                                .registrationPageFormControllers['first_name'],
+                            label:
+                                "${loginProvider.isFarmer ? "Farmer's" : ""} First Name",
+                            validator: (value) {
+                              if (value?.isEmpty ?? false) {
+                                return snackbar(
+                                    context, "Please enter a valid first name");
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: TextFieldWidget(
+                            controller: loginPageController
+                                .registrationPageFormControllers['last_name'],
+                            label:
+                                "${loginProvider.isFarmer ? "Farmer's" : ""} Last Name",
+                            validator: (value) {
+                              if (value?.isEmpty ?? false) {
+                                return snackbar(
+                                    context, "Please enter a valid last name");
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
+              SizedBox(
+                height: loginProvider.isFarmer ? 8 : 0,
               ),
               !loginProvider.isFarmer
                   ? TextFieldWidget(
@@ -773,7 +793,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         false;
 
                     if (formValidatedState) {
-                      if (loginPageController.profileImage == null) {
+                      if (loginPageController.profileImage == null &&
+                          loginProvider.isFarmer) {
                         formValidatedState = false;
                         snackbar(
                             context,
@@ -1227,11 +1248,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   false;
 
               if (formValidatedState) {
-                if (loginPageController.profileImage == null) {
+                print(loginPageController.profileImage == null &&
+                    loginProvider.isFarmer);
+                if (loginPageController.profileImage == null &&
+                    loginProvider.isFarmer) {
                   formValidatedState = false;
-                  snackbar(
-                      context,
-                      "Please upload ${loginProvider.isFarmer ? "the Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "your" : "your"} image");
+                  snackbar(context, "Please upload the Farmer image");
                 }
                 if (!loginProvider.isFarmer) {
                   if (loginPageController.storeLogo == null) {

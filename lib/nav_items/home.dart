@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
           "icon": "assets/images/orders_home.png",
         },
       ];
-      if (!loginProvider.isFarmer) {
+      if (loginProvider.isFarmer) {
         destinations.add(
           {
             "title": "My Purchases",
@@ -115,13 +115,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const OrdersPage()));
-                    } else if (index == 3 && !loginProvider.isFarmer) {
+                    } else if (index == 3 && loginProvider.isFarmer) {
                       // Navigator.push(
                       //     context,
                       //     MaterialPageRoute(
                       //         builder: (context) => const PurchasesScreen()));
                     } else if (index == 4 ||
-                        (loginProvider.isFarmer && index == 3)) {
+                        (!loginProvider.isFarmer && index == 3)) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(

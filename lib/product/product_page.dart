@@ -228,7 +228,8 @@ class _ProductPageState extends State<ProductPage> {
                                                 horizontal: 42),
                                             child: ElevatedButtonWidget(
                                               bgColor: Theme.of(context)
-                                                  .primaryColor,
+                                                  .colorScheme
+                                                  .primary,
                                               trailingIcon: Icons.add_rounded,
                                               buttonName:
                                                   'Shop Items'.toUpperCase(),
@@ -584,7 +585,8 @@ class _ProductPageState extends State<ProductPage> {
                                                     style: ElevatedButton.styleFrom(
                                                         primary:
                                                             Theme.of(context)
-                                                                .primaryColor,
+                                                                .colorScheme
+                                                                .primary,
                                                         shape:
                                                             RoundedRectangleBorder(
                                                                 borderRadius:
@@ -608,21 +610,25 @@ class _ProductPageState extends State<ProductPage> {
                                                   flex: 3,
                                                   child: ElevatedButton(
                                                     style: ElevatedButton.styleFrom(
-                                                        primary:
-                                                            Theme.of(context)
-                                                                .primaryColor,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8)),
-                                                        onPrimary:
+                                                        foregroundColor:
                                                             Theme.of(context)
                                                                 .colorScheme
-                                                                .onPrimary),
+                                                                .onPrimary,
+                                                        backgroundColor:
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .primary,
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8))),
                                                     onPressed: () async {
-                                                      dialCall();
+                                                      dialCall(
+                                                          mobileNumber: widget
+                                                                      .productDetails[
+                                                                  "seller_mobile"] ??
+                                                              "");
                                                     },
                                                     child: const Text("Phone"),
                                                   ),
@@ -704,27 +710,32 @@ class _ProductPageState extends State<ProductPage> {
                             return ProductCard(
                                 includeHorizontalPadding: false,
                                 type: CardType.product,
-                                productId:
-                                    productProvider.categorizedProducts["Fruits"]
-                                            ?[index]["product_id"] ??
-                                        "XYZ",
+                                productId: productProvider.categorizedProducts[widget.productDetails["category_id"]]
+                                        ?.where((element) =>
+                                            element["product_id"] !=
+                                            widget.productDetails["product_id"])
+                                        .toList()[index]["product_id"] ??
+                                    "XYZ",
                                 productName:
-                                    productProvider.categorizedProducts["Fruits"]
-                                            ?[index]["name"] ??
+                                    productProvider.categorizedProducts[widget.productDetails["category_id"]]?.where((element) => element["product_id"] != widget.productDetails["product_id"]).toList()[index]
+                                            ["name"] ??
                                         "Name",
-                                productDescription:
-                                    productProvider.categorizedProducts["Fruits"]
-                                            ?[index]["description"] ??
-                                        "Description",
-                                imageURL: productProvider
-                                            .categorizedProducts["Fruits"]
-                                        ?[index]["url"] ??
-                                    "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
-                                price: double.tryParse(productProvider.categorizedProducts["Fruits"]?[index]["price"] ?? "00.00") ?? 00.00,
-                                units: productProvider.categorizedProducts["Fruits"]?[index]["units"] ?? "1 unit",
-                                location: productProvider.categorizedProducts["Fruits"]?[index]["place"] ?? "Visakhapatnam");
+                                productDescription: productProvider
+                                        .categorizedProducts[widget.productDetails["category_id"]]
+                                        ?.where((element) => element["product_id"] != widget.productDetails["product_id"])
+                                        .toList()[index]["description"] ??
+                                    "Description",
+                                imageURL: productProvider.categorizedProducts[widget.productDetails["category_id"]]?.where((element) => element["product_id"] != widget.productDetails["product_id"]).toList()[index]["url"] ?? "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
+                                price: double.tryParse(productProvider.categorizedProducts[widget.productDetails["category_id"]]?.where((element) => element["product_id"] != widget.productDetails["product_id"]).toList()[index]["price"] ?? "00.00") ?? 00.00,
+                                units: productProvider.categorizedProducts[widget.productDetails["category_id"]]?.where((element) => element["product_id"] != widget.productDetails["product_id"]).toList()[index]["units"] ?? "1 unit",
+                                location: productProvider.categorizedProducts[widget.productDetails["category_id"]]?.where((element) => element["product_id"] != widget.productDetails["product_id"]).toList()[index]["place"] ?? "Visakhapatnam");
                           },
-                          itemCount: 3,
+                          itemCount: productProvider.categorizedProducts[
+                                  widget.productDetails["category_id"]]
+                              ?.where((element) =>
+                                  element["product_id"] !=
+                                  widget.productDetails["product_id"])
+                              ?.length,
                           primary: false,
                           shrinkWrap: true,
                         )

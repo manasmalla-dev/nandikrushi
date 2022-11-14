@@ -94,12 +94,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             flex: 3,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  primary:
+                                  foregroundColor:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  backgroundColor:
                                       Theme.of(context).colorScheme.primary,
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
-                                  onPrimary:
-                                      Theme.of(context).colorScheme.onPrimary),
+                                      borderRadius: BorderRadius.circular(8))),
                               onPressed: () async {
                                 var pickedImage = await ImagePicker()
                                     .pickImage(source: ImageSource.gallery);
@@ -126,12 +126,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             flex: 3,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  primary:
+                                  foregroundColor:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  backgroundColor:
                                       Theme.of(context).colorScheme.primary,
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
-                                  onPrimary:
-                                      Theme.of(context).colorScheme.onPrimary),
+                                      borderRadius: BorderRadius.circular(8))),
                               onPressed: () async {
                                 var pickedImage = await ImagePicker()
                                     .pickImage(source: ImageSource.camera);
@@ -197,8 +197,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           child: Row(
                             children: [
-                              loginPageController.profileImage == null
+                              loginPageController.profileImage != null ||
+                                      profileProvider.sellerImage.isNotEmpty
                                   ? Expanded(
+                                      child: Center(
+                                        child: SizedBox(
+                                          width: 120,
+                                          child: Stack(
+                                            children: [
+                                              Center(
+                                                child: ClipOval(
+                                                  child: loginPageController
+                                                              .profileImage !=
+                                                          null
+                                                      ? Image.file(
+                                                          File(loginPageController
+                                                                  .profileImage
+                                                                  ?.path ??
+                                                              ""),
+                                                          height: 96,
+                                                          width: 96,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Image.network(
+                                                          profileProvider
+                                                              .sellerImage,
+                                                          height: 96,
+                                                          width: 96,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                ),
+                                              ),
+                                              Positioned(
+                                                bottom: 0,
+                                                right: 0,
+                                                child: Container(
+                                                  width: 32,
+                                                  height: 32,
+                                                  decoration: BoxDecoration(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                      shape: BoxShape.circle),
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      showImagePickerSheet(
+                                                          constraints:
+                                                              constraints,
+                                                          onImageSelected: (XFile
+                                                              profileImage) {
+                                                            loginPageController
+                                                                    .profileImage =
+                                                                profileImage;
+                                                          });
+                                                    },
+                                                    icon: Icon(
+                                                        Icons.edit_rounded,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
+                                                        size: 16),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Expanded(
                                       child: Center(
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
@@ -237,56 +304,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   .bodyLarge
                                                   ?.fontSize,
                                             )
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : Expanded(
-                                      child: Center(
-                                        child: Stack(
-                                          children: [
-                                            Center(
-                                              child: ClipOval(
-                                                  child: Image.file(
-                                                File(loginPageController
-                                                        .profileImage?.path ??
-                                                    ""),
-                                                height: 96,
-                                                width: 96,
-                                                fit: BoxFit.cover,
-                                              )),
-                                            ),
-                                            Positioned(
-                                              bottom: 0,
-                                              right: 0,
-                                              child: Container(
-                                                width: 32,
-                                                height: 32,
-                                                decoration: BoxDecoration(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .primary,
-                                                    shape: BoxShape.circle),
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    showImagePickerSheet(
-                                                        constraints:
-                                                            constraints,
-                                                        onImageSelected: (XFile
-                                                            profileImage) {
-                                                          loginPageController
-                                                                  .profileImage =
-                                                              profileImage;
-                                                        });
-                                                  },
-                                                  icon: Icon(Icons.edit_rounded,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onPrimary,
-                                                      size: 16),
-                                                ),
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -414,7 +431,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             .availableUserTypes = loginProvider
                                                 .availableUserTypes.isEmpty
                                             ? {
-                                                "Farmer":
+                                                "Farmers ":
                                                     const Color(0xFF006838),
                                                 "Organic Stores":
                                                     const Color(0xFF00bba8),
@@ -422,11 +439,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     const Color(0xFFffd500),
                                               }
                                             : loginProvider.availableUserTypes;
+                                        print(loginProvider
+                                            .availableUserTypes.keys);
+                                        print(loginProvider.userAppTheme.key);
                                         return Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Flexible(
                                               child: Radio<String>(
+                                                activeColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                                 value: loginProvider
                                                     .availableUserTypes.keys
                                                     .toList()[index],
@@ -1237,8 +1260,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               false;
 
                                       if (formValidatedState) {
-                                        if (loginPageController.profileImage ==
-                                            null) {
+                                        if (!(loginPageController
+                                                    .profileImage !=
+                                                null ||
+                                            profileProvider
+                                                .sellerImage.isNotEmpty)) {
                                           formValidatedState = false;
                                           snackbar(
                                               context,
@@ -1335,11 +1361,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 };
 
                                                 var sellerImageURL =
-                                                    await uploadFilesToCloud(
-                                                        loginPageController
-                                                            .profileImage,
-                                                        cloudLocation:
-                                                            "profile_pics");
+                                                    loginPageController
+                                                                .profileImage !=
+                                                            null
+                                                        ? await uploadFilesToCloud(
+                                                            loginPageController
+                                                                .profileImage,
+                                                            cloudLocation:
+                                                                "profile_pics")
+                                                        : profileProvider
+                                                            .sellerImage;
                                                 var storeLogoURL = "";
                                                 if (!loginProvider.isFarmer) {
                                                   storeLogoURL =
@@ -1450,23 +1481,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     )
                                                   ]);
                                                 } else {
-                                                  //TODO: Check with backend
                                                   body.addEntries([
-                                                    MapEntry(
-                                                        "seller_storename",
-                                                        loginPageController
-                                                                .registrationPageFormControllers[
-                                                                    "first_name"]
-                                                                ?.text
-                                                                .toString() ??
-                                                            "XYZ"),
+                                                    MapEntry("seller_storename",
+                                                        "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}'s Store"),
                                                     MapEntry(
                                                       "store_logo",
                                                       sellerImageURL,
                                                     )
                                                   ]);
                                                 }
-
                                                 var response = await Server()
                                                     .postFormData(
                                                         body: body,

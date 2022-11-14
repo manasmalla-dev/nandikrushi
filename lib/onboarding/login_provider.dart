@@ -19,6 +19,8 @@ class LoginProvider extends ChangeNotifier {
   Map<String, Color> availableUserTypes = {};
   MapEntry<String, Color> userAppTheme = const MapEntry("", Color(0xFF006838));
   bool get isFarmer => userAppTheme.key.contains("Farmer");
+  bool get isStore => userAppTheme.key.contains("Stores");
+  bool get isRestaurant => userAppTheme.key.contains("Restaurant");
 
   Map<String, String> languages = {
     "english": "english".toUpperCase(),
@@ -282,9 +284,13 @@ class LoginProvider extends ChangeNotifier {
           ""
     };
 
-    var sellerImageURL = await uploadFilesToCloud(
-        loginPageController.profileImage,
-        cloudLocation: "profile_pics");
+    var sellerImageURL = "";
+    if (isFarmer) {
+      sellerImageURL = await uploadFilesToCloud(
+          loginPageController.profileImage,
+          cloudLocation: "profile_pics");
+    }
+
     var storeLogoURL = "";
     if (!isFarmer) {
       storeLogoURL = await uploadFilesToCloud(loginPageController.storeLogo,
@@ -302,102 +308,112 @@ class LoginProvider extends ChangeNotifier {
         certificatesURLs.add(urlData);
       });
     }
-    Map<String, String> body = {
-      "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
-      "firstname": loginPageController
-              .registrationPageFormControllers["first_name"]?.text
-              .toString() ??
-          "",
-      "lastname": loginPageController
-              .registrationPageFormControllers["last_name"]?.text
-              .toString() ??
-          "",
-      "email": loginPageController
-              .registrationPageFormControllers["email"]?.text
-              .toString() ??
-          "",
-      "telephone": phoneNumber,
-      "password": loginPageController
-              .registrationPageFormControllers["password"]?.text
-              .toString() ??
-          "",
-      "confirm": loginPageController
-              .registrationPageFormControllers["c_password"]?.text
-              .toString() ??
-          "",
-      "agree": 1.toString(),
-      "become_seller": 1.toString(),
-      "seller_type": userAppTheme.key.toString(),
-      "land": loginPageController.landInAcres.toString(),
-      "seller_image": sellerImageURL.toString(),
-      "additional_comments": "Farmer is the backbone of India",
-      "additional_documents": loginPageController.userCertification,
-      "upload_document": certificatesURLs
-          .toString(), //TODO: Check with backend on how to parse data
-      "store_address": userAddress.toString(),
-      "store_status": 1.toString(),
-      "language":
-          (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
-      // "agree": "1"
-    };
-    // var body = {
-    //   "user_id": "eebRSIhd4dM3wKYml7vFT4Xyx4p1",
-    //   "firstname": "Madhava",
-    //   "lastname": "Murari",
-    //   "email": "madhavamurari@universe.com",
-    //   "telephone": "2222222222",
-    //   "password": "123456789",
-    //   "confirm": "123456789",
-    //   "agree": "1",
-    //   "become_seller": "1",
-    //   "seller_type": "Farmers",
-    //   "land": "20",
-    //   "seller_image":
-    //       "https://firebasestorage.googleapis.com/v0/b/nandikrushi-35ddb.appspot.com/o/profile_pics%2F2022-10-21%2021%3A06%3A38.897369.png?alt=media&token=a0364eb3-189a-4849-91a4-9dc4dd562597",
-    //   "additional_comments": "Farmer is the backbone of India",
-    //   "additional_documents": "Self Declared Natural Farmer",
-    //   "upload_document":
-    //       "https://firebasestorage.googleapis.com/v0/b/nandikrushi-35ddb.appspot.com/o/profile_pics%2F2022-10-21%2021%3A06%3A38.897369.png?alt=media&token=a0364eb3-189a-4849-91a4-9dc4dd562597",
-    //   "seller_storename": "Spot124Manas",
-    //   "store_logo":
-    //       "https://firebasestorage.googleapis.com/v0/b/nandikrushi-35ddb.appspot.com/o/profile_pics%2F2022-10-21%2021%3A06%3A38.897369.png?alt=media&token=a0364eb3-189a-4849-91a4-9dc4dd562597",
-    //   "store_address":
-    //       "{coordinates-x: 17.741, coordinates-y: 83.30, houseNumber: 50-103, city: Vizag, mandal: Sethamadhara, district: VSP, state: AP, pincode: 530012}",
-    //   "store_status": "1",
-    //   "language": "1"
-    // };
 
     if (!isFarmer) {
-      body.addEntries([
-        MapEntry(
-            "seller_storename",
-            loginPageController
-                    .registrationPageFormControllers["storeName"]?.text
-                    .toString() ??
-                ""),
-        MapEntry(
-          "store_logo",
-          storeLogoURL.toString(),
-        )
-      ]);
+      //Store/Restaurant
+      Map<String, String> body = {
+        "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
+
+        "email": loginPageController
+                .registrationPageFormControllers["email"]?.text
+                .toString() ??
+            "",
+        "telephone": phoneNumber,
+        "password": loginPageController
+                .registrationPageFormControllers["password"]?.text
+                .toString() ??
+            "",
+        "confirm": loginPageController
+                .registrationPageFormControllers["c_password"]?.text
+                .toString() ??
+            "",
+        // "agree": 1.toString(),
+        // "become_seller": 1.toString(),
+        "seller_type": userAppTheme.key.toString(),
+        //  "land": loginPageController.landInAcres.toString(),
+        //    "seller_image": sellerImageURL.toString(),
+        //  "additional_comments": "Farmer is the backbone of India",
+        "additional_documents": loginPageController.userCertification,
+        "upload_document": certificatesURLs
+            .toString(), //TODO: Check with backend on how to parse data
+        "store_address": userAddress.toString(),
+        // "store_status": 1.toString(),
+        "language":
+            (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
+        "store_name": loginPageController
+                .registrationPageFormControllers["storeName"]?.text
+                .toString() ??
+            "",
+        "store_logo": storeLogoURL.toString(),
+        // "agree": "1"
+      };
+
+      var registrationURL =
+          "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/storeregistration";
+      var response = await Server()
+          .postFormData(body: body, url: registrationURL)
+          .catchError((e) {
+        log("64$e");
+      });
+      onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
+          onSuccess, onError, () {});
     } else {
+      //Farmer
+      Map<String, String> body = {
+        "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
+        "firstname": loginPageController
+                .registrationPageFormControllers["first_name"]?.text
+                .toString() ??
+            "",
+        "lastname": loginPageController
+                .registrationPageFormControllers["last_name"]?.text
+                .toString() ??
+            "",
+        "email": loginPageController
+                .registrationPageFormControllers["email"]?.text
+                .toString() ??
+            "",
+        "telephone": phoneNumber,
+        "password": loginPageController
+                .registrationPageFormControllers["password"]?.text
+                .toString() ??
+            "",
+        "confirm": loginPageController
+                .registrationPageFormControllers["c_password"]?.text
+                .toString() ??
+            "",
+        "agree": 1.toString(),
+        "become_seller": 1.toString(),
+        "seller_type": userAppTheme.key.toString(),
+        "land": loginPageController.landInAcres.toString(),
+        "seller_image": sellerImageURL.toString(),
+        "additional_comments": "Farmer is the backbone of India",
+        "additional_documents": loginPageController.userCertification,
+        "upload_document": certificatesURLs
+            .toString(), //TODO: Check with backend on how to parse data
+        "store_address": userAddress.toString(),
+        "store_status": 1.toString(),
+        "language":
+            (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
+        // "agree": "1"
+      };
       body.addEntries([
         MapEntry("seller_storename",
-            "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}"),
+            "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}'s Store"),
         MapEntry(
           "store_logo",
           sellerImageURL,
         )
       ]);
+      var registrationURL =
+          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/register";
+      var response = await Server()
+          .postFormData(body: body, url: registrationURL)
+          .catchError((e) {
+        log("64$e");
+      });
+      onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
+          onSuccess, onError, () {});
     }
-    var registrationURL =
-        "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/register";
-    var response = await Server()
-        .postFormData(body: body, url: registrationURL)
-        .catchError((e) {
-      log("64$e");
-    });
-    onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
-        onSuccess, onError, () {});
   }
 }

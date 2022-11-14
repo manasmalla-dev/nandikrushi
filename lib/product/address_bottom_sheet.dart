@@ -59,7 +59,7 @@ showAddressesBottomSheet(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 42),
                               child: ElevatedButtonWidget(
-                                bgColor: themeData.primaryColor,
+                                bgColor: themeData.colorScheme.primary,
                                 trailingIcon: Icons.add_rounded,
                                 buttonName: 'Add Address'.toUpperCase(),
                                 textColor: Colors.white,

@@ -16,14 +16,17 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen>
     with TickerProviderStateMixin {
-  var tabs = ["A2 Milk", "Vegetables", "Fruits", "Ghee", "Oil", "Millets"];
   late TabController _controller;
   late TextEditingController searchController;
 
   @override
   void initState() {
     super.initState();
-    _controller = TabController(length: 6, vsync: this, initialIndex: 1);
+    ProductProvider productProvider = Provider.of(context, listen: false);
+    _controller = TabController(
+        length: productProvider.categories.length,
+        vsync: this,
+        initialIndex: 1);
     searchController = TextEditingController();
   }
 
@@ -66,53 +69,22 @@ class _SearchScreenState extends State<SearchScreen>
                 toolbarHeight: 30,
                 flexibleSpace: Center(
                   child: TabBar(
-                    indicatorColor: Theme.of(context).primaryColor,
+                    indicatorColor: Theme.of(context).colorScheme.primary,
                     controller: _controller,
                     isScrollable: true,
-                    tabs: [
-                      Tab(
+                    tabs: List.generate(
+                      productProvider.categories.length,
+                      (index) => Tab(
                         child: TextWidget(
-                          tabs[0].toUpperCase(),
+                          productProvider.categories.entries
+                              .toList()[index]
+                              .key
+                              .toUpperCase(),
                           weight: getTabBarTextFontWeight(0),
                           color: getTabBarTextColor(0),
                         ),
                       ),
-                      Tab(
-                        child: TextWidget(
-                          tabs[1].toUpperCase(),
-                          weight: getTabBarTextFontWeight(1),
-                          color: getTabBarTextColor(1),
-                        ),
-                      ),
-                      Tab(
-                        child: TextWidget(
-                          tabs[2].toUpperCase(),
-                          weight: getTabBarTextFontWeight(2),
-                          color: getTabBarTextColor(2),
-                        ),
-                      ),
-                      Tab(
-                        child: TextWidget(
-                          tabs[3].toUpperCase(),
-                          weight: getTabBarTextFontWeight(3),
-                          color: getTabBarTextColor(3),
-                        ),
-                      ),
-                      Tab(
-                        child: TextWidget(
-                          tabs[4].toUpperCase(),
-                          weight: getTabBarTextFontWeight(4),
-                          color: getTabBarTextColor(4),
-                        ),
-                      ),
-                      Tab(
-                        child: TextWidget(
-                          tabs[5].toUpperCase(),
-                          weight: getTabBarTextFontWeight(5),
-                          color: getTabBarTextColor(5),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 floating: false,
@@ -129,7 +101,10 @@ class _SearchScreenState extends State<SearchScreen>
                       child: RotatedBox(
                         quarterTurns: -1,
                         child: TextWidget(
-                          tabs[_controller.index].toUpperCase(),
+                          productProvider.categories.entries
+                              .toList()[_controller.index]
+                              .key
+                              .toUpperCase(),
                           weight: FontWeight.bold,
                         ),
                       ),
@@ -162,7 +137,9 @@ class _SearchScreenState extends State<SearchScreen>
                                 margin: const EdgeInsets.all(12),
                                 child: ClipOval(
                                     child: Container(
-                                        color: Theme.of(context).primaryColor,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         padding: const EdgeInsets.all(0),
                                         child: const Icon(
                                           Icons.search_rounded,
@@ -176,11 +153,16 @@ class _SearchScreenState extends State<SearchScreen>
                           child: TabBarView(
                             controller: _controller,
                             children: List.generate(
-                                tabs.length,
+                                productProvider.categories.entries
+                                    .toList()
+                                    .length,
                                 (tabIndex) => ListView.builder(
                                       itemBuilder: (context, index) {
                                         var product = productProvider
-                                            .categorizedProducts[tabs[tabIndex]]
+                                            .categorizedProducts[productProvider
+                                                .categories.entries
+                                                .toList()[tabIndex]
+                                                .key]
                                             ?.where((element) =>
                                                 element["name"]
                                                     ?.toLowerCase()
@@ -210,7 +192,10 @@ class _SearchScreenState extends State<SearchScreen>
                                                 "Visakhapatnam");
                                       },
                                       itemCount: productProvider
-                                          .categorizedProducts[tabs[tabIndex]]
+                                          .categorizedProducts[productProvider
+                                              .categories.entries
+                                              .toList()[tabIndex]
+                                              .key]
                                           ?.where((element) =>
                                               element["name"]
                                                   ?.toLowerCase()

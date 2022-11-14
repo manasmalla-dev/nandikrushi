@@ -156,7 +156,7 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: a13302b0088fbf5f38b79b6ece49c2af7d3e05d6
   FirebaseStorage: 160ba975dd3452d9c59a3bf5ea9bf70ff96bd3c2
   FirebaseStorageInternal: 425c7dc7de44d9b7e07a9f8d6515bab0f1266b87
-  FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
+  FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
   geolocator_apple: 72a78ae3f3e4ec0db62117bd93e34523f5011d58
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1

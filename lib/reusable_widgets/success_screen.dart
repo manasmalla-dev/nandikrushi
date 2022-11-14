@@ -57,7 +57,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                   widget.isSuccess ? "SUCCESS" : "Failure",
                   size: 48,
                   weight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -65,7 +65,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                     "${widget.isSuccess ? 'Added' : 'Failed adding'} your product:\n${widget.body["name"]}",
                     size: 20,
                     weight: FontWeight.w500,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                     align: TextAlign.center,
                   ),
                 ),
@@ -83,7 +83,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
 
                   height: 56,
                   borderRadius: 12,
-                  bgColor: Theme.of(context).primaryColor,
+                  bgColor: Theme.of(context).colorScheme.primary,
                   textColor: Colors.white,
                   buttonName: widget.isSuccess
                       ? "Sell Another Product".toUpperCase()
@@ -109,7 +109,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                   },
                   height: 56,
                   borderRadius: 12,
-                  bgColor: Theme.of(context).primaryColor,
+                  bgColor: Theme.of(context).colorScheme.primary,
                   textColor: Colors.white,
                   buttonName: "Home".toUpperCase(),
                   innerPadding: 0.02,

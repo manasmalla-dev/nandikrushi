@@ -76,17 +76,17 @@ class LoginController extends ControllerMVC {
       if (isLocationServiceEnabled) {
         location = await Geolocator.getCurrentPosition();
         log(location.toString());
-        geocodeLocation();
+        await geocodeLocation();
       } else {
         log("open settings");
         if (await Geolocator.openLocationSettings()) {
-          checkLocationPermissionAndGetLocation();
+          await checkLocationPermissionAndGetLocation();
         }
       }
     } else {
       log("Entered location requester");
       await Geolocator.requestPermission();
-      checkLocationPermissionAndGetLocation();
+      await checkLocationPermissionAndGetLocation();
     }
   }
 
@@ -167,7 +167,7 @@ class LoginController extends ControllerMVC {
     )
         .timeout(const Duration(seconds: 5), onTimeout: () {
       var userTypeData = {
-        "Farmer": const Color(0xFF006838),
+        "Farmers ": const Color(0xFF006838),
         "Organic Stores": const Color(0xFF00bba8),
         "Organic Restaurants": const Color(0xFFffd500),
       };
@@ -200,7 +200,7 @@ class LoginController extends ControllerMVC {
         snackbar(context, "Undefined Parameter when calling API");
         log("Undefined Parameter");
         var userTypeData = {
-          "Farmer": const Color(0xFF006838),
+          "Farmers ": const Color(0xFF006838),
           "Organic Stores": const Color(0xFF00bba8),
           "Organic Restaurants": const Color(0xFFffd500),
         };
@@ -209,7 +209,7 @@ class LoginController extends ControllerMVC {
         snackbar(context, "API Not found");
         log("Not found");
         var userTypeData = {
-          "Farmer": const Color(0xFF006838),
+          "Farmers ": const Color(0xFF006838),
           "Organic Stores": const Color(0xFF00bba8),
           "Organic Restaurants": const Color(0xFFffd500),
         };
@@ -218,7 +218,7 @@ class LoginController extends ControllerMVC {
         snackbar(context, "Failed to get data!");
         log("failure ${response.statusCode}");
         var userTypeData = {
-          "Farmer": const Color(0xFF006838),
+          "Farmers ": const Color(0xFF006838),
           "Organic Stores": const Color(0xFF00bba8),
           "Organic Restaurants": const Color(0xFFffd500),
         };
@@ -228,7 +228,7 @@ class LoginController extends ControllerMVC {
       snackbar(context, "Failed to get data!");
       log("failure");
       var userTypeData = {
-        "Farmer": const Color(0xFF006838),
+        "Farmers ": const Color(0xFF006838),
         "Organic Stores": const Color(0xFF00bba8),
         "Organic Restaurants": const Color(0xFFffd500),
       };
@@ -261,14 +261,11 @@ class LoginController extends ControllerMVC {
       'storeName': TextEditingController(text: profileProvider.storeName),
       'reg_number': TextEditingController(),
     };
+    checkLocationPermissionAndGetLocation();
     log(profileProvider.landInAcres.toString());
     landInAcres = profileProvider.landInAcres.toDouble();
     userCertification = profileProvider.certificationType;
     log(profileProvider.sellerImage + " =123");
-    get(Uri.parse(profileProvider.sellerImage))
-        .then((value) => profileImage = XFile.fromData(value.bodyBytes));
-    get(Uri.parse(profileProvider.storeLogo))
-        .then((value) => storeLogo = XFile.fromData(value.bodyBytes));
     notifyListeners();
     //TODO: Add Certificates
   }

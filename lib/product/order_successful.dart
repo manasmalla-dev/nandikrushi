@@ -62,7 +62,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                   size: Theme.of(context).textTheme.titleMedium?.fontSize,
                   flow: TextOverflow.visible,
                 ),
-                const SizedBox( 
+                const SizedBox(
                   height: 20,
                 ),
                 TextWidget(
@@ -90,14 +90,24 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
                         borderRadius: 8,
                         onClick: () async {
                           profileProvider.showLoader();
-                          productProvider.getData(
+                          productProvider.getOrders(
                               showMessage: (_) {
                                 snackbar(context, _, isError: false);
                               },
                               profileProvider: profileProvider);
+
                           productProvider.changeScreen(0);
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
+
+                          //TODO: Update later to use dynamic uid that is fetched from repository
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => NandikrushiNavHost(
+                                  userId:
+                                      FirebaseAuth.instance.currentUser?.uid ??
+                                          "")),
+                            ),
+                          );
                         },
                         height: 64,
                         textColor: Colors.white,

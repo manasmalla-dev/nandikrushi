@@ -97,8 +97,9 @@ class ProductController extends ControllerMVC {
       if (response.statusCode == 200) {
         log("sucess");
         log(response.body);
-        productProvider.getData(
+        productProvider.getAllProducts(
             showMessage: showMessage, profileProvider: profileProvider);
+
         Navigator.push(
             context,
             MaterialPageRoute(

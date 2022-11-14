@@ -226,24 +226,25 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                         .toString()
                                         .contains("true")) {
                                   log(response.body);
-                                  
-                                     navigatorState.push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              OrderSuccessfulScreen(
-                                                name: profileProvider.firstName,
-                                                deliverySlot:
-                                                    "${DateFormat('EEE, dd MMM').format(
-                                                          DateTime.now().add(
-                                                            Duration(
-                                                              days:
-                                                                  deliverySlot ~/
-                                                                      2,
-                                                            ),
+
+                                  navigatorState.push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            OrderSuccessfulScreen(
+                                              name: profileProvider.firstName,
+                                              deliverySlot:
+                                                  "${DateFormat('EEE, dd MMM').format(
+                                                        DateTime.now().add(
+                                                          Duration(
+                                                            days:
+                                                                deliverySlot ~/
+                                                                    2,
                                                           ),
-                                                        ).toUpperCase()} (${deliverySlot % 2 == 0 ? '7 AM - 11 AM' : '11 AM - 3 PM'})",
-                                                orderNumber: "XXXXXXXXXXX",
-                                              )),);
+                                                        ),
+                                                      ).toUpperCase()} (${deliverySlot % 2 == 0 ? '7 AM - 11 AM' : '11 AM - 3 PM'})",
+                                              orderNumber: "XXXXXXXXXXX",
+                                            )),
+                                  );
                                   profileProvider.hideLoader();
                                 }
                               } else if (response.statusCode == 400) {
@@ -268,7 +269,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                             }
                           },
                           height: 56,
-                          bgColor: Theme.of(context).primaryColor,
+                          bgColor: Theme.of(context).colorScheme.primary,
                           buttonName: "Continue".toUpperCase(),
                           borderRadius: 8,
                           textColor: Colors.white,
@@ -294,7 +295,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                 .textTheme
                                 .titleMedium
                                 ?.fontSize,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                             weight: FontWeight.w700,
                           ),
                           TextWidget(

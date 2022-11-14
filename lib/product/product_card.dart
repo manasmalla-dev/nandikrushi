@@ -349,7 +349,8 @@ class _ProductCardState extends State<ProductCard> {
                                                           style: ElevatedButton.styleFrom(
                                                               primary: Theme.of(
                                                                       context)
-                                                                  .primaryColor,
+                                                                  .colorScheme
+                                                                  .primary,
                                                               shape: RoundedRectangleBorder(
                                                                   borderRadius:
                                                                       BorderRadius
@@ -540,7 +541,8 @@ class _ProductCardState extends State<ProductCard> {
                                                           style: ElevatedButton.styleFrom(
                                                               primary: Theme.of(
                                                                       context)
-                                                                  .primaryColor,
+                                                                  .colorScheme
+                                                                  .primary,
                                                               shape: RoundedRectangleBorder(
                                                                   borderRadius:
                                                                       BorderRadius

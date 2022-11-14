@@ -336,12 +336,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                             weight: FontWeight.w500,
                                                                                           ),
                                                                                           const SizedBox(
-                                                                                            height: 12,
+                                                                                            height: 10,
                                                                                           ),
                                                                                           const TextWidget(
                                                                                             "Choose an image of the product from one of the following sources",
                                                                                             flow: TextOverflow.visible,
-                                                                                            size: 126,
+                                                                                            size: 16,
                                                                                             color: Colors.grey,
                                                                                           ),
                                                                                           const Spacer(),
@@ -354,11 +354,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                                   onPressed: () async {
                                                                                                     var image = await ImagePicker().pickImage(source: ImageSource.gallery);
                                                                                                     if (image != null) {
-                                                                                                      addProductController.productImage[index] = image;
+                                                                                                      addProductController.productImage[index] = (image);
+                                                                                                      Navigator.maybeOf(context)?.maybePop();
                                                                                                     } else {
                                                                                                       Navigator.maybeOf(context)?.maybePop();
                                                                                                     }
-
                                                                                                     setState(() {});
                                                                                                   },
                                                                                                   child: const TextWidget(
@@ -375,7 +375,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                                   onPressed: () async {
                                                                                                     var image = await ImagePicker().pickImage(source: ImageSource.camera);
                                                                                                     if (image != null) {
-                                                                                                      addProductController.productImage[index] = image;
+                                                                                                      addProductController.productImage[index] = (image);
+                                                                                                      Navigator.maybeOf(context)?.maybePop();
                                                                                                     } else {
                                                                                                       Navigator.maybeOf(context)?.maybePop();
                                                                                                     }
@@ -564,9 +565,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                       .primary)),
                                                         ),
                                                         isExpanded: true,
-                                                        hint: const TextWidget(
+                                                        hint: Text(
                                                           'Category',
-                                                          size: 20,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium,
                                                         ),
                                                         dropdownColor: ElevationOverlay
                                                             .colorWithOverlay(
@@ -586,9 +590,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                             .map((e) =>
                                                                 DropdownMenuItem(
                                                                   value: e,
-                                                                  child:
-                                                                      TextWidget(
-                                                                          e),
+                                                                  child: Text(
+                                                                    e,
+                                                                    style: Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyMedium,
+                                                                  ),
                                                                 ))
                                                             .toList(),
                                                         onChanged: (_) {
@@ -619,34 +627,41 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                               Color(0xFF006838))),
                                                         ),
                                                         isExpanded: true,
-                                                        hint: const TextWidget(
+                                                        hint: Text(
                                                           'Sub-Category',
-                                                          size: 20,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium,
                                                         ),
-                                                        dropdownColor: ElevationOverlay
-                                                            .colorWithOverlay(
-                                                                Theme.of(
-                                                                        context)
+                                                        dropdownColor:
+                                                            ElevationOverlay.colorWithOverlay(
+                                                                Theme.of(context)
                                                                     .colorScheme
                                                                     .surface,
-                                                                Theme.of(
-                                                                        context)
+                                                                Theme.of(context)
                                                                     .colorScheme
                                                                     .primary,
                                                                 2.0),
                                                         value: addProductController
                                                             .selectedSubCategory,
-                                                        items: [
-                                                          "Daily Basket",
-                                                          "Weekly Basket",
-                                                          "Monthly Basket",
-                                                        ]
-                                                            .map((e) =>
-                                                                DropdownMenuItem(
+                                                        items: (productProvider
+                                                                    .subcategories[productProvider.categories[
+                                                                        addProductController
+                                                                            .selectedCategory]]
+                                                                    ?.map((e) => e
+                                                                        .keys
+                                                                        .first) ??
+                                                                [])
+                                                            .map((e) => DropdownMenuItem(
                                                                   value: e,
-                                                                  child:
-                                                                      TextWidget(
-                                                                          e),
+                                                                  child: Text(
+                                                                    e,
+                                                                    style: Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyMedium,
+                                                                  ),
                                                                 ))
                                                             .toList(),
                                                         onChanged: (_) {
@@ -692,9 +707,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                     .primary,
                                                                 2.0),
                                                         isExpanded: true,
-                                                        hint: const TextWidget(
+                                                        hint: Text(
                                                           'Units',
-                                                          size: 20,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium,
                                                         ),
                                                         value:
                                                             addProductController

@@ -11,6 +11,7 @@ import 'package:http/http.dart';
 import 'package:location/location.dart' as location;
 import 'package:google_maps_webservice/places.dart' as gmw;
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/loader_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
@@ -156,7 +157,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
           "country": country.toString(),
         };
         addresses.add(geolocatedLocationAddress);
-
+        addresses = addresses.toSet().toList();
         setState(() {
           isSearching = false;
         });
@@ -750,14 +751,16 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                                   : otherController.text
                                                       .toString()
                                         });
-
+                                        LoginProvider loginProvider =
+                                            Provider.of<LoginProvider>(context,
+                                                listen: false);
                                         //TODO: widget.onSaveAddress(addressList);
                                         profileProvider.createAddress(
                                             Navigator.of(context),
                                             addressList,
                                             userLocation, (_) {
                                           snackbar(context, _);
-                                        });
+                                        }, loginProvider);
                                       } else {
                                         profileProvider.hideLoader();
                                       }

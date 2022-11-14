@@ -11,7 +11,7 @@ extension DarkMode on BuildContext {
 Future<MapEntry<String, Color>> getAppTheme() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   var appTheme = sharedPreferences.getString('user_app_theme') ??
-      jsonEncode({"Farmer": const Color(0xFF006838).value});
+      jsonEncode({"": const Color(0xFF006838).value});
   var decodedJson = Map<String, int>.from(jsonDecode(appTheme));
   MapEntry<String, Color> decodedJSON = {
     decodedJson.keys.first.toString(): Color(decodedJson.values.first)
