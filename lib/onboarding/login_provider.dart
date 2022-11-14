@@ -399,7 +399,7 @@ class LoginProvider extends ChangeNotifier {
       };
       body.addEntries([
         MapEntry("seller_storename",
-            "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}'s Store"),
+            "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}"),
         MapEntry(
           "store_logo",
           sellerImageURL,

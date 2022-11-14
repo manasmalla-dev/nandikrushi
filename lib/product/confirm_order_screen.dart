@@ -181,9 +181,8 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                               "address_id": widget.addressID,
                               "coupon_code": "2222",
                               "time_slot": "1",
-                              "schedule": DateTime.now()
-                                  .add(const Duration(days: 1))
-                                  .millisecondsSinceEpoch,
+                              "schedule": DateFormat("yyyy-MM-dd")
+                                  .format(DateTime.now()),
                               "orders": productProvider.cart
                                   .map((e) => {"cart_id": e["cart_id"]})
                                   .toList()

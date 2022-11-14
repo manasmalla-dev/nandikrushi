@@ -44,6 +44,7 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
         },
       )
           .then((value) {
+        print("Hello");
         productProvider.getData(
             profileProvider: profileProvider,
             showMessage: (_) {

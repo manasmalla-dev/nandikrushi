@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
@@ -126,7 +127,12 @@ class OrdersPage extends StatelessWidget {
                             poster: productProvider.orders[itemIndex]
                                 ["customer_name"],
                             additionalInformation: {
-                              "date": productProvider.orders[itemIndex]["date"],
+                              "date": DateFormat("EEE, MMM dd").format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      (int.tryParse(productProvider
+                                                  .orders[itemIndex]["date"]) ??
+                                              0000000000) *
+                                          1000)),
                               "status": 0
                             },
                           );

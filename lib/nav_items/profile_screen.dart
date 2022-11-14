@@ -246,9 +246,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                               constraints,
                                                           onImageSelected: (XFile
                                                               profileImage) {
-                                                            loginPageController
-                                                                    .profileImage =
-                                                                profileImage;
+                                                            setState(() {
+                                                              loginPageController
+                                                                      .profileImage =
+                                                                  profileImage;
+                                                            });
                                                           });
                                                     },
                                                     icon: Icon(
@@ -1428,7 +1430,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   "telephone": FirebaseAuth
                                                           .instance
                                                           .currentUser
-                                                          ?.phoneNumber ??
+                                                          ?.phoneNumber
+                                                          ?.replaceFirst(
+                                                              "+91", "") ??
                                                       phoneNumberController
                                                           .text,
                                                   "password": loginPageController
@@ -1455,7 +1459,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           .toString(), //TODO: Check with backend on how to parse data
                                                   "store_address":
                                                       userAddress.toString(),
-                                                  "store_status": 1.toString(),
                                                   "language": (loginProvider
                                                               .languages.entries
                                                               .toList()
@@ -1483,13 +1486,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 } else {
                                                   body.addEntries([
                                                     MapEntry("seller_storename",
-                                                        "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}'s Store"),
+                                                        "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}"),
                                                     MapEntry(
                                                       "store_logo",
                                                       sellerImageURL,
                                                     )
                                                   ]);
                                                 }
+                                                print(body);
                                                 var response = await Server()
                                                     .postFormData(
                                                         body: body,
@@ -1498,6 +1502,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     .catchError((e) {
                                                   log("64$e");
                                                 });
+
                                                 if (response?.statusCode ==
                                                     200) {
                                                   var decodedResponse = jsonDecode(response

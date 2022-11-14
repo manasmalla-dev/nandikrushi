@@ -248,8 +248,10 @@ class ProductProvider extends ChangeNotifier {
                   element.value ==
                   int.tryParse(e["category"][0]["category_id"] ?? "-1"))
               .isNotEmpty) {
+            print(double.tryParse(
+                e["vendor_details"][0]["location"]["lagtitude"].toString()));
             var locationGeoCoded = await placemarkFromCoordinates(
-                e["vendor_details"][0]["location"]["lagtitude"]
+                !e["vendor_details"][0]["location"]["lagtitude"]
                         .toString()
                         .contains("0.0")
                     ? double.tryParse(e["vendor_details"][0]["location"]
@@ -257,7 +259,7 @@ class ProductProvider extends ChangeNotifier {
                             .toString()) ??
                         17.7003844
                     : 17.7003844,
-                e["vendor_details"][0]["location"]["latitude"]
+                !e["vendor_details"][0]["location"]["latitude"]
                         .toString()
                         .contains("0.0")
                     ? double.tryParse(e["vendor_details"][0]["location"]
@@ -265,6 +267,8 @@ class ProductProvider extends ChangeNotifier {
                             .toString()) ??
                         83.1016542
                     : 83.1016542);
+
+            //print("${e["Products"][0]["product_name"]} - $locationGeoCoded");
 
             var element = {
               'name': e["Products"][0]["product_name"].toString(),
@@ -328,7 +332,6 @@ class ProductProvider extends ChangeNotifier {
             }
           }
         }
-
         notifyListeners();
         await getMyProducts(
             showMessage: showMessage,
