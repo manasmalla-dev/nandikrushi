@@ -387,7 +387,7 @@ Future signOut(
                     borderRadius: 5.0,
                     borderSideColor: Colors.indigo[900],
                     onClick: () async {
-                      LoginProvider loginProvider = Provider.of(context);
+                      LoginProvider loginProvider = Provider.of(context, listen: false);
                       loginProvider.hideLoader();
                       FirebaseAuth.instance.signOut();
                       SharedPreferences sharedPreferences =

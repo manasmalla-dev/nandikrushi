@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:250225425929:android:02d5f89ddb411d5f3a02d8",
+        "mobilesdk_app_id": "1:250225425929:android:c9465c49e58d9b4b3a02d8",
         "android_client_info": {
           "package_name": "com.nandikrushi"
         }
@@ -71,6 +71,14 @@
           "android_info": {
             "package_name": "farm.nandikrushi",
             "certificate_hash": "e0928a27a5e839c0d5bef33cfdaafd3d944c9705"
+          }
+        },
+        {
+          "client_id": "250225425929-u9up0or8ruj4au6ot9sc88nqi13e6v11.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "farm.nandikrushi",
+            "certificate_hash": "550f7c48019aa840c289e5234f77d2975e33fe02"
           }
         },
         {
