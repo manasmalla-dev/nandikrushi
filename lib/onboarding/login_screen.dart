@@ -8,7 +8,7 @@ import 'package:nandikrushi_farmer/onboarding/login_bg.dart';
 import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/otp_screen.dart';
-import 'package:nandikrushi_farmer/onboarding/registration_screen.dart';
+import 'package:nandikrushi_farmer/onboarding/user_type.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
@@ -38,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
               isError: false);
           context.setAsReturningUser(uID);
           data.showLoader();
+
           Navigator.maybeOf(context)?.pushReplacement(MaterialPageRoute(
               builder: (context) => NandikrushiNavHost(
                     userId: uID,
@@ -61,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }, onRegisterUser: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const RegistrationScreen(),
+              builder: (context) => const UserTypeScreen(),
             ),
           );
         });

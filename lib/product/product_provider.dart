@@ -18,12 +18,14 @@ import '../utils/server.dart';
 class ProductProvider extends ChangeNotifier {
   var selectedIndex = 0;
 
-  Map<String, String> units = {
-    "Kilogram": "kg",
-    "Gram": "g",
-    "Liter": "lt",
-    "Milliliter": "ml",
-    "Dozen": "dz"
+  Map<String, Map<String, String>> units = {
+    "Vegetables": {
+      "Kilogram": "kg",
+      "Gram": "g",
+      "Liter": "lt",
+      "Milliliter": "ml",
+      "Dozen": "dz"
+    }
   };
 
   changeScreen(int _) {
@@ -91,14 +93,25 @@ class ProductProvider extends ChangeNotifier {
       try {
         if (jsonDecode(response.body)["status"]) {
           categories = {};
+          units = {};
           (jsonDecode(response.body)["message"])
               .where(
                   (element) => element["customer_group_id"].toString() == "2")
               .toList()
-              .forEach((e) => categories.addAll({
-                    capitalize(e["category_name"].toString().toLowerCase()):
-                        int.tryParse(e["category_id"]) ?? 24
-                  }));
+              .forEach((e) {
+            categories.addAll({
+              capitalize(e["category_name"].toString().toLowerCase()):
+                  int.tryParse(e["category_id"]) ?? 24
+            });
+            Map<String, String> tempUnitsMap = {};
+            e["units"].forEach((el) {
+              print(el["id"]);
+              tempUnitsMap
+                  .addAll({el["id"].toString(): el["title"] ?? "units"});
+            });
+            units[capitalize(e["category_name"].toString().toLowerCase())] =
+                tempUnitsMap;
+          });
           print(jsonDecode(response.body)["message"]);
           print(categories);
         } else {

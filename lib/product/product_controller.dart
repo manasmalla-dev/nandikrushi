@@ -42,13 +42,16 @@ class ProductController extends ControllerMVC {
     };
     var isValidData = true;
     for (MapEntry<String, String?> dataValue in data.entries) {
-      if (dataValue.value != null && dataValue.value!.isNotEmpty) {
+      if (dataValue.value != null && dataValue.value!.isNotEmpty ||
+          (productProvider.subcategories.isEmpty &&
+              dataValue.key == "subcategory")) {
       } else {
         isValidData = false;
         snackbar(context, "Please enter a valid ${dataValue.key}");
       }
     }
     if (!isValidData) {
+      profileProvider.hideLoader();
       return false;
     }
     var name = formControllers['product-name']?.text ?? "";

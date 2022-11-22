@@ -697,12 +697,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                         ),
                                                         dropdownColor: ElevationOverlay
                                                             .colorWithOverlay(
-                                                                Theme.of(
-                                                                        context)
+                                                                Theme.of(context)
                                                                     .colorScheme
                                                                     .surface,
-                                                                Theme.of(
-                                                                        context)
+                                                                Theme.of(context)
                                                                     .colorScheme
                                                                     .primary,
                                                                 2.0),
@@ -718,8 +716,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                             addProductController
                                                                 .selectedUnits,
                                                         items: productProvider
-                                                            .units
-                                                            .map((key, value) =>
+                                                            .units[addProductController
+                                                                .selectedCategory]
+                                                            ?.map((key,
+                                                                    value) =>
                                                                 MapEntry(
                                                                     key,
                                                                     DropdownMenuItem<
@@ -727,7 +727,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                       value:
                                                                           value,
                                                                       child: TextWidget(
-                                                                          '$key ($value)'),
+                                                                          value),
                                                                     )))
                                                             .values
                                                             .toList(),
@@ -819,7 +819,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       addProductController.addProduct(
                                         context,
                                         urls,
-                                        productProvider.units.values.toList(),
+                                        productProvider
+                                                .units[addProductController
+                                                    .selectedCategory]
+                                                ?.values
+                                                .toList() ??
+                                            [],
                                         (_) {
                                           snackbar(context, _);
                                         },

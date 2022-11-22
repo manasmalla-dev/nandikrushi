@@ -197,119 +197,127 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           child: Row(
                             children: [
-                              loginPageController.profileImage != null ||
-                                      profileProvider.sellerImage.isNotEmpty
-                                  ? Expanded(
-                                      child: Center(
-                                        child: SizedBox(
-                                          width: 120,
-                                          child: Stack(
-                                            children: [
-                                              Center(
-                                                child: ClipOval(
-                                                  child: loginPageController
-                                                              .profileImage !=
-                                                          null
-                                                      ? Image.file(
-                                                          File(loginPageController
-                                                                  .profileImage
-                                                                  ?.path ??
-                                                              ""),
-                                                          height: 96,
-                                                          width: 96,
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      : Image.network(
-                                                          profileProvider
-                                                              .sellerImage,
-                                                          height: 96,
-                                                          width: 96,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                bottom: 0,
-                                                right: 0,
-                                                child: Container(
-                                                  width: 32,
-                                                  height: 32,
-                                                  decoration: BoxDecoration(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .primary,
-                                                      shape: BoxShape.circle),
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      showImagePickerSheet(
-                                                          constraints:
-                                                              constraints,
-                                                          onImageSelected: (XFile
-                                                              profileImage) {
-                                                            setState(() {
-                                                              loginPageController
-                                                                      .profileImage =
-                                                                  profileImage;
-                                                            });
-                                                          });
-                                                    },
-                                                    icon: Icon(
-                                                        Icons.edit_rounded,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                        size: 16),
+                              loginProvider.isFarmer
+                                  ? (loginPageController.profileImage != null ||
+                                          profileProvider
+                                              .sellerImage.isNotEmpty)
+                                      ? Expanded(
+                                          child: Center(
+                                            child: SizedBox(
+                                              width: 120,
+                                              child: Stack(
+                                                children: [
+                                                  Center(
+                                                    child: ClipOval(
+                                                      child: loginPageController
+                                                                  .profileImage !=
+                                                              null
+                                                          ? Image.file(
+                                                              File(loginPageController
+                                                                      .profileImage
+                                                                      ?.path ??
+                                                                  ""),
+                                                              height: 96,
+                                                              width: 96,
+                                                              fit: BoxFit.cover,
+                                                            )
+                                                          : Image.network(
+                                                              profileProvider
+                                                                  .sellerImage,
+                                                              height: 96,
+                                                              width: 96,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                    ),
                                                   ),
-                                                ),
+                                                  Positioned(
+                                                    bottom: 0,
+                                                    right: 0,
+                                                    child: Container(
+                                                      width: 32,
+                                                      height: 32,
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
+                                                          shape:
+                                                              BoxShape.circle),
+                                                      child: IconButton(
+                                                        onPressed: () {
+                                                          showImagePickerSheet(
+                                                              constraints:
+                                                                  constraints,
+                                                              onImageSelected:
+                                                                  (XFile
+                                                                      profileImage) {
+                                                                setState(() {
+                                                                  loginPageController
+                                                                          .profileImage =
+                                                                      profileImage;
+                                                                });
+                                                              });
+                                                        },
+                                                        icon: Icon(
+                                                            Icons.edit_rounded,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onPrimary,
+                                                            size: 16),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Expanded(
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            IconButton(
-                                              iconSize: 75,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              onPressed: () {
-                                                showImagePickerSheet(
-                                                    constraints: constraints,
-                                                    onImageSelected:
-                                                        (XFile profileImage) {
-                                                      loginPageController
-                                                              .profileImage =
-                                                          profileImage;
-                                                    });
-                                              },
-                                              splashRadius: 42,
-                                              icon: const Icon(
-                                                  Icons.add_a_photo_rounded),
                                             ),
-                                            TextWidget(
-                                              "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary
-                                                  .withOpacity(0.7),
-                                              weight: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge
-                                                  ?.fontWeight,
-                                              size: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge
-                                                  ?.fontSize,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                          ),
+                                        )
+                                      : Expanded(
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                IconButton(
+                                                  iconSize: 75,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  onPressed: () {
+                                                    showImagePickerSheet(
+                                                        constraints:
+                                                            constraints,
+                                                        onImageSelected: (XFile
+                                                            profileImage) {
+                                                          loginPageController
+                                                                  .profileImage =
+                                                              profileImage;
+                                                        });
+                                                  },
+                                                  splashRadius: 42,
+                                                  icon: const Icon(Icons
+                                                      .add_a_photo_rounded),
+                                                ),
+                                                TextWidget(
+                                                  "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                      .withOpacity(0.7),
+                                                  weight: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.fontWeight,
+                                                  size: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.fontSize,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                  : SizedBox(),
                               !loginProvider.isFarmer
                                   ? loginPageController.storeLogo == null
                                       ? Expanded(
@@ -1534,7 +1542,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         isError: false);
                                                     Navigator.of(context).pop();
                                                     profileProvider
-                                                        .hideLoader();
+                                                        .showLoader();
+                                                    profileProvider
+                                                        .getProfile(
+                                                          loginProvider:
+                                                              loginProvider,
+                                                          userID: profileProvider
+                                                              .userIdForAddress,
+                                                          showMessage: (_) {
+                                                            snackbar(
+                                                                context, _);
+                                                          },
+                                                        )
+                                                        .then((value) =>
+                                                            profileProvider
+                                                                .hideLoader());
                                                   } else {
                                                     snackbar(context,
                                                         "Failed to update, error: ${decodedResponse["message"]}");

@@ -219,6 +219,20 @@ class LoginProvider extends ChangeNotifier {
           log("Successful login");
           print(
               "User ID: ${decodedResponse["message"].toString().contains("user_id") ? decodedResponse["message"]["user_id"] : decodedResponse["customer_details"]["user_id"]}, Seller ID: ${decodedResponse["message"].toString().contains("customer_id") ? (decodedResponse["message"]?["customer_id"] ?? decodedResponse["customer_id"]) : decodedResponse["customer_details"]["customer_id"]}");
+          var customerGroupID = (decodedResponse["message"]
+                  .toString()
+                  .contains("customer_group_id")
+              ? decodedResponse["message"]["customer_group_id"]
+              : decodedResponse["customer_details"]["customer_group_id"]);
+          var customerGroupTitle = availableUserTypes.entries
+              .where((element) =>
+                  element.key.toLowerCase().contains(customerGroupID == "2"
+                      ? "farmer"
+                      : customerGroupID == "3"
+                          ? "store"
+                          : "rest"))
+              .first;
+          updateUserAppType(customerGroupTitle);
           onSuccessfulLogin(
               capitalize(
                   decodedResponse["message"].toString().contains("firstname")
