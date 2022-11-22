@@ -834,6 +834,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     } else {
                                       snackbar(context,
                                           "Please upload a picture of the product!");
+                                      profileProvider.hideLoader();
                                     }
                                   },
 

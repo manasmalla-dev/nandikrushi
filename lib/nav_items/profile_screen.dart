@@ -501,7 +501,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 const SizedBox(
                                   height: 16,
                                 ),
-                                Row(
+                                loginProvider.isFarmer ? Row(
                                   children: [
                                     Expanded(
                                       child: TextFieldWidget(
@@ -537,7 +537,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                   ],
-                                ),
+                                ): const SizedBox(),
                                 const SizedBox(
                                   height: 8,
                                 ),

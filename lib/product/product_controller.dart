@@ -42,8 +42,10 @@ class ProductController extends ControllerMVC {
     };
     var isValidData = true;
     for (MapEntry<String, String?> dataValue in data.entries) {
-      if (dataValue.value != null && dataValue.value!.isNotEmpty ||
-          (productProvider.subcategories.isEmpty &&
+      if ((dataValue.value != null && dataValue.value!.isNotEmpty) ||
+          ((productProvider
+              .subcategories[productProvider.categories[
+          selectedCategory]]?.isEmpty ?? true) &&
               dataValue.key == "subcategory")) {
       } else {
         isValidData = false;

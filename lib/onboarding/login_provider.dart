@@ -224,6 +224,7 @@ class LoginProvider extends ChangeNotifier {
                   .contains("customer_group_id")
               ? decodedResponse["message"]["customer_group_id"]
               : decodedResponse["customer_details"]["customer_group_id"]);
+          print("$customerGroupID - > GRP DATA");
           var customerGroupTitle = availableUserTypes.entries
               .where((element) =>
                   element.key.toLowerCase().contains(customerGroupID == "2"
