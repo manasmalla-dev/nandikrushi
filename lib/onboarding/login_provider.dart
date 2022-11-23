@@ -324,7 +324,7 @@ class LoginProvider extends ChangeNotifier {
       });
     }
 
-    if (!isFarmer) {
+    if (!isFarmer && isStore) {
       //Store/Restaurant
       Map<String, String> body = {
         "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
@@ -365,6 +365,54 @@ class LoginProvider extends ChangeNotifier {
 
       var registrationURL =
           "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/storeregistration";
+      var response = await Server()
+          .postFormData(body: body, url: registrationURL)
+          .catchError((e) {
+        log("64$e");
+      });
+      onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
+          onSuccess, onError, () {});
+    } if (!isFarmer && isRestaurant) {
+      //Store/Restaurant
+      Map<String, String> body = {
+        "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
+
+        "email": loginPageController
+            .registrationPageFormControllers["email"]?.text
+            .toString() ??
+            "",
+        "telephone": phoneNumber,
+        "password": loginPageController
+            .registrationPageFormControllers["password"]?.text
+            .toString() ??
+            "",
+        "confirm": loginPageController
+            .registrationPageFormControllers["c_password"]?.text
+            .toString() ??
+            "",
+        // "agree": 1.toString(),
+        // "become_seller": 1.toString(),
+        "seller_type": userAppTheme.key.toString(),
+        //  "land": loginPageController.landInAcres.toString(),
+        //    "seller_image": sellerImageURL.toString(),
+        //  "additional_comments": "Farmer is the backbone of India",
+        "additional_documents": loginPageController.userCertification,
+        "upload_document": certificatesURLs
+            .toString(), //TODO: Check with backend on how to parse data
+        "store_address": userAddress.toString(),
+        // "store_status": 1.toString(),
+        "language":
+        (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
+        "store_name": loginPageController
+            .registrationPageFormControllers["storeName"]?.text
+            .toString() ??
+            "",
+        "store_logo": storeLogoURL.toString(),
+        // "agree": "1"
+      };
+
+      var registrationURL =
+          "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/restaurantregistration";
       var response = await Server()
           .postFormData(body: body, url: registrationURL)
           .catchError((e) {

@@ -319,7 +319,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         )
                                   : SizedBox(),
                               !loginProvider.isFarmer
-                                  ? loginPageController.storeLogo == null
+                                  ? (loginPageController.storeLogo == null ||
+                  profileProvider
+                      .storeLogo.isNotEmpty)
                                       ? Expanded(
                                           child: Center(
                                             child: Column(
@@ -370,14 +372,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               children: [
                                                 Center(
                                                   child: ClipOval(
-                                                      child: Image.file(
-                                                    File(loginPageController
-                                                            .storeLogo?.path ??
-                                                        ""),
-                                                    height: 96,
-                                                    width: 96,
-                                                    fit: BoxFit.cover,
-                                                  )),
+                                                      child: loginPageController
+                                                          .storeLogo !=
+                                                          null
+                                                          ? Image.file(
+                                                        File(loginPageController
+                                                            .storeLogo
+                                                            ?.path ??
+                                                            ""),
+                                                        height: 96,
+                                                        width: 96,
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                          : Image.network(
+                                                        profileProvider
+                                                            .storeLogo,
+                                                        height: 96,
+                                                        width: 96,
+                                                        fit: BoxFit.cover,
+                                                      ),),
                                                 ),
                                                 Positioned(
                                                   bottom: 0,

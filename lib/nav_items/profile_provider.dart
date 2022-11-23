@@ -55,7 +55,7 @@ class ProfileProvider extends ChangeNotifier {
         ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getparticularuser"
         : loginProvider.isStore
             ? "http://nkweb.sweken.com/ index.php?route=extension/account/purpletree_multivendor/api/storeregistration/getparticularorganicstore"
-            : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getparticularuser";
+            : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/restaurantregistration/getparticularorganicrestaurant";
     var response =
         await Server().postFormData(body: {"user_id": userID}, url: url);
     //TODO: Videos API needs to be integrated

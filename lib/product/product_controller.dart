@@ -78,7 +78,9 @@ class ProductController extends ControllerMVC {
       "quantity": (int.tryParse(quantity) ?? 0).toString(),
       "price": (double.tryParse(price) ?? 0.0).toString(),
       "description": description.toString(),
-      "units": (unitsList.indexOf(units) + 1).toString(),
+      "units": (productProvider
+          .units[
+      selectedCategory]?.entries.firstWhere((element) => element.value == selectedUnits).key).toString(),
       //"category_id": product.category.toString(),
       "category_id": productProvider.categories[category].toString(),
       "seller_id": profileProvider.sellerID,
