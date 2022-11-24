@@ -1078,37 +1078,41 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(8)),
                                               onPressed: () {
-                                                showImagePickerSheet(
-                                                  constraints: constraints,
-                                                  onImageSelected:
-                                                      (XFile certificate) {
-                                                    if (loginPageController
-                                                        .userCertificates
-                                                        .isEmpty) {
-                                                      for (var element
-                                                          in loginProvider
-                                                              .certificationList) {
-                                                        loginPageController
-                                                            .userCertificates
-                                                            .add([]);
+                                                if (loginPageController
+                                                        .registrationPageFormControllers[
+                                                            "reg_number"]
+                                                        ?.toString()
+                                                        ?.isNotEmpty ??
+                                                    false) {
+                                                  showImagePickerSheet(
+                                                    constraints: constraints,
+                                                    onImageSelected:
+                                                        (XFile certificate) {
+                                                      if (loginPageController
+                                                          .userCertificates
+                                                          .isEmpty) {
+                                                        for (var element
+                                                            in loginProvider
+                                                                .certificationList) {
+                                                          loginPageController
+                                                              .userCertificates
+                                                              .add([]);
+                                                        }
                                                       }
-                                                    }
-                                                    loginPageController
-                                                        .userCertificates[index]
-                                                        .add(certificate);
-                                                  },
-                                                );
+                                                      loginPageController
+                                                          .userCertificates[
+                                                              index]
+                                                          .add(certificate);
+                                                    },
+                                                  );
+                                                } else {
+                                                  snackbar(context,
+                                                      "Please enter a valid registration number before uploading the respective document!");
+                                                }
                                               },
                                               child: const TextWidget(
                                                 "Choose File",
                                               )),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          Icon(
-                                            Icons.archive_rounded,
-                                            color: Colors.white.withAlpha(150),
-                                          ),
                                         ],
                                       )
                                     ],

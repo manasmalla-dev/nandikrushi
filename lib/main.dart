@@ -20,7 +20,7 @@ Future<void> main() async {
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.white,
       ));
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+      //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     }
   }
   var data = await getAppTheme();
