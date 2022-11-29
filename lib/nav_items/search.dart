@@ -26,7 +26,7 @@ class _SearchScreenState extends State<SearchScreen>
     _controller = TabController(
         length: productProvider.categories.length,
         vsync: this,
-        initialIndex: 1);
+        initialIndex: productProvider.categories.length > 1 ? 1 : 0);
     searchController = TextEditingController();
   }
 

@@ -767,7 +767,8 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                     },
                                     height: 56,
                                     borderRadius: 12,
-                                    bgColor: Colors.green[900],
+                                    bgColor:
+                                        Theme.of(context).colorScheme.primary,
                                     textColor: Colors.white,
                                     buttonName: 'Save'.toUpperCase(),
                                     trailingIcon: Icons.check_rounded,

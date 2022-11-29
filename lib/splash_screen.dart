@@ -43,9 +43,9 @@ class SplashScreen extends StatelessWidget {
           children: [
             Image.asset("assets/images/logo.png"),
             TextWidget(
-              "Farmer".toUpperCase(),
+              loginProvider.userAppTheme.key.toUpperCase(),
               size: 12,
-              lSpace: 16,
+              lSpace: loginProvider.userAppTheme.key.length > 10 ? 8 : 16,
               color: context.isDarkMode
                   ? Theme.of(context).colorScheme.onBackground
                   : Theme.of(context).colorScheme.primary,

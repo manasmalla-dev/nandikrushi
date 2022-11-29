@@ -30,6 +30,7 @@ class ProfileProvider extends ChangeNotifier {
   List<String> certificates = [];
   String storeName = "";
   String storeLogo = "";
+  String certificateID = "";
   Map<String, String> storeAddress = {};
   List<Map<String, String>> userAddresses = [];
   String userIdForAddress = "";
@@ -82,7 +83,11 @@ class ProfileProvider extends ChangeNotifier {
       telephone =
           "+91 ${profileJSON["telephone"].toString().substring(0, 5)} ${profileJSON["telephone"].toString().substring(5, 10)}";
       languageID = int.tryParse(profileJSON["language_id"]) ?? 1;
-      customerGroupId = profileJSON["customer_group_id"] ?? "Farmer";
+      customerGroupId = profileJSON["customer_group_id"] ?? "1";
+      certificateID = profileJSON["certificate_id"] ?? "AP123239230MNS";
+      if (certificateID.isEmpty) {
+        certificateID == "AP123239230MNS";
+      }
       sellerType = profileJSON["seller_type"];
       landInAcres = (double.tryParse(profileJSON["land"]) ?? 1.0).ceil();
       sellerImage = profileJSON["seller_image"];
@@ -207,8 +212,10 @@ class ProfileProvider extends ChangeNotifier {
       body: jsonEncode({
         "customer_id": sellerID,
         "address_title": addressList["address_type"] ?? "",
-        "firstname": firstName,
-        "lastname": lastName,
+        "firstname": firstName.isEmpty ? storeName.split("").first : firstName,
+        "lastname": lastName.isEmpty
+            ? storeName.replaceFirst("${storeName.split("").first} ", "")
+            : lastName,
         "company": "Nandikrushi",
         "flat_no": addressList["house_number"] ?? "",
         "landmark": addressList["landmark"] ?? "",

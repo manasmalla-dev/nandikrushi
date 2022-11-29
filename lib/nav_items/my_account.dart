@@ -236,7 +236,8 @@ class MyAccountScreen extends StatelessWidget {
                                         .titleLarge
                                         ?.fontSize,
                                     fontWeight: FontWeight.w500,
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
@@ -306,31 +307,35 @@ class MyAccountScreen extends StatelessWidget {
               const SizedBox(
                 width: 32,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextWidget(
-                    userName,
-                    size: themeData.textTheme.headlineMedium?.fontSize,
-                    color: themeData.colorScheme.primary,
-                    height: 1,
-                  ),
-                  TextWidget(
-                    userPhoneNumber,
-                    weight: FontWeight.w500,
-                    color: themeData.colorScheme.primary.withOpacity(0.5),
-                    size: themeData.textTheme.titleMedium?.fontSize,
-                  ),
-                  Opacity(
-                    opacity: 0.5,
-                    child: TextWidget(
-                      userEmail,
-                      weight: FontWeight.w500,
-                      size: themeData.textTheme.bodySmall?.fontSize,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextWidget(
+                      userName,
+                      size: userName.length < 12
+                          ? themeData.textTheme.headlineMedium?.fontSize
+                          : themeData.textTheme.titleLarge?.fontSize,
+                      color: themeData.colorScheme.primary,
+                      height: 1,
                     ),
-                  ),
-                ],
+                    TextWidget(
+                      userPhoneNumber,
+                      weight: FontWeight.w500,
+                      color: themeData.colorScheme.primary.withOpacity(0.5),
+                      size: themeData.textTheme.titleMedium?.fontSize,
+                    ),
+                    Opacity(
+                      opacity: 0.5,
+                      child: TextWidget(
+                        userEmail,
+                        weight: FontWeight.w500,
+                        size: themeData.textTheme.bodySmall?.fontSize,
+                      ),
+                    ),
+                  ],
+                ),
               )
             ],
           ),
@@ -387,7 +392,8 @@ Future signOut(
                     borderRadius: 5.0,
                     borderSideColor: Colors.indigo[900],
                     onClick: () async {
-                      LoginProvider loginProvider = Provider.of(context, listen: false);
+                      LoginProvider loginProvider =
+                          Provider.of(context, listen: false);
                       loginProvider.hideLoader();
                       FirebaseAuth.instance.signOut();
                       SharedPreferences sharedPreferences =

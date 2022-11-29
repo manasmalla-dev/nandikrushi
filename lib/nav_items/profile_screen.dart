@@ -6,12 +6,15 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nandikrushi_farmer/nav_items/profile_address_workflow.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/loader_screen.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/material_you_clipper.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/textfield_widget.dart';
@@ -170,335 +173,549 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return Scaffold(
                   appBar: AppBar(
                     toolbarHeight: kToolbarHeight,
-                    elevation: 0,
-                    leading: const Icon(Icons.person_pin_rounded),
-                    title: TextWidget(
-                      'Profile',
-                      size: Theme.of(context).textTheme.titleMedium?.fontSize,
-                      weight: FontWeight.w700,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    automaticallyImplyLeading: false,
+                    title: Row(
+                      children: [
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Icon(
+                          Icons.person_pin_rounded,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        TextWidget(
+                          'Profile',
+                          size:
+                              Theme.of(context).textTheme.titleMedium?.fontSize,
+                          weight: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.fontWeight,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ],
                     ),
                   ),
                   body: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        const SizedBox(
-                          height: 18,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(32),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            children: [
-                              loginProvider.isFarmer
-                                  ? (loginPageController.profileImage != null ||
-                                          profileProvider
-                                              .sellerImage.isNotEmpty)
-                                      ? Expanded(
-                                          child: Center(
-                                            child: SizedBox(
-                                              width: 120,
-                                              child: Stack(
-                                                children: [
-                                                  Center(
-                                                    child: ClipOval(
-                                                      child: loginPageController
-                                                                  .profileImage !=
-                                                              null
-                                                          ? Image.file(
-                                                              File(loginPageController
-                                                                      .profileImage
-                                                                      ?.path ??
-                                                                  ""),
-                                                              height: 96,
-                                                              width: 96,
-                                                              fit: BoxFit.cover,
-                                                            )
-                                                          : Image.network(
-                                                              profileProvider
-                                                                  .sellerImage,
-                                                              height: 96,
-                                                              width: 96,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    bottom: 0,
-                                                    right: 0,
-                                                    child: Container(
-                                                      width: 32,
-                                                      height: 32,
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .primary,
-                                                          shape:
-                                                              BoxShape.circle),
-                                                      child: IconButton(
-                                                        onPressed: () {
-                                                          showImagePickerSheet(
-                                                              constraints:
-                                                                  constraints,
-                                                              onImageSelected:
-                                                                  (XFile
-                                                                      profileImage) {
-                                                                setState(() {
-                                                                  loginPageController
-                                                                          .profileImage =
-                                                                      profileImage;
-                                                                });
-                                                              });
-                                                        },
-                                                        icon: Icon(
-                                                            Icons.edit_rounded,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .onPrimary,
-                                                            size: 16),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      : Expanded(
-                                          child: Center(
-                                            child: Column(
+                        const SizedBox(height: 32),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: SizedBox(
+                            height: 200,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text("Please select your role"),
+                                      ListView.builder(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, index) {
+                                            loginProvider.availableUserTypes =
+                                                loginProvider.availableUserTypes
+                                                        .isEmpty
+                                                    ? {
+                                                        "Farmers ": const Color(
+                                                            0xFF006838),
+                                                        "Organic Stores":
+                                                            const Color(
+                                                                0xFF00bba8),
+                                                        "Organic Restaurants":
+                                                            const Color(
+                                                                0xFFffd500),
+                                                      }
+                                                    : loginProvider
+                                                        .availableUserTypes;
+                                            print(loginProvider
+                                                .availableUserTypes.keys);
+                                            print(
+                                                loginProvider.userAppTheme.key);
+                                            return Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                IconButton(
-                                                  iconSize: 75,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                  onPressed: () {
-                                                    showImagePickerSheet(
-                                                        constraints:
-                                                            constraints,
-                                                        onImageSelected: (XFile
-                                                            profileImage) {
-                                                          loginPageController
-                                                                  .profileImage =
-                                                              profileImage;
-                                                        });
-                                                  },
-                                                  splashRadius: 42,
-                                                  icon: const Icon(Icons
-                                                      .add_a_photo_rounded),
-                                                ),
-                                                TextWidget(
-                                                  "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary
-                                                      .withOpacity(0.7),
-                                                  weight: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge
-                                                      ?.fontWeight,
-                                                  size: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge
-                                                      ?.fontSize,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                  : SizedBox(),
-                              !loginProvider.isFarmer
-                                  ? (loginPageController.storeLogo == null ||
-                  profileProvider
-                      .storeLogo.isNotEmpty)
-                                      ? Expanded(
-                                          child: Center(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                IconButton(
-                                                  iconSize: 75,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                  onPressed: () {
-                                                    showImagePickerSheet(
-                                                        constraints:
-                                                            constraints,
-                                                        onImageSelected:
-                                                            (XFile storeLogo) {
-                                                          loginPageController
-                                                                  .storeLogo =
-                                                              storeLogo;
-                                                        });
-                                                  },
-                                                  splashRadius: 42,
-                                                  icon: const Icon(Icons
-                                                      .add_a_photo_rounded),
-                                                ),
-                                                TextWidget(
-                                                  "Add ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Logo",
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary
-                                                      .withOpacity(0.7),
-                                                  weight: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge
-                                                      ?.fontWeight,
-                                                  size: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge
-                                                      ?.fontSize,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      : Expanded(
-                                          child: Center(
-                                            child: Stack(
-                                              children: [
-                                                Center(
-                                                  child: ClipOval(
-                                                      child: loginPageController
-                                                          .storeLogo !=
-                                                          null
-                                                          ? Image.file(
-                                                        File(loginPageController
-                                                            .storeLogo
-                                                            ?.path ??
-                                                            ""),
-                                                        height: 96,
-                                                        width: 96,
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                          : Image.network(
-                                                        profileProvider
-                                                            .storeLogo,
-                                                        height: 96,
-                                                        width: 96,
-                                                        fit: BoxFit.cover,
-                                                      ),),
-                                                ),
-                                                Positioned(
-                                                  bottom: 0,
-                                                  right: 0,
-                                                  child: Container(
-                                                    width: 32,
-                                                    height: 32,
-                                                    decoration: BoxDecoration(
-                                                        color: Theme.of(context)
+                                                Flexible(
+                                                  child: Radio<String>(
+                                                    activeColor:
+                                                        Theme.of(context)
                                                             .colorScheme
                                                             .primary,
-                                                        shape: BoxShape.circle),
-                                                    child: IconButton(
-                                                      onPressed: () {
-                                                        showImagePickerSheet(
-                                                            constraints:
-                                                                constraints,
-                                                            onImageSelected:
-                                                                (XFile
-                                                                    storeLogo) {
-                                                              loginPageController
-                                                                      .storeLogo =
-                                                                  storeLogo;
-                                                            });
-                                                      },
-                                                      icon: Icon(
-                                                        Icons.edit_rounded,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                        size: 16,
-                                                      ),
-                                                    ),
+                                                    value: loginProvider
+                                                        .availableUserTypes.keys
+                                                        .toList()[index],
+                                                    groupValue: loginProvider
+                                                        .userAppTheme.key,
+                                                    onChanged: (_) {
+                                                      loginProvider
+                                                          .updateUserAppType(
+                                                              loginProvider
+                                                                  .availableUserTypes
+                                                                  .entries
+                                                                  .elementAt(
+                                                                      index));
+                                                    },
                                                   ),
                                                 ),
+                                                Text(
+                                                  loginProvider
+                                                      .availableUserTypes.keys
+                                                      .toList()[index],
+                                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                      color: loginProvider
+                                                                  .userAppTheme
+                                                                  .key ==
+                                                              loginProvider
+                                                                      .availableUserTypes
+                                                                      .keys
+                                                                      .toList()[
+                                                                  index]
+                                                          ? Theme.of(context)
+                                                              .colorScheme
+                                                              .primary
+                                                          : null,
+                                                      fontWeight: loginProvider
+                                                                  .userAppTheme
+                                                                  .key ==
+                                                              loginProvider
+                                                                  .availableUserTypes
+                                                                  .keys
+                                                                  .toList()[index]
+                                                          ? FontWeight.w500
+                                                          : null),
+                                                ),
                                               ],
+                                            );
+                                          },
+                                          itemCount: 3),
+                                    ],
+                                  ),
+                                ),
+                                Flexible(
+                                    child: Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Positioned(
+                                      width: 300,
+                                      height: 300,
+                                      top: -130,
+                                      child: ClipPath(
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        clipper: MaterialClipper(),
+                                        child: GoogleMap(
+                                          markers: {
+                                            Marker(
+                                              markerId: const MarkerId("Home"),
+                                              position: LatLng(
+                                                  double.tryParse(profileProvider
+                                                                  .storeAddress[
+                                                              "coordinates-x"] ??
+                                                          "17.744062") ??
+                                                      17.744062,
+                                                  double.tryParse(profileProvider
+                                                                  .storeAddress[
+                                                              "coordinates-y"] ??
+                                                          "83.335216") ??
+                                                      83.335216),
                                             ),
+                                          },
+                                          onTap: (_) {},
+                                          initialCameraPosition: CameraPosition(
+                                            bearing: 0,
+                                            target: LatLng(
+                                                double.tryParse(profileProvider
+                                                                .storeAddress[
+                                                            "coordinates-x"] ??
+                                                        "17.744062") ??
+                                                    17.744062,
+                                                (double.tryParse(profileProvider
+                                                                .storeAddress[
+                                                            "coordinates-y"] ??
+                                                        "83.335216") ??
+                                                    83.335216)),
+                                            tilt: 0,
+                                            zoom: 15,
                                           ),
-                                        )
-                                  : const SizedBox()
-                            ],
+                                          onMapCreated:
+                                              (GoogleMapController controller) {
+                                            //_controller.complete(controller);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      width: 300,
+                                      height: 300,
+                                      top: -130,
+                                      child: ClipPath(
+                                        clipper: MaterialClipper(),
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ProfileAddressWorkflow(
+                                                          controller:
+                                                              loginPageController,
+                                                          constraints:
+                                                              constraints,
+                                                        )));
+                                          },
+                                          child: Container(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(0.5),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const Positioned(
+                                      top: 50,
+                                      left: 100,
+                                      child: Icon(
+                                        Icons.edit_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 0,
+                                      child: Container(
+                                        height: 120,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                          color: !(!(loginPageController
+                                                              .profileImage !=
+                                                          null ||
+                                                      profileProvider
+                                                          .sellerImage
+                                                          .isNotEmpty) ||
+                                                  loginPageController
+                                                          .storeLogo !=
+                                                      null ||
+                                                  profileProvider
+                                                      .storeLogo.isNotEmpty)
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withOpacity(0.2)
+                                              : Colors.transparent,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            loginProvider.isFarmer
+                                                ? (loginPageController
+                                                                .profileImage !=
+                                                            null ||
+                                                        profileProvider
+                                                            .sellerImage
+                                                            .isNotEmpty)
+                                                    ? Expanded(
+                                                        child: Center(
+                                                          child: SizedBox(
+                                                            width: 120,
+                                                            child: Stack(
+                                                              children: [
+                                                                Center(
+                                                                  child:
+                                                                      ClipOval(
+                                                                    child: loginPageController.profileImage !=
+                                                                            null
+                                                                        ? Image
+                                                                            .file(
+                                                                            File(loginPageController.profileImage?.path ??
+                                                                                ""),
+                                                                            height:
+                                                                                96,
+                                                                            width:
+                                                                                96,
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          )
+                                                                        : Image
+                                                                            .network(
+                                                                            profileProvider.sellerImage,
+                                                                            height:
+                                                                                96,
+                                                                            width:
+                                                                                96,
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          ),
+                                                                  ),
+                                                                ),
+                                                                Positioned(
+                                                                  bottom: 0,
+                                                                  right: 0,
+                                                                  child:
+                                                                      Container(
+                                                                    width: 32,
+                                                                    height: 32,
+                                                                    decoration: BoxDecoration(
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                        shape: BoxShape
+                                                                            .circle),
+                                                                    child:
+                                                                        IconButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        showImagePickerSheet(
+                                                                            constraints:
+                                                                                constraints,
+                                                                            onImageSelected:
+                                                                                (XFile profileImage) {
+                                                                              setState(() {
+                                                                                loginPageController.profileImage = profileImage;
+                                                                              });
+                                                                            });
+                                                                      },
+                                                                      icon: Icon(
+                                                                          Icons
+                                                                              .edit_rounded,
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .onPrimary,
+                                                                          size:
+                                                                              16),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Expanded(
+                                                        child: Center(
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              IconButton(
+                                                                iconSize: 75,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary,
+                                                                onPressed: () {
+                                                                  showImagePickerSheet(
+                                                                      constraints:
+                                                                          constraints,
+                                                                      onImageSelected:
+                                                                          (XFile
+                                                                              profileImage) {
+                                                                        loginPageController.profileImage =
+                                                                            profileImage;
+                                                                      });
+                                                                },
+                                                                splashRadius:
+                                                                    42,
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .add_a_photo_rounded),
+                                                              ),
+                                                              TextWidget(
+                                                                "Add ${loginProvider.isFarmer ? "Farmer" : "your"} Image",
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary
+                                                                    .withOpacity(
+                                                                        0.7),
+                                                                weight: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge
+                                                                    ?.fontWeight,
+                                                                size: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge
+                                                                    ?.fontSize,
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                : const SizedBox(),
+                                            !loginProvider.isFarmer
+                                                ? !(loginPageController
+                                                                .storeLogo !=
+                                                            null ||
+                                                        profileProvider
+                                                            .storeLogo
+                                                            .isNotEmpty)
+                                                    ? Expanded(
+                                                        child: Center(
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              IconButton(
+                                                                iconSize: 75,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary,
+                                                                onPressed: () {
+                                                                  showImagePickerSheet(
+                                                                      constraints:
+                                                                          constraints,
+                                                                      onImageSelected:
+                                                                          (XFile
+                                                                              storeLogo) {
+                                                                        loginPageController.storeLogo =
+                                                                            storeLogo;
+                                                                      });
+                                                                },
+                                                                splashRadius:
+                                                                    42,
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .add_a_photo_rounded),
+                                                              ),
+                                                              TextWidget(
+                                                                "Add ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Logo",
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary
+                                                                    .withOpacity(
+                                                                        0.7),
+                                                                weight: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge
+                                                                    ?.fontWeight,
+                                                                size: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge
+                                                                    ?.fontSize,
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Expanded(
+                                                        child: Center(
+                                                          child: SizedBox(
+                                                            width: 96,
+                                                            child: Stack(
+                                                              children: [
+                                                                Center(
+                                                                  child:
+                                                                      ClipOval(
+                                                                    child: loginPageController.storeLogo !=
+                                                                            null
+                                                                        ? Image
+                                                                            .file(
+                                                                            File(loginPageController.storeLogo?.path ??
+                                                                                ""),
+                                                                            height:
+                                                                                96,
+                                                                            width:
+                                                                                96,
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          )
+                                                                        : Image
+                                                                            .network(
+                                                                            profileProvider.storeLogo,
+                                                                            height:
+                                                                                96,
+                                                                            width:
+                                                                                96,
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          ),
+                                                                  ),
+                                                                ),
+                                                                Positioned(
+                                                                  bottom: 0,
+                                                                  right: 0,
+                                                                  child:
+                                                                      Container(
+                                                                    width: 32,
+                                                                    height: 32,
+                                                                    decoration: BoxDecoration(
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                        shape: BoxShape
+                                                                            .circle),
+                                                                    child:
+                                                                        IconButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        showImagePickerSheet(
+                                                                            constraints:
+                                                                                constraints,
+                                                                            onImageSelected:
+                                                                                (XFile storeLogo) {
+                                                                              setState(() {
+                                                                                loginPageController.storeLogo = storeLogo;
+                                                                              });
+                                                                            });
+                                                                      },
+                                                                      icon:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .edit_rounded,
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .onPrimary,
+                                                                        size:
+                                                                            16,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                : const SizedBox()
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                              ],
+                            ),
                           ),
                         ),
+                        const SizedBox(height: 8),
                         Padding(
-                          padding: const EdgeInsets.all(
-                            32,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32,
                           ),
                           child: Form(
                             key: loginPageController.registrationFormKey,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text("Please select your role"),
-                                SizedBox(
-                                  height: 50,
-                                  child: ListView.builder(
-                                      primary: false,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        loginProvider
-                                            .availableUserTypes = loginProvider
-                                                .availableUserTypes.isEmpty
-                                            ? {
-                                                "Farmers ":
-                                                    const Color(0xFF006838),
-                                                "Organic Stores":
-                                                    const Color(0xFF00bba8),
-                                                "Organic Restaurants":
-                                                    const Color(0xFFffd500),
-                                              }
-                                            : loginProvider.availableUserTypes;
-                                        print(loginProvider
-                                            .availableUserTypes.keys);
-                                        print(loginProvider.userAppTheme.key);
-                                        return Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Flexible(
-                                              child: Radio<String>(
-                                                activeColor: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                value: loginProvider
-                                                    .availableUserTypes.keys
-                                                    .toList()[index],
-                                                groupValue: loginProvider
-                                                    .userAppTheme.key,
-                                                onChanged: (_) {
-                                                  loginProvider
-                                                      .updateUserAppType(
-                                                          loginProvider
-                                                              .availableUserTypes
-                                                              .entries
-                                                              .elementAt(
-                                                                  index));
-                                                },
-                                              ),
-                                            ),
-                                            Text(loginProvider
-                                                .availableUserTypes.keys
-                                                .toList()[index]),
-                                          ],
-                                        );
-                                      },
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: 3),
-                                ),
-                                const SizedBox(height: 16),
                                 TextWidget(
                                   "${loginProvider.isFarmer ? "Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"} Information",
                                   color: Colors.grey.shade800,
@@ -511,48 +728,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       .titleMedium
                                       ?.fontSize,
                                 ),
-                                const SizedBox(
-                                  height: 16,
+                                SizedBox(
+                                  height: loginProvider.isFarmer ? 8 : 0,
                                 ),
-                                loginProvider.isFarmer ? Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFieldWidget(
-                                        controller: loginPageController
-                                                .registrationPageFormControllers[
-                                            'first_name'],
-                                        label:
-                                            "${loginProvider.isFarmer ? "Farmer's" : ""} First Name",
-                                        validator: (value) {
-                                          if (value?.isEmpty ?? false) {
-                                            return snackbar(context,
-                                                "Please enter a valid first name");
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 24),
-                                    Expanded(
-                                      child: TextFieldWidget(
-                                        controller: loginPageController
-                                                .registrationPageFormControllers[
-                                            'last_name'],
-                                        label:
-                                            "${loginProvider.isFarmer ? "Farmer's" : ""} Last Name",
-                                        validator: (value) {
-                                          if (value?.isEmpty ?? false) {
-                                            return snackbar(context,
-                                                "Please enter a valid last name");
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ): const SizedBox(),
-                                const SizedBox(
-                                  height: 8,
+                                loginProvider.isFarmer
+                                    ? Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFieldWidget(
+                                              controller: loginPageController
+                                                      .registrationPageFormControllers[
+                                                  'first_name'],
+                                              label:
+                                                  "${loginProvider.isFarmer ? "Farmer's" : ""} First Name",
+                                              validator: (value) {
+                                                if (value?.isEmpty ?? false) {
+                                                  return snackbar(context,
+                                                      "Please enter a valid first name");
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                          const SizedBox(width: 24),
+                                          Expanded(
+                                            child: TextFieldWidget(
+                                              controller: loginPageController
+                                                      .registrationPageFormControllers[
+                                                  'last_name'],
+                                              label:
+                                                  "${loginProvider.isFarmer ? "Farmer's" : ""} Last Name",
+                                              validator: (value) {
+                                                if (value?.isEmpty ?? false) {
+                                                  return snackbar(context,
+                                                      "Please enter a valid last name");
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : const SizedBox(),
+                                SizedBox(
+                                  height: loginProvider.isFarmer ? 0 : 8,
                                 ),
                                 !loginProvider.isFarmer
                                     ? TextFieldWidget(
@@ -609,7 +828,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   },
                                 ),
                                 const SizedBox(
-                                  height: 8,
+                                  height: 4,
                                 ),
                                 Row(
                                   children: [
@@ -655,155 +874,207 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                                 const SizedBox(
-                                  height: 32,
-                                ),
-                                TextWidget(
-                                  "Location Details",
-                                  color: Colors.grey.shade800,
-                                  weight: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.fontWeight,
-                                  size: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.fontSize,
-                                ),
-                                const SizedBox(
                                   height: 16,
                                 ),
                                 Row(
                                   children: [
-                                    Expanded(
-                                      child: TextFieldWidget(
-                                        controller: loginPageController
-                                                .registrationPageFormControllers[
-                                            'state'],
-                                        label: 'State',
-                                        validator: (value) {
-                                          if (value?.isEmpty ?? false) {
-                                            return snackbar(context,
-                                                "Please enter a valid state");
-                                          }
-                                          return null;
-                                        },
-                                      ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextWidget(
+                                          "Certification",
+                                          color: Colors.grey.shade800,
+                                          weight: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.fontWeight,
+                                          size: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.fontSize,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        TextWidget(
+                                          loginPageController
+                                                  .userCertification.isEmpty
+                                              ? profileProvider
+                                                  .certificationType
+                                              : loginPageController
+                                                  .userCertification,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          weight: FontWeight.w400,
+                                          size: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.fontSize,
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(width: 24),
-                                    Expanded(
-                                      child: TextFieldWidget(
-                                        controller: loginPageController
-                                                .registrationPageFormControllers[
-                                            'district'],
-                                        label: 'District',
-                                        validator: (value) {
-                                          if (value?.isEmpty ?? false) {
-                                            return snackbar(context,
-                                                "Please enter a valid district");
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFieldWidget(
-                                        controller: loginPageController
-                                                .registrationPageFormControllers[
-                                            'mandal'],
-                                        label: 'Locality',
-                                        validator: (value) {
-                                          if (value?.isEmpty ?? false) {
-                                            return snackbar(context,
-                                                "Please enter a valid locality");
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 24),
-                                    Expanded(
-                                      child: TextFieldWidget(
-                                        controller: loginPageController
-                                                .registrationPageFormControllers[
-                                            'city'],
-                                        label: 'City/Vilage',
-                                        keyboardType:
-                                            TextInputType.streetAddress,
-                                        validator: (value) {
-                                          if (value?.isEmpty ?? false) {
-                                            return snackbar(context,
-                                                "Please enter a valid city/village");
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFieldWidget(
-                                        controller: loginPageController
-                                                .registrationPageFormControllers[
-                                            'house_number'],
-                                        label: 'H.No.',
-                                        validator: (value) {
-                                          if (value?.isEmpty ?? false) {
-                                            return snackbar(context,
-                                                "Please enter a valid house number");
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 24),
-                                    Expanded(
-                                      child: TextFieldWidget(
-                                        textInputAction: TextInputAction.done,
-                                        controller: loginPageController
-                                                .registrationPageFormControllers[
-                                            'pincode'],
-                                        label: 'Pincode',
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 6,
-                                        validator: (value) {
-                                          if (value?.isEmpty ?? false) {
-                                            return snackbar(context,
-                                                "Please enter a valid pincode");
-                                          }
-                                          return null;
-                                        },
+                                    const Spacer(),
+                                    IconButton(
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            backgroundColor: Colors.transparent,
+                                            context: context,
+                                            builder: (context) {
+                                              return Wrap(
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .background,
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                    .vertical(
+                                                                top: Radius
+                                                                    .circular(
+                                                                        24))),
+                                                    child:
+                                                        certificationBottomSheet(
+                                                            loginProvider,
+                                                            loginPageController,
+                                                            setState,
+                                                            constraints,
+                                                            showImagePickerSheet,
+                                                            context),
+                                                  ),
+                                                ],
+                                              );
+                                            });
+                                      },
+                                      icon: Icon(
+                                        Icons.edit_rounded,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            ?.withOpacity(0.5),
                                       ),
                                     )
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 8,
+
+                                Row(
+                                  children: [
+                                    TextWidget(
+                                      (loginPageController
+                                                      .registrationPageFormControllers[
+                                                          "reg_number"]
+                                                      ?.text
+                                                      .toString() ??
+                                                  "")
+                                              .isEmpty
+                                          ? profileProvider
+                                                  .certificateID.isEmpty
+                                              ? "AP123239230MNS"
+                                              : profileProvider.certificateID
+                                          : loginPageController
+                                              .registrationPageFormControllers[
+                                                  "reg_number"]
+                                              ?.text
+                                              .toString(),
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      weight: FontWeight.w700,
+                                      size: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.fontSize,
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Icon(
+                                      (loginPageController
+                                                          .registrationPageFormControllers[
+                                                              "reg_number"]
+                                                          ?.text
+                                                          .toString() ??
+                                                      "")
+                                                  .isEmpty &&
+                                              profileProvider
+                                                  .certificateID.isNotEmpty
+                                          ? Icons.verified_rounded
+                                          : Icons.pending_actions_rounded,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          ?.withOpacity(0.5),
+                                      size: 16,
+                                    )
+                                  ],
                                 ),
+
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Divider(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        ?.withOpacity(0.5),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {},
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.delete_rounded,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            ?.withOpacity(0.5),
+                                      ),
+                                      Text(
+                                        "Delete account",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .button
+                                            ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                    ?.withOpacity(0.5)),
+                                      )
+                                    ],
+                                  ),
+                                )
+                                // const SizedBox(
+                                //   height: 32,
+                                // ),
+                                // TextWidget(
+                                //   "Location Details",
+                                //   color: Colors.grey.shade800,
+                                //   weight: Theme.of(context)
+                                //       .textTheme
+                                //       .titleMedium
+                                //       ?.fontWeight,
+                                //   size: Theme.of(context)
+                                //       .textTheme
+                                //       .titleMedium
+                                //       ?.fontSize,
+                                // ),
+                                // const SizedBox(
+                                //   height: 16,
+                                // ),
                               ],
                             ),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(
-                              left: 32, right: 32, bottom: 32),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              loginProvider.isFarmer
-                                  ? TextWidget(
+                        loginProvider.isFarmer
+                            ? Container(
+                                margin: const EdgeInsets.only(
+                                    left: 32, right: 32, bottom: 32),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWidget(
                                       "Cultivated Land Area (in acres)",
                                       color: Colors.grey.shade800,
                                       weight: Theme.of(context)
@@ -814,13 +1085,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           .textTheme
                                           .titleMedium
                                           ?.fontSize,
-                                    )
-                                  : const SizedBox(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              loginProvider.isFarmer
-                                  ? SliderTheme(
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    SliderTheme(
                                       data: SliderThemeData(
                                         activeTickMarkColor: Theme.of(context)
                                             .colorScheme
@@ -853,762 +1122,347 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   num;
                                             });
                                           }),
-                                    )
-                                  : const SizedBox(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              TextWidget(
-                                "Select Certification Details",
-                                color: Colors.grey.shade800,
-                                weight: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.fontWeight,
-                                size: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.fontSize,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              primary: false,
-                              itemCount: loginProvider.certificationList.length,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      if (loginPageController
-                                          .userCertificates.isNotEmpty) {
-                                        if (loginPageController
-                                            .userCertificates[index]
-                                            .isNotEmpty) {
-                                          loginPageController
-                                              .userCertificates[index] = [];
-                                        }
-                                      }
-                                      loginPageController.userCertification =
-                                          loginProvider
-                                              .certificationList[index];
-                                      loginPageController
-                                          .registrationPageFormControllers[
-                                              "reg_number"]
-                                          ?.text = "";
-                                    });
-                                  },
-                                  child: Container(
-                                    color: loginPageController
-                                                .userCertification ==
-                                            loginProvider
-                                                .certificationList[index]
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Colors.transparent,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Checkbox(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              3.5)),
-                                                  activeColor: loginProvider
-                                                          .userAppTheme.key
-                                                          .contains(
-                                                              "Restaraunts")
-                                                      ? Colors.green[900]
-                                                      : Colors.white,
-                                                  checkColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                  value: loginPageController
-                                                          .userCertification ==
-                                                      loginProvider
-                                                              .certificationList[
-                                                          index],
-                                                  onChanged: (boolean) {
-                                                    setState(() {
-                                                      if (loginPageController
-                                                          .userCertificates
-                                                          .isNotEmpty) {
-                                                        if (loginPageController
-                                                            .userCertificates[
-                                                                index]
-                                                            .isNotEmpty) {
-                                                          loginPageController
-                                                                  .userCertificates[
-                                                              index] = [];
-                                                        }
-                                                      }
-                                                      loginPageController
-                                                              .userCertification =
-                                                          loginProvider
-                                                                  .certificationList[
-                                                              index];
-                                                      loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "reg_number"]
-                                                          ?.text = "";
-                                                    });
-                                                  }),
-                                              Expanded(
-                                                child: SizedBox(
-                                                  child: TextWidget(
-                                                    loginProvider
-                                                            .certificationList[
-                                                        index],
-                                                    weight: FontWeight.w500,
-                                                    color: loginPageController
-                                                                .userCertification ==
-                                                            loginProvider
-                                                                    .certificationList[
-                                                                index]
-                                                        ? loginProvider
-                                                                .userAppTheme
-                                                                .key
-                                                                .contains(
-                                                                    "Restaraunts")
-                                                            ? Colors.green[900]
-                                                            : Colors.white
-                                                        : Colors.black,
-                                                  ),
-                                                ),
-                                              )
-                                            ]),
-                                        (loginProvider.isFarmer
-                                                    ? index != 0
-                                                    : true) &&
-                                                index != 5 &&
-                                                loginPageController
-                                                        .userCertification ==
-                                                    loginProvider
-                                                            .certificationList[
-                                                        index]
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 16.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 42,
-                                                    ),
-                                                    Flexible(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          const TextWidget(
-                                                            "Reference Number",
-                                                            color: Colors.white,
-                                                          ),
-                                                          SizedBox(
-                                                            width:
-                                                                getProportionateWidth(
-                                                                    136,
-                                                                    constraints),
-                                                            child: Form(
-                                                              key: loginPageController
-                                                                  .registrationFormSecondPageKey,
-                                                              child:
-                                                                  TextFormField(
-                                                                textInputAction:
-                                                                    TextInputAction
-                                                                        .done,
-                                                                onChanged: (_) {
-                                                                  setState(
-                                                                      () {});
-                                                                },
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                        filled:
-                                                                            true,
-                                                                        contentPadding: const EdgeInsets.symmetric(
-                                                                            vertical:
-                                                                                8,
-                                                                            horizontal:
-                                                                                16),
-                                                                        fillColor:
-                                                                            Colors
-                                                                                .white,
-                                                                        counterStyle: fonts(
-                                                                            Theme.of(context)
-                                                                                .textTheme
-                                                                                .bodySmall
-                                                                                ?.fontSize,
-                                                                            FontWeight
-                                                                                .normal,
-                                                                            Colors
-                                                                                .white),
-                                                                        hintStyle: fonts(
-                                                                            Theme.of(context)
-                                                                                .textTheme
-                                                                                .bodyMedium
-                                                                                ?.fontSize,
-                                                                            FontWeight
-                                                                                .w500,
-                                                                            Colors.grey[
-                                                                                400]),
-                                                                        hintText:
-                                                                            'Registration Number',
-                                                                        border:
-                                                                            OutlineInputBorder(
-                                                                          borderSide:
-                                                                              BorderSide.none,
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(10.0),
-                                                                        ),
-                                                                        isDense:
-                                                                            true,
-                                                                        errorBorder:
-                                                                            InputBorder.none),
-                                                                validator:
-                                                                    (value) {
-                                                                  if (value
-                                                                          ?.isEmpty ??
-                                                                      false) {
-                                                                    snackbar(
-                                                                        context,
-                                                                        "Please enter a valid certificate registration number");
-                                                                    return " ";
-                                                                  } else {
-                                                                    return null;
-                                                                  }
-                                                                },
-                                                                controller: loginPageController
-                                                                        .registrationPageFormControllers[
-                                                                    "reg_number"],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        const TextWidget(
-                                                          "Upload Certificate",
-                                                          color: Colors.white,
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            MaterialButton(
-                                                                padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    vertical: 8,
-                                                                    horizontal:
-                                                                        16),
-                                                                color: Colors
-                                                                    .white,
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8)),
-                                                                onPressed: () {
-                                                                  showImagePickerSheet(
-                                                                    constraints:
-                                                                        constraints,
-                                                                    onImageSelected:
-                                                                        (XFile
-                                                                            certificate) {
-                                                                      if (loginPageController
-                                                                          .userCertificates
-                                                                          .isEmpty) {
-                                                                        for (var element
-                                                                            in loginProvider.certificationList) {
-                                                                          loginPageController
-                                                                              .userCertificates
-                                                                              .add([]);
-                                                                        }
-                                                                      }
-                                                                      loginPageController
-                                                                          .userCertificates[
-                                                                              index]
-                                                                          .add(
-                                                                              certificate);
-                                                                    },
-                                                                  );
-                                                                },
-                                                                child:
-                                                                    const TextWidget(
-                                                                  "Choose File",
-                                                                )),
-                                                            const SizedBox(
-                                                              width: 8,
-                                                            ),
-                                                            Icon(
-                                                              Icons
-                                                                  .archive_rounded,
-                                                              color: Colors
-                                                                  .white
-                                                                  .withAlpha(
-                                                                      150),
-                                                            ),
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 24,
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            : const SizedBox(),
-                                        (loginProvider.isFarmer
-                                                    ? index != 0
-                                                    : true) &&
-                                                index != 5 &&
-                                                loginPageController
-                                                    .userCertificates
-                                                    .isNotEmpty &&
-                                                loginPageController
-                                                        .userCertification ==
-                                                    loginProvider
-                                                            .certificationList[
-                                                        index] &&
-                                                loginPageController
-                                                    .userCertificates[index]
-                                                    .isNotEmpty
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 96),
-                                                child: SizedBox(
-                                                  height: 120,
-                                                  child: ListView.builder(
-                                                    itemCount:
-                                                        loginPageController
-                                                            .userCertificates[
-                                                                index]
-                                                            .length,
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    shrinkWrap: true,
-                                                    primary: false,
-                                                    itemBuilder:
-                                                        (context, imageIndex) {
-                                                      // log(registrationController
-                                                      //    .userCertificates);
-                                                      return Stack(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                              child: Image.file(
-                                                                File(loginPageController
-                                                                    .userCertificates[
-                                                                        index][
-                                                                        imageIndex]
-                                                                    .path),
-                                                                height: 96,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Positioned(
-                                                            child: Container(
-                                                              decoration: const BoxDecoration(
-                                                                  color: Colors
-                                                                      .red,
-                                                                  shape: BoxShape
-                                                                      .circle),
-                                                              child: IconButton(
-                                                                onPressed: () {
-                                                                  loginPageController
-                                                                      .userCertificates[
-                                                                          index]
-                                                                      .removeAt(
-                                                                          imageIndex);
-                                                                  setState(
-                                                                      () {});
-                                                                },
-                                                                icon:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .delete_rounded,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              )
-                                            : const SizedBox()
-                                      ],
                                     ),
-                                  ),
-                                );
-                              }),
-                        ),
-                        constraints.maxWidth < 500
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 32,
-                                  vertical: 16,
+                                  ],
                                 ),
-                                child: ElevatedButtonWidget(
-                                    onClick: () async {
-                                      var formValidatedState =
-                                          loginPageController
-                                                  .registrationFormKey
-                                                  .currentState
-                                                  ?.validate() ??
-                                              false;
-
-                                      if (formValidatedState) {
-                                        if (!(loginPageController
-                                                    .profileImage !=
-                                                null ||
-                                            profileProvider
-                                                .sellerImage.isNotEmpty)) {
-                                          formValidatedState = false;
-                                          snackbar(
-                                              context,
-                                              "Please upload ${loginProvider.isFarmer ? "the Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "your" : "your"} image");
-                                        }
-                                        if (!loginProvider.isFarmer) {
-                                          if (loginPageController.storeLogo ==
-                                              null) {
-                                            formValidatedState = false;
-                                            snackbar(context,
-                                                "Please upload the ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"}'s logo");
-                                          }
-                                        }
-
-                                        if (formValidatedState) {
-                                          var formValidatedState =
-                                              loginPageController
-                                                      .registrationFormSecondPageKey
-                                                      .currentState
-                                                      ?.validate() ??
-                                                  true;
-
-                                          if (loginPageController.landInAcres >
-                                              1) {
-                                            if (formValidatedState &&
-                                                loginPageController
-                                                    .userCertification
-                                                    .isNotEmpty) {
-                                              if ((loginPageController
-                                                          .userCertification
-                                                          .isNotEmpty &&
-                                                      loginPageController
-                                                          .userCertificates
-                                                          .where((element) =>
-                                                              element
-                                                                  .isNotEmpty)
-                                                          .isNotEmpty) ||
-                                                  loginPageController
-                                                          .registrationFormSecondPageKey
-                                                          .currentState ==
-                                                      null) {
-                                                profileProvider.showLoader();
-
-                                                Map<String, String>
-                                                    userAddress = {
-                                                  "coordinates-x":
-                                                      (loginPageController
-                                                                  .location
-                                                                  ?.latitude ??
-                                                              0)
-                                                          .toString(),
-                                                  "coordinates-y":
-                                                      (loginPageController
-                                                                  .location
-                                                                  ?.longitude ??
-                                                              0)
-                                                          .toString(),
-                                                  "houseNumber": loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "house_number"]
-                                                          ?.text
-                                                          .toString() ??
-                                                      "",
-                                                  "city": loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "city"]
-                                                          ?.text
-                                                          .toString() ??
-                                                      "",
-                                                  "mandal": loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "mandal"]
-                                                          ?.text
-                                                          .toString() ??
-                                                      "",
-                                                  "district": loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "district"]
-                                                          ?.text
-                                                          .toString() ??
-                                                      "",
-                                                  "state": loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "state"]
-                                                          ?.text
-                                                          .toString() ??
-                                                      "",
-                                                  "pincode": loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "pincode"]
-                                                          ?.text
-                                                          .toString() ??
-                                                      ""
-                                                };
-
-                                                var sellerImageURL =
-                                                    loginPageController
-                                                                .profileImage !=
-                                                            null
-                                                        ? await uploadFilesToCloud(
-                                                            loginPageController
-                                                                .profileImage,
-                                                            cloudLocation:
-                                                                "profile_pics")
-                                                        : profileProvider
-                                                            .sellerImage;
-                                                var storeLogoURL = "";
-                                                if (!loginProvider.isFarmer) {
-                                                  storeLogoURL =
-                                                      await uploadFilesToCloud(
-                                                          loginPageController
-                                                              .storeLogo,
-                                                          cloudLocation:
-                                                              "logo");
-                                                }
-                                                List<String> certificatesURLs =
-                                                    [];
-                                                if (loginPageController
-                                                    .userCertificates
-                                                    .where((element) =>
-                                                        element.isEmpty)
-                                                    .isNotEmpty) {
-                                                  await Future.forEach<XFile>(
-                                                      loginPageController
-                                                          .userCertificates
-                                                          .firstWhere((element) =>
-                                                              element
-                                                                  .isNotEmpty),
-                                                      (element) async {
-                                                    String urlData =
-                                                        await uploadFilesToCloud(
-                                                            element,
-                                                            cloudLocation:
-                                                                "legal_docs",
-                                                            fileType: ".jpg");
-                                                    certificatesURLs
-                                                        .add(urlData);
-                                                  });
-                                                }
-                                                Map<String, String> body = {
-                                                  "user_id": profileProvider
-                                                      .userIdForAddress,
-                                                  "firstname": loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "first_name"]
-                                                          ?.text
-                                                          .toString() ??
-                                                      "",
-                                                  "lastname": loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "last_name"]
-                                                          ?.text
-                                                          .toString() ??
-                                                      "",
-                                                  "email": loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "email"]
-                                                          ?.text
-                                                          .toString() ??
-                                                      "",
-                                                  "telephone": FirebaseAuth
-                                                          .instance
-                                                          .currentUser
-                                                          ?.phoneNumber
-                                                          ?.replaceFirst(
-                                                              "+91", "") ??
-                                                      phoneNumberController
-                                                          .text,
-                                                  "password": loginPageController
-                                                          .registrationPageFormControllers[
-                                                              "password"]
-                                                          ?.text
-                                                          .toString() ??
-                                                      "",
-                                                  "seller_type": loginProvider
-                                                      .userAppTheme.key
-                                                      .toString(),
-                                                  "land": loginPageController
-                                                      .landInAcres
-                                                      .toString(),
-                                                  "seller_image":
-                                                      sellerImageURL.toString(),
-                                                  "additional_comments":
-                                                      "Farmer is the backbone of India",
-                                                  "additional_documents":
-                                                      loginPageController
-                                                          .userCertification,
-                                                  "upload_document":
-                                                      certificatesURLs
-                                                          .toString(), //TODO: Check with backend on how to parse data
-                                                  "store_address":
-                                                      userAddress.toString(),
-                                                  "language": (loginProvider
-                                                              .languages.entries
-                                                              .toList()
-                                                              .indexOf(loginProvider
-                                                                  .usersLanguage) +
-                                                          1)
-                                                      .toString(),
-                                                  // "agree": "1"
-                                                };
-                                                if (!loginProvider.isFarmer) {
-                                                  body.addEntries([
-                                                    MapEntry(
-                                                        "seller_storename",
-                                                        loginPageController
-                                                                .registrationPageFormControllers[
-                                                                    "storeName"]
-                                                                ?.text
-                                                                .toString() ??
-                                                            ""),
-                                                    MapEntry(
-                                                      "store_logo",
-                                                      storeLogoURL.toString(),
-                                                    )
-                                                  ]);
-                                                } else {
-                                                  body.addEntries([
-                                                    MapEntry("seller_storename",
-                                                        "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}"),
-                                                    MapEntry(
-                                                      "store_logo",
-                                                      sellerImageURL,
-                                                    )
-                                                  ]);
-                                                }
-                                                print(body);
-                                                var response = await Server()
-                                                    .postFormData(
-                                                        body: body,
-                                                        url:
-                                                            "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/updateparticularuser")
-                                                    .catchError((e) {
-                                                  log("64$e");
-                                                });
-
-                                                if (response?.statusCode ==
-                                                    200) {
-                                                  var decodedResponse = jsonDecode(response
-                                                          ?.body
-                                                          .replaceFirst(
-                                                              '<b>Notice</b>: Undefined index: customer_group_id in\n<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>',
-                                                              '')
-                                                          .replaceFirst(
-                                                              "<b>Notice</b>: Undefined index: customer_group_id in<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>",
-                                                              "") ??
-                                                      '{"message": {},"success": false}');
-                                                  log(response?.body ?? "");
-                                                  var statusCodeBody = false;
-                                                  if (decodedResponse[
-                                                          "success"] !=
-                                                      null) {
-                                                    statusCodeBody =
-                                                        decodedResponse[
-                                                            "success"];
-                                                  } else {
-                                                    statusCodeBody =
-                                                        decodedResponse[
-                                                            "status"];
-                                                  }
-                                                  if (statusCodeBody) {
-                                                    log("Successful update");
-                                                    snackbar(context,
-                                                        "Successfully updated your profile",
-                                                        isError: false);
-                                                    Navigator.of(context).pop();
-                                                    profileProvider
-                                                        .showLoader();
-                                                    profileProvider
-                                                        .getProfile(
-                                                          loginProvider:
-                                                              loginProvider,
-                                                          userID: profileProvider
-                                                              .userIdForAddress,
-                                                          showMessage: (_) {
-                                                            snackbar(
-                                                                context, _);
-                                                          },
-                                                        )
-                                                        .then((value) =>
-                                                            profileProvider
-                                                                .hideLoader());
-                                                  } else {
-                                                    snackbar(context,
-                                                        "Failed to update, error: ${decodedResponse["message"]}");
-                                                    profileProvider
-                                                        .hideLoader();
-                                                  }
-                                                } else {
-                                                  snackbar(context,
-                                                      "Oops! Couldn't update your profile: ${response?.statusCode}");
-                                                  profileProvider.hideLoader();
-                                                  Navigator.of(context).pop();
-                                                }
-                                              } else {
-                                                snackbar(context,
-                                                    "Please upload a valid certificate");
-                                              }
-                                            } else {
-                                              snackbar(context,
-                                                  "Please select a certification type");
-                                            }
-                                          } else {
-                                            snackbar(context,
-                                                "Please select your cultivated land in acres with the slider");
-                                          }
-                                        }
-                                      }
-                                    },
-                                    height:
-                                        getProportionateHeight(64, constraints),
-                                    borderRadius: 12,
-                                    bgColor:
-                                        Theme.of(context).colorScheme.primary,
-                                    textColor:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    buttonName: "Update".toUpperCase(),
-                                    innerPadding: 0.02,
-                                    trailingIcon: Icons.arrow_forward),
                               )
                             : const SizedBox(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32,
+                            vertical: 16,
+                          ),
+                          child: ElevatedButtonWidget(
+                              onClick: () async {
+                                var formValidatedState = loginPageController
+                                        .registrationFormKey.currentState
+                                        ?.validate() ??
+                                    false;
+
+                                if (formValidatedState) {
+                                  if (!(loginPageController.profileImage !=
+                                              null ||
+                                          profileProvider
+                                              .sellerImage.isNotEmpty) &&
+                                      loginProvider.isFarmer) {
+                                    formValidatedState = false;
+                                    snackbar(
+                                        context,
+                                        "Please upload ${loginProvider.isFarmer ? "the Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "your" : "your"} image");
+                                  }
+                                  if (!loginProvider.isFarmer) {
+                                    if (!(loginPageController.storeLogo !=
+                                            null ||
+                                        profileProvider.storeLogo.isNotEmpty)) {
+                                      formValidatedState = false;
+                                      snackbar(context,
+                                          "Please upload the ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"}'s logo");
+                                    }
+                                  }
+
+                                  if (formValidatedState) {
+                                    var formValidatedState = loginPageController
+                                            .registrationFormSecondPageKey
+                                            .currentState
+                                            ?.validate() ??
+                                        true;
+
+                                    if (!loginProvider.isFarmer ||
+                                        loginPageController.landInAcres > 1) {
+                                      if (formValidatedState &&
+                                          loginPageController
+                                              .userCertification.isNotEmpty) {
+                                        if ((loginPageController
+                                                    .userCertification
+                                                    .isNotEmpty &&
+                                                loginPageController
+                                                    .userCertificates
+                                                    .where((element) =>
+                                                        element.isNotEmpty)
+                                                    .isNotEmpty) ||
+                                            loginPageController
+                                                    .registrationFormSecondPageKey
+                                                    .currentState ==
+                                                null) {
+                                          profileProvider.showLoader();
+
+                                          Map<String, String> userAddress = {
+                                            "coordinates-x":
+                                                (loginPageController.location
+                                                            ?.latitude ??
+                                                        0)
+                                                    .toString(),
+                                            "coordinates-y":
+                                                (loginPageController.location
+                                                            ?.longitude ??
+                                                        0)
+                                                    .toString(),
+                                            "houseNumber": loginPageController
+                                                    .registrationPageFormControllers[
+                                                        "house_number"]
+                                                    ?.text
+                                                    .toString() ??
+                                                "",
+                                            "city": loginPageController
+                                                    .registrationPageFormControllers[
+                                                        "city"]
+                                                    ?.text
+                                                    .toString() ??
+                                                "",
+                                            "mandal": loginPageController
+                                                    .registrationPageFormControllers[
+                                                        "mandal"]
+                                                    ?.text
+                                                    .toString() ??
+                                                "",
+                                            "district": loginPageController
+                                                    .registrationPageFormControllers[
+                                                        "district"]
+                                                    ?.text
+                                                    .toString() ??
+                                                "",
+                                            "state": loginPageController
+                                                    .registrationPageFormControllers[
+                                                        "state"]
+                                                    ?.text
+                                                    .toString() ??
+                                                "",
+                                            "pincode": loginPageController
+                                                    .registrationPageFormControllers[
+                                                        "pincode"]
+                                                    ?.text
+                                                    .toString() ??
+                                                ""
+                                          };
+
+                                          var sellerImageURL =
+                                              loginPageController
+                                                          .profileImage !=
+                                                      null
+                                                  ? await uploadFilesToCloud(
+                                                      loginPageController
+                                                          .profileImage,
+                                                      cloudLocation:
+                                                          "profile_pics")
+                                                  : profileProvider.sellerImage;
+                                          var storeLogoURL = "";
+                                          if (!loginProvider.isFarmer) {
+                                            storeLogoURL =
+                                                loginPageController.storeLogo !=
+                                                        null
+                                                    ? await uploadFilesToCloud(
+                                                        loginPageController
+                                                            .storeLogo,
+                                                        cloudLocation: "logo")
+                                                    : profileProvider.storeLogo;
+                                          }
+                                          List<String> certificatesURLs = [];
+                                          if (loginPageController
+                                              .userCertificates
+                                              .where(
+                                                  (element) => element.isEmpty)
+                                              .isNotEmpty) {
+                                            await Future.forEach<XFile>(
+                                                loginPageController
+                                                    .userCertificates
+                                                    .firstWhere((element) =>
+                                                        element.isNotEmpty),
+                                                (element) async {
+                                              String urlData =
+                                                  await uploadFilesToCloud(
+                                                      element,
+                                                      cloudLocation:
+                                                          "legal_docs",
+                                                      fileType: ".jpg");
+                                              certificatesURLs.add(urlData);
+                                            });
+                                          }
+                                          Map<String, String> body = {
+                                            "user_id": profileProvider
+                                                .userIdForAddress,
+
+                                            "email": loginPageController
+                                                    .registrationPageFormControllers[
+                                                        "email"]
+                                                    ?.text
+                                                    .toString() ??
+                                                "",
+                                            "telephone": FirebaseAuth.instance
+                                                    .currentUser?.phoneNumber
+                                                    ?.replaceFirst("+91", "") ??
+                                                phoneNumberController.text,
+                                            "password": loginPageController
+                                                    .registrationPageFormControllers[
+                                                        "password"]
+                                                    ?.text
+                                                    .toString() ??
+                                                "",
+                                            "seller_type": loginProvider
+                                                .userAppTheme.key
+                                                .toString(),
+
+                                            "additional_documents":
+                                                loginPageController
+                                                    .userCertification,
+                                            "upload_document": certificatesURLs
+                                                .toString(), //TODO: Check with backend on how to parse data
+                                            "store_address":
+                                                userAddress.toString(),
+                                            "language": (loginProvider
+                                                        .languages.entries
+                                                        .toList()
+                                                        .indexOf(loginProvider
+                                                            .usersLanguage) +
+                                                    1)
+                                                .toString(),
+
+                                            "certificate_id": loginPageController
+                                                    .registrationPageFormControllers[
+                                                        "reg_number"]
+                                                    ?.text
+                                                    .toString() ??
+                                                "",
+                                            // "agree": "1"
+                                          };
+                                          if (!loginProvider.isFarmer) {
+                                            body.addEntries([
+                                              MapEntry(
+                                                  "store_name",
+                                                  loginPageController
+                                                          .registrationPageFormControllers[
+                                                              "storeName"]
+                                                          ?.text
+                                                          .toString() ??
+                                                      ""),
+                                              MapEntry(
+                                                "store_logo",
+                                                storeLogoURL.toString(),
+                                              )
+                                            ]);
+                                          } else {
+                                            body.addEntries([
+                                              MapEntry("seller_storename",
+                                                  "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}"),
+                                              MapEntry(
+                                                "store_logo",
+                                                sellerImageURL,
+                                              ),
+                                            ]);
+                                            body.addAll({
+                                              "firstname": loginPageController
+                                                      .registrationPageFormControllers[
+                                                          "first_name"]
+                                                      ?.text
+                                                      .toString() ??
+                                                  "",
+                                              "lastname": loginPageController
+                                                      .registrationPageFormControllers[
+                                                          "last_name"]
+                                                      ?.text
+                                                      .toString() ??
+                                                  "",
+                                              "land": loginPageController
+                                                  .landInAcres
+                                                  .toString(),
+                                              "seller_image":
+                                                  sellerImageURL.toString(),
+                                              "additional_comments":
+                                                  "Farmer is the backbone of India",
+                                            });
+                                          }
+                                          print(body);
+                                          var response = await Server()
+                                              .postFormData(
+                                                  body: body,
+                                                  url: loginProvider.isFarmer
+                                                      ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/updateparticularuser"
+                                                      : loginProvider.isStore
+                                                          ? "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/storeregistration"
+                                                          : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/restaurantregistration/updateparticularorganicrestaurant")
+                                              .catchError((e) {
+                                            log("64$e");
+                                          });
+
+                                          if (response?.statusCode == 200) {
+                                            print(response?.body);
+                                            var decodedResponse = jsonDecode(response
+                                                    ?.body
+                                                    .replaceFirst(
+                                                        '<b>Notice</b>: Undefined index: customer_group_id in\n<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>',
+                                                        '')
+                                                    .replaceFirst(
+                                                        "<b>Notice</b>: Undefined index: customer_group_id in<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>",
+                                                        "") ??
+                                                '{"message": {},"success": false}');
+                                            log(response?.body ?? "");
+                                            var statusCodeBody = false;
+                                            if (decodedResponse["success"] !=
+                                                null) {
+                                              statusCodeBody =
+                                                  decodedResponse["success"];
+                                            } else {
+                                              statusCodeBody =
+                                                  decodedResponse["status"];
+                                            }
+                                            if (statusCodeBody) {
+                                              log("Successful update");
+                                              snackbar(context,
+                                                  "Successfully updated your profile",
+                                                  isError: false);
+                                              Navigator.of(context).pop();
+                                              profileProvider.showLoader();
+                                              profileProvider
+                                                  .getProfile(
+                                                    loginProvider:
+                                                        loginProvider,
+                                                    userID: profileProvider
+                                                        .userIdForAddress,
+                                                    showMessage: (_) {
+                                                      snackbar(context, _);
+                                                    },
+                                                  )
+                                                  .then((value) =>
+                                                      profileProvider
+                                                          .hideLoader());
+                                            } else {
+                                              snackbar(context,
+                                                  "Failed to update, error: ${decodedResponse["message"]}");
+                                              profileProvider.hideLoader();
+                                            }
+                                          } else {
+                                            print(response?.body);
+                                            snackbar(context,
+                                                "Oops! Couldn't update your profile: ${response?.statusCode}");
+                                            profileProvider.hideLoader();
+                                            Navigator.of(context).pop();
+                                          }
+                                        } else {
+                                          snackbar(context,
+                                              "Please upload a valid certificate");
+                                        }
+                                      } else {
+                                        snackbar(context,
+                                            "Please select a certification type");
+                                      }
+                                    } else {
+                                      snackbar(context,
+                                          "Please select your cultivated land in acres with the slider");
+                                    }
+                                  }
+                                }
+                              },
+                              height: getProportionateHeight(64, constraints),
+                              borderRadius: 12,
+                              bgColor: Theme.of(context).colorScheme.primary,
+                              textColor:
+                                  Theme.of(context).colorScheme.onPrimary,
+                              buttonName: "Update".toUpperCase(),
+                              innerPadding: 0.02,
+                              trailingIcon: Icons.arrow_forward),
+                        ),
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Image.asset(
@@ -1628,4 +1482,431 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     });
   }
+}
+
+certificationBottomSheet(
+    LoginProvider loginProvider,
+    LoginController loginPageController,
+    setState,
+    BoxConstraints constraints,
+    showImagePickerSheet,
+    context) {
+  var isErrorInTextField = false;
+  var hasCertificateError = false;
+  return StatefulBuilder(builder: (context, setBSState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(
+          height: 24,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Text(
+            "Certification",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.w500),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 4),
+          child: Text(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque elit dolor, egestas eget molestie in.",
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: ListView.builder(
+              shrinkWrap: true,
+              primary: false,
+              itemCount: loginProvider.certificationList.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      setBSState(() {
+                        if (loginPageController.userCertificates.isNotEmpty) {
+                          if (loginPageController
+                              .userCertificates[index].isNotEmpty) {
+                            loginPageController.userCertificates[index] = [];
+                          }
+                        }
+                        loginPageController.userCertification =
+                            loginProvider.certificationList[index];
+                        loginPageController
+                            .registrationPageFormControllers["reg_number"]
+                            ?.text = "";
+                      });
+                    });
+                  },
+                  child: Container(
+                    color: loginPageController.userCertification ==
+                            loginProvider.certificationList[index]
+                        ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                        : null,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Checkbox(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(3.5)),
+                                  activeColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  checkColor:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  value: loginPageController
+                                          .userCertification ==
+                                      loginProvider.certificationList[index],
+                                  onChanged: (boolean) {
+                                    setState(() {
+                                      setBSState(() {
+                                        if (loginPageController
+                                            .userCertificates.isNotEmpty) {
+                                          if (loginPageController
+                                              .userCertificates[index]
+                                              .isNotEmpty) {
+                                            loginPageController
+                                                .userCertificates[index] = [];
+                                          }
+                                        }
+                                        loginPageController.userCertification =
+                                            loginProvider
+                                                .certificationList[index];
+                                        loginPageController
+                                            .registrationPageFormControllers[
+                                                "reg_number"]
+                                            ?.text = "";
+                                      });
+                                    });
+                                  }),
+                              Expanded(
+                                child: SizedBox(
+                                  child: TextWidget(
+                                    loginProvider.certificationList[index],
+                                    color: loginPageController
+                                                .userCertification ==
+                                            loginProvider
+                                                .certificationList[index]
+                                        ? Theme.of(context).colorScheme.primary
+                                        : const Color(0xFF1F1F1F)
+                                            .withOpacity(0.7),
+                                  ),
+                                ),
+                              )
+                            ]),
+                        hasCertificateError &&
+                                loginPageController.userCertification ==
+                                    loginProvider.certificationList[index]
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: Text(
+                                    "Please upload a valid certificate",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .error),
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
+                        (loginProvider.isFarmer ? index != 0 : true) &&
+                                index != 5 &&
+                                loginPageController.userCertification ==
+                                    loginProvider.certificationList[index]
+                            ? Padding(
+                                padding: const EdgeInsets.only(bottom: 16.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      width: 42,
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Form(
+                                        key: loginPageController
+                                            .registrationFormSecondPageKey,
+                                        child: TextFormField(
+                                          textInputAction: TextInputAction.done,
+                                          onChanged: (_) {
+                                            setState(() {});
+                                            setBSState(() {});
+                                          },
+                                          decoration: InputDecoration(
+                                              prefixIcon: const Icon(
+                                                  Icons.contact_page_rounded),
+                                              filled: true,
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 16),
+                                              fillColor: isErrorInTextField
+                                                  ? ElevationOverlay.colorWithOverlay(
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .primary
+                                                          .withOpacity(0.2),
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .error,
+                                                      16)
+                                                  : Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                      .withOpacity(0.2),
+                                              counterStyle: fonts(
+                                                  Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall
+                                                      ?.fontSize,
+                                                  FontWeight.normal,
+                                                  Colors.white),
+                                              hintStyle: fonts(
+                                                  Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.fontSize,
+                                                  FontWeight.w400,
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                      .withOpacity(0.7)),
+                                              hintText: 'Registration Number',
+                                              border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    width: 5),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              isDense: true,
+                                              errorBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .error,
+                                                    width: 3),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              )),
+                                          validator: (value) {
+                                            if (value?.isEmpty ?? false) {
+                                              isErrorInTextField = true;
+                                              setBSState(() {});
+                                              return "Enter a valid certificate registration number";
+                                            } else {
+                                              isErrorInTextField = false;
+                                              setBSState(() {});
+                                              return null;
+                                            }
+                                          },
+                                          controller: loginPageController
+                                                  .registrationPageFormControllers[
+                                              "reg_number"],
+                                        ),
+                                      ),
+                                    ),
+                                    (loginProvider.isFarmer
+                                                ? index != 0
+                                                : true) &&
+                                            index != 5 &&
+                                            loginPageController
+                                                    .userCertification ==
+                                                loginProvider
+                                                    .certificationList[index]
+                                        ? Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 24),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 8),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                            ),
+                                            height: 48,
+                                            child: IconButton(
+                                              onPressed: () {
+                                                showImagePickerSheet(
+                                                  constraints: constraints,
+                                                  onImageSelected:
+                                                      (XFile certificate) {
+                                                    if (loginPageController
+                                                        .userCertificates
+                                                        .isEmpty) {
+                                                      for (var element
+                                                          in loginProvider
+                                                              .certificationList) {
+                                                        loginPageController
+                                                            .userCertificates
+                                                            .add([]);
+                                                      }
+                                                    }
+                                                    setState(() {
+                                                      setBSState(() {
+                                                        loginPageController
+                                                            .userCertificates[
+                                                                index]
+                                                            .add(certificate);
+                                                      });
+                                                    });
+                                                  },
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                Icons.upload_file_outlined,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          )
+                                        : const Spacer(),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox(),
+                        const SizedBox(
+                          width: 20,
+                        ),
+
+                        // SizedBox(
+                        //   height: (loginProvider.isFarmer ? index != 0 : true) &&
+                        //           index != 5 &&
+                        //           loginPageController.userCertification ==
+                        //               loginProvider.certificationList[index]
+                        //       ? 12
+                        //       : 0,
+                        // ),
+                        (loginProvider.isFarmer ? index != 0 : true) &&
+                                index != 5 &&
+                                loginPageController
+                                    .userCertificates.isNotEmpty &&
+                                loginPageController.userCertification ==
+                                    loginProvider.certificationList[index] &&
+                                loginPageController
+                                    .userCertificates[index].isNotEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.only(left: 96),
+                                child: SizedBox(
+                                  height: 120,
+                                  child: ListView.builder(
+                                    itemCount: loginPageController
+                                        .userCertificates[index].length,
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    primary: false,
+                                    itemBuilder: (context, imageIndex) {
+                                      // log(registrationController
+                                      //    .userCertificates);
+                                      return Stack(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: Image.file(
+                                                File(loginPageController
+                                                    .userCertificates[index]
+                                                        [imageIndex]
+                                                    .path),
+                                                height: 96,
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            child: Container(
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.red,
+                                                  shape: BoxShape.circle),
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  loginPageController
+                                                      .userCertificates[index]
+                                                      .removeAt(imageIndex);
+                                                  setState(() {});
+                                                  setBSState(() {});
+                                                },
+                                                icon: const Icon(
+                                                  Icons.delete_rounded,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 32,
+            vertical: 16,
+          ),
+          child: ElevatedButtonWidget(
+              onClick: () async {
+                if (loginPageController
+                        .registrationFormSecondPageKey.currentState
+                        ?.validate() ??
+                    true) {
+                  if ((loginPageController.userCertification.isNotEmpty &&
+                          loginPageController.userCertificates
+                              .where((element) => element.isNotEmpty)
+                              .isNotEmpty) ||
+                      loginPageController
+                              .registrationFormSecondPageKey.currentState ==
+                          null) {
+                    setBSState(() {
+                      hasCertificateError = false;
+                    });
+                    Navigator.of(context).pop();
+                    setState(() {});
+                  } else {
+                    setBSState(() {
+                      hasCertificateError = true;
+                    });
+                  }
+                }
+              },
+              height: getProportionateHeight(64, constraints),
+              borderRadius: 12,
+              bgColor: Theme.of(context).colorScheme.primary,
+              textColor: Theme.of(context).colorScheme.onPrimary,
+              buttonName: "Update".toUpperCase(),
+              innerPadding: 0.02,
+              trailingIcon: Icons.arrow_forward),
+        ),
+      ],
+    );
+  });
 }

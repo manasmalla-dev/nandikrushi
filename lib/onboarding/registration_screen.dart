@@ -1081,6 +1081,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                 if (loginPageController
                                                         .registrationPageFormControllers[
                                                             "reg_number"]
+                                                        ?.text
                                                         ?.toString()
                                                         ?.isNotEmpty ??
                                                     false) {

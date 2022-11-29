@@ -75,6 +75,7 @@ class ProductProvider extends ChangeNotifier {
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
+    print("HELLO CATEGORIES ${profileProvider.customerGroupId}");
     profileProvider.showLoader();
     var url =
         "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getcategories";
@@ -94,15 +95,18 @@ class ProductProvider extends ChangeNotifier {
         if (jsonDecode(response.body)["status"]) {
           categories = {};
           units = {};
+
           (jsonDecode(response.body)["message"])
-              .where(
-                  (element) => element["customer_group_id"].toString() == "2")
+              .where((element) =>
+                  element["customer_group_id"].toString() ==
+                  profileProvider.customerGroupId)
               .toList()
               .forEach((e) {
             categories.addAll({
               capitalize(e["category_name"].toString().toLowerCase()):
                   int.tryParse(e["category_id"]) ?? 24
             });
+            print(categories);
             Map<String, String> tempUnitsMap = {};
             e["units"].forEach((el) {
               print(el["id"]);
@@ -113,6 +117,24 @@ class ProductProvider extends ChangeNotifier {
                 tempUnitsMap;
           });
           print(jsonDecode(response.body)["message"]);
+          if (categories.isEmpty) {
+            categories = profileProvider.customerGroupId == 3
+                ? {"Flours": 0}
+                : profileProvider.customerGroupId == 2
+                    ? {"Vegetables": 24}
+                    : {"Breakfast": 0};
+            units = profileProvider.customerGroupId == 3
+                ? {
+                    "Flours": {"kilograms": "kgs"}
+                  }
+                : profileProvider.customerGroupId == 2
+                    ? {
+                        "Vegetables": {"kilograms": "kgs"}
+                      }
+                    : {
+                        "Breakfast": {"plates": "plates"}
+                      };
+          }
           print(categories);
         } else {
           showMessage("Error fetching data!");
@@ -195,6 +217,25 @@ class ProductProvider extends ChangeNotifier {
               });
             }
           });
+          if (subcategories.isEmpty) {
+            subcategories = profileProvider.customerGroupId == 3
+                ? {
+                    0: [
+                      {"Atta": 0}
+                    ]
+                  }
+                : profileProvider.customerGroupId == 2
+                    ? {
+                        24: [
+                          {"Leafy Vegetables": 0}
+                        ]
+                      }
+                    : {
+                        0: [
+                          {"Idli": 0}
+                        ]
+                      };
+          }
           print(subcategories);
         } else {
           showMessage("Error fetching data!");
@@ -1096,6 +1137,7 @@ class ProductProvider extends ChangeNotifier {
   Future<void> getData(
       {required Function(String) showMessage,
       required ProfileProvider profileProvider}) async {
+    print("HELLO");
     await getCategories(
         showMessage: showMessage,
         profileProvider: profileProvider,

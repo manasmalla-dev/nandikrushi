@@ -12,14 +12,22 @@ import 'package:nandikrushi_farmer/splash_screen.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
 import 'package:provider/provider.dart';
 
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+
 Future<void> main() async {
+  final GoogleMapsFlutterPlatform mapsImplementation =
+      GoogleMapsFlutterPlatform.instance;
+  if (mapsImplementation is GoogleMapsFlutterAndroid) {
+    mapsImplementation.useAndroidViewSurface = false;
+  }
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   if (!kIsWeb) {
     if (Platform.isAndroid) {
-      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.white,
-      ));
+      // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      //   systemNavigationBarColor: Colors.white,
+      // ));
       //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     }
   }

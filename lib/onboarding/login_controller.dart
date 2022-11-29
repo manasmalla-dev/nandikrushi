@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -58,7 +59,7 @@ class LoginController extends ControllerMVC {
 
   PageController pageController = PageController();
 
-  Position? location;
+  LatLng? location;
   List<Placemark>? locationGeoCoded;
 
   List<List<XFile>> userCertificates = [];
@@ -68,15 +69,22 @@ class LoginController extends ControllerMVC {
     log("IsPermissionGranted: $permissionGranted");
     if (permissionGranted == LocationPermission.always ||
         permissionGranted == LocationPermission.whileInUse) {
-      location = await Geolocator.getLastKnownPosition();
+      var lastKnownLocation = await Geolocator.getLastKnownPosition();
+      if (lastKnownLocation != null) {
+        location =
+            LatLng(lastKnownLocation.latitude, lastKnownLocation.longitude);
+      }
       log(location.toString());
       var isLocationServiceEnabled =
           await Geolocator.isLocationServiceEnabled();
       log(isLocationServiceEnabled.toString());
       if (isLocationServiceEnabled) {
-        location = await Geolocator.getCurrentPosition();
+        var currentPosition = await Geolocator.getCurrentPosition();
+
+        location = LatLng(currentPosition.latitude, currentPosition.longitude);
+
         log(location.toString());
-        await geocodeLocation();
+        await geocodeLocation(location!.latitude, location!.longitude);
       } else {
         log("open settings");
         if (await Geolocator.openLocationSettings()) {
@@ -90,9 +98,8 @@ class LoginController extends ControllerMVC {
     }
   }
 
-  Future<void> geocodeLocation() async {
-    locationGeoCoded =
-        await placemarkFromCoordinates(location!.latitude, location!.longitude);
+  Future<void> geocodeLocation(latitude, longitude) async {
+    locationGeoCoded = await placemarkFromCoordinates(latitude, longitude);
     log(locationGeoCoded.toString());
     registrationPageFormControllers["pincode"]?.text =
         locationGeoCoded?.first.postalCode ?? "";

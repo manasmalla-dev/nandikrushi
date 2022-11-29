@@ -360,6 +360,10 @@ class LoginProvider extends ChangeNotifier {
                 .toString() ??
             "",
         "store_logo": storeLogoURL.toString(),
+        "certificate_id": loginPageController
+                .registrationPageFormControllers["reg_number"]?.text
+                .toString() ??
+            "",
         // "agree": "1"
       };
 
@@ -372,23 +376,24 @@ class LoginProvider extends ChangeNotifier {
       });
       onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
           onSuccess, onError, () {});
-    } if (!isFarmer && isRestaurant) {
+    }
+    if (!isFarmer && isRestaurant) {
       //Store/Restaurant
       Map<String, String> body = {
         "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
 
         "email": loginPageController
-            .registrationPageFormControllers["email"]?.text
-            .toString() ??
+                .registrationPageFormControllers["email"]?.text
+                .toString() ??
             "",
         "telephone": phoneNumber,
         "password": loginPageController
-            .registrationPageFormControllers["password"]?.text
-            .toString() ??
+                .registrationPageFormControllers["password"]?.text
+                .toString() ??
             "",
         "confirm": loginPageController
-            .registrationPageFormControllers["c_password"]?.text
-            .toString() ??
+                .registrationPageFormControllers["c_password"]?.text
+                .toString() ??
             "",
         // "agree": 1.toString(),
         // "become_seller": 1.toString(),
@@ -402,12 +407,16 @@ class LoginProvider extends ChangeNotifier {
         "store_address": userAddress.toString(),
         // "store_status": 1.toString(),
         "language":
-        (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
+            (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
         "store_name": loginPageController
-            .registrationPageFormControllers["storeName"]?.text
-            .toString() ??
+                .registrationPageFormControllers["storeName"]?.text
+                .toString() ??
             "",
         "store_logo": storeLogoURL.toString(),
+        "certificate_id": loginPageController
+                .registrationPageFormControllers["reg_number"]?.text
+                .toString() ??
+            "",
         // "agree": "1"
       };
 

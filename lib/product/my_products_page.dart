@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/product/add_product.dart';
@@ -7,6 +10,7 @@ import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
+import 'package:nandikrushi_farmer/utils/server.dart';
 import 'package:provider/provider.dart';
 
 import '../reusable_widgets/loader_screen.dart';
@@ -173,75 +177,75 @@ class MyProductsPage extends StatelessWidget {
                                             trailingIcon: Icons.delete,
                                             bgColor: Colors.red.shade400,
                                             onClick: () async {
-                                              Navigator.of(context).pop();
-                                              snackbar(context,
-                                                  "Feature coming soon!");
-                                              // profileProvider.showLoader();
-                                              // var response = await Server()
-                                              //     .postFormData(
-                                              //         url:
-                                              //             "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/deletesellerproduct",
-                                              //         body: {
-                                              //       "user_id": profileProvider
-                                              //           .userIdForAddress,
-                                              //       "product_id":
-                                              //           product["product_id"]
-                                              //               .toString()
-                                              //     });
-                                              // if (response == null) {
-                                              //   snackbar(context,
-                                              //       "Failed to get a response from the server!");
-                                              //   profileProvider.hideLoader();
-                                              //   //hideLoader();
-                                              //   if (Platform.isAndroid) {
-                                              //     SystemNavigator.pop();
-                                              //   } else if (Platform.isIOS) {
-                                              //     exit(0);
-                                              //   }
-                                              //   return;
-                                              // }
-                                              // if (response.statusCode == 200) {
-                                              //   if (!response.body.contains(
-                                              //       '"status":false')) {
-                                              //     productProvider.getData(
-                                              //         showMessage: (_) {
-                                              //           snackbar(context, _);
-                                              //         },
-                                              //         profileProvider:
-                                              //             profileProvider);
-                                              //   } else if (response
-                                              //           .statusCode ==
-                                              //       400) {
-                                              //     snackbar(context,
-                                              //         "Undefined parameter when calling API");
-                                              //     profileProvider.hideLoader();
-                                              //     if (Platform.isAndroid) {
-                                              //       SystemNavigator.pop();
-                                              //     } else if (Platform.isIOS) {
-                                              //       exit(0);
-                                              //     }
-                                              //   } else if (response
-                                              //           .statusCode ==
-                                              //       404) {
-                                              //     snackbar(
-                                              //         context, "API not found");
-                                              //     profileProvider.hideLoader();
-                                              //     if (Platform.isAndroid) {
-                                              //       SystemNavigator.pop();
-                                              //     } else if (Platform.isIOS) {
-                                              //       exit(0);
-                                              //     }
-                                              //   } else {
-                                              //     snackbar(context,
-                                              //         "Failed to get data!");
-                                              //     profileProvider.hideLoader();
-                                              //     if (Platform.isAndroid) {
-                                              //       SystemNavigator.pop();
-                                              //     } else if (Platform.isIOS) {
-                                              //       exit(0);
-                                              //     }
-                                              //   }
-                                              // }
+                                              // Navigator.of(context).pop();
+                                              // snackbar(context,
+                                              //     "Feature coming soon!");
+                                              profileProvider.showLoader();
+                                              var response = await Server()
+                                                  .postFormData(
+                                                      url:
+                                                          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/deletesellerproduct",
+                                                      body: {
+                                                    "user_id": profileProvider
+                                                        .userIdForAddress,
+                                                    "product_id":
+                                                        product["product_id"]
+                                                            .toString()
+                                                  });
+                                              if (response == null) {
+                                                snackbar(context,
+                                                    "Failed to get a response from the server!");
+                                                profileProvider.hideLoader();
+                                                //hideLoader();
+                                                if (Platform.isAndroid) {
+                                                  SystemNavigator.pop();
+                                                } else if (Platform.isIOS) {
+                                                  exit(0);
+                                                }
+                                                return;
+                                              }
+                                              if (response.statusCode == 200) {
+                                                if (!response.body.contains(
+                                                    '"status":false')) {
+                                                  productProvider.getData(
+                                                      showMessage: (_) {
+                                                        snackbar(context, _);
+                                                      },
+                                                      profileProvider:
+                                                          profileProvider);
+                                                } else if (response
+                                                        .statusCode ==
+                                                    400) {
+                                                  snackbar(context,
+                                                      "Undefined parameter when calling API");
+                                                  profileProvider.hideLoader();
+                                                  if (Platform.isAndroid) {
+                                                    SystemNavigator.pop();
+                                                  } else if (Platform.isIOS) {
+                                                    exit(0);
+                                                  }
+                                                } else if (response
+                                                        .statusCode ==
+                                                    404) {
+                                                  snackbar(
+                                                      context, "API not found");
+                                                  profileProvider.hideLoader();
+                                                  if (Platform.isAndroid) {
+                                                    SystemNavigator.pop();
+                                                  } else if (Platform.isIOS) {
+                                                    exit(0);
+                                                  }
+                                                } else {
+                                                  snackbar(context,
+                                                      "Failed to get data!");
+                                                  profileProvider.hideLoader();
+                                                  if (Platform.isAndroid) {
+                                                    SystemNavigator.pop();
+                                                  } else if (Platform.isIOS) {
+                                                    exit(0);
+                                                  }
+                                                }
+                                              }
                                             },
                                           );
                                         })

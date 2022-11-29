@@ -30,24 +30,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
   ProductController addProductController = ProductController();
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        ProfileProvider profileProvider = Provider.of(context);
-        Navigator.of(context).pushReplacement(
+    return Consumer<ProductProvider>(builder: (context, productProvider, _) {
+      return LayoutBuilder(builder: (context, constraints) {
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: Consumer<ProfileProvider>(
+              builder: (context, profileProvider, _) {
+            return WillPopScope(
+               onWillPop: () {
+        print("123");
+        Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) =>
                 NandikrushiNavHost(userId: profileProvider.userIdForAddress),
           ),
         );
-        return Future.value(false);
+
+        return Future.value(true);
       },
-      child: Consumer<ProductProvider>(builder: (context, productProvider, _) {
-        return LayoutBuilder(builder: (context, constraints) {
-          return Scaffold(
-            resizeToAvoidBottomInset: true,
-            body: Consumer<ProfileProvider>(
-                builder: (context, profileProvider, _) {
-              return Stack(
+              child: Stack(
                 children: [
                   SingleChildScrollView(
                     child: Stack(children: [
@@ -473,7 +474,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                     } else {
                                                                                       Navigator.maybeOf(context)?.maybePop();
                                                                                     }
-
+            
                                                                                     setState(() {});
                                                                                   },
                                                                                   child: const TextWidget(
@@ -838,7 +839,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                         profileProvider.hideLoader();
                                       }
                                     },
-
+            
                                     height: 54,
                                     borderRadius: 8,
                                     buttonName: "Submit".toUpperCase(),
@@ -858,11 +859,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ? const LoaderScreen()
                       : const SizedBox(),
                 ],
-              );
-            }),
-          );
-        });
-      }),
-    );
+              ),
+            );
+          }),
+        );
+      });
+    });
   }
 }
