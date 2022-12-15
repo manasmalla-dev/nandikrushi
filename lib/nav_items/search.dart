@@ -24,9 +24,9 @@ class _SearchScreenState extends State<SearchScreen>
     super.initState();
     ProductProvider productProvider = Provider.of(context, listen: false);
     _controller = TabController(
-        length: productProvider.categories.length,
+        length: productProvider.allCategories.length,
         vsync: this,
-        initialIndex: productProvider.categories.length > 1 ? 1 : 0);
+        initialIndex: productProvider.allCategories.length > 1 ? 1 : 0);
     searchController = TextEditingController();
   }
 
@@ -73,10 +73,10 @@ class _SearchScreenState extends State<SearchScreen>
                     controller: _controller,
                     isScrollable: true,
                     tabs: List.generate(
-                      productProvider.categories.length,
+                      productProvider.allCategories.length,
                       (index) => Tab(
                         child: TextWidget(
-                          productProvider.categories.entries
+                          productProvider.allCategories.entries
                               .toList()[index]
                               .key
                               .toUpperCase(),
@@ -101,7 +101,7 @@ class _SearchScreenState extends State<SearchScreen>
                       child: RotatedBox(
                         quarterTurns: -1,
                         child: TextWidget(
-                          productProvider.categories.entries
+                          productProvider.allCategories.entries
                               .toList()[_controller.index]
                               .key
                               .toUpperCase(),
@@ -153,14 +153,14 @@ class _SearchScreenState extends State<SearchScreen>
                           child: TabBarView(
                             controller: _controller,
                             children: List.generate(
-                                productProvider.categories.entries
+                                productProvider.allCategories.entries
                                     .toList()
                                     .length,
                                 (tabIndex) => ListView.builder(
                                       itemBuilder: (context, index) {
                                         var product = productProvider
                                             .categorizedProducts[productProvider
-                                                .categories.entries
+                                                .allCategories.entries
                                                 .toList()[tabIndex]
                                                 .key]
                                             ?.where((element) =>
@@ -193,7 +193,7 @@ class _SearchScreenState extends State<SearchScreen>
                                       },
                                       itemCount: productProvider
                                           .categorizedProducts[productProvider
-                                              .categories.entries
+                                              .allCategories.entries
                                               .toList()[tabIndex]
                                               .key]
                                           ?.where((element) =>

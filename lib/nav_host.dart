@@ -188,7 +188,7 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
                   : Row(
                       children: [
                         Container(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.background,
                           padding: const EdgeInsets.all(8),
                           child: NavigationRail(
                               groupAlignment: 0,

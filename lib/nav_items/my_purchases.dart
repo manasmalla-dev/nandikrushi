@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
-import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:provider/provider.dart';
 
-class OrdersPage extends StatelessWidget {
-  const OrdersPage({Key? key}) : super(key: key);
+class MyPurchasesScreen extends StatefulWidget {
+  const MyPurchasesScreen({super.key});
 
+  @override
+  State<MyPurchasesScreen> createState() => _MyPurchasesScreenState();
+}
+
+class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,13 +29,13 @@ class OrdersPage extends StatelessWidget {
               ))
         ],
         title: TextWidget(
-          'Orders',
+          'My Purchases',
           size: Theme.of(context).textTheme.titleMedium?.fontSize,
           weight: FontWeight.w700,
         ),
       ),
       body: Consumer<ProductProvider>(builder: (context, productProvider, _) {
-        return productProvider.orders.isEmpty
+        return productProvider.myPurchases.isEmpty
             ? Column(children: [
                 Expanded(
                   child: Center(
@@ -60,7 +64,7 @@ class OrdersPage extends StatelessWidget {
                           Opacity(
                             opacity: 0.7,
                             child: TextWidget(
-                              'Looks like you have not recieved any orders yet',
+                              'Looks like you have not ordered anything yet',
                               flow: TextOverflow.visible,
                               align: TextAlign.center,
                               size: Theme.of(context)
@@ -106,12 +110,12 @@ class OrdersPage extends StatelessWidget {
                           return Divider();
                         },
                         itemCount: productProvider
-                            .orders[itemIndex]["products"].length,
+                            .myPurchases[itemIndex]["products"].length,
                         itemBuilder: (context, productOrderIndex) {
-                          var product = productProvider.orders[itemIndex]
+                          var product = productProvider.myPurchases[itemIndex]
                               ["products"][productOrderIndex];
                           return ProductCard(
-                            type: CardType.orders,
+                            type: CardType.myPurchases,
                             productId: product["product_id"] ?? "XYZ",
                             productName: product["product_name"] ?? "Name",
                             productDescription:
@@ -124,16 +128,20 @@ class OrdersPage extends StatelessWidget {
                             units:
                                 "${product["quantity"]} ${product["units"]?.toString().replaceFirst("1", "") ?? " unit"}${(int.tryParse(product["quantity"]) ?? 1) > 1 ? "s" : ""}",
                             location: product["place"] ?? "Visakhapatnam",
-                            poster: productProvider.orders[itemIndex]
-                                ["customer_name"],
+                            poster: productProvider.myPurchases[itemIndex]
+                                ["store_name"],
                             additionalInformation: {
                               "date": DateFormat("EEE, MMM dd").format(
                                   DateTime.fromMillisecondsSinceEpoch(
                                       (int.tryParse(productProvider
-                                                  .orders[itemIndex]["date"]) ??
+                                                      .myPurchases[itemIndex]
+                                                  ["date"]) ??
                                               0000000000) *
                                           1000)),
-                              "status": 0
+                              "status": 0,
+                              "rating": (double.tryParse(
+                                      product["rating"] ?? "0.0") ??
+                                  0),
                             },
                           );
                         }),
@@ -142,7 +150,7 @@ class OrdersPage extends StatelessWidget {
                 separatorBuilder: (context, _) {
                   return const Divider();
                 },
-                itemCount: productProvider.orders.length);
+                itemCount: productProvider.myPurchases.length);
       }),
     );
   }

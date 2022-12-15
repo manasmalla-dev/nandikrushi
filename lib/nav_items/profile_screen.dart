@@ -878,42 +878,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextWidget(
-                                          "Certification",
-                                          color: Colors.grey.shade800,
-                                          weight: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium
-                                              ?.fontWeight,
-                                          size: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium
-                                              ?.fontSize,
-                                        ),
-                                        const SizedBox(height: 8),
-                                        TextWidget(
-                                          loginPageController
-                                                  .userCertification.isEmpty
-                                              ? profileProvider
-                                                  .certificationType
-                                              : loginPageController
-                                                  .userCertification,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          weight: FontWeight.w400,
-                                          size: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium
-                                              ?.fontSize,
-                                        ),
-                                      ],
+                                    Flexible(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextWidget(
+                                            "Certification",
+                                            color: Colors.grey.shade800,
+                                            weight: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.fontWeight,
+                                            size: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.fontSize,
+                                          ),
+                                          const SizedBox(height: 8),
+                                          TextWidget(
+                                            loginPageController
+                                                    .userCertification.isEmpty
+                                                ? profileProvider
+                                                    .certificationType
+                                                : loginPageController
+                                                    .userCertification,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            weight: FontWeight.w400,
+                                            size: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.fontSize,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    const Spacer(),
                                     IconButton(
                                       onPressed: () {
                                         showModalBottomSheet(
@@ -1300,6 +1301,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     ?.text
                                                     .toString() ??
                                                 "",
+                                            "confirm": loginPageController
+                                                    .registrationPageFormControllers[
+                                                        "password"]
+                                                    ?.text
+                                                    .toString() ??
+                                                "",
                                             "seller_type": loginProvider
                                                 .userAppTheme.key
                                                 .toString(),
@@ -1378,14 +1385,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               .postFormData(
                                                   body: body,
                                                   url: loginProvider.isFarmer
-                                                      ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/updateparticularuser"
+                                                      ? "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/updateparticularuser"
                                                       : loginProvider.isStore
-                                                          ? "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/storeregistration"
-                                                          : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/restaurantregistration/updateparticularorganicrestaurant")
+                                                          ? "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/storeregistration/updateparticularorganicstore"
+                                                          : "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/restaurantregistration/updateparticularorganicrestaurant")
                                               .catchError((e) {
                                             log("64$e");
                                           });
-
+                                          print("response - $response");
                                           if (response?.statusCode == 200) {
                                             print(response?.body);
                                             var decodedResponse = jsonDecode(response

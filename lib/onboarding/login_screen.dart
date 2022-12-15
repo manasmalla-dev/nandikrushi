@@ -437,7 +437,7 @@ void showForgotPasswordDialog(
   bool isLargeScreen,
 ) {
   /*
-                            http://nkweb.sweken.com/nkweb/index.php?route=extension/account/purpletree_multivendor/api/forgotpassword
+                            https://nkweb.sweken.com/nkweb/index.php?route=extension/account/purpletree_multivendor/api/forgotpassword
                             */
   showDialog(
     context: context,

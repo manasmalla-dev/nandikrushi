@@ -193,7 +193,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                               profileProvider.showLoader();
                               var response = await post(
                                 Uri.parse(
-                                    "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/placeorder"),
+                                    "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/placeorder"),
                                 body: jsonEncode(placeOrderBody),
                                 headers: {
                                   "Content-Type": "application/json",

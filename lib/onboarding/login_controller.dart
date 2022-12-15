@@ -170,7 +170,7 @@ class LoginController extends ControllerMVC {
     var isTimedOut = false;
     var response = await Server()
         .getMethodParams(
-      'http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/customergroups',
+      'https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/customergroups',
     )
         .timeout(const Duration(seconds: 5), onTimeout: () {
       var userTypeData = {
@@ -268,7 +268,7 @@ class LoginController extends ControllerMVC {
       'storeName': TextEditingController(text: profileProvider.storeName),
       'reg_number': TextEditingController(),
     };
-    checkLocationPermissionAndGetLocation();
+    //checkLocationPermissionAndGetLocation();
     log(profileProvider.landInAcres.toString());
     landInAcres = profileProvider.landInAcres.toDouble();
     userCertification = profileProvider.certificationType;

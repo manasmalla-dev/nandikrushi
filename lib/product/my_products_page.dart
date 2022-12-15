@@ -184,7 +184,7 @@ class MyProductsPage extends StatelessWidget {
                                               var response = await Server()
                                                   .postFormData(
                                                       url:
-                                                          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/deletesellerproduct",
+                                                          "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/deletesellerproduct",
                                                       body: {
                                                     "user_id": profileProvider
                                                         .userIdForAddress,

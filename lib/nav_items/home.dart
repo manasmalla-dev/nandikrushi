@@ -8,6 +8,8 @@ import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/utils/size_config.dart';
 import 'package:provider/provider.dart';
 
+import 'my_purchases.dart';
+
 class HomeScreen extends StatefulWidget {
   final BoxConstraints constraints;
   const HomeScreen({Key? key, required this.constraints}) : super(key: key);
@@ -41,15 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
           "icon": "assets/images/orders_home.png",
         },
       ];
-      if (loginProvider.isFarmer) {
-        destinations.add(
-          {
-            "title": "My Purchases",
-            "sub_title": "Products from Farmer",
-            "icon": "assets/images/wallet_home.png",
-          },
-        );
-      }
+      destinations.add(
+        {
+          "title": "My Purchases",
+          "sub_title": "Products from Farmer",
+          "icon": "assets/images/wallet_home.png",
+        },
+      );
+
       destinations.add(
         {
           "title": "Videos",
@@ -115,13 +116,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const OrdersPage()));
-                    } else if (index == 3 && loginProvider.isFarmer) {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => const PurchasesScreen()));
-                    } else if (index == 4 ||
-                        (!loginProvider.isFarmer && index == 3)) {
+                    } else if (index == 3) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MyPurchasesScreen()));
+                    } else if (index == 4) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(

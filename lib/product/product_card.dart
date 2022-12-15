@@ -3,8 +3,10 @@ import 'package:nandikrushi_farmer/nav_items/my_account.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/product/product_page.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/rating_widget.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
+import 'package:nandikrushi_farmer/utils/login_utils.dart';
 
 import 'package:provider/provider.dart';
 
@@ -99,7 +101,8 @@ class _ProductCardState extends State<ProductCard> {
                             TextWidget("Rs. ${widget.price}"),
                             TextWidget(widget.units),
                             widget.poster != null
-                                ? TextWidget(widget.poster)
+                                ? TextWidget(capitalize(
+                                    widget.poster?.toLowerCase() ?? "User"))
                                 : const SizedBox(),
                             Row(
                               children: [
@@ -435,6 +438,82 @@ class _ProductCardState extends State<ProductCard> {
                             ]
                           : widget.type == CardType.myPurchases
                               ? [
+                                  Text(
+                                      'Order placed on: ${widget.additionalInformation["date"]}'),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: FixedRatingStar(
+                                            value: widget.additionalInformation[
+                                                        "rating"] <
+                                                    0.5
+                                                ? 0
+                                                : widget.additionalInformation[
+                                                            "rating"] ==
+                                                        0.5
+                                                    ? 0.5
+                                                    : 1),
+                                      ),
+                                      Flexible(
+                                        child: FixedRatingStar(
+                                            value: widget.additionalInformation[
+                                                        "rating"] <
+                                                    1.5
+                                                ? 0
+                                                : widget.additionalInformation[
+                                                            "rating"] ==
+                                                        1.5
+                                                    ? 0.5
+                                                    : 1),
+                                      ),
+                                      Flexible(
+                                        child: FixedRatingStar(
+                                            value: widget.additionalInformation[
+                                                        "rating"] <
+                                                    2.5
+                                                ? 0
+                                                : widget.additionalInformation[
+                                                            "rating"] ==
+                                                        2.5
+                                                    ? 0.5
+                                                    : 1),
+                                      ),
+                                      Flexible(
+                                        child: FixedRatingStar(
+                                            value: widget.additionalInformation[
+                                                        "rating"] <
+                                                    3.5
+                                                ? 0
+                                                : widget.additionalInformation[
+                                                            "rating"] ==
+                                                        3.5
+                                                    ? 0.5
+                                                    : 1),
+                                      ),
+                                      Flexible(
+                                        child: FixedRatingStar(
+                                            value: widget.additionalInformation[
+                                                        "rating"] <
+                                                    4.5
+                                                ? 0
+                                                : widget.additionalInformation[
+                                                            "rating"] ==
+                                                        4.5
+                                                    ? 0.5
+                                                    : 1),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 8),
+                                  TextWidget(
+                                    "Buy Again".toString().toUpperCase(),
+                                    size: Theme.of(context)
+                                        .textTheme
+                                        .button
+                                        ?.fontSize,
+                                    weight: FontWeight.bold,
+                                  ),
                                   //A product card for my purchases page
                                 ]
                               : [

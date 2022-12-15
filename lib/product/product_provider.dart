@@ -41,6 +41,14 @@ class ProductProvider extends ChangeNotifier {
     "Oil": 20,
     "Millets": 18,
   };
+  var allCategories = {
+    "A2 Milk": 17,
+    "Vegetables": 24,
+    "Fruits": 33,
+    "Ghee": 57,
+    "Oil": 20,
+    "Millets": 18,
+  };
   var subcategories = {
     17: [
       {"A2 Milk": 17}
@@ -66,6 +74,7 @@ class ProductProvider extends ChangeNotifier {
   List<Map<String, String>> products = [];
   List<Map<String, String>> myProducts = [];
   List<Map<String, dynamic>> orders = [];
+  List<Map<String, dynamic>> myPurchases = [];
   List<Map<String, String>> coupons = [];
   Map<String, List<Map<String, String>>> categorizedProducts = {};
   Map<String, String> appliedCoupon = {};
@@ -81,6 +90,7 @@ class ProductProvider extends ChangeNotifier {
         "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getcategories";
     var response = await Server().getMethodParams(url);
     if (response == null) {
+      print("Hello everyone");
       showMessage("Failed to get a response from the server!");
       //hideLoader();
       if (Platform.isAndroid) {
@@ -95,7 +105,8 @@ class ProductProvider extends ChangeNotifier {
         if (jsonDecode(response.body)["status"]) {
           categories = {};
           units = {};
-
+          allCategories = {};
+          print(profileProvider.customerGroupId);
           (jsonDecode(response.body)["message"])
               .where((element) =>
                   element["customer_group_id"].toString() ==
@@ -108,14 +119,25 @@ class ProductProvider extends ChangeNotifier {
             });
             print(categories);
             Map<String, String> tempUnitsMap = {};
-            e["units"].forEach((el) {
-              print(el["id"]);
-              tempUnitsMap
-                  .addAll({el["id"].toString(): el["title"] ?? "units"});
-            });
-            units[capitalize(e["category_name"].toString().toLowerCase())] =
-                tempUnitsMap;
+            if (e["units"] != null) {
+              e["units"].forEach((el) {
+                print(el["id"]);
+                tempUnitsMap
+                    .addAll({el["id"].toString(): el["title"] ?? "units"});
+              });
+              units[capitalize(e["category_name"].toString().toLowerCase())] =
+                  tempUnitsMap;
+            }
           });
+          //get all categories
+          (jsonDecode(response.body)["message"]).toList().forEach((e) {
+            allCategories.addAll({
+              capitalize(e["category_name"].toString().toLowerCase()):
+                  int.tryParse(e["category_id"]) ?? 24
+            });
+            print(allCategories);
+          });
+          //if categories are empty for user group
           print(jsonDecode(response.body)["message"]);
           if (categories.isEmpty) {
             categories = profileProvider.customerGroupId == 3
@@ -123,6 +145,7 @@ class ProductProvider extends ChangeNotifier {
                 : profileProvider.customerGroupId == 2
                     ? {"Vegetables": 24}
                     : {"Breakfast": 0};
+            allCategories = {"Flours": 0, "Vegetables": 24, "Breakfast": 0};
             units = profileProvider.customerGroupId == 3
                 ? {
                     "Flours": {"kilograms": "kgs"}
@@ -279,7 +302,7 @@ class ProductProvider extends ChangeNotifier {
       bool isFromNavHost = false}) async {
     profileProvider.showLoader();
     var url =
-        "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getallproducts";
+        "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getallproducts";
     var response = await Server().getMethodParams(url);
     if (response == null) {
       showMessage("Failed to get a response from the server!");
@@ -297,7 +320,7 @@ class ProductProvider extends ChangeNotifier {
         products = [];
 
         for (var e in decodedResponse) {
-          if (categories.entries
+          if (allCategories.entries
               .where((element) =>
                   element.value ==
                   int.tryParse(e["category"][0]["category_id"] ?? "-1"))
@@ -334,7 +357,7 @@ class ProductProvider extends ChangeNotifier {
                           .roundToDouble() /
                       100)
                   .toString(),
-              "category_id": categories.entries
+              "category_id": allCategories.entries
                   .where((element) =>
                       element.value ==
                       int.tryParse(e["category"][0]["category_id"] ?? "-1"))
@@ -378,7 +401,7 @@ class ProductProvider extends ChangeNotifier {
         }
         products = products.toSet().toList();
 
-        for (var element in categories.keys) {
+        for (var element in allCategories.keys) {
           categorizedProducts[element] = [];
           for (var product in products) {
             if (product["category_id"] == element) {
@@ -424,11 +447,12 @@ class ProductProvider extends ChangeNotifier {
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
+    print("Hello getting orders");
     profileProvider.showLoader();
 
     var ordersData = await post(
       Uri.parse(
-          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getorders"),
+          "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getorders"),
       body: jsonEncode({"customer_id": profileProvider.sellerID.toString()}),
       headers: {
         "Content-Type": "application/json",
@@ -446,6 +470,7 @@ class ProductProvider extends ChangeNotifier {
       return;
     }
     if (ordersData.statusCode == 200) {
+      print("enterd orders API");
       orders = [];
       try {
         if (jsonDecode(ordersData.body)["status"]) {
@@ -514,6 +539,7 @@ class ProductProvider extends ChangeNotifier {
             orders.add(orderData);
           }
           log(orders.toString());
+          print("got orders");
           if (!isFromNavHost) {
             profileProvider.isDataFetched = true;
             notifyListeners();
@@ -537,6 +563,11 @@ class ProductProvider extends ChangeNotifier {
         profileProvider.hideLoader();
         notifyListeners();
       }
+
+      await getMyPurchases(
+          showMessage: showMessage,
+          profileProvider: profileProvider,
+          isFromNavHost: isFromNavHost);
     } else if (ordersData.statusCode == 400) {
       showMessage("Undefined parameter when calling API");
       if (Platform.isAndroid) {
@@ -561,13 +592,168 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
+  getMyPurchases(
+      {required Function(String) showMessage,
+      required ProfileProvider profileProvider,
+      bool isFromNavHost = false}) async {
+    print("Hello getting my purchses");
+    profileProvider.showLoader();
+
+    var myPurchasesData = await post(
+      Uri.parse(
+          "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/mypurchases"),
+      body: jsonEncode({"customer_id": profileProvider.sellerID.toString()}),
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+    );
+    if (myPurchasesData == null) {
+      showMessage("Failed to get a response from the server!");
+      //hideLoader();
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+      return;
+    }
+    if (myPurchasesData.statusCode == 200) {
+      myPurchases = [];
+      try {
+        if (jsonDecode(myPurchasesData.body)["status"]) {
+          List<dynamic> myPurchasesJSONResponse =
+              jsonDecode(myPurchasesData.body)["order"];
+          print(myPurchasesJSONResponse);
+          for (var element in myPurchasesJSONResponse) {
+            print("myPurchases - 1- > $element");
+            var myPurchasesData = {"order_id": element["order_id"]};
+            myPurchasesData["products"] = [];
+            for (var productOrderDetails
+                in (element["product_details"] as List<dynamic>)) {
+              // print(
+              //     "The rating of the product you've purchased: ${}");
+              if (products
+                  .where((e) =>
+                      e["product_id"] == productOrderDetails["product_id"])
+                  .isNotEmpty) {
+                (myPurchasesData["products"]).add({
+                  "product_name": productOrderDetails["product_name"],
+                  "description": products
+                          .where((e) =>
+                              e["product_id"] ==
+                              productOrderDetails["product_id"])
+                          .isNotEmpty
+                      ? products
+                          .where((e) =>
+                              e["product_id"] ==
+                              productOrderDetails["product_id"])
+                          .first["description"]
+                          .toString()
+                      : productOrderDetails["description"],
+                  "url": (Uri.tryParse(products
+                                  .where((e) =>
+                                      e["product_id"] ==
+                                      productOrderDetails["product_id"])
+                                  .first["url"]
+                                  .toString())
+                              ?.host
+                              .isNotEmpty ??
+                          false)
+                      ? products
+                          .where((e) =>
+                              e["product_id"] ==
+                              productOrderDetails["product_id"])
+                          .first["url"]
+                          .toString()
+                      : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
+                  "price": productOrderDetails["price"],
+                  "product_id": productOrderDetails["product_id"],
+                  "quantity": productOrderDetails["quantity"],
+                  "units": products
+                      .where((e) =>
+                          e["product_id"] == productOrderDetails["product_id"])
+                      .first["units"]
+                      .toString(),
+                  "place": element["shipping_details"][0]["shipping_city"],
+                  "rating": products
+                          .where((e) =>
+                              e["product_id"] ==
+                              productOrderDetails["product_id"])
+                          .isNotEmpty
+                      ? products
+                          .where((e) =>
+                              e["product_id"] ==
+                              productOrderDetails["product_id"])
+                          .first["rating"]
+                          .toString()
+                      : "3.5"
+                });
+              }
+            }
+            myPurchasesData.addAll({
+              "store_name": "${element["store_details"][0]["store_name"]}",
+              "date": element["delivery_details"][0]["delivery_date"],
+            });
+
+            print("order - 2- > $myPurchasesData");
+            myPurchases.add(myPurchasesData);
+          }
+          log(myPurchases.toString());
+          if (!isFromNavHost) {
+            profileProvider.isDataFetched = true;
+            notifyListeners();
+            profileProvider.hideLoader();
+          } else {
+            notifyListeners();
+          }
+        } else {
+          myPurchases = [];
+          notifyListeners();
+          if (!isFromNavHost) {
+            profileProvider.isDataFetched = true;
+            notifyListeners();
+            profileProvider.hideLoader();
+          } else {
+            notifyListeners();
+          }
+        }
+      } on Exception catch (e) {
+        showMessage("Error fetching data: $e");
+        profileProvider.hideLoader();
+        notifyListeners();
+      }
+    } else if (myPurchasesData.statusCode == 400) {
+      showMessage("Undefined parameter when calling API");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    } else if (myPurchasesData.statusCode == 404) {
+      showMessage("API not found");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    } else {
+      showMessage("Failed to get data!");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    }
+  }
+
   getCart(
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
     var cartData = await Server().postFormData(
         url:
-            "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/products",
+            "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/products",
         body: {
           "customer_id": profileProvider.sellerID.toString(),
         });
@@ -667,7 +853,7 @@ class ProductProvider extends ChangeNotifier {
     print("Getting data");
     var myProductsData = await Server().postFormData(
         url:
-            "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerproduct/GetSellerproductdata",
+            "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerproduct/GetSellerproductdata",
         body: {
           "user_id": profileProvider.userIdForAddress,
         });
@@ -740,7 +926,7 @@ class ProductProvider extends ChangeNotifier {
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
     var couponsData = await Server().getMethodParams(
-        "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/coupon/getcoupon");
+        "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/coupon/getcoupon");
     if (couponsData == null) {
       showMessage("Failed to get a response from the server!");
       //hideLoader();
@@ -826,7 +1012,7 @@ class ProductProvider extends ChangeNotifier {
       profileProvider.hideLoader();
     } else {
       String apiURL =
-          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/add";
+          "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/add";
       var cartData = await Server().postFormData(url: apiURL, body: {
         "customer_id": profileProvider.sellerID,
         "product_id": productID,
@@ -996,8 +1182,8 @@ class ProductProvider extends ChangeNotifier {
                           onClick: () async {
                             profileProvider.showLoader();
                             String apiURL = initialCartIems == 0
-                                ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove"
-                                : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update";
+                                ? "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove"
+                                : "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/update";
                             var updateCartBody = {
                               "customer_id": profileProvider.sellerID,
                               "product_id": productID,
@@ -1094,7 +1280,7 @@ class ProductProvider extends ChangeNotifier {
       profileProvider.hideLoader();
     } else {
       String apiURL =
-          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove";
+          "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove";
       var body = {
         "customer_id": profileProvider.sellerID,
         "product_id": productID,
@@ -1150,6 +1336,7 @@ class ProductProvider extends ChangeNotifier {
         showMessage: showMessage,
         profileProvider: profileProvider,
         isFromNavHost: true);
+    print("hello navhost calling");
     await getOrders(
         showMessage: showMessage,
         profileProvider: profileProvider,

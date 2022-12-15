@@ -23,6 +23,9 @@ class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
   @override
   Widget build(BuildContext context) {
     LoginController loginPageController = widget.controller;
+    loginPageController.checkLocationPermissionAndGetLocation().then((_) {
+      setState(() {});
+    });
     return Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
       return Scaffold(
         appBar: AppBar(
@@ -70,29 +73,15 @@ class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
                         });
                       }),
                       markerId: const MarkerId("Home"),
-                      position: LatLng(
-                          double.tryParse(profileProvider
-                                      .storeAddress["coordinates-x"] ??
-                                  "17.744062") ??
-                              17.744062,
-                          double.tryParse(profileProvider
-                                      .storeAddress["coordinates-y"] ??
-                                  "83.335216") ??
-                              83.335216),
+                      position: loginPageController.location ??
+                          LatLng(17.744062, 83.335216),
                     ),
                   },
                   onTap: (_) {},
                   initialCameraPosition: CameraPosition(
                     bearing: 0,
-                    target: LatLng(
-                        double.tryParse(
-                                profileProvider.storeAddress["coordinates-x"] ??
-                                    "17.744062") ??
-                            17.744062,
-                        (double.tryParse(
-                                profileProvider.storeAddress["coordinates-y"] ??
-                                    "83.335216") ??
-                            83.335216)),
+                    target: loginPageController.location ??
+                        LatLng(17.744062, 83.335216),
                     tilt: 0,
                     zoom: 15,
                   ),

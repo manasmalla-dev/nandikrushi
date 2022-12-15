@@ -53,10 +53,10 @@ class ProfileProvider extends ChangeNotifier {
     userIdForAddress = userID;
 
     var url = loginProvider.isFarmer
-        ? "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getparticularuser"
+        ? "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getparticularuser"
         : loginProvider.isStore
-            ? "http://nkweb.sweken.com/ index.php?route=extension/account/purpletree_multivendor/api/storeregistration/getparticularorganicstore"
-            : "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/restaurantregistration/getparticularorganicrestaurant";
+            ? "https://nkweb.sweken.com/ index.php?route=extension/account/purpletree_multivendor/api/storeregistration/getparticularorganicstore"
+            : "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/restaurantregistration/getparticularorganicrestaurant";
     var response =
         await Server().postFormData(body: {"user_id": userID}, url: url);
     //TODO: Videos API needs to be integrated
@@ -101,7 +101,7 @@ class ProfileProvider extends ChangeNotifier {
       storeAddress = jsonStringToMap(profileJSON["store_address"]);
       var userAddressResponse = await Server().postFormData(body: {
         "customer_id": sellerID.toString()
-      }, url: "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/getallAddress");
+      }, url: "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/getallAddress");
       if (userAddressResponse == null) {
         showMessage("Failed to get a response from the server!");
         hideLoader();
@@ -173,6 +173,7 @@ class ProfileProvider extends ChangeNotifier {
         exit(0);
       }
     } else {
+      print(response.statusCode);
       showMessage("Failed to get data!");
       hideLoader();
       if (Platform.isAndroid) {
@@ -208,7 +209,7 @@ class ProfileProvider extends ChangeNotifier {
     //Send this data to the server
     var response = await post(
       Uri.parse(
-          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/add"),
+          "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/add"),
       body: jsonEncode({
         "customer_id": sellerID,
         "address_title": addressList["address_type"] ?? "",

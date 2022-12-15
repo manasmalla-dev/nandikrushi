@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/success_screen.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
+import 'package:provider/provider.dart';
 
 class ProductController extends ControllerMVC {
   List<XFile?> productImage = [];
@@ -31,6 +33,7 @@ class ProductController extends ControllerMVC {
       Function(String) showMessage,
       ProductProvider productProvider,
       ProfileProvider profileProvider) async {
+    LoginProvider loginProvider = Provider.of(context);
     var data = {
       "name": formControllers['product-name']?.text,
       "category": selectedCategory,
@@ -44,8 +47,10 @@ class ProductController extends ControllerMVC {
     for (MapEntry<String, String?> dataValue in data.entries) {
       if ((dataValue.value != null && dataValue.value!.isNotEmpty) ||
           ((productProvider
-              .subcategories[productProvider.categories[
-          selectedCategory]]?.isEmpty ?? true) &&
+                      .subcategories[
+                          productProvider.categories[selectedCategory]]
+                      ?.isEmpty ??
+                  true) &&
               dataValue.key == "subcategory")) {
       } else {
         isValidData = false;
@@ -78,13 +83,17 @@ class ProductController extends ControllerMVC {
       "quantity": (int.tryParse(quantity) ?? 0).toString(),
       "price": (double.tryParse(price) ?? 0.0).toString(),
       "description": description.toString(),
-      "units": (productProvider
-          .units[
-      selectedCategory]?.entries.firstWhere((element) => element.value == selectedUnits).key).toString(),
+      "units": (productProvider.units[selectedCategory]?.entries
+              .firstWhere((element) => element.value == selectedUnits)
+              .key)
+          .toString(),
       //"category_id": product.category.toString(),
       "category_id": productProvider.categories[category].toString(),
       "seller_id": profileProvider.sellerID,
     };
+    if (!loginProvider.isFarmer) {
+      body.addAll({"ingredients[]": "ingredient"});
+    }
     image.asMap().entries.forEach((_) {
       body.addAll({"product_image[${_.key}]": _.value});
     });
@@ -94,7 +103,7 @@ class ProductController extends ControllerMVC {
         .postFormData(
             body: body,
             url:
-                "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/addsellerproduct")
+                "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/addsellerproduct")
         .then((response) async {
       if (response == null) {
         showMessage("Failed to get a response from the server!");

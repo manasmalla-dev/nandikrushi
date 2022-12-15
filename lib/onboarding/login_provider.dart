@@ -110,7 +110,7 @@ class LoginProvider extends ChangeNotifier {
                 loginController.passwordTextEditController.text.toString()
           },
           url:
-              "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/emaillogin",
+              "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/emaillogin",
         );
 
         onLoginWithServer(response, null, onSuccessfulLogin, onError, () {
@@ -188,7 +188,7 @@ class LoginProvider extends ChangeNotifier {
           'telephone': loginController.phoneTextEditController.text.toString()
         },
         url:
-            "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerlogin/verify_mobile",
+            "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerlogin/verify_mobile",
       );
       onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
           onSuccessfulLogin, onError, onRegisterUser);
@@ -324,7 +324,7 @@ class LoginProvider extends ChangeNotifier {
       });
     }
 
-    if (!isFarmer && isStore) {
+    if (!isFarmer && isStore && !isRestaurant) {
       //Store/Restaurant
       Map<String, String> body = {
         "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
@@ -376,8 +376,7 @@ class LoginProvider extends ChangeNotifier {
       });
       onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
           onSuccess, onError, () {});
-    }
-    if (!isFarmer && isRestaurant) {
+    } else if (!isFarmer && isRestaurant && !isStore) {
       //Store/Restaurant
       Map<String, String> body = {
         "user_id": FirebaseAuth.instance.currentUser?.uid ?? "",
@@ -467,6 +466,11 @@ class LoginProvider extends ChangeNotifier {
         "store_status": 1.toString(),
         "language":
             (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
+
+        "certificate_id": loginPageController
+                .registrationPageFormControllers["reg_number"]?.text
+                .toString() ??
+            "",
         // "agree": "1"
       };
       body.addEntries([
@@ -478,7 +482,7 @@ class LoginProvider extends ChangeNotifier {
         )
       ]);
       var registrationURL =
-          "http://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/register";
+          "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/register";
       var response = await Server()
           .postFormData(body: body, url: registrationURL)
           .catchError((e) {
