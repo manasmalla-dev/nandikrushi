@@ -64,7 +64,8 @@ class LoginController extends ControllerMVC {
 
   List<List<XFile>> userCertificates = [];
 
-  Future<void> checkLocationPermissionAndGetLocation() async {
+  Future<void> checkLocationPermissionAndGetLocation(
+      BuildContext context) async {
     var permissionGranted = await Geolocator.checkPermission();
     log("IsPermissionGranted: $permissionGranted");
     if (permissionGranted == LocationPermission.always ||
@@ -84,22 +85,27 @@ class LoginController extends ControllerMVC {
         location = LatLng(currentPosition.latitude, currentPosition.longitude);
 
         log(location.toString());
-        await geocodeLocation(location!.latitude, location!.longitude);
+        await geocodeLocation(context, location!.latitude, location!.longitude);
       } else {
         log("open settings");
         if (await Geolocator.openLocationSettings()) {
-          await checkLocationPermissionAndGetLocation();
+          await checkLocationPermissionAndGetLocation(context);
         }
       }
     } else {
       log("Entered location requester");
       await Geolocator.requestPermission();
-      await checkLocationPermissionAndGetLocation();
+      await checkLocationPermissionAndGetLocation(context);
     }
   }
 
-  Future<void> geocodeLocation(latitude, longitude) async {
+  Future<void> geocodeLocation(
+      BuildContext context, latitude, longitude) async {
     locationGeoCoded = await placemarkFromCoordinates(latitude, longitude);
+    if (location?.latitude == 0 || location?.longitude == 0) {
+      snackbar(context, "HALT on CRITICAL ERROR, location is empty");
+      exit(0);
+    }
     log(locationGeoCoded.toString());
     registrationPageFormControllers["pincode"]?.text =
         locationGeoCoded?.first.postalCode ?? "";

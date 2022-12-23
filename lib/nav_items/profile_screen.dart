@@ -217,89 +217,91 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text("Please select your role"),
-                                      ListView.builder(
-                                          primary: false,
-                                          shrinkWrap: true,
-                                          itemBuilder: (context, index) {
-                                            loginProvider.availableUserTypes =
-                                                loginProvider.availableUserTypes
-                                                        .isEmpty
-                                                    ? {
-                                                        "Farmers ": const Color(
-                                                            0xFF006838),
-                                                        "Organic Stores":
-                                                            const Color(
-                                                                0xFF00bba8),
-                                                        "Organic Restaurants":
-                                                            const Color(
-                                                                0xFFffd500),
-                                                      }
-                                                    : loginProvider
-                                                        .availableUserTypes;
-                                            print(loginProvider
-                                                .availableUserTypes.keys);
-                                            print(
-                                                loginProvider.userAppTheme.key);
-                                            return Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Flexible(
-                                                  child: Radio<String>(
-                                                    activeColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .primary,
-                                                    value: loginProvider
-                                                        .availableUserTypes.keys
-                                                        .toList()[index],
-                                                    groupValue: loginProvider
-                                                        .userAppTheme.key,
-                                                    onChanged: (_) {
-                                                      loginProvider
-                                                          .updateUserAppType(
-                                                              loginProvider
-                                                                  .availableUserTypes
-                                                                  .entries
-                                                                  .elementAt(
-                                                                      index));
-                                                    },
-                                                  ),
-                                                ),
-                                                Text(
-                                                  loginProvider
-                                                      .availableUserTypes.keys
-                                                      .toList()[index],
-                                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                      color: loginProvider
-                                                                  .userAppTheme
-                                                                  .key ==
-                                                              loginProvider
-                                                                      .availableUserTypes
-                                                                      .keys
-                                                                      .toList()[
-                                                                  index]
-                                                          ? Theme.of(context)
-                                                              .colorScheme
-                                                              .primary
-                                                          : null,
-                                                      fontWeight: loginProvider
-                                                                  .userAppTheme
-                                                                  .key ==
-                                                              loginProvider
-                                                                  .availableUserTypes
-                                                                  .keys
-                                                                  .toList()[index]
-                                                          ? FontWeight.w500
-                                                          : null),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                          itemCount: 3),
+                                      const Text(
+                                          loginProvider.userAppTheme.key),
+                                      // ListView.builder(
+                                      //     primary: false,
+                                      //     shrinkWrap: true,
+                                      //     itemBuilder: (context, index) {
+                                      //       loginProvider.availableUserTypes =
+                                      //           loginProvider.availableUserTypes
+                                      //                   .isEmpty
+                                      //               ? {
+                                      //                   "Farmers ": const Color(
+                                      //                       0xFF006838),
+                                      //                   "Organic Stores":
+                                      //                       const Color(
+                                      //                           0xFF00bba8),
+                                      //                   "Organic Restaurants":
+                                      //                       const Color(
+                                      //                           0xFFffd500),
+                                      //                 }
+                                      //               : loginProvider
+                                      //                   .availableUserTypes;
+                                      //       print(loginProvider
+                                      //           .availableUserTypes.keys);
+                                      //       print(
+                                      //           loginProvider.userAppTheme.key);
+                                      //       return Row(
+                                      //         mainAxisSize: MainAxisSize.min,
+                                      //         children: [
+                                      //           Flexible(
+                                      //             child: Radio<String>(
+                                      //               activeColor:
+                                      //                   Theme.of(context)
+                                      //                       .colorScheme
+                                      //                       .primary,
+                                      //               value: loginProvider
+                                      //                   .availableUserTypes.keys
+                                      //                   .toList()[index],
+                                      //               groupValue: loginProvider
+                                      //                   .userAppTheme.key,
+                                      //               onChanged: (_) {
+                                      //                 loginProvider
+                                      //                     .updateUserAppType(
+                                      //                         loginProvider
+                                      //                             .availableUserTypes
+                                      //                             .entries
+                                      //                             .elementAt(
+                                      //                                 index));
+                                      //               },
+                                      //             ),
+                                      //           ),
+                                      //           Text(
+                                      //             loginProvider
+                                      //                 .availableUserTypes.keys
+                                      //                 .toList()[index],
+                                      //             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      //                 color: loginProvider
+                                      //                             .userAppTheme
+                                      //                             .key ==
+                                      //                         loginProvider
+                                      //                                 .availableUserTypes
+                                      //                                 .keys
+                                      //                                 .toList()[
+                                      //                             index]
+                                      //                     ? Theme.of(context)
+                                      //                         .colorScheme
+                                      //                         .primary
+                                      //                     : null,
+                                      //                 fontWeight: loginProvider
+                                      //                             .userAppTheme
+                                      //                             .key ==
+                                      //                         loginProvider
+                                      //                             .availableUserTypes
+                                      //                             .keys
+                                      //                             .toList()[index]
+                                      //                     ? FontWeight.w500
+                                      //                     : null),
+                                      //           ),
+                                      //         ],
+                                      //       );
+                                      //     },
+                                      //     itemCount: 3),
                                     ],
                                   ),
                                 ),
+                                Spacer(),
                                 Flexible(
                                     child: Stack(
                                   clipBehavior: Clip.none,

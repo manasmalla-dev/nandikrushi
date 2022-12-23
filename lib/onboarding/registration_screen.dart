@@ -30,7 +30,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   void initState() {
     super.initState();
-    loginPageController.checkLocationPermissionAndGetLocation();
+    loginPageController.checkLocationPermissionAndGetLocation(context);
   }
 
   @override

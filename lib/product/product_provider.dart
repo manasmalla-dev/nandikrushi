@@ -160,14 +160,14 @@ class ProductProvider extends ChangeNotifier {
           }
           print(categories);
         } else {
-          showMessage("Error fetching data!");
+          showMessage("Error fetching categories 1!");
           profileProvider.hideLoader();
           notifyListeners();
         }
 
         notifyListeners();
       } on Exception catch (e) {
-        showMessage("Error fetching data: $e");
+        showMessage("Error fetching categories - 2: $e");
         profileProvider.hideLoader();
         notifyListeners();
       }
@@ -261,14 +261,14 @@ class ProductProvider extends ChangeNotifier {
           }
           print(subcategories);
         } else {
-          showMessage("Error fetching data!");
+          showMessage("Error fetching subcategories -2 !");
           profileProvider.hideLoader();
           notifyListeners();
         }
 
         notifyListeners();
       } on Exception catch (e) {
-        showMessage("Error fetching data: $e");
+        showMessage("Error fetching subcategories: $e");
         profileProvider.hideLoader();
         notifyListeners();
       }
@@ -327,23 +327,23 @@ class ProductProvider extends ChangeNotifier {
               .isNotEmpty) {
             print(double.tryParse(
                 e["vendor_details"][0]["location"]["lagtitude"].toString()));
-            var locationGeoCoded = await placemarkFromCoordinates(
-                !e["vendor_details"][0]["location"]["lagtitude"]
-                        .toString()
-                        .contains("0.0")
-                    ? double.tryParse(e["vendor_details"][0]["location"]
-                                ["lagtitude"]
-                            .toString()) ??
-                        17.7003844
-                    : 17.7003844,
-                !e["vendor_details"][0]["location"]["latitude"]
-                        .toString()
-                        .contains("0.0")
-                    ? double.tryParse(e["vendor_details"][0]["location"]
-                                ["latitude"]
-                            .toString()) ??
-                        83.1016542
-                    : 83.1016542);
+            // var locationGeoCoded = await placemarkFromCoordinates(
+            //     !e["vendor_details"][0]["location"]["lagtitude"]
+            //             .toString()
+            //             .contains("0.0")
+            //         ? double.tryParse(e["vendor_details"][0]["location"]
+            //                     ["lagtitude"]
+            //                 .toString()) ??
+            //             17.7003844
+            //         : 17.7003844,
+            //     !e["vendor_details"][0]["location"]["latitude"]
+            //             .toString()
+            //             .contains("0.0")
+            //         ? double.tryParse(e["vendor_details"][0]["location"]
+            //                     ["latitude"]
+            //                 .toString()) ??
+            //             83.1016542
+            //         : 83.1016542);
 
             //print("${e["Products"][0]["product_name"]} - $locationGeoCoded");
 
@@ -368,7 +368,7 @@ class ProductProvider extends ChangeNotifier {
                   '${e["Products"][0]["min_purchase"]} ${e["Products"][0]["units"]}'
                       .toString(),
               'place':
-                  "${locationGeoCoded.first.subLocality ?? "Paravada"}, ${locationGeoCoded.first.subAdministrativeArea ?? "Visakhapatnam"}",
+                  "${e["vendor_details"][0]["location"]["mandal"]}, ${e["vendor_details"][0]["location"]["district"]}",
               'url': Uri.tryParse(e["Products"][0]["image"].toString())
                           ?.host
                           .isNotEmpty ??
@@ -383,7 +383,7 @@ class ProductProvider extends ChangeNotifier {
                   (e["vendor_details"][0]["email"] ?? "info@spotmies.com")
                       .toString(),
               'seller_place':
-                  "${locationGeoCoded.first.subLocality ?? "Paravada"}, ${locationGeoCoded.first.subAdministrativeArea ?? "Visakhapatnam"}",
+                  "${e["vendor_details"][0]["location"]["mandal"]}, ${e["vendor_details"][0]["location"]["district"]}",
               'seller_certificate': (e["vendor_details"][0]["certificates"] ??
                       "Organic Certification")
                   .toString(),
@@ -415,7 +415,7 @@ class ProductProvider extends ChangeNotifier {
             profileProvider: profileProvider,
             isFromNavHost: isFromNavHost);
       } on Exception catch (e) {
-        showMessage("Error fetching data: $e");
+        showMessage("Error fetching all products: $e");
         profileProvider.hideLoader();
         notifyListeners();
       }
@@ -559,7 +559,7 @@ class ProductProvider extends ChangeNotifier {
           }
         }
       } on Exception catch (e) {
-        showMessage("Error fetching data: $e");
+        showMessage("Error fetching orders: $e");
         profileProvider.hideLoader();
         notifyListeners();
       }
@@ -719,7 +719,7 @@ class ProductProvider extends ChangeNotifier {
           }
         }
       } on Exception catch (e) {
-        showMessage("Error fetching data: $e");
+        showMessage("Error fetching my purchases: $e");
         profileProvider.hideLoader();
         notifyListeners();
       }
@@ -818,7 +818,7 @@ class ProductProvider extends ChangeNotifier {
           }
         }
       } on Exception catch (e) {
-        showMessage("Error fetching data: $e");
+        showMessage("Error fetching cart: $e");
         profileProvider.hideLoader();
         notifyListeners();
       }
@@ -893,7 +893,7 @@ class ProductProvider extends ChangeNotifier {
           notifyListeners();
         }
       } on Exception catch (e) {
-        showMessage("Error fetching data: $e");
+        showMessage("Error fetching my products: $e");
         profileProvider.hideLoader();
         notifyListeners();
       }
@@ -964,7 +964,7 @@ class ProductProvider extends ChangeNotifier {
           notifyListeners();
         }
       } on Exception catch (e) {
-        showMessage("Error fetching data: $e");
+        showMessage("Error fetching coupons: $e");
         profileProvider.hideLoader();
         notifyListeners();
       }

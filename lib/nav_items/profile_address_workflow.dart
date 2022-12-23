@@ -23,7 +23,9 @@ class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
   @override
   Widget build(BuildContext context) {
     LoginController loginPageController = widget.controller;
-    loginPageController.checkLocationPermissionAndGetLocation().then((_) {
+    loginPageController
+        .checkLocationPermissionAndGetLocation(context)
+        .then((_) {
       setState(() {});
     });
     return Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
@@ -68,7 +70,7 @@ class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
                           print(newPosition.latitude);
                           print(newPosition.longitude);
                           loginPageController.location = newPosition;
-                          loginPageController.geocodeLocation(
+                          loginPageController.geocodeLocation(context,
                               newPosition.latitude, newPosition.longitude);
                         });
                       }),
