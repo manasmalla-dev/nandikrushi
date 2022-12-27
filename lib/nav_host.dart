@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:nandikrushi/nav_items/basket.dart';
+import 'package:nandikrushi/nav_items/dashboard.dart';
 import 'package:nandikrushi/nav_items/home.dart';
 import 'package:nandikrushi/nav_items/my_account.dart';
 import 'package:nandikrushi/nav_items/profile_provider.dart';
@@ -129,9 +130,7 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
         return LayoutBuilder(builder: (context, constraints) {
           List<Widget> widgetOptions = <Widget>[
             Center(
-              child: HomeScreen(
-                constraints: constraints,
-              ),
+              child: Dashboard(),
             ),
             const Center(child: SearchScreen()),
             const Center(

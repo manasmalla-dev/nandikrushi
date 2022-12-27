@@ -30,7 +30,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   void initState() {
     super.initState();
-    loginPageController.checkLocationPermissionAndGetLocation(context);
+    //loginPageController.checkLocationPermissionAndGetLocation(context);
   }
 
   @override
@@ -424,126 +424,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               const SizedBox(
                 height: 32,
-              ),
-              TextWidget(
-                "Location Details",
-                weight: Theme.of(context).textTheme.titleMedium?.fontWeight,
-                size: Theme.of(context).textTheme.titleMedium?.fontSize,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFieldWidget(
-                      controller: loginPageController
-                          .registrationPageFormControllers['state'],
-                      label: 'State',
-                      validator: (value) {
-                        if (value?.isEmpty ?? false) {
-                          return snackbar(
-                              context, "Please enter a valid state");
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 24),
-                  Expanded(
-                    child: TextFieldWidget(
-                      controller: loginPageController
-                          .registrationPageFormControllers['district'],
-                      label: 'District',
-                      validator: (value) {
-                        if (value?.isEmpty ?? false) {
-                          return snackbar(
-                              context, "Please enter a valid district");
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFieldWidget(
-                      controller: loginPageController
-                          .registrationPageFormControllers['mandal'],
-                      label: 'Locality',
-                      validator: (value) {
-                        if (value?.isEmpty ?? false) {
-                          return snackbar(
-                              context, "Please enter a valid locality");
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 24),
-                  Expanded(
-                    child: TextFieldWidget(
-                      controller: loginPageController
-                          .registrationPageFormControllers['city'],
-                      label: 'City/Vilage',
-                      keyboardType: TextInputType.streetAddress,
-                      validator: (value) {
-                        if (value?.isEmpty ?? false) {
-                          return snackbar(
-                              context, "Please enter a valid city/village");
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFieldWidget(
-                      controller: loginPageController
-                          .registrationPageFormControllers['house_number'],
-                      label: 'H.No.',
-                      validator: (value) {
-                        if (value?.isEmpty ?? false) {
-                          return snackbar(
-                              context, "Please enter a valid house number");
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 24),
-                  Expanded(
-                    child: TextFieldWidget(
-                      textInputAction: TextInputAction.done,
-                      controller: loginPageController
-                          .registrationPageFormControllers['pincode'],
-                      label: 'Pincode',
-                      keyboardType: TextInputType.number,
-                      maxLength: 6,
-                      validator: (value) {
-                        if (value?.isEmpty ?? false) {
-                          return snackbar(
-                              context, "Please enter a valid pincode");
-                        }
-                        return null;
-                      },
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 8,
               ),
             ],
           ),

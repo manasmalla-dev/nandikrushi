@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:nandikrushi/nav_items/profile_provider.dart';
 import 'package:nandikrushi/onboarding/login_controller.dart';
 import 'package:nandikrushi/onboarding/login_provider.dart';
 import 'package:nandikrushi/reusable_widgets/text_widget.dart';
@@ -16,6 +17,11 @@ class SplashScreen extends StatelessWidget {
     LoginController loginPageController = LoginController();
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
+    ProfileProvider profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    loginPageController
+        .checkLocationPermissionAndGetLocation(context, profileProvider)
+        .then((_) {});
 
     loginPageController.checkUser(
       isReturningUserFuture: context.isReturningUser,

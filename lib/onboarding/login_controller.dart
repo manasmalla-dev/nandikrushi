@@ -65,7 +65,7 @@ class LoginController extends ControllerMVC {
   List<List<XFile>> userCertificates = [];
 
   Future<void> checkLocationPermissionAndGetLocation(
-      BuildContext context) async {
+      BuildContext context, ProfileProvider profileProvider) async {
     var permissionGranted = await Geolocator.checkPermission();
     log("IsPermissionGranted: $permissionGranted");
     if (permissionGranted == LocationPermission.always ||
@@ -85,22 +85,24 @@ class LoginController extends ControllerMVC {
         location = LatLng(currentPosition.latitude, currentPosition.longitude);
 
         log(location.toString());
-        await geocodeLocation(context, location!.latitude, location!.longitude);
+        await geocodeLocation(
+            context, location!.latitude, location!.longitude, profileProvider);
       } else {
         log("open settings");
-        if (await Geolocator.openLocationSettings()) {
-          await checkLocationPermissionAndGetLocation(context);
+        var openSettings = await Geolocator.openLocationSettings();
+        if (openSettings) {
+          await checkLocationPermissionAndGetLocation(context, profileProvider);
         }
       }
     } else {
       log("Entered location requester");
       await Geolocator.requestPermission();
-      await checkLocationPermissionAndGetLocation(context);
+      await checkLocationPermissionAndGetLocation(context, profileProvider);
     }
   }
 
-  Future<void> geocodeLocation(
-      BuildContext context, latitude, longitude) async {
+  Future<void> geocodeLocation(BuildContext context, latitude, longitude,
+      ProfileProvider profileProvider) async {
     locationGeoCoded = await placemarkFromCoordinates(latitude, longitude);
     if (location?.latitude == 0 || location?.longitude == 0) {
       snackbar(context, "HALT on CRITICAL ERROR, location is empty");
@@ -119,6 +121,7 @@ class LoginController extends ControllerMVC {
         locationGeoCoded?.first.street ?? "";
     registrationPageFormControllers["mandal"]?.text =
         locationGeoCoded?.first.subLocality ?? "";
+    profileProvider.setCity(locationGeoCoded?.first.locality ?? "City");
   }
 
   checkUser(

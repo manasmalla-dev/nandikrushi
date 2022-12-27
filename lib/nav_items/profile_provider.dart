@@ -231,4 +231,10 @@ class ProfileProvider extends ChangeNotifier {
 
     navigatorState.pop();
   }
+
+  String city = "Visakhapatnam";
+  void setCity(String locality) {
+    city = locality;
+    notifyListeners();
+  }
 }

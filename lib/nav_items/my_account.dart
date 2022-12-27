@@ -102,10 +102,10 @@ class MyAccountScreen extends StatelessWidget {
                                 listTileWithouST(context,
                                     title: "Profile",
                                     leading: Icons.person, ontap: () {
-                                  // Navigator.maybeOf(context)?.push(
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             const ProfileScreen()));
+                                  Navigator.maybeOf(context)?.push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ProfileScreen()));
                                 }),
                                 listTileWithouST(context,
                                     title: "Address",

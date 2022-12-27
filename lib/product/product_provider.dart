@@ -28,6 +28,10 @@ class ProductProvider extends ChangeNotifier {
     }
   };
 
+  List<int> freshFarms = [301, 298, 299];
+
+  List<int> naturalFarms = [301, 298, 299];
+
   changeScreen(int _) {
     selectedIndex = _;
     notifyListeners();

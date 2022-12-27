@@ -23,12 +23,13 @@ class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
   @override
   Widget build(BuildContext context) {
     LoginController loginPageController = widget.controller;
-    loginPageController
-        .checkLocationPermissionAndGetLocation(context)
-        .then((_) {
-      setState(() {});
-    });
+
     return Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
+      loginPageController
+          .checkLocationPermissionAndGetLocation(context, profileProvider)
+          .then((_) {
+        setState(() {});
+      });
       return Scaffold(
         appBar: AppBar(
           toolbarHeight: kToolbarHeight,
@@ -70,8 +71,11 @@ class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
                           print(newPosition.latitude);
                           print(newPosition.longitude);
                           loginPageController.location = newPosition;
-                          loginPageController.geocodeLocation(context,
-                              newPosition.latitude, newPosition.longitude);
+                          loginPageController.geocodeLocation(
+                              context,
+                              newPosition.latitude,
+                              newPosition.longitude,
+                              profileProvider);
                         });
                       }),
                       markerId: const MarkerId("Home"),

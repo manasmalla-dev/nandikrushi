@@ -4,10 +4,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:nandikrushi/onboarding/login_controller.dart';
 import 'package:nandikrushi/utils/custom_color_util.dart';
-import 'package:nandikrushi/utils/firebase_storage_utils.dart';
 import 'package:nandikrushi/utils/login_utils.dart';
 import 'package:nandikrushi/utils/server.dart';
 
@@ -164,13 +162,17 @@ class LoginProvider extends ChangeNotifier {
     if (response?.statusCode == 200) {
       var decodedResponse =
           jsonDecode(response?.body ?? '{"message": {},"success": false}');
-      log(response?.body ?? "");
+
+      print(response?.body ?? "");
+
       var statusCodeBody = false;
+
       if (decodedResponse["success"] != null) {
         statusCodeBody = decodedResponse["success"].toString().contains("true");
       } else {
         statusCodeBody = decodedResponse["status"].toString().contains("true");
       }
+
       if (statusCodeBody) {
         if (decodedResponse["message"].toString().contains("No Data Found") ||
             decodedResponse["message"]["status"].toString() != "1") {
@@ -241,18 +243,43 @@ class LoginProvider extends ChangeNotifier {
               .registrationPageFormControllers["c_password"]?.text
               .toString() ??
           "",
-      "language":
-          (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
     };
 
     var registrationURL =
         "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/customerregister";
+
     var response = await Server()
         .postFormData(body: body, url: registrationURL)
         .catchError((e) {
       log("64$e");
     });
-    onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
-        onSuccess, onError, () {});
+
+    if (response?.statusCode == 200) {
+      var decodedResponse =
+          jsonDecode(response?.body ?? '{"message": {},"success": false}');
+
+      print(response?.body ?? "");
+
+      var statusCodeBody =
+          decodedResponse["success"].toString().contains("true");
+
+      if (statusCodeBody) {
+        log("Successful login");
+        print(
+            "User ID: ${decodedResponse["customer_details"]["user_id"]}, Seller ID: ${decodedResponse["customer_details"]["customer_id"]}");
+
+        onSuccess(
+            capitalize(decodedResponse["customer_details"]["firstname"]),
+            true,
+            FirebaseAuth.instance.currentUser?.uid ?? "",
+            decodedResponse["customer_details"]["customer_id"]);
+      } else {
+        onError("Failed to login, error: ${decodedResponse["message"]}");
+        hideLoader();
+      }
+    } else {
+      onError("Oops! Couldn't log you in: ${response?.statusCode}");
+      hideLoader();
+    }
   }
 }
