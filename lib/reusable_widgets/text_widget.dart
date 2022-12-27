@@ -9,6 +9,7 @@ class TextWidget extends StatelessWidget {
   final TextOverflow? flow;
   final TextAlign? align;
   final double? height;
+  final bool isUnderlined;
 
   const TextWidget(this.text,
       {Key? key,
@@ -18,7 +19,8 @@ class TextWidget extends StatelessWidget {
       this.align,
       this.flow,
       this.lSpace,
-      this.height})
+      this.height,
+      this.isUnderlined = false})
       : super(key: key);
 
   @override
@@ -27,13 +29,16 @@ class TextWidget extends StatelessWidget {
         overflow: flow,
         textAlign: align,
         style: TextStyle(
-            fontFamily: 'Product Sans',
-            // fontFamily: 'Roboto',
-            letterSpacing: lSpace,
-            fontSize: size,
-            color: color,
-            fontWeight: weight,
-            height: height));
+          fontFamily: 'Product Sans',
+          // fontFamily: 'Roboto',
+          letterSpacing: lSpace,
+          fontSize: size,
+          color: color,
+          fontWeight: weight,
+          height: height,
+          decoration: isUnderlined ? TextDecoration.underline : null,
+          decorationStyle: isUnderlined ? TextDecorationStyle.dashed : null,
+        ));
   }
 }
 

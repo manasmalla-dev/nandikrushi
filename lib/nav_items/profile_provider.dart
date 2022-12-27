@@ -68,7 +68,7 @@ class ProfileProvider extends ChangeNotifier {
       email = profileJSON["email"];
       telephone =
           "+91 ${profileJSON["telephone"].toString().substring(0, 5)} ${profileJSON["telephone"].toString().substring(5, 10)}";
-      languageID = int.tryParse(profileJSON["language_id"]) ?? 1;
+      //languageID = int.tryParse(profileJSON["language_id"]) ?? 1;
 
       var userAddressResponse = await Server().postFormData(body: {
         "customer_id": customerID.toString()
