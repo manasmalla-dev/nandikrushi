@@ -45,61 +45,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     SingleChildScrollView(
                       child: Stack(
                         children: [
-                          Positioned(
-                            top: -(getProportionateHeight(28, constraints)),
-                            left: getProportionateWidth(210, constraints),
-                            child: const Image(
-                              image: AssetImage("assets/images/ic_farmer.png"),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: getProportionateHeight(75, constraints)),
-                            padding: const EdgeInsets.symmetric(horizontal: 36),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Nandikrushi",
-                                  style: TextStyle(
-                                      color: calculateContrast(
-                                                  const Color(0xFF769F77),
-                                                  createMaterialColor(
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .primary)
-                                                      .shade700) >
-                                              3
-                                          ? createMaterialColor(
-                                                  Theme.of(context)
-                                                      .colorScheme
-                                                      .primary)
-                                              .shade700
-                                          : createMaterialColor(
-                                                  Theme.of(context)
-                                                      .colorScheme
-                                                      .primary)
-                                              .shade100,
-                                      fontFamily: 'Samarkan',
-                                      fontSize: getProportionateHeight(
-                                          32, constraints)),
-                                ),
-                                TextWidget(
-                                  "Create Account".toUpperCase(),
-                                  color: Theme.of(context).colorScheme.primary,
-                                  weight: FontWeight.bold,
-                                  size: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall
-                                      ?.fontSize,
-                                ),
-                              ],
-                            ),
-                          ),
                           Padding(
                             padding: EdgeInsets.only(
-                                top: getProportionateHeight(150, constraints)),
+                                top: getProportionateHeight(64, constraints)),
                             child: Column(
                                 children: registrationDetailsFirstPage(
                                     loginProvider, constraints)),
@@ -117,13 +65,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 )
               : Stack(
                   children: [
-                    Positioned(
-                      top: -(getProportionateHeight(28, constraints)),
-                      left: getProportionateWidth(210, constraints),
-                      child: const Image(
-                        image: AssetImage("assets/images/ic_farmer.png"),
-                      ),
-                    ),
                     Container(
                       margin: EdgeInsets.only(
                           top: getProportionateHeight(75, constraints)),
@@ -132,6 +73,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const Image(
+                            image: AssetImage(
+                                "assets/images/registration_apple.png"),
+                          ),
                           Text(
                             "Nandikrushi",
                             style: TextStyle(
@@ -311,11 +256,63 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   List<Widget> registrationDetailsFirstPage(
       LoginProvider loginProvider, BoxConstraints constraints) {
     return [
+      const Image(
+        image: AssetImage("assets/images/registration_apple.png"),
+      ),
+      SizedBox(
+        height: 24,
+      ),
+      Row(
+        children: [
+          SizedBox(
+            width: 32,
+          ),
+          TextWidget(
+            "Welcome to".toUpperCase(),
+            color: Theme.of(context).colorScheme.primary,
+            weight: FontWeight.bold,
+            size: Theme.of(context).textTheme.titleSmall?.fontSize,
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(
+            "Nandikrushi",
+            style: TextStyle(
+                color: calculateContrast(
+                            const Color(0xFF769F77),
+                            createMaterialColor(
+                                    Theme.of(context).colorScheme.primary)
+                                .shade700) >
+                        3
+                    ? createMaterialColor(Theme.of(context).colorScheme.primary)
+                        .shade700
+                    : createMaterialColor(Theme.of(context).colorScheme.primary)
+                        .shade100,
+                fontFamily: 'Samarkan',
+                fontSize: getProportionateHeight(32, constraints)),
+          ),
+        ],
+      ),
+      Align(
+        alignment: Alignment.centerLeft,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          child: TextWidget(
+            "One last step to go..".toUpperCase(),
+            color: Theme.of(context).colorScheme.primary,
+            size: Theme.of(context).textTheme.titleSmall?.fontSize,
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 16,
+      ),
       Padding(
         padding: const EdgeInsets.only(
           left: 32,
           right: 32,
-          bottom: 24,
+          bottom: 16,
           top: 8,
         ),
         child: Form(
@@ -423,7 +420,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ],
               ),
               const SizedBox(
-                height: 32,
+                height: 16,
               ),
             ],
           ),
