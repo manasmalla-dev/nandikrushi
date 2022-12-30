@@ -89,7 +89,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   CarouselSlider.builder(
                       carouselController: carouselController,
-                      itemCount: 5,
+                      itemCount: profileProvider.carousel.length,
                       itemBuilder: (context, index, _) {
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -123,13 +123,14 @@ class _DashboardState extends State<Dashboard> {
                                   children: [
                                     const Spacer(),
                                     TextWidget(
-                                      'We\'re Fresh.',
+                                      profileProvider.carousel[index]["name"],
                                       weight: FontWeight.w500,
                                       color: Colors.white,
                                       size: height(context) * 0.03,
                                     ),
-                                    const TextWidget(
-                                      'We believe in Truly food is a Medicine',
+                                    TextWidget(
+                                      profileProvider.carousel[index]
+                                          ["description"],
                                       color: Colors.white,
                                       size: 14,
                                     ),

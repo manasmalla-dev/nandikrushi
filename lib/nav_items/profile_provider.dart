@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
+import 'package:nandikrushi/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi/utils/server.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,7 @@ class ProfileProvider extends ChangeNotifier {
 
   List<Map<String, String>> userAddresses = [];
   String userIdForAddress = "";
+  List<Map<String, String>> carousel = [];
 
   bool isDataFetched = false;
   showLoader() {
@@ -126,6 +128,7 @@ class ProfileProvider extends ChangeNotifier {
           exit(0);
         }
       }
+      carousel = await getCarouselData(showMessage);
       notifyListeners();
     } else if (response.statusCode == 400) {
       showMessage("Undefined parameter when calling API");
@@ -236,5 +239,98 @@ class ProfileProvider extends ChangeNotifier {
   void setCity(String locality) {
     city = locality;
     notifyListeners();
+  }
+
+  Future<List<Map<String, String>>> getCarouselData(
+      Function(String) showError) async {
+    var isTimedOut = false;
+    var url =
+        "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/carousel/getcarousel";
+
+    var response = await Server()
+        .getMethodParams(
+      url,
+    )
+        .timeout(const Duration(seconds: 5), onTimeout: () {
+      isTimedOut = true;
+      return [
+        {
+          "title": "We\'re Fresh.",
+          "description": "We believe in Truly food is a Medicine"
+        },
+        {
+          "title": "We\'re Fresh.",
+          "description": "We believe in Truly food is a Medicine"
+        }
+      ];
+    });
+
+    if (!isTimedOut) {
+      if (response.statusCode == 200) {
+        log("sucess");
+        log(response.body);
+        List<dynamic> values = jsonDecode(response.body)["message"];
+
+        var iterables = values.map(
+          (e) => {
+            "title": e["title"].toString(),
+            "description": e["description"].toString()
+          },
+        );
+        return iterables.toList();
+      } else if (response.statusCode == 400) {
+        showError("Undefined Parameter when calling API");
+        log("Undefined Parameter");
+        return [
+          {
+            "title": "We\'re Fresh.",
+            "description": "We believe in Truly food is a Medicine"
+          },
+          {
+            "title": "We\'re Fresh.",
+            "description": "We believe in Truly food is a Medicine"
+          }
+        ];
+      } else if (response.statusCode == 404) {
+        showError("API Not found");
+        log("Not found");
+        return [
+          {
+            "title": "We\'re Fresh.",
+            "description": "We believe in Truly food is a Medicine"
+          },
+          {
+            "title": "We\'re Fresh.",
+            "description": "We believe in Truly food is a Medicine"
+          }
+        ];
+      } else {
+        showError("Failed to get data!");
+        log("failure ${response.statusCode}");
+        return [
+          {
+            "title": "We\'re Fresh.",
+            "description": "We believe in Truly food is a Medicine"
+          },
+          {
+            "title": "We\'re Fresh.",
+            "description": "We believe in Truly food is a Medicine"
+          }
+        ];
+      }
+    } else {
+      showError("Failed to get data!");
+      log("failure");
+      return [
+        {
+          "title": "We\'re Fresh.",
+          "description": "We believe in Truly food is a Medicine"
+        },
+        {
+          "title": "We\'re Fresh.",
+          "description": "We believe in Truly food is a Medicine"
+        }
+      ];
+    }
   }
 }

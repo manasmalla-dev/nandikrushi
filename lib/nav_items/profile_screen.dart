@@ -900,329 +900,120 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           child: ElevatedButtonWidget(
                               onClick: () async {
-                                // var formValidatedState = loginPageController
-                                //         .registrationFormKey.currentState
-                                //         ?.validate() ??
-                                //     false;
+                                var formValidatedState = loginPageController
+                                        .registrationFormKey.currentState
+                                        ?.validate() ??
+                                    false;
 
-                                // if (formValidatedState) {
-                                //   if (!(loginPageController.profileImage !=
-                                //               null ||
-                                //           profileProvider
-                                //               .sellerImage.isNotEmpty) &&
-                                //       loginProvider.isFarmer) {
-                                //     formValidatedState = false;
-                                //     snackbar(
-                                //         context,
-                                //         "Please upload ${loginProvider.isFarmer ? "the Farmer" : loginProvider.userAppTheme.key.contains("Store") ? "your" : "your"} image");
-                                //   }
-                                //   if (!loginProvider.isFarmer) {
-                                //     if (!(loginPageController.storeLogo !=
-                                //             null ||
-                                //         profileProvider.storeLogo.isNotEmpty)) {
-                                //       formValidatedState = false;
-                                //       snackbar(context,
-                                //           "Please upload the ${loginProvider.userAppTheme.key.contains("Store") ? "Store" : "Restaurant"}'s logo");
-                                //     }
-                                //   }
+                                if (formValidatedState) {
+                                  profileProvider.showLoader();
 
-                                //   if (formValidatedState) {
-                                //     var formValidatedState = loginPageController
-                                //             .registrationFormSecondPageKey
-                                //             .currentState
-                                //             ?.validate() ??
-                                //         true;
+                                  Map<String, String> body = {
+                                    "user_id": profileProvider.userIdForAddress,
 
-                                //     if (!loginProvider.isFarmer ||
-                                //         loginPageController.landInAcres > 1) {
-                                //       if (formValidatedState &&
-                                //           loginPageController
-                                //               .userCertification.isNotEmpty) {
-                                //         if ((loginPageController
-                                //                     .userCertification
-                                //                     .isNotEmpty &&
-                                //                 loginPageController
-                                //                     .userCertificates
-                                //                     .where((element) =>
-                                //                         element.isNotEmpty)
-                                //                     .isNotEmpty) ||
-                                //             loginPageController
-                                //                     .registrationFormSecondPageKey
-                                //                     .currentState ==
-                                //                 null) {
-                                //           profileProvider.showLoader();
+                                    "email": loginPageController
+                                            .registrationPageFormControllers[
+                                                "email"]
+                                            ?.text
+                                            .toString() ??
+                                        "",
+                                    "telephone": FirebaseAuth
+                                            .instance.currentUser?.phoneNumber
+                                            ?.replaceFirst("+91", "") ??
+                                        phoneNumberController.text,
+                                    "password": loginPageController
+                                            .registrationPageFormControllers[
+                                                "password"]
+                                            ?.text
+                                            .toString() ??
+                                        "",
+                                    "confirm": loginPageController
+                                            .registrationPageFormControllers[
+                                                "password"]
+                                            ?.text
+                                            .toString() ??
+                                        "",
 
-                                //           Map<String, String> userAddress = {
-                                //             "coordinates-x":
-                                //                 (loginPageController.location
-                                //                             ?.latitude ??
-                                //                         0)
-                                //                     .toString(),
-                                //             "coordinates-y":
-                                //                 (loginPageController.location
-                                //                             ?.longitude ??
-                                //                         0)
-                                //                     .toString(),
-                                //             "houseNumber": loginPageController
-                                //                     .registrationPageFormControllers[
-                                //                         "house_number"]
-                                //                     ?.text
-                                //                     .toString() ??
-                                //                 "",
-                                //             "city": loginPageController
-                                //                     .registrationPageFormControllers[
-                                //                         "city"]
-                                //                     ?.text
-                                //                     .toString() ??
-                                //                 "",
-                                //             "mandal": loginPageController
-                                //                     .registrationPageFormControllers[
-                                //                         "mandal"]
-                                //                     ?.text
-                                //                     .toString() ??
-                                //                 "",
-                                //             "district": loginPageController
-                                //                     .registrationPageFormControllers[
-                                //                         "district"]
-                                //                     ?.text
-                                //                     .toString() ??
-                                //                 "",
-                                //             "state": loginPageController
-                                //                     .registrationPageFormControllers[
-                                //                         "state"]
-                                //                     ?.text
-                                //                     .toString() ??
-                                //                 "",
-                                //             "pincode": loginPageController
-                                //                     .registrationPageFormControllers[
-                                //                         "pincode"]
-                                //                     ?.text
-                                //                     .toString() ??
-                                //                 ""
-                                //           };
+                                    "language": (loginProvider.languages.entries
+                                                .toList()
+                                                .indexOf(loginProvider
+                                                    .usersLanguage) +
+                                            1)
+                                        .toString(),
 
-                                //           var sellerImageURL =
-                                //               loginPageController
-                                //                           .profileImage !=
-                                //                       null
-                                //                   ? await uploadFilesToCloud(
-                                //                       loginPageController
-                                //                           .profileImage,
-                                //                       cloudLocation:
-                                //                           "profile_pics")
-                                //                   : profileProvider.sellerImage;
-                                //           var storeLogoURL = "";
-                                //           if (!loginProvider.isFarmer) {
-                                //             storeLogoURL =
-                                //                 loginPageController.storeLogo !=
-                                //                         null
-                                //                     ? await uploadFilesToCloud(
-                                //                         loginPageController
-                                //                             .storeLogo,
-                                //                         cloudLocation: "logo")
-                                //                     : profileProvider.storeLogo;
-                                //           }
-                                //           List<String> certificatesURLs = [];
-                                //           if (loginPageController
-                                //               .userCertificates
-                                //               .where(
-                                //                   (element) => element.isEmpty)
-                                //               .isNotEmpty) {
-                                //             await Future.forEach<XFile>(
-                                //                 loginPageController
-                                //                     .userCertificates
-                                //                     .firstWhere((element) =>
-                                //                         element.isNotEmpty),
-                                //                 (element) async {
-                                //               String urlData =
-                                //                   await uploadFilesToCloud(
-                                //                       element,
-                                //                       cloudLocation:
-                                //                           "legal_docs",
-                                //                       fileType: ".jpg");
-                                //               certificatesURLs.add(urlData);
-                                //             });
-                                //           }
-                                //           print(userAddress);
-                                //           Map<String, String> body = {
-                                //             "user_id": profileProvider
-                                //                 .userIdForAddress,
+                                    // "agree": "1"
+                                  };
 
-                                //             "email": loginPageController
-                                //                     .registrationPageFormControllers[
-                                //                         "email"]
-                                //                     ?.text
-                                //                     .toString() ??
-                                //                 "",
-                                //             "telephone": FirebaseAuth.instance
-                                //                     .currentUser?.phoneNumber
-                                //                     ?.replaceFirst("+91", "") ??
-                                //                 phoneNumberController.text,
-                                //             "password": loginPageController
-                                //                     .registrationPageFormControllers[
-                                //                         "password"]
-                                //                     ?.text
-                                //                     .toString() ??
-                                //                 "",
-                                //             "confirm": loginPageController
-                                //                     .registrationPageFormControllers[
-                                //                         "password"]
-                                //                     ?.text
-                                //                     .toString() ??
-                                //                 "",
-                                //             "seller_type": loginProvider
-                                //                 .userAppTheme.key
-                                //                 .toString(),
+                                  body.addAll({
+                                    "firstname": loginPageController
+                                            .registrationPageFormControllers[
+                                                "first_name"]
+                                            ?.text
+                                            .toString() ??
+                                        "",
+                                    "lastname": loginPageController
+                                            .registrationPageFormControllers[
+                                                "last_name"]
+                                            ?.text
+                                            .toString() ??
+                                        "",
+                                  });
 
-                                //             "additional_documents":
-                                //                 loginPageController
-                                //                     .userCertification,
-                                //             "upload_document": certificatesURLs
-                                //                 .toString(), //TODO: Check with backend on how to parse data
-                                //             "store_address":
-                                //                 userAddress.toString(),
-                                //             "language": (loginProvider
-                                //                         .languages.entries
-                                //                         .toList()
-                                //                         .indexOf(loginProvider
-                                //                             .usersLanguage) +
-                                //                     1)
-                                //                 .toString(),
-
-                                //             "certificate_id": loginPageController
-                                //                     .registrationPageFormControllers[
-                                //                         "reg_number"]
-                                //                     ?.text
-                                //                     .toString() ??
-                                //                 "",
-                                //             // "agree": "1"
-                                //           };
-                                //           if (!loginProvider.isFarmer) {
-                                //             body.addEntries([
-                                //               MapEntry(
-                                //                   "store_name",
-                                //                   loginPageController
-                                //                           .registrationPageFormControllers[
-                                //                               "storeName"]
-                                //                           ?.text
-                                //                           .toString() ??
-                                //                       ""),
-                                //               MapEntry(
-                                //                 "store_logo",
-                                //                 storeLogoURL.toString(),
-                                //               )
-                                //             ]);
-                                //           } else {
-                                //             body.addEntries([
-                                //               MapEntry("seller_storename",
-                                //                   "${loginPageController.registrationPageFormControllers["first_name"]?.text.toString() ?? "XYZ"} ${loginPageController.registrationPageFormControllers["last_name"]?.text.toString() ?? "XYZ"}"),
-                                //               MapEntry(
-                                //                 "store_logo",
-                                //                 sellerImageURL,
-                                //               ),
-                                //             ]);
-                                //             body.addAll({
-                                //               "firstname": loginPageController
-                                //                       .registrationPageFormControllers[
-                                //                           "first_name"]
-                                //                       ?.text
-                                //                       .toString() ??
-                                //                   "",
-                                //               "lastname": loginPageController
-                                //                       .registrationPageFormControllers[
-                                //                           "last_name"]
-                                //                       ?.text
-                                //                       .toString() ??
-                                //                   "",
-                                //               "land": loginPageController
-                                //                   .landInAcres
-                                //                   .toString(),
-                                //               "seller_image":
-                                //                   sellerImageURL.toString(),
-                                //               "additional_comments":
-                                //                   "Farmer is the backbone of India",
-                                //             });
-                                //           }
-                                //           print(body);
-                                //           var response = await Server()
-                                //               .postFormData(
-                                //                   body: body,
-                                //                   url: loginProvider.isFarmer
-                                //                       ? "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/updateparticularuser"
-                                //                       : loginProvider.isStore
-                                //                           ? "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/storeregistration/updateparticularorganicstore"
-                                //                           : "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/restaurantregistration/updateparticularorganicrestaurant")
-                                //               .catchError((e) {
-                                //             log("64$e");
-                                //           });
-                                //           print("response - $response");
-                                //           if (response?.statusCode == 200) {
-                                //             print(response?.body);
-                                //             var decodedResponse = jsonDecode(response
-                                //                     ?.body
-                                //                     .replaceFirst(
-                                //                         '<b>Notice</b>: Undefined index: customer_group_id in\n<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>',
-                                //                         '')
-                                //                     .replaceFirst(
-                                //                         "<b>Notice</b>: Undefined index: customer_group_id in<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>",
-                                //                         "") ??
-                                //                 '{"message": {},"success": false}');
-                                //             log(response?.body ?? "");
-                                //             var statusCodeBody = false;
-                                //             if (decodedResponse["success"] !=
-                                //                 null) {
-                                //               statusCodeBody =
-                                //                   decodedResponse["success"];
-                                //             } else {
-                                //               statusCodeBody =
-                                //                   decodedResponse["status"];
-                                //             }
-                                //             if (statusCodeBody) {
-                                //               log("Successful update");
-                                //               snackbar(context,
-                                //                   "Successfully updated your profile",
-                                //                   isError: false);
-                                //               Navigator.of(context).pop();
-                                //               profileProvider.showLoader();
-                                //               profileProvider
-                                //                   .getProfile(
-                                //                     loginProvider:
-                                //                         loginProvider,
-                                //                     userID: profileProvider
-                                //                         .userIdForAddress,
-                                //                     showMessage: (_) {
-                                //                       snackbar(context, _);
-                                //                     },
-                                //                   )
-                                //                   .then((value) =>
-                                //                       profileProvider
-                                //                           .hideLoader());
-                                //             } else {
-                                //               snackbar(context,
-                                //                   "Failed to update, error: ${decodedResponse["message"]}");
-                                //               profileProvider.hideLoader();
-                                //             }
-                                //           } else {
-                                //             print(response?.body);
-                                //             snackbar(context,
-                                //                 "Oops! Couldn't update your profile: ${response?.statusCode}");
-                                //             profileProvider.hideLoader();
-                                //             Navigator.of(context).pop();
-                                //           }
-                                //         } else {
-                                //           snackbar(context,
-                                //               "Please upload a valid certificate");
-                                //         }
-                                //       } else {
-                                //         snackbar(context,
-                                //             "Please select a certification type");
-                                //       }
-                                //     } else {
-                                //       snackbar(context,
-                                //           "Please select your cultivated land in acres with the slider");
-                                //     }
-                                //   }
-                                // }
+                                  print(body);
+                                  var response = await Server()
+                                      .postFormData(
+                                          body: body,
+                                          url:
+                                              "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/updateparticularuser")
+                                      .catchError((e) {
+                                    log("64$e");
+                                  });
+                                  print("response - $response");
+                                  if (response?.statusCode == 200) {
+                                    print(response?.body);
+                                    var decodedResponse = jsonDecode(response
+                                            ?.body
+                                            .replaceFirst(
+                                                '<b>Notice</b>: Undefined index: customer_group_id in\n<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>',
+                                                '')
+                                            .replaceFirst(
+                                                "<b>Notice</b>: Undefined index: customer_group_id in<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>",
+                                                "") ??
+                                        '{"message": {},"success": false}');
+                                    log(response?.body ?? "");
+                                    var statusCodeBody = false;
+                                    if (decodedResponse["success"] != null) {
+                                      statusCodeBody =
+                                          decodedResponse["success"];
+                                    } else {
+                                      statusCodeBody =
+                                          decodedResponse["status"];
+                                    }
+                                    if (statusCodeBody) {
+                                      log("Successful update");
+                                      snackbar(context,
+                                          "Successfully updated your profile",
+                                          isError: false);
+                                      Navigator.of(context).pop();
+                                      profileProvider.showLoader();
+                                      profileProvider
+                                          .getProfile(
+                                            loginProvider: loginProvider,
+                                            userID: profileProvider
+                                                .userIdForAddress,
+                                            showMessage: (_) {
+                                              snackbar(context, _);
+                                            },
+                                          )
+                                          .then((value) =>
+                                              profileProvider.hideLoader());
+                                    } else {
+                                      snackbar(context,
+                                          "Failed to update, error: ${decodedResponse["message"]}");
+                                      profileProvider.hideLoader();
+                                    }
+                                  }
+                                }
                               },
                               height: getProportionateHeight(64, constraints),
                               borderRadius: 12,
