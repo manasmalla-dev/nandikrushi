@@ -4,9 +4,11 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nandikrushi/nav_items/my_purchases.dart';
 import 'package:nandikrushi/nav_items/profile_provider.dart';
 import 'package:nandikrushi/nav_items/profile_screen.dart';
 import 'package:nandikrushi/product/address_bottom_sheet.dart';
+import 'package:nandikrushi/product/orders_page.dart';
 import 'package:nandikrushi/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi/splash_screen.dart';
@@ -113,6 +115,15 @@ class MyAccountScreen extends StatelessWidget {
                                   showAddressesBottomSheet(context,
                                       profileProvider, Theme.of(context),
                                       isOrderWorkflow: false);
+                                }),
+                                listTileWithouST(context,
+                                    title: "Orders",
+                                    leading: Icons.shopping_bag_rounded,
+                                    ontap: () {
+                                  Navigator.maybeOf(context)?.push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MyPurchasesScreen()));
                                 }),
                                 Padding(
                                   padding:

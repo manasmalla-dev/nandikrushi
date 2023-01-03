@@ -87,71 +87,85 @@ class _DashboardState extends State<Dashboard> {
                   const SizedBox(
                     height: 16,
                   ),
-                  CarouselSlider.builder(
-                      carouselController: carouselController,
-                      itemCount: profileProvider.carousel.length,
-                      itemBuilder: (context, index, _) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: SizedBox(
-                                  width: width(context) * 0.9,
-                                  child: Image.asset(
-                                    'assets/images/green_fresh.png',
-                                    fit: BoxFit.cover,
-                                    height: double.infinity,
+                  profileProvider.shouldShowLoader
+                      ? Container(
+                          height: 150,
+                          margin: EdgeInsets.symmetric(horizontal: 24),
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(16)),
+                          child: Center(child: RefreshProgressIndicator()),
+                        )
+                      : CarouselSlider.builder(
+                          carouselController: carouselController,
+                          itemCount: profileProvider.carousel.length,
+                          itemBuilder: (context, index, _) {
+                            return Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: SizedBox(
+                                      width: width(context) * 0.9,
+                                      child: Image.network(
+                                        profileProvider.carousel[index]
+                                                ["image"] ??
+                                            "https://raw.githubusercontent.com/manasmalla-dev/nandikrushi/user-v2/assets/images/green_fresh.png",
+                                        fit: BoxFit.cover,
+                                        height: double.infinity,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: Container(
-                                  width: width(context) * 0.9,
-                                  height: double.infinity,
-                                  color: Colors.black.withOpacity(0.47),
-                                ),
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                width: double.infinity,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Spacer(),
-                                    TextWidget(
-                                      profileProvider.carousel[index]["name"],
-                                      weight: FontWeight.w500,
-                                      color: Colors.white,
-                                      size: height(context) * 0.03,
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: Container(
+                                      width: width(context) * 0.9,
+                                      height: double.infinity,
+                                      color: Colors.black.withOpacity(0.47),
                                     ),
-                                    TextWidget(
-                                      profileProvider.carousel[index]
-                                          ["description"],
-                                      color: Colors.white,
-                                      size: 14,
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    width: double.infinity,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Spacer(),
+                                        TextWidget(
+                                          profileProvider.carousel[index]
+                                              ["title"],
+                                          weight: FontWeight.w500,
+                                          color: Colors.white,
+                                          size: height(context) * 0.03,
+                                        ),
+                                        TextWidget(
+                                          profileProvider.carousel[index]
+                                              ["description"],
+                                          color: Colors.white,
+                                          size: 14,
+                                        ),
+                                        SizedBox(
+                                          height: height(context) * 0.02,
+                                        )
+                                      ],
                                     ),
-                                    SizedBox(
-                                      height: height(context) * 0.02,
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                      options: CarouselOptions(
-                          autoPlay: true,
-                          height: height(context) * 0.2,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              currentPos = index;
-                            });
-                          })),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                          options: CarouselOptions(
+                              autoPlay: true,
+                              height: height(context) * 0.2,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  currentPos = index;
+                                });
+                              })),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [1, 2, 3, 4, 5].map((url) {
@@ -250,16 +264,21 @@ class _DashboardState extends State<Dashboard> {
                         const SizedBox(
                           height: 12,
                         ),
-                        Row(
-                          children: [
-                            const Icon(Icons.arrow_forward_rounded),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            TextWidget(
-                              'View All'.toUpperCase(),
-                            )
-                          ],
+                        InkWell(
+                          onTap: () {
+                            productProvider.changeScreen(1);
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(Icons.arrow_forward_rounded),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              TextWidget(
+                                'View All'.toUpperCase(),
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -319,7 +338,8 @@ class _DashboardState extends State<Dashboard> {
                               ],
                             ),
                             profileProvider.shouldShowLoader ||
-                                    productProvider.freshFarms.isEmpty
+                                    productProvider.freshFarms.isEmpty ||
+                                    productProvider.products.isEmpty
                                 ? SizedBox()
                                 : Expanded(
                                     child: ListView(
@@ -496,73 +516,74 @@ class _DashboardState extends State<Dashboard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                     ),
                   ),
-                  Container(
-                    color: Colors.white,
-                    width: double.infinity,
-                    height: height(context) * 0.3,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: SizedBox(
-                        width: width(context) *
-                            0.4 *
-                            (productProvider.naturalFarms.length + 1.2),
-                        height: height(context) * 0.3,
-                        child: Row(
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                  profileProvider.shouldShowLoader ||
+                          productProvider.naturalFarms.isEmpty ||
+                          productProvider.products.isEmpty
+                      ? const SizedBox()
+                      : Container(
+                          color: Colors.white,
+                          width: double.infinity,
+                          height: height(context) * 0.35,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 16),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SizedBox(
+                              width: width(context) *
+                                  0.4 *
+                                  (productProvider.naturalFarms.length + 1.2),
+                              height: height(context) * 0.35,
+                              child: Row(
+                                children: [
+                                  Row(
                                     children: [
-                                      TextWidget(
-                                        'Natural Store',
-                                        size: height(context) * 0.03,
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      TextWidget(
-                                        'Subscribe for daily needs\nat your door step',
-                                        size: height(context) * 0.015,
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      TextWidget(
-                                        'Daily | Weekly | Monthly',
-                                        size: height(context) * 0.015,
-                                        color: Colors.grey.shade600,
-                                      ),
-                                      const Spacer(),
-                                      Flexible(
-                                        child: Row(
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            const Icon(
-                                                Icons.arrow_forward_rounded),
+                                            TextWidget(
+                                              'Natural Store',
+                                              size: height(context) * 0.03,
+                                            ),
                                             const SizedBox(
-                                              width: 12,
+                                              height: 8,
                                             ),
                                             TextWidget(
-                                              'View All'.toUpperCase(),
-                                            )
+                                              'Subscribe for daily needs\nat your door step',
+                                              size: height(context) * 0.015,
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            TextWidget(
+                                              'Daily | Weekly | Monthly',
+                                              size: height(context) * 0.015,
+                                              color: Colors.grey.shade600,
+                                            ),
+                                            const Spacer(),
+                                            Flexible(
+                                              child: Row(
+                                                children: [
+                                                  const Icon(Icons
+                                                      .arrow_forward_rounded),
+                                                  const SizedBox(
+                                                    width: 12,
+                                                  ),
+                                                  TextWidget(
+                                                    'View All'.toUpperCase(),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
+                                      const VerticalDivider()
                                     ],
                                   ),
-                                ),
-                                const VerticalDivider()
-                              ],
-                            ),
-                            profileProvider.shouldShowLoader ||
-                                    productProvider.freshFarms.isEmpty
-                                ? SizedBox()
-                                : Expanded(
+                                  Expanded(
                                     child: ListView(
                                       scrollDirection: Axis.horizontal,
                                       physics:
@@ -713,11 +734,11 @@ class _DashboardState extends State<Dashboard> {
                                       }).toList(),
                                     ),
                                   ),
-                          ],
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                   Container(
                     color: const Color(0xFFE2F2D5),
                     width: double.infinity,

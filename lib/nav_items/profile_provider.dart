@@ -274,7 +274,8 @@ class ProfileProvider extends ChangeNotifier {
         var iterables = values.map(
           (e) => {
             "title": e["title"].toString(),
-            "description": e["description"].toString()
+            "description": e["description"].toString(),
+            "image": e["url"].toString()
           },
         );
         return iterables.toList();

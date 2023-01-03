@@ -964,7 +964,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       .postFormData(
                                           body: body,
                                           url:
-                                              "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/updateparticularuser")
+                                              "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/customerregister/updateparticularcustomer")
                                       .catchError((e) {
                                     log("64$e");
                                   });

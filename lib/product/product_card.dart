@@ -18,6 +18,7 @@ enum CardType {
 }
 
 class ProductCard extends StatefulWidget {
+  final bool canTap;
   final CardType type;
   final String productId;
   final String productName;
@@ -43,7 +44,8 @@ class ProductCard extends StatefulWidget {
       this.poster,
       required this.location,
       this.includeHorizontalPadding = true,
-      this.additionalInformation = const {}})
+      this.additionalInformation = const {},
+      this.canTap = true})
       : super(key: key);
 
   @override
@@ -54,15 +56,18 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        ProductProvider productProvider = Provider.of(context, listen: false);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProductPage(
-                  productDetails: productProvider.products
-                      .where((e) => e["product_id"] == widget.productId)
-                      .first,
-                )));
-      },
+      onTap: widget.canTap
+          ? () {
+              ProductProvider productProvider =
+                  Provider.of(context, listen: false);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ProductPage(
+                        productDetails: productProvider.products
+                            .where((e) => e["product_id"] == widget.productId)
+                            .first,
+                      )));
+            }
+          : null,
       child: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: widget.includeHorizontalPadding ? 16 : 0, vertical: 8),

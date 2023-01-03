@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nandikrushi/nav_items/order_details_screen.dart';
 import 'package:nandikrushi/product/product_card.dart';
 import 'package:nandikrushi/product/product_provider.dart';
 import 'package:nandikrushi/reusable_widgets/text_widget.dart';
@@ -29,7 +30,7 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
               ))
         ],
         title: TextWidget(
-          'My Purchases',
+          'Orders',
           size: Theme.of(context).textTheme.titleMedium?.fontSize,
           weight: FontWeight.w700,
         ),
@@ -98,53 +99,65 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
               ])
             : ListView.separated(
                 itemBuilder: (context, itemIndex) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceVariant,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: ListView.separated(
-                        primary: false,
-                        shrinkWrap: true,
-                        separatorBuilder: (_, __) {
-                          return Divider();
-                        },
-                        itemCount: productProvider
-                            .myPurchases[itemIndex]["products"].length,
-                        itemBuilder: (context, productOrderIndex) {
-                          var product = productProvider.myPurchases[itemIndex]
-                              ["products"][productOrderIndex];
-                          return ProductCard(
-                            type: CardType.myPurchases,
-                            productId: product["product_id"] ?? "XYZ",
-                            productName: product["product_name"] ?? "Name",
-                            productDescription:
-                                product["description"] ?? "Description",
-                            imageURL: product["url"] ??
-                                "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
-                            price:
-                                double.tryParse(product["price"] ?? "00.00") ??
-                                    00.00,
-                            units:
-                                "${product["quantity"]} ${product["units"]?.toString().replaceFirst("1", "") ?? " unit"}${(int.tryParse(product["quantity"]) ?? 1) > 1 ? "s" : ""}",
-                            location: product["place"] ?? "Visakhapatnam",
-                            poster: productProvider.myPurchases[itemIndex]
-                                ["store_name"],
-                            additionalInformation: {
-                              "date": DateFormat("EEE, MMM dd").format(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      (int.tryParse(productProvider
-                                                      .myPurchases[itemIndex]
-                                                  ["date"]) ??
-                                              0000000000) *
-                                          1000)),
-                              "status": 0,
-                              "rating": (double.tryParse(
-                                      product["rating"] ?? "0.0") ??
-                                  0),
-                            },
-                          );
-                        }),
+                  return InkWell(
+                    onTap: () {
+                      print("Hello");
+
+                      print(productProvider.myPurchases[itemIndex]);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => OrderDetailScreen(
+                                order: productProvider.myPurchases[itemIndex],
+                              )));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: ListView.separated(
+                          primary: false,
+                          shrinkWrap: true,
+                          separatorBuilder: (_, __) {
+                            return Divider();
+                          },
+                          itemCount: productProvider
+                              .myPurchases[itemIndex]["products"].length,
+                          itemBuilder: (context, productOrderIndex) {
+                            var product = productProvider.myPurchases[itemIndex]
+                                ["products"][productOrderIndex];
+                            return ProductCard(
+                              canTap: false,
+                              type: CardType.myPurchases,
+                              productId: product["product_id"] ?? "XYZ",
+                              productName: product["product_name"] ?? "Name",
+                              productDescription:
+                                  product["description"] ?? "Description",
+                              imageURL: product["url"] ??
+                                  "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
+                              price: double.tryParse(
+                                      product["price"] ?? "00.00") ??
+                                  00.00,
+                              units:
+                                  "${product["quantity"]} ${product["units"]?.toString().replaceFirst("1", "") ?? " unit"}${(int.tryParse(product["quantity"]) ?? 1) > 1 ? "s" : ""}",
+                              location: product["place"] ?? "Visakhapatnam",
+                              poster: productProvider.myPurchases[itemIndex]
+                                  ["store_name"],
+                              additionalInformation: {
+                                "date": DateFormat("EEE, MMM dd").format(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        (int.tryParse(productProvider
+                                                        .myPurchases[itemIndex]
+                                                    ["date"]) ??
+                                                0000000000) *
+                                            1000)),
+                                "status": 0,
+                                "rating": (double.tryParse(
+                                        product["rating"] ?? "0.0") ??
+                                    0),
+                              },
+                            );
+                          }),
+                    ),
                   );
                 },
                 separatorBuilder: (context, _) {

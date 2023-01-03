@@ -84,6 +84,88 @@ class ProductProvider extends ChangeNotifier {
   Map<String, String> appliedCoupon = {};
   String myProductsMessage = "Oops!";
 
+  getFreshProducts(
+      {required Function(String) showMessage,
+      required ProfileProvider profileProvider,
+      bool isFromNavHost = false}) async {
+    profileProvider.showLoader();
+    var urlStore =
+        "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getfreshstoreproducts";
+    var url =
+        "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getfreshfarmerproducts";
+    var response = await Server().getMethodParams(url);
+    var responseStore = await Server().getMethodParams(urlStore);
+    if (response == null || responseStore == null) {
+      showMessage("Failed to get a response from the server!");
+      //hideLoader();
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+      return;
+    }
+    if (response.statusCode == 200 && responseStore.statusCode == 200) {
+      try {
+        if (jsonDecode(response.body)["status"]) {
+          // ignore: unnecessary_cast
+          if (!jsonDecode(response.body)["message"]
+              .toString()
+              .contains("No Products found")) {
+            freshFarms =
+                (jsonDecode(response.body)["message"].toList() as List<dynamic>)
+                    .map((e) {
+              return int.tryParse(e["product_id"]) ?? 0;
+            }).toList();
+          } else {
+            freshFarms = [];
+          }
+          if (!jsonDecode(responseStore.body)["message"]
+              .toString()
+              .contains("No Products found")) {
+            naturalFarms =
+                jsonDecode(responseStore.body)["message"].toList().map((e) {
+              return int.tryParse(e["product_id"]) ?? 0;
+            }).toList();
+          } else {
+            naturalFarms = [];
+          }
+        } else {
+          showMessage("Error fetching fresh data!");
+          profileProvider.hideLoader();
+          notifyListeners();
+        }
+
+        notifyListeners();
+      } on Exception catch (e) {
+        showMessage("Error fetching data: $e");
+        profileProvider.hideLoader();
+        notifyListeners();
+      }
+    } else if (response.statusCode == 400 || responseStore.statusCode == 400) {
+      showMessage("Undefined parameter when calling API");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    } else if (response.statusCode == 404 || responseStore.statusCode == 404) {
+      showMessage("API not found");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    } else {
+      showMessage("Failed to get data!");
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    }
+  }
+
   getCategories(
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
@@ -412,134 +494,134 @@ class ProductProvider extends ChangeNotifier {
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
-    profileProvider.showLoader();
+    // profileProvider.showLoader();
 
-    var ordersData = await post(
-      Uri.parse(
-          "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getorders"),
-      body: jsonEncode({"customer_id": profileProvider.customerID.toString()}),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-    );
+    // var ordersData = await post(
+    //   Uri.parse(
+    //       "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getorders"),
+    //   body: jsonEncode({"customer_id": profileProvider.customerID.toString()}),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Accept": "application/json",
+    //   },
+    // );
 
-    if (ordersData.statusCode == 200) {
-      orders = [];
-      try {
-        if (jsonDecode(ordersData.body)["status"]) {
-          List<dynamic> orderJSONResponse =
-              jsonDecode(ordersData.body)["order"];
-          for (var element in orderJSONResponse) {
-            var orderData = {"order_id": element["order_id"]};
-            orderData["products"] = [];
-            for (var productOrderDetails
-                in (element["product_details"] as List<dynamic>)) {
-              if (products
-                  .where((e) =>
-                      e["product_id"] == productOrderDetails["product_id"])
-                  .isNotEmpty) {
-                (orderData["products"]).add({
-                  "product_name": productOrderDetails["product_name"],
-                  "description": products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .isNotEmpty
-                      ? products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .first["description"]
-                          .toString()
-                      : productOrderDetails["description"],
-                  "url": (Uri.tryParse(products
-                                  .where((e) =>
-                                      e["product_id"] ==
-                                      productOrderDetails["product_id"])
-                                  .first["url"]
-                                  .toString())
-                              ?.host
-                              .isNotEmpty ??
-                          false)
-                      ? products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .first["url"]
-                          .toString()
-                      : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
-                  "price": productOrderDetails["price"],
-                  "product_id": productOrderDetails["product_id"],
-                  "quantity": productOrderDetails["quantity"],
-                  "units": products
-                      .where((e) =>
-                          e["product_id"] == productOrderDetails["product_id"])
-                      .first["units"]
-                      .toString(),
-                  "place": element["shipping_details"][0]["shipping_city"],
-                });
-              }
-            }
-            orderData.addAll({
-              "customer_name":
-                  "${element["customer_details"][0]["firstname"]} ${element["customer_details"][0]["lastname"]}",
-              "date": element["delivery_details"][0]["delivery_date"]
-            });
+    // if (ordersData.statusCode == 200) {
+    //   orders = [];
+    //   try {
+    //     if (jsonDecode(ordersData.body)["status"]) {
+    //       List<dynamic> orderJSONResponse =
+    //           jsonDecode(ordersData.body)["order"];
+    //       for (var element in orderJSONResponse) {
+    //         var orderData = {"order_id": element["order_id"]};
+    //         orderData["products"] = [];
+    //         for (var productOrderDetails
+    //             in (element["product_details"] as List<dynamic>)) {
+    //           if (products
+    //               .where((e) =>
+    //                   e["product_id"] == productOrderDetails["product_id"])
+    //               .isNotEmpty) {
+    //             (orderData["products"]).add({
+    //               "product_name": productOrderDetails["product_name"],
+    //               "description": products
+    //                       .where((e) =>
+    //                           e["product_id"] ==
+    //                           productOrderDetails["product_id"])
+    //                       .isNotEmpty
+    //                   ? products
+    //                       .where((e) =>
+    //                           e["product_id"] ==
+    //                           productOrderDetails["product_id"])
+    //                       .first["description"]
+    //                       .toString()
+    //                   : productOrderDetails["description"],
+    //               "url": (Uri.tryParse(products
+    //                               .where((e) =>
+    //                                   e["product_id"] ==
+    //                                   productOrderDetails["product_id"])
+    //                               .first["url"]
+    //                               .toString())
+    //                           ?.host
+    //                           .isNotEmpty ??
+    //                       false)
+    //                   ? products
+    //                       .where((e) =>
+    //                           e["product_id"] ==
+    //                           productOrderDetails["product_id"])
+    //                       .first["url"]
+    //                       .toString()
+    //                   : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
+    //               "price": productOrderDetails["price"],
+    //               "product_id": productOrderDetails["product_id"],
+    //               "quantity": productOrderDetails["quantity"],
+    //               "units": products
+    //                   .where((e) =>
+    //                       e["product_id"] == productOrderDetails["product_id"])
+    //                   .first["units"]
+    //                   .toString(),
+    //               "place": element["shipping_details"][0]["shipping_city"],
+    //             });
+    //           }
+    //         }
+    //         orderData.addAll({
+    //           "customer_name":
+    //               "${element["customer_details"][0]["firstname"]} ${element["customer_details"][0]["lastname"]}",
+    //           "date": element["delivery_details"][0]["delivery_date"]
+    //         });
 
-            orders.add(orderData);
-          }
-          log(orders.toString());
-          if (!isFromNavHost) {
-            profileProvider.isDataFetched = true;
-            notifyListeners();
-            profileProvider.hideLoader();
-          } else {
-            notifyListeners();
-          }
-        } else {
-          orders = [];
-          notifyListeners();
-          if (!isFromNavHost) {
-            profileProvider.isDataFetched = true;
-            notifyListeners();
-            profileProvider.hideLoader();
-          } else {
-            notifyListeners();
-          }
-        }
-      } on Exception catch (e) {
-        showMessage("Error fetching orders: $e");
-        profileProvider.hideLoader();
-        notifyListeners();
-      }
+    //         orders.add(orderData);
+    //       }
+    //       log(orders.toString());
+    //       if (!isFromNavHost) {
+    //         profileProvider.isDataFetched = true;
+    //         notifyListeners();
+    //         profileProvider.hideLoader();
+    //       } else {
+    //         notifyListeners();
+    //       }
+    //     } else {
+    //       orders = [];
+    //       notifyListeners();
+    //       if (!isFromNavHost) {
+    //         profileProvider.isDataFetched = true;
+    //         notifyListeners();
+    //         profileProvider.hideLoader();
+    //       } else {
+    //         notifyListeners();
+    //       }
+    //     }
+    //   } on Exception catch (e) {
+    //     showMessage("Error fetching orders: $e");
+    //     profileProvider.hideLoader();
+    //     notifyListeners();
+    //   }
 
-      await getMyPurchases(
-          showMessage: showMessage,
-          profileProvider: profileProvider,
-          isFromNavHost: isFromNavHost);
-    } else if (ordersData.statusCode == 400) {
-      showMessage("Undefined parameter when calling API");
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
-    } else if (ordersData.statusCode == 404) {
-      showMessage("API not found");
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
-    } else {
-      showMessage("Failed to get data!");
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
-    }
+    await getMyPurchases(
+        showMessage: showMessage,
+        profileProvider: profileProvider,
+        isFromNavHost: isFromNavHost);
+    // } else if (ordersData.statusCode == 400) {
+    //   showMessage("Undefined parameter when calling API");
+    //   if (Platform.isAndroid) {
+    //     SystemNavigator.pop();
+    //   } else if (Platform.isIOS) {
+    //     exit(0);
+    //   }
+    // } else if (ordersData.statusCode == 404) {
+    //   showMessage("API not found");
+    //   if (Platform.isAndroid) {
+    //     SystemNavigator.pop();
+    //   } else if (Platform.isIOS) {
+    //     exit(0);
+    //   }
+    // } else {
+    //   showMessage("Failed to get data!");
+    //   if (Platform.isAndroid) {
+    //     SystemNavigator.pop();
+    //   } else if (Platform.isIOS) {
+    //     exit(0);
+    //   }
+    // }
   }
 
   getMyPurchases(
@@ -622,7 +704,26 @@ class ProductProvider extends ChangeNotifier {
                           e["product_id"] == productOrderDetails["product_id"])
                       .first["units"]
                       .toString(),
+                  "payment_method": element["payment_details"][0]
+                      ["payment_method"],
                   "place": element["shipping_details"][0]["shipping_city"],
+                  "shipping_firstname": element["shipping_details"][0]
+                      ["shipping_firstname"],
+                  "shipping_lastname": element["shipping_details"][0]
+                      ["shipping_lastname"],
+                  "shipping_address_1": element["shipping_details"][0]
+                      ["shipping_address_1"],
+                  "shipping_address_2": element["shipping_details"][0]
+                      ["shipping_address_2"],
+                  "shipping_city": element["shipping_details"][0]
+                      ["shipping_city"],
+                  "shipping_postcode": element["shipping_details"][0]
+                      ["shipping_postcode"],
+                  "shipping_country": element["shipping_details"][0]
+                      ["shipping_country"],
+                  "shipping_zone": element["shipping_details"][0]
+                      ["shipping_zone"],
+                  "telephone": element["customer_details"][0]["telephone"],
                   "rating": products
                           .where((e) =>
                               e["product_id"] ==
@@ -641,6 +742,7 @@ class ProductProvider extends ChangeNotifier {
             myPurchasesData.addAll({
               "store_name": "${element["store_details"][0]["store_name"]}",
               "date": element["delivery_details"][0]["delivery_date"],
+              "time": element["delivery_details"][0]["delivery_time"]
             });
 
             myPurchases.add(myPurchasesData);
@@ -1276,6 +1378,10 @@ class ProductProvider extends ChangeNotifier {
         profileProvider: profileProvider,
         isFromNavHost: true);
     await getAllProducts(
+        showMessage: showMessage,
+        profileProvider: profileProvider,
+        isFromNavHost: true);
+    await getFreshProducts(
         showMessage: showMessage,
         profileProvider: profileProvider,
         isFromNavHost: true);
