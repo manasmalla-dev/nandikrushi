@@ -217,8 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                          loginProvider.userAppTheme.key),
+                                      Text(loginProvider.userAppTheme.key),
                                       // ListView.builder(
                                       //     primary: false,
                                       //     shrinkWrap: true,
@@ -1240,6 +1239,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     .toString() ??
                                                 ""
                                           };
+
+                                          print(userAddress);
 
                                           var sellerImageURL =
                                               loginPageController
