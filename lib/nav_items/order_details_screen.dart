@@ -319,6 +319,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       "${widget.order["products"][0]["shipping_firstname"]} ${widget.order["products"][0]["shipping_lastname"]}",
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
+                    Text(widget.order["products"][0]["shipping_house_number"]),
                     Text(widget.order["products"][0]["shipping_address_1"]),
                     Text(widget.order["products"][0]["shipping_address_2"]),
                     Text(widget.order["products"][0]["shipping_city"]),

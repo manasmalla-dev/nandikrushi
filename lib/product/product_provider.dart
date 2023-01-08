@@ -713,6 +713,8 @@ class ProductProvider extends ChangeNotifier {
                       ["shipping_lastname"],
                   "shipping_address_1": element["shipping_details"][0]
                       ["shipping_address_1"],
+                  "shipping_house_number": element["shipping_details"][0]
+                      ["house_no"],
                   "shipping_address_2": element["shipping_details"][0]
                       ["shipping_address_2"],
                   "shipping_city": element["shipping_details"][0]
