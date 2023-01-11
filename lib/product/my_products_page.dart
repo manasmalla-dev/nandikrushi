@@ -50,7 +50,7 @@ class MyProductsPage extends StatelessWidget {
         elevation: 0,
         actions: [
           PopupMenuButton(
-              offset: Offset(-5, 0),
+              offset: const Offset(-5, 0),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
               icon: const Icon(
@@ -64,7 +64,7 @@ class MyProductsPage extends StatelessWidget {
                     builder: (context, setMenuState) {
                       return Column(
                         children: [
-                          PopupMenuItem(child: Text("Sort by")),
+                          const PopupMenuItem(child: Text("Sort by")),
                           PopupMenuItem(
                               child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -81,10 +81,10 @@ class MyProductsPage extends StatelessWidget {
                                           sort = _ ?? sort;
                                         });
                                       }),
-                                  SizedBox(width: 16),
-                                  Icon(Icons.abc_rounded),
-                                  SizedBox(width: 8),
-                                  Text("Name")
+                                  const SizedBox(width: 16),
+                                  const Icon(Icons.abc_rounded),
+                                  const SizedBox(width: 8),
+                                  const Text("Name")
                                 ],
                               ),
                               Row(
@@ -99,15 +99,15 @@ class MyProductsPage extends StatelessWidget {
                                           sort = _ ?? sort;
                                         });
                                       }),
-                                  SizedBox(width: 16),
-                                  Icon(Icons.calendar_month_rounded),
-                                  SizedBox(width: 8),
-                                  Text("Date")
+                                  const SizedBox(width: 16),
+                                  const Icon(Icons.calendar_month_rounded),
+                                  const SizedBox(width: 8),
+                                  const Text("Date")
                                 ],
                               ),
                             ],
                           )),
-                          PopupMenuItem(child: Text("Filter by")),
+                          const PopupMenuItem(child: Text("Filter by")),
                           PopupMenuItem(
                               child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -124,10 +124,10 @@ class MyProductsPage extends StatelessWidget {
                                           filter = _ ?? filter;
                                         });
                                       }),
-                                  SizedBox(width: 16),
-                                  Icon(Icons.inventory_2_rounded),
-                                  SizedBox(width: 8),
-                                  Text("In Stock")
+                                  const SizedBox(width: 16),
+                                  const Icon(Icons.inventory_2_rounded),
+                                  const SizedBox(width: 8),
+                                  const Text("In Stock")
                                 ],
                               ),
                               Row(
@@ -142,10 +142,10 @@ class MyProductsPage extends StatelessWidget {
                                           filter = _ ?? filter;
                                         });
                                       }),
-                                  SizedBox(width: 16),
-                                  Icon(Icons.cancel_outlined),
-                                  SizedBox(width: 8),
-                                  Text("Out Of Stock")
+                                  const SizedBox(width: 16),
+                                  const Icon(Icons.cancel_outlined),
+                                  const SizedBox(width: 8),
+                                  const Text("Out Of Stock")
                                 ],
                               ),
                             ],

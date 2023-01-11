@@ -753,7 +753,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     },
                                   )
                                 : const SizedBox(),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             TextFieldWidget(
@@ -1372,7 +1372,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     .primary
                                     .withOpacity(0.5),
                               ),
-                              SizedBox(width: 16,),
+                              const SizedBox(
+                                width: 16,
+                              ),
                               Text(
                                 "Delete account",
                                 style: Theme.of(context)
@@ -1389,7 +1391,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24,),
+                    const SizedBox(
+                      height: 24,
+                    ),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Image.asset(

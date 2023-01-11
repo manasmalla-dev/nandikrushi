@@ -26,7 +26,7 @@ class OrdersPage extends StatelessWidget {
           elevation: 0,
           actions: [
             PopupMenuButton(
-                offset: Offset(-5, 0),
+                offset: const Offset(-5, 0),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 icon: const Icon(
@@ -40,7 +40,7 @@ class OrdersPage extends StatelessWidget {
                       builder: (context, setMenuState) {
                         return Column(
                           children: [
-                            PopupMenuItem(child: Text("Sort by")),
+                            const PopupMenuItem(child: Text("Sort by")),
                             PopupMenuItem(
                                 child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -58,10 +58,10 @@ class OrdersPage extends StatelessWidget {
                                             sort = _ ?? sort;
                                           });
                                         }),
-                                    SizedBox(width: 16),
-                                    Icon(Icons.abc_rounded),
-                                    SizedBox(width: 8),
-                                    Text("Name")
+                                    const SizedBox(width: 16),
+                                    const Icon(Icons.abc_rounded),
+                                    const SizedBox(width: 8),
+                                    const Text("Name")
                                   ],
                                 ),
                                 Row(
@@ -77,15 +77,15 @@ class OrdersPage extends StatelessWidget {
                                             sort = _ ?? sort;
                                           });
                                         }),
-                                    SizedBox(width: 16),
-                                    Icon(Icons.calendar_month_rounded),
-                                    SizedBox(width: 8),
-                                    Text("Date")
+                                    const SizedBox(width: 16),
+                                    const Icon(Icons.calendar_month_rounded),
+                                    const SizedBox(width: 8),
+                                    const Text("Date")
                                   ],
                                 ),
                               ],
                             )),
-                            PopupMenuItem(child: Text("Filter by")),
+                            const PopupMenuItem(child: Text("Filter by")),
                             PopupMenuItem(
                                 child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -103,10 +103,11 @@ class OrdersPage extends StatelessWidget {
                                             filter = _ ?? filter;
                                           });
                                         }),
-                                    SizedBox(width: 16),
-                                    Icon(Icons.check_circle_outline_rounded),
-                                    SizedBox(width: 8),
-                                    Text("Accepted")
+                                    const SizedBox(width: 16),
+                                    const Icon(
+                                        Icons.check_circle_outline_rounded),
+                                    const SizedBox(width: 8),
+                                    const Text("Accepted")
                                   ],
                                 ),
                                 Row(
@@ -122,10 +123,10 @@ class OrdersPage extends StatelessWidget {
                                             filter = _ ?? filter;
                                           });
                                         }),
-                                    SizedBox(width: 16),
-                                    Icon(Icons.pending_rounded),
-                                    SizedBox(width: 8),
-                                    Text("Pending")
+                                    const SizedBox(width: 16),
+                                    const Icon(Icons.pending_rounded),
+                                    const SizedBox(width: 8),
+                                    const Text("Pending")
                                   ],
                                 ),
                                 Row(
@@ -141,10 +142,10 @@ class OrdersPage extends StatelessWidget {
                                             filter = _ ?? filter;
                                           });
                                         }),
-                                    SizedBox(width: 16),
-                                    Icon(Icons.cancel_outlined),
-                                    SizedBox(width: 8),
-                                    Text("Cancelled")
+                                    const SizedBox(width: 16),
+                                    const Icon(Icons.cancel_outlined),
+                                    const SizedBox(width: 8),
+                                    const Text("Cancelled")
                                   ],
                                 ),
                               ],

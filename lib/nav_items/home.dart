@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/basket.dart';
 import 'package:nandikrushi_farmer/nav_items/my_account.dart';
@@ -246,11 +247,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               InkWell(
-                                onTap: () {
+                                onTap: () async {
+                                  print(await FirebaseMessaging.instance
+                                      .getToken());
                                   if (searchController.value.text.isNotEmpty) {
-                                   setState(() {
-                                     searchController.value = TextEditingValue();
-                                   });
+                                    setState(() {
+                                      searchController.value =
+                                          const TextEditingValue();
+                                    });
                                   }
                                 },
                                 child: Icon(
@@ -334,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   size: 36,
                                                 ),
                                               ),
-                                              Center(
+                                              const Center(
                                                 child: Icon(
                                                   Icons
                                                       .play_circle_fill_rounded,
@@ -705,7 +709,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 margin:
                                                     const EdgeInsets.symmetric(
                                                         vertical: 8),
-                                                padding: EdgeInsets.all(16),
+                                                padding:
+                                                    const EdgeInsets.all(16),
                                                 decoration: BoxDecoration(
                                                     color: Theme.of(context)
                                                         .colorScheme
@@ -787,7 +792,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         : Column(
                             children: [
                               Image.asset("assets/images/ic_searching.png"),
-                              SizedBox(
+                              const SizedBox(
                                 height: 24,
                               ),
                               Text(
@@ -795,10 +800,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style:
                                     Theme.of(context).textTheme.headlineSmall,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 12,
                               ),
-                              Text(
+                              const Text(
                                 "Looking over our humongous database\nof products and orders...",
                                 textAlign: TextAlign.center,
                               )

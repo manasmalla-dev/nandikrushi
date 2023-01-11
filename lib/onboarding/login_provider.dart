@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
@@ -186,7 +187,8 @@ class LoginProvider extends ChangeNotifier {
       //User is signed in with Firebase, checking with API
       var response = await Server().postFormData(
         body: {
-          'telephone': loginController.phoneTextEditController.text.toString()
+          'telephone': loginController.phoneTextEditController.text.toString(),
+          'device_token': await FirebaseMessaging.instance.getToken() ?? ""
         },
         url:
             "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerlogin/verify_mobile",
@@ -366,6 +368,8 @@ class LoginProvider extends ChangeNotifier {
                 .registrationPageFormControllers["reg_number"]?.text
                 .toString() ??
             "",
+
+        'device_token': await FirebaseMessaging.instance.getToken() ?? ""
         // "agree": "1"
       };
 
@@ -417,6 +421,8 @@ class LoginProvider extends ChangeNotifier {
                 .registrationPageFormControllers["reg_number"]?.text
                 .toString() ??
             "",
+
+        'device_token': await FirebaseMessaging.instance.getToken() ?? ""
         // "agree": "1"
       };
 
@@ -471,6 +477,8 @@ class LoginProvider extends ChangeNotifier {
                 .registrationPageFormControllers["reg_number"]?.text
                 .toString() ??
             "",
+
+        'device_token': await FirebaseMessaging.instance.getToken() ?? "",
         // "agree": "1"
       };
       body.addEntries([

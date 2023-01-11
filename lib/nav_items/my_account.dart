@@ -266,7 +266,7 @@ class MyAccountScreen extends StatelessWidget {
                                           fontSize: getProportionateHeight(
                                               11, constraints)),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 8,
                                 ),
                                 TextWidget(
@@ -279,7 +279,7 @@ class MyAccountScreen extends StatelessWidget {
                                   color: Colors.lightGreen.shade200,
                                   align: TextAlign.center,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 24,
                                 )
                               ],
@@ -372,7 +372,7 @@ class MyAccountScreen extends StatelessWidget {
                           0.7,
                       lSpace: 3,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
                     TextWidget(

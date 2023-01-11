@@ -26,7 +26,7 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
         elevation: 0,
         actions: [
           PopupMenuButton(
-              offset: Offset(-5, 0),
+              offset: const Offset(-5, 0),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
               icon: const Icon(
@@ -38,7 +38,7 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
                     builder: (context, setMenuState) {
                       return Column(
                         children: [
-                          PopupMenuItem(child: Text("Sort by")),
+                          const PopupMenuItem(child: Text("Sort by")),
                           PopupMenuItem(
                               child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -55,10 +55,10 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
                                           sort = _ ?? sort;
                                         });
                                       }),
-                                  SizedBox(width: 16),
-                                  Icon(Icons.abc_rounded),
-                                  SizedBox(width: 8),
-                                  Text("Name")
+                                  const SizedBox(width: 16),
+                                  const Icon(Icons.abc_rounded),
+                                  const SizedBox(width: 8),
+                                  const Text("Name")
                                 ],
                               ),
                               Row(
@@ -73,10 +73,10 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
                                           sort = _ ?? sort;
                                         });
                                       }),
-                                  SizedBox(width: 16),
-                                  Icon(Icons.calendar_month_rounded),
-                                  SizedBox(width: 8),
-                                  Text("Date")
+                                  const SizedBox(width: 16),
+                                  const Icon(Icons.calendar_month_rounded),
+                                  const SizedBox(width: 8),
+                                  const Text("Date")
                                 ],
                               ),
                             ],

@@ -69,7 +69,7 @@ class _VideosScreenState extends State<VideosScreen>
         return Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(bottom: 16, left: 16, right: 54),
+              padding: const EdgeInsets.only(bottom: 16, left: 16, right: 54),
               child: Text(
                 "Get yourself updates with the latest trends and technologies to help you make a better bussiness and produce",
                 style: Theme.of(context).textTheme.bodySmall,
@@ -77,9 +77,9 @@ class _VideosScreenState extends State<VideosScreen>
             ),
             Expanded(
               child: GridView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
                 itemBuilder: (context, index) {
-                  var opacity = 1 - (0.18 * index);
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
@@ -112,7 +112,7 @@ class _VideosScreenState extends State<VideosScreen>
                             size: 36,
                           ),
                         ),
-                        Center(
+                        const Center(
                           child: Icon(
                             Icons.play_circle_fill_rounded,
                             color: Colors.white,
@@ -124,7 +124,7 @@ class _VideosScreenState extends State<VideosScreen>
                   );
                 },
                 itemCount: videoID.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1.8,
                     crossAxisSpacing: 16,

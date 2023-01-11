@@ -791,7 +791,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
 }
 
 class PlacesAPISDK {
-  static const apiKey = 'AIzaSyBLWoBcT6V-9UDaT6jujKggai-GW0v3uYI';
+  static const apiKey = 'AIzaSyD9RFDxjCbHTBGX5bmoE6aDG8HswIH8xZk';
   late Prediction? instance;
   Future<Prediction?> init(context) async {
     instance = await PlacesAutocomplete.show(

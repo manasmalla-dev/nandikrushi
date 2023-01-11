@@ -29,7 +29,7 @@ class NotificationScreen extends StatelessWidget {
                           size:
                               Theme.of(context).textTheme.titleLarge?.fontSize,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 24,
                         ),
                         Text(
@@ -39,7 +39,7 @@ class NotificationScreen extends StatelessWidget {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.only(top: 8),
                       child: Text(
                         "Catch all the updates you might\nhave missed out",
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -50,7 +50,7 @@ class NotificationScreen extends StatelessWidget {
                                 ?.withOpacity(0.6)),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 36,
                     ),
                     ListView.separated(
@@ -84,9 +84,9 @@ class NotificationScreen extends StatelessWidget {
                                             .colorScheme
                                             .primary
                                             .withOpacity(0.1),
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 16)
-                                                .copyWith(top: 8),
+                                        padding: const EdgeInsets.symmetric(
+                                                horizontal: 16)
+                                            .copyWith(top: 8),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -126,14 +126,6 @@ class NotificationScreen extends StatelessWidget {
                                                                           "") ??
                                                                   0) ==
                                                               1) {
-                                                            var order = productProvider
-                                                                .myPurchases
-                                                                .where((element) =>
-                                                                    element["order_id"]
-                                                                        .toString() ==
-                                                                    notification[
-                                                                        "data"])
-                                                                .first;
                                                             Navigator.of(context).push(
                                                                 MaterialPageRoute(
                                                                     builder: (context) =>
@@ -179,7 +171,7 @@ class NotificationScreen extends StatelessWidget {
                                                             : Icons
                                                                 .card_travel_rounded)),
                                                   )
-                                                : SizedBox()
+                                                : const SizedBox()
                                           ],
                                         ),
                                       ))
@@ -189,7 +181,7 @@ class NotificationScreen extends StatelessWidget {
                           );
                         },
                         separatorBuilder: (context, _) {
-                          return SizedBox(
+                          return const SizedBox(
                             height: 16,
                           );
                         },
