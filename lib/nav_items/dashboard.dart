@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:nandikrushi/nav_items/notification_screen.dart';
 import 'package:nandikrushi/nav_items/profile_provider.dart';
 import 'package:nandikrushi/reusable_widgets/text_widget.dart';
-
 import 'package:provider/provider.dart';
 
 import '../product/product_provider.dart';
@@ -80,7 +80,10 @@ class _DashboardState extends State<Dashboard> {
                       icon: const Icon(Icons.language_rounded),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const NotificationScreen()));
+                      },
                       icon: const Icon(Icons.notifications_rounded),
                     )
                   ]),

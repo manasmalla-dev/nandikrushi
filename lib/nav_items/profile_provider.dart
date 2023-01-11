@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
-import 'package:nandikrushi/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi/utils/server.dart';
-import 'package:provider/provider.dart';
 
 import '../onboarding/login_provider.dart';
 
@@ -27,7 +25,10 @@ class ProfileProvider extends ChangeNotifier {
   String userIdForAddress = "";
   List<Map<String, String>> carousel = [];
 
+  List<Map<String, String>> notifications = [];
+
   bool isDataFetched = false;
+
   showLoader() {
     shouldShowLoader = true;
     notifyListeners();
@@ -129,6 +130,7 @@ class ProfileProvider extends ChangeNotifier {
         }
       }
       carousel = await getCarouselData(showMessage);
+      notifications = await getNotifications(showMessage);
       notifyListeners();
     } else if (response.statusCode == 400) {
       showMessage("Undefined parameter when calling API");
@@ -236,6 +238,7 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   String city = "Visakhapatnam";
+
   void setCity(String locality) {
     city = locality;
     notifyListeners();
@@ -332,6 +335,63 @@ class ProfileProvider extends ChangeNotifier {
           "description": "We believe in Truly food is a Medicine"
         }
       ];
+    }
+  }
+
+  Future<List<Map<String, String>>> getNotifications(
+      Function(String) showError) async {
+    var isTimedOut = false;
+    var url =
+        "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/savednotifications/getsavednotifications";
+
+    var response = await Server()
+        .getMethodParams(
+      url,
+    )
+        .timeout(const Duration(seconds: 5), onTimeout: () {
+      isTimedOut = true;
+      return [];
+    });
+
+    if (!isTimedOut) {
+      if (response.statusCode == 200 && jsonDecode(response.body)["status"]) {
+        log("sucess");
+        log(response.body);
+        List<dynamic> values = jsonDecode(response.body)["message"];
+
+        var iterables = values
+            .where((element) =>
+                element["user_id"] == null ||
+                element["user_id"] == userIdForAddress ||
+                element["user_id"] == "")
+            .map(
+              (e) => {
+                "title": e["title"].toString(),
+                "description": e["description"].toString(),
+                "image": e["image"].toString(),
+                "data": e["data"].toString(),
+                "type": e["notification_type"].toString()
+              },
+            )
+            .toList();
+        return iterables;
+      } else if (response.statusCode == 400) {
+        showError("Undefined Parameter when calling API");
+        log("Undefined Parameter");
+        return [];
+      } else if (response.statusCode == 404) {
+        showError("API Not found");
+        log("Not found");
+        return [];
+      } else {
+        showError("Failed to get data!");
+        log("failure ${response.statusCode}");
+        return [];
+      }
+    } else {
+      showError("Failed to get data!");
+      log("failure");
+      return [];
     }
   }
 }
