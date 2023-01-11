@@ -63,8 +63,7 @@ class ProductController extends ControllerMVC {
     }
     var name = formControllers['product-name']?.text ?? "";
     var category = selectedCategory ?? "";
-    var subcategory = selectedSubCategory ?? "";
-    var units = selectedUnits ?? "";
+
     var quantity = formControllers['quantity']?.text ?? "";
     var price = formControllers['price']?.text ?? "";
     var description = formControllers['description']?.text ?? "";
@@ -77,6 +76,8 @@ class ProductController extends ControllerMVC {
     //     quantity: int.tryParse(quantity) ?? 0,
     //     description: description,
     //     productImage: image[0]);
+
+    //TODO: Remind sir to add subcategories
     Map<String, String> body = {
       "user_id": uid.toString(),
       "name": name.toString(),

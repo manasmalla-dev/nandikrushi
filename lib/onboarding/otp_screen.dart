@@ -48,7 +48,7 @@ class _OTPScreenState extends State<OTPScreen> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back,
                         ))),
                 body: SingleChildScrollView(

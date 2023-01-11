@@ -1,11 +1,14 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:nandikrushi_farmer/nav_items/basket.dart';
 import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/textfield_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -23,10 +26,18 @@ class _SearchScreenState extends State<SearchScreen>
   void initState() {
     super.initState();
     ProductProvider productProvider = Provider.of(context, listen: false);
+
     _controller = TabController(
-        length: productProvider.allCategories.length,
+        length: productProvider.categorizedProducts.entries
+            .where((element) => element.value.isNotEmpty)
+            .length,
         vsync: this,
-        initialIndex: productProvider.allCategories.length > 1 ? 1 : 0);
+        initialIndex: productProvider.categorizedProducts.entries
+                    .where((element) => element.value.isNotEmpty)
+                    .length >
+                1
+            ? 1
+            : 0);
     searchController = TextEditingController();
   }
 
@@ -51,116 +62,175 @@ class _SearchScreenState extends State<SearchScreen>
       return SafeArea(
         bottom: false,
         child: Material(
-          child: CustomScrollView(
-            slivers: [
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                const SizedBox(
-                  height: 280,
-                  child: MapsContainer(),
-                ),
-                Container(
-                  color: Theme.of(context).colorScheme.surfaceVariant,
-                  height: 2,
-                ),
-              ])),
-              SliverAppBar(
-                leading: const SizedBox(),
-                toolbarHeight: 30,
-                flexibleSpace: Center(
-                  child: TabBar(
-                    indicatorColor: Theme.of(context).colorScheme.primary,
-                    controller: _controller,
-                    isScrollable: true,
-                    tabs: List.generate(
-                      productProvider.allCategories.length,
-                      (index) => Tab(
-                        child: TextWidget(
-                          productProvider.allCategories.entries
-                              .toList()[index]
-                              .key
-                              .toUpperCase(),
-                          weight: getTabBarTextFontWeight(0),
-                          color: getTabBarTextColor(0),
+          child: Scaffold(
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const BasketScreen()));
+              },
+              child: const Icon(Icons.shopping_basket_outlined),
+            ),
+            body: CustomScrollView(
+              slivers: [
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  SizedBox(
+                    height: 280,
+                    child: MapsContainer(
+                      productProvider: productProvider,
+                    ),
+                  ),
+                  Container(
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    height: 2,
+                  ),
+                ])),
+                SliverAppBar(
+                  leading: const SizedBox(),
+                  toolbarHeight: 30,
+                  flexibleSpace: Center(
+                    child: TabBar(
+                      indicatorColor: Theme.of(context).colorScheme.primary,
+                      controller: _controller,
+                      isScrollable: true,
+                      tabs: List.generate(
+                        productProvider.categorizedProducts.entries
+                            .where((element) => element.value.isNotEmpty)
+                            .length,
+                        (index) => Tab(
+                          child: TextWidget(
+                            productProvider.categorizedProducts.entries
+                                .where((element) => element.value.isNotEmpty)
+                                .toList()[index]
+                                .key
+                                .toUpperCase(),
+                            weight: getTabBarTextFontWeight(0),
+                            color: getTabBarTextColor(0),
+                          ),
                         ),
                       ),
                     ),
                   ),
+                  floating: false,
+                  pinned: true,
                 ),
-                floating: false,
-                pinned: true,
-              ),
-              SliverFillRemaining(
-                child: Row(
-                  children: [
-                    Container(
-                      height: double.infinity,
-                      color: Theme.of(context).colorScheme.surfaceVariant,
-                      alignment: Alignment.center,
-                      width: 24,
-                      child: RotatedBox(
-                        quarterTurns: -1,
-                        child: TextWidget(
-                          productProvider.allCategories.entries
-                              .toList()[_controller.index]
-                              .key
-                              .toUpperCase(),
-                          weight: FontWeight.bold,
+                SliverFillRemaining(
+                  child: Row(
+                    children: [
+                      Container(
+                        height: double.infinity,
+                        color: Theme.of(context).colorScheme.surfaceVariant,
+                        alignment: Alignment.center,
+                        width: 24,
+                        child: RotatedBox(
+                          quarterTurns: -1,
+                          child: TextWidget(
+                            productProvider.categorizedProducts.entries
+                                .where((element) => element.value.isNotEmpty)
+                                .toList()[_controller.index]
+                                .key
+                                .toUpperCase(),
+                            weight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                        child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 72,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 24.0),
-                            child: TextFieldWidget(
-                              onChanged: (_) {
-                                setState(() {});
-                              },
-                              onSubmitField: () {
-                                setState(() {});
-                              },
-                              textInputAction: TextInputAction.search,
-                              controller: searchController,
-                              label: "Search",
-                              style: Theme.of(context).textTheme.titleMedium,
-                              suffix: Container(
-                                margin: const EdgeInsets.all(12),
-                                child: ClipOval(
-                                    child: Container(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        padding: const EdgeInsets.all(0),
-                                        child: const Icon(
-                                          Icons.search_rounded,
-                                          color: Colors.white,
-                                        ))),
+                      Expanded(
+                          child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 72,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: TextFieldWidget(
+                                onChanged: (_) {
+                                  setState(() {});
+                                },
+                                onSubmitField: () {
+                                  setState(() {});
+                                },
+                                textInputAction: TextInputAction.search,
+                                controller: searchController,
+                                label: "Search",
+                                style: Theme.of(context).textTheme.titleMedium,
+                                suffix: Container(
+                                  margin: const EdgeInsets.all(12),
+                                  child: ClipOval(
+                                      child: Container(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          padding: const EdgeInsets.all(0),
+                                          child: const Icon(
+                                            Icons.search_rounded,
+                                            color: Colors.white,
+                                          ))),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: TabBarView(
-                            controller: _controller,
-                            children: List.generate(
-                                productProvider.allCategories.entries
-                                    .toList()
-                                    .length,
-                                (tabIndex) => ListView.builder(
-                                      itemBuilder: (context, index) {
-                                        var product = productProvider
+                          Expanded(
+                            child: TabBarView(
+                              controller: _controller,
+                              children: List.generate(
+                                  productProvider.categorizedProducts.entries
+                                      .where(
+                                          (element) => element.value.isNotEmpty)
+                                      .toList()
+                                      .length,
+                                  (tabIndex) => ListView.builder(
+                                        itemBuilder: (context, index) {
+                                          var product = productProvider
+                                              .categorizedProducts[
+                                                  productProvider
+                                                      .categorizedProducts
+                                                      .entries
+                                                      .where((element) =>
+                                                          element
+                                                              .value.isNotEmpty)
+                                                      .toList()[tabIndex]
+                                                      .key]
+                                              ?.where((element) =>
+                                                  element["name"]
+                                                      ?.toLowerCase()
+                                                      .contains(searchController
+                                                          .text
+                                                          .toLowerCase()) ??
+                                                  true)
+                                              .toList()[index];
+                                          return ProductCard(
+                                              type: CardType.product,
+                                              productId:
+                                                  product?["product_id"] ??
+                                                      "XYZ",
+                                              productName:
+                                                  product?["name"] ?? "Name",
+                                              productDescription:
+                                                  product?["description"] ??
+                                                      "Description",
+                                              imageURL: product?["url"] ??
+                                                  "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
+                                              price: double.tryParse(
+                                                      product?["price"] ??
+                                                          "00.00") ??
+                                                  00.00,
+                                              units:
+                                                  product?["units"] ?? "1 unit",
+                                              location: product?["place"] ??
+                                                  "Visakhapatnam");
+                                        },
+                                        itemCount: productProvider
                                             .categorizedProducts[productProvider
-                                                .allCategories.entries
+                                                .categorizedProducts.entries
+                                                .where((element) =>
+                                                    element.value.isNotEmpty)
                                                 .toList()[tabIndex]
                                                 .key]
                                             ?.where((element) =>
@@ -170,51 +240,19 @@ class _SearchScreenState extends State<SearchScreen>
                                                         .text
                                                         .toLowerCase()) ??
                                                 true)
-                                            .toList()[index];
-                                        return ProductCard(
-                                            type: CardType.product,
-                                            productId:
-                                                product?["product_id"] ?? "XYZ",
-                                            productName:
-                                                product?["name"] ?? "Name",
-                                            productDescription:
-                                                product?["description"] ??
-                                                    "Description",
-                                            imageURL: product?["url"] ??
-                                                "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
-                                            price: double.tryParse(
-                                                    product?["price"] ??
-                                                        "00.00") ??
-                                                00.00,
-                                            units:
-                                                product?["units"] ?? "1 unit",
-                                            location: product?["place"] ??
-                                                "Visakhapatnam");
-                                      },
-                                      itemCount: productProvider
-                                          .categorizedProducts[productProvider
-                                              .allCategories.entries
-                                              .toList()[tabIndex]
-                                              .key]
-                                          ?.where((element) =>
-                                              element["name"]
-                                                  ?.toLowerCase()
-                                                  .contains(searchController
-                                                      .text
-                                                      .toLowerCase()) ??
-                                              true)
-                                          .length,
-                                      primary: false,
-                                      shrinkWrap: true,
-                                    )),
+                                            .length,
+                                        primary: false,
+                                        shrinkWrap: true,
+                                      )),
+                            ),
                           ),
-                        ),
-                      ],
-                    )),
-                  ],
-                ),
-              )
-            ],
+                        ],
+                      )),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       );
@@ -223,7 +261,9 @@ class _SearchScreenState extends State<SearchScreen>
 }
 
 class MapsContainer extends StatefulWidget {
-  const MapsContainer({Key? key}) : super(key: key);
+  final ProductProvider productProvider;
+  const MapsContainer({Key? key, required this.productProvider})
+      : super(key: key);
 
   @override
   State<MapsContainer> createState() => _MapsContainerState();
@@ -234,10 +274,7 @@ class _MapsContainerState extends State<MapsContainer>
   late GoogleMapController mapController;
 
   final LatLng _center = const LatLng(17.7410573, 83.3093624);
-  final Map<String, LatLng> markerLocations = {
-    "Spotmies": const LatLng(17.744257, 83.3106602),
-    "Manas's Residence": const LatLng(17.7410573, 83.3093624)
-  };
+
   late String _darkMapStyle;
   Future _loadMapStyles() async {
     _darkMapStyle =
@@ -246,16 +283,15 @@ class _MapsContainerState extends State<MapsContainer>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _loadMapStyles();
   }
 
   Future _setMapStyle() async {
-    final controller = await mapController;
+    final controller = mapController;
     final theme = WidgetsBinding.instance.window.platformBrightness;
-    print(theme);
+
     if (theme == Brightness.dark) {
       controller.setMapStyle(_darkMapStyle);
     } else {
@@ -265,7 +301,6 @@ class _MapsContainerState extends State<MapsContainer>
 
   @override
   void didChangePlatformBrightness() {
-    // TODO: implement didChangePlatformBrightness
     super.didChangePlatformBrightness();
     setState(() {
       _setMapStyle();
@@ -274,7 +309,6 @@ class _MapsContainerState extends State<MapsContainer>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
@@ -285,33 +319,36 @@ class _MapsContainerState extends State<MapsContainer>
     setState(() {
       _setMapStyle();
     });
-    setState(() {
-      _markers.clear();
-      for (final office in markerLocations.entries) {
-        final marker = Marker(
-          markerId: MarkerId(office.key),
-          position: LatLng(office.value.latitude, office.value.longitude),
-          infoWindow: InfoWindow(
-            title: office.key,
-            snippet: "${office.value.latitude},${office.value.longitude}",
-          ),
-        );
-        _markers[office.key] = marker;
-      }
-    });
+    sellerPins = widget.productProvider.products
+        .where((e) => e["latitude"] != null && e["longitude"] != null)
+        .map((e) => Marker(
+              markerId: MarkerId(e["seller_name"].toString()),
+              position: LatLng(double.tryParse(e["longitude"]!)!,
+                  double.tryParse(e["latitude"]!)!),
+              infoWindow: InfoWindow(
+                title: e["seller_name"].toString(),
+                snippet: "Fresh Veggies from here",
+              ),
+            ))
+        .toSet();
+
+    setState(() {});
   }
 
-  final Map<String, Marker> _markers = {};
+  Set<Marker> sellerPins = {};
 
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
       onMapCreated: _onMapCreated,
+      gestureRecognizers: {
+        Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer())
+      },
       initialCameraPosition: CameraPosition(
         target: _center,
-        zoom: 16,
+        zoom: 14,
       ),
-      markers: _markers.values.toSet(),
+      markers: sellerPins,
     );
   }
 }

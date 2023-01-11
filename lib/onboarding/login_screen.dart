@@ -331,7 +331,7 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
                   const Spacer(),
                   TextButton(
                     style: TextButton.styleFrom(
-                        primary: Theme.of(context).colorScheme.primary),
+                        foregroundColor: Theme.of(context).colorScheme.primary),
                     onPressed: () {
                       showForgotPasswordDialog(context, widget.constraints,
                           widget.loginPageController, false);
@@ -366,7 +366,7 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
         Platform.isAndroid || Platform.isIOS
             ? TextButton(
                 style: TextButton.styleFrom(
-                    primary: Theme.of(context).colorScheme.primary),
+                    foregroundColor: Theme.of(context).colorScheme.primary),
                 onPressed: () {
                   widget.onChangeLoginMethod();
                 },
@@ -773,7 +773,8 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                         const Spacer(),
                         TextButton(
                           style: TextButton.styleFrom(
-                              primary: Theme.of(context).colorScheme.primary),
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.primary),
                           onPressed: () {
                             showForgotPasswordDialog(
                               context,
@@ -817,7 +818,8 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
               Platform.isAndroid || Platform.isIOS
                   ? TextButton(
                       style: TextButton.styleFrom(
-                          primary: Theme.of(context).colorScheme.primary),
+                          foregroundColor:
+                              Theme.of(context).colorScheme.primary),
                       onPressed: () {
                         widget.onChangeLoginMethod();
                       },

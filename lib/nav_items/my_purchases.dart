@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:nandikrushi_farmer/product/product_card.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
+import 'package:nandikrushi_farmer/utils/sort_filter.dart';
 import 'package:provider/provider.dart';
 
 class MyPurchasesScreen extends StatefulWidget {
@@ -13,20 +14,82 @@ class MyPurchasesScreen extends StatefulWidget {
 }
 
 class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
+  Sort sort = Sort.name;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        automaticallyImplyLeading: false,
         toolbarHeight: kToolbarHeight,
         elevation: 0,
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+          PopupMenuButton(
+              offset: Offset(-5, 0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
               icon: const Icon(
                 Icons.sort_rounded,
-              ))
+              ),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(child: StatefulBuilder(
+                    builder: (context, setMenuState) {
+                      return Column(
+                        children: [
+                          PopupMenuItem(child: Text("Sort by")),
+                          PopupMenuItem(
+                              child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                children: [
+                                  Radio<Sort>(
+                                      activeColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      value: Sort.name,
+                                      groupValue: sort,
+                                      onChanged: (_) {
+                                        setMenuState(() {
+                                          sort = _ ?? sort;
+                                        });
+                                      }),
+                                  SizedBox(width: 16),
+                                  Icon(Icons.abc_rounded),
+                                  SizedBox(width: 8),
+                                  Text("Name")
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Radio<Sort>(
+                                      activeColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      value: Sort.date,
+                                      groupValue: sort,
+                                      onChanged: (_) {
+                                        setMenuState(() {
+                                          sort = _ ?? sort;
+                                        });
+                                      }),
+                                  SizedBox(width: 16),
+                                  Icon(Icons.calendar_month_rounded),
+                                  SizedBox(width: 8),
+                                  Text("Date")
+                                ],
+                              ),
+                            ],
+                          )),
+                        ],
+                      );
+                    },
+                  ))
+                ];
+              },
+              onSelected: (value) {
+                //
+              }),
         ],
         title: TextWidget(
           'My Purchases',
@@ -35,6 +98,7 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
         ),
       ),
       body: Consumer<ProductProvider>(builder: (context, productProvider, _) {
+        //TODO: Implement the sort logic
         return productProvider.myPurchases.isEmpty
             ? Column(children: [
                 Expanded(
@@ -99,7 +163,8 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
             : ListView.separated(
                 itemBuilder: (context, itemIndex) {
                   return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.surfaceVariant,
                         borderRadius: BorderRadius.circular(12)),
@@ -107,7 +172,7 @@ class _MyPurchasesScreenState extends State<MyPurchasesScreen> {
                         primary: false,
                         shrinkWrap: true,
                         separatorBuilder: (_, __) {
-                          return Divider();
+                          return const Divider();
                         },
                         itemCount: productProvider
                             .myPurchases[itemIndex]["products"].length,

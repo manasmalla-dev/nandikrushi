@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
@@ -84,13 +83,13 @@ class ProductProvider extends ChangeNotifier {
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
-    print("HELLO CATEGORIES ${profileProvider.customerGroupId}");
+    profileProvider.fetchingDataType = "fetch the categories";
+    notifyListeners();
     profileProvider.showLoader();
     var url =
         "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getcategories";
     var response = await Server().getMethodParams(url);
     if (response == null) {
-      print("Hello everyone");
       showMessage("Failed to get a response from the server!");
       //hideLoader();
       if (Platform.isAndroid) {
@@ -106,7 +105,6 @@ class ProductProvider extends ChangeNotifier {
           categories = {};
           units = {};
           allCategories = {};
-          print(profileProvider.customerGroupId);
           (jsonDecode(response.body)["message"])
               .where((element) =>
                   element["customer_group_id"].toString() ==
@@ -117,11 +115,9 @@ class ProductProvider extends ChangeNotifier {
               capitalize(e["category_name"].toString().toLowerCase()):
                   int.tryParse(e["category_id"]) ?? 24
             });
-            print(categories);
             Map<String, String> tempUnitsMap = {};
             if (e["units"] != null) {
               e["units"].forEach((el) {
-                print(el["id"]);
                 tempUnitsMap
                     .addAll({el["id"].toString(): el["title"] ?? "units"});
               });
@@ -135,22 +131,20 @@ class ProductProvider extends ChangeNotifier {
               capitalize(e["category_name"].toString().toLowerCase()):
                   int.tryParse(e["category_id"]) ?? 24
             });
-            print(allCategories);
           });
           //if categories are empty for user group
-          print(jsonDecode(response.body)["message"]);
           if (categories.isEmpty) {
-            categories = profileProvider.customerGroupId == 3
+            categories = profileProvider.customerGroupId == 3.toString()
                 ? {"Flours": 0}
-                : profileProvider.customerGroupId == 2
+                : profileProvider.customerGroupId == 2.toString()
                     ? {"Vegetables": 24}
                     : {"Breakfast": 0};
             allCategories = {"Flours": 0, "Vegetables": 24, "Breakfast": 0};
-            units = profileProvider.customerGroupId == 3
+            units = profileProvider.customerGroupId == 3.toString()
                 ? {
                     "Flours": {"kilograms": "kgs"}
                   }
-                : profileProvider.customerGroupId == 2
+                : profileProvider.customerGroupId == 2.toString()
                     ? {
                         "Vegetables": {"kilograms": "kgs"}
                       }
@@ -158,7 +152,6 @@ class ProductProvider extends ChangeNotifier {
                         "Breakfast": {"plates": "plates"}
                       };
           }
-          print(categories);
         } else {
           showMessage("Error fetching categories 1!");
           profileProvider.hideLoader();
@@ -200,6 +193,9 @@ class ProductProvider extends ChangeNotifier {
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
     profileProvider.showLoader();
+
+    profileProvider.fetchingDataType = "fetch the subcategories";
+    notifyListeners();
     var url =
         "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getsubcategories";
     var response = await Server().getMethodParams(url);
@@ -241,13 +237,13 @@ class ProductProvider extends ChangeNotifier {
             }
           });
           if (subcategories.isEmpty) {
-            subcategories = profileProvider.customerGroupId == 3
+            subcategories = profileProvider.customerGroupId == 3.toString()
                 ? {
                     0: [
                       {"Atta": 0}
                     ]
                   }
-                : profileProvider.customerGroupId == 2
+                : profileProvider.customerGroupId == 2.toString()
                     ? {
                         24: [
                           {"Leafy Vegetables": 0}
@@ -259,7 +255,6 @@ class ProductProvider extends ChangeNotifier {
                         ]
                       };
           }
-          print(subcategories);
         } else {
           showMessage("Error fetching subcategories -2 !");
           profileProvider.hideLoader();
@@ -300,6 +295,8 @@ class ProductProvider extends ChangeNotifier {
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
+    profileProvider.fetchingDataType = "fetch our products";
+    notifyListeners();
     profileProvider.showLoader();
     var url =
         "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getallproducts";
@@ -325,8 +322,6 @@ class ProductProvider extends ChangeNotifier {
                   element.value ==
                   int.tryParse(e["category"][0]["category_id"] ?? "-1"))
               .isNotEmpty) {
-            print(double.tryParse(
-                e["vendor_details"][0]["location"]["lagtitude"].toString()));
             // var locationGeoCoded = await placemarkFromCoordinates(
             //     !e["vendor_details"][0]["location"]["lagtitude"]
             //             .toString()
@@ -394,7 +389,23 @@ class ProductProvider extends ChangeNotifier {
                           .round() /
                       2)
                   .toString(),
+              'customer_ratings': jsonEncode(e["Products"][0]["rating"]),
             };
+
+            if (!e["vendor_details"][0]["location"]["longitude"]
+                    .toString()
+                    .contains("0.0") &&
+                !e["vendor_details"][0]["location"]["latitude"]
+                    .toString()
+                    .contains("0.0") &&
+                e["vendor_details"][0]["location"]["longitude"] != null &&
+                e["vendor_details"][0]["location"]["latitude"] != null) {
+              element.addAll({
+                "longitude": e["vendor_details"][0]["location"]["longitude"],
+                "latitude": e["vendor_details"][0]["location"]["latitude"],
+              });
+            }
+
             log("12Prod->$element ,; $e");
             products.add(element);
           }
@@ -447,7 +458,8 @@ class ProductProvider extends ChangeNotifier {
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
-    print("Hello getting orders");
+    profileProvider.fetchingDataType = "fetch your orders";
+    notifyListeners();
     profileProvider.showLoader();
 
     var ordersData = await post(
@@ -459,26 +471,14 @@ class ProductProvider extends ChangeNotifier {
         "Accept": "application/json",
       },
     );
-    if (ordersData == null) {
-      showMessage("Failed to get a response from the server!");
-      //hideLoader();
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
-      return;
-    }
+
     if (ordersData.statusCode == 200) {
-      print("enterd orders API");
       orders = [];
       try {
         if (jsonDecode(ordersData.body)["status"]) {
           List<dynamic> orderJSONResponse =
               jsonDecode(ordersData.body)["order"];
-          print(orderJSONResponse);
           for (var element in orderJSONResponse) {
-            print("order - 1- > $element");
             var orderData = {"order_id": element["order_id"]};
             orderData["products"] = [];
             for (var productOrderDetails
@@ -532,14 +532,13 @@ class ProductProvider extends ChangeNotifier {
             orderData.addAll({
               "customer_name":
                   "${element["customer_details"][0]["firstname"]} ${element["customer_details"][0]["lastname"]}",
-              "date": element["delivery_details"][0]["delivery_date"]
+              "date": element["delivery_details"][0]["delivery_date"],
+              "order_status": element["delivery_details"][0]["order_status"],
             });
 
-            print("order - 2- > $orderData");
             orders.add(orderData);
           }
           log(orders.toString());
-          print("got orders");
           if (!isFromNavHost) {
             profileProvider.isDataFetched = true;
             notifyListeners();
@@ -596,7 +595,8 @@ class ProductProvider extends ChangeNotifier {
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
-    print("Hello getting my purchses");
+    profileProvider.fetchingDataType = "fetch your purchases";
+    notifyListeners();
     profileProvider.showLoader();
 
     var myPurchasesData = await post(
@@ -608,25 +608,14 @@ class ProductProvider extends ChangeNotifier {
         "Accept": "application/json",
       },
     );
-    if (myPurchasesData == null) {
-      showMessage("Failed to get a response from the server!");
-      //hideLoader();
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
-      return;
-    }
+
     if (myPurchasesData.statusCode == 200) {
       myPurchases = [];
       try {
         if (jsonDecode(myPurchasesData.body)["status"]) {
           List<dynamic> myPurchasesJSONResponse =
               jsonDecode(myPurchasesData.body)["order"];
-          print(myPurchasesJSONResponse);
           for (var element in myPurchasesJSONResponse) {
-            print("myPurchases - 1- > $element");
             var myPurchasesData = {"order_id": element["order_id"]};
             myPurchasesData["products"] = [];
             for (var productOrderDetails
@@ -696,7 +685,6 @@ class ProductProvider extends ChangeNotifier {
               "date": element["delivery_details"][0]["delivery_date"],
             });
 
-            print("order - 2- > $myPurchasesData");
             myPurchases.add(myPurchasesData);
           }
           log(myPurchases.toString());
@@ -751,6 +739,8 @@ class ProductProvider extends ChangeNotifier {
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
+    profileProvider.fetchingDataType = "fetch your cart";
+    notifyListeners();
     var cartData = await Server().postFormData(
         url:
             "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/products",
@@ -850,7 +840,8 @@ class ProductProvider extends ChangeNotifier {
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
-    print("Getting data");
+    profileProvider.fetchingDataType = "fetch your products";
+    notifyListeners();
     var myProductsData = await Server().postFormData(
         url:
             "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerproduct/GetSellerproductdata",
@@ -925,6 +916,8 @@ class ProductProvider extends ChangeNotifier {
       {required Function(String) showMessage,
       required ProfileProvider profileProvider,
       bool isFromNavHost = false}) async {
+    profileProvider.fetchingDataType = "fetch great coupons";
+    notifyListeners();
     var couponsData = await Server().getMethodParams(
         "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/coupon/getcoupon");
     if (couponsData == null) {
@@ -1000,6 +993,9 @@ class ProductProvider extends ChangeNotifier {
       required ProfileProvider profileProvider}) async {
     var cartElementExists =
         cart.where((element) => element["product_id"] == productID).isNotEmpty;
+
+    profileProvider.fetchingDataType = "modify your cart";
+    notifyListeners();
     profileProvider.showLoader();
     if (cartElementExists) {
       modifyProductToCart(
@@ -1025,8 +1021,6 @@ class ProductProvider extends ChangeNotifier {
       }
       if (cartData.statusCode == 200) {
         if (jsonDecode(cartData.body)["status"]) {
-          //TODO add to cart manually and then notifyListener
-          print("Hello!");
           await getCart(
               showMessage: showMessage, profileProvider: profileProvider);
           await getAllProducts(
@@ -1180,6 +1174,9 @@ class ProductProvider extends ChangeNotifier {
                         ),
                         ElevatedButtonWidget(
                           onClick: () async {
+                            profileProvider.fetchingDataType =
+                                "modify your cart";
+                            notifyListeners();
                             profileProvider.showLoader();
                             String apiURL = initialCartIems == 0
                                 ? "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/cart/remove"
@@ -1193,7 +1190,7 @@ class ProductProvider extends ChangeNotifier {
                                 "quantity": initialCartIems.toString(),
                               });
                             }
-                            log("payload->${updateCartBody}");
+                            log("payload->$updateCartBody");
                             var cartData = await Server().postFormData(
                                 url: apiURL, body: updateCartBody);
                             if (cartData == null) {
@@ -1209,8 +1206,6 @@ class ProductProvider extends ChangeNotifier {
                             }
                             if (cartData.statusCode == 200) {
                               if (jsonDecode(cartData.body)["status"]) {
-                                //TODO update to cart manually and then notifyListener
-
                                 await getAllProducts(
                                     showMessage: showMessage,
                                     profileProvider: profileProvider);
@@ -1268,6 +1263,9 @@ class ProductProvider extends ChangeNotifier {
                 "") ??
             0) >
         1;
+
+    profileProvider.fetchingDataType = "modify your cart";
+    notifyListeners();
     profileProvider.showLoader();
     if (cartElementExists) {
       modifyProductToCart(
@@ -1295,7 +1293,6 @@ class ProductProvider extends ChangeNotifier {
       }
       if (cartData.statusCode == 200) {
         if (jsonDecode(cartData.body)["status"]) {
-          //TODO add to cart manually and then notifyListener
           await getCart(
               showMessage: showMessage, profileProvider: profileProvider);
           await getAllProducts(
@@ -1323,7 +1320,6 @@ class ProductProvider extends ChangeNotifier {
   Future<void> getData(
       {required Function(String) showMessage,
       required ProfileProvider profileProvider}) async {
-    print("HELLO");
     await getCategories(
         showMessage: showMessage,
         profileProvider: profileProvider,
@@ -1336,7 +1332,6 @@ class ProductProvider extends ChangeNotifier {
         showMessage: showMessage,
         profileProvider: profileProvider,
         isFromNavHost: true);
-    print("hello navhost calling");
     await getOrders(
         showMessage: showMessage,
         profileProvider: profileProvider,
@@ -1354,7 +1349,5 @@ class ProductProvider extends ChangeNotifier {
     profileProvider.isDataFetched = true;
     notifyListeners();
     profileProvider.hideLoader();
-    //TODO: Update the above get methods to include the hide loader
-    // as soon as data is fetched unless first time
   }
 }

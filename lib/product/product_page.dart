@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/my_account.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
@@ -28,7 +30,9 @@ class _ProductPageState extends State<ProductPage> {
         double rating =
             (double.tryParse(widget.productDetails["rating"] ?? "0.0") ?? 0);
         return Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.background,
             toolbarHeight: kToolbarHeight,
             elevation: 0,
             actions: [
@@ -298,6 +302,7 @@ class _ProductPageState extends State<ProductPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const SizedBox(height: 24,),
                         Container(
                           height: 185,
                           width: double.infinity,
@@ -391,6 +396,8 @@ class _ProductPageState extends State<ProductPage> {
                                     : rating == 4.5
                                         ? 0.5
                                         : 1),
+                            const SizedBox(width: 8,),
+                            Text((jsonDecode(widget.productDetails["customer_ratings"] ?? "{}") as Map<String, dynamic>).length.toString(), style: Theme.of(context).textTheme.titleMedium,)
                           ],
                         ),
                         const SizedBox(
@@ -583,8 +590,9 @@ class _ProductPageState extends State<ProductPage> {
                                                   flex: 3,
                                                   child: ElevatedButton(
                                                     style: ElevatedButton.styleFrom(
-                                                        primary:
-                                                            Theme.of(context)
+                                                        foregroundColor: Theme.of(context)
+                                                                .colorScheme
+                                                                .onPrimary, backgroundColor: Theme.of(context)
                                                                 .colorScheme
                                                                 .primary,
                                                         shape:
@@ -592,11 +600,7 @@ class _ProductPageState extends State<ProductPage> {
                                                                 borderRadius:
                                                                     BorderRadius
                                                                         .circular(
-                                                                            8)),
-                                                        onPrimary:
-                                                            Theme.of(context)
-                                                                .colorScheme
-                                                                .onPrimary),
+                                                                            8))),
                                                     onPressed: () async {
                                                       launchEmail();
                                                     },
@@ -697,14 +701,24 @@ class _ProductPageState extends State<ProductPage> {
                         const SizedBox(
                           height: 12,
                         ),
-                        const Divider(
+                        (productProvider.categorizedProducts[
+                        widget.productDetails["category_id"]]
+                            ?.where((element) =>
+                        element["product_id"] !=
+                            widget.productDetails["product_id"])
+                            .isNotEmpty ?? false) ? const Divider(
                           thickness: 1,
-                        ),
-                        TextWidget(
+                        ): const SizedBox(),
+                        (productProvider.categorizedProducts[
+                        widget.productDetails["category_id"]]
+                            ?.where((element) =>
+                        element["product_id"] !=
+                            widget.productDetails["product_id"])
+                            .isNotEmpty ?? false) ? TextWidget(
                           'More Farmer Products'.toUpperCase(),
                           weight: FontWeight.w800,
                           size: 16,
-                        ),
+                        ): const SizedBox(),
                         ListView.builder(
                           itemBuilder: (context, index) {
                             return ProductCard(
@@ -735,7 +749,7 @@ class _ProductPageState extends State<ProductPage> {
                               ?.where((element) =>
                                   element["product_id"] !=
                                   widget.productDetails["product_id"])
-                              ?.length,
+                              .length,
                           primary: false,
                           shrinkWrap: true,
                         )

@@ -67,8 +67,6 @@ class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
                       draggable: true,
                       onDragEnd: ((newPosition) {
                         setState(() {
-                          print(newPosition.latitude);
-                          print(newPosition.longitude);
                           loginPageController.location = newPosition;
                           loginPageController.geocodeLocation(context,
                               newPosition.latitude, newPosition.longitude);
@@ -76,14 +74,14 @@ class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
                       }),
                       markerId: const MarkerId("Home"),
                       position: loginPageController.location ??
-                          LatLng(17.744062, 83.335216),
+                          const LatLng(17.744062, 83.335216),
                     ),
                   },
                   onTap: (_) {},
                   initialCameraPosition: CameraPosition(
                     bearing: 0,
                     target: loginPageController.location ??
-                        LatLng(17.744062, 83.335216),
+                        const LatLng(17.744062, 83.335216),
                     tilt: 0,
                     zoom: 15,
                   ),
@@ -107,7 +105,7 @@ class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   width: double.infinity,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(32)),

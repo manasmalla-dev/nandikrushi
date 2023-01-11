@@ -7,7 +7,6 @@ import 'package:nandikrushi_farmer/reusable_widgets/rating_widget.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/utils/login_utils.dart';
-
 import 'package:provider/provider.dart';
 
 enum CardType {
@@ -350,19 +349,21 @@ class _ProductCardState extends State<ProductCard> {
                                                         flex: 3,
                                                         child: ElevatedButton(
                                                           style: ElevatedButton.styleFrom(
-                                                              primary: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .primary,
+                                                              foregroundColor:
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onPrimary,
+                                                              backgroundColor:
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .primary,
                                                               shape: RoundedRectangleBorder(
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
-                                                                              8)),
-                                                              onPrimary: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .onPrimary),
+                                                                              8))),
                                                           onPressed: () async {
                                                             dialCall();
                                                           },
@@ -399,7 +400,7 @@ class _ProductCardState extends State<ProductCard> {
                           ? [
                               //A product card for my products page
                               Text(
-                                  'Posted on: ${widget.additionalInformation["date"]}'),
+                                  'Posted on:\n${widget.additionalInformation["date"]}'),
                               const SizedBox(height: 8),
                               OutlinedButton(
                                 style: OutlinedButton.styleFrom(
@@ -505,7 +506,7 @@ class _ProductCardState extends State<ProductCard> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   TextWidget(
                                     "Buy Again".toString().toUpperCase(),
                                     size: Theme.of(context)
@@ -618,19 +619,21 @@ class _ProductCardState extends State<ProductCard> {
                                                         flex: 3,
                                                         child: ElevatedButton(
                                                           style: ElevatedButton.styleFrom(
-                                                              primary: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .primary,
+                                                              foregroundColor:
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onPrimary,
+                                                              backgroundColor:
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .primary,
                                                               shape: RoundedRectangleBorder(
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
-                                                                              8)),
-                                                              onPrimary: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .onPrimary),
+                                                                              8))),
                                                           onPressed: () async {
                                                             dialCall();
                                                           },

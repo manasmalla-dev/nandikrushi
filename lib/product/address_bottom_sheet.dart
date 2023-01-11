@@ -20,7 +20,7 @@ showAddressesBottomSheet(
               height: 600,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
+                  color: Theme.of(context).colorScheme.background,
                   borderRadius: BorderRadius.circular(16)),
               child: profileProvider.userAddresses.isEmpty
                   ? Center(
@@ -45,7 +45,7 @@ showAddressesBottomSheet(
                               height: 12,
                             ),
                             TextWidget(
-                              'Your selected city is Hyderabad.\nPlease add an address by tapping below.',
+                              'Your selected city is ${profileProvider.storeAddress["city"]}.\nPlease add an address by tapping below.',
                               weight: FontWeight.w600,
                               color: Colors.grey,
                               flow: TextOverflow.visible,

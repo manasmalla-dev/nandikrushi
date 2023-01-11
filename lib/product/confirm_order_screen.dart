@@ -35,7 +35,7 @@ coupons(BuildContext context) {
             backgroundColor: ElevationOverlay.colorWithOverlay(
                 Theme.of(context).colorScheme.surface,
                 Theme.of(context).colorScheme.primary,
-                3.0),
+                0.5),
             insetPadding: const EdgeInsets.symmetric(horizontal: 42),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
@@ -76,6 +76,7 @@ coupons(BuildContext context) {
                                     ? Theme.of(context)
                                         .colorScheme
                                         .secondaryContainer
+                                        .withOpacity(0.3)
                                     : null,
                             onTap: () async {
                               if (productProvider.appliedCoupon.isEmpty) {
@@ -125,12 +126,12 @@ coupons(BuildContext context) {
 class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
   var radioState = false;
 
-  var selected;
+  dynamic selected;
   int deliverySlot = 0;
 
   @override
   Widget build(BuildContext context) {
-    _displayDialog(BuildContext context) async {
+    displayDialog(BuildContext context) async {
       selected = await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -151,7 +152,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                       Container(
                         alignment: Alignment.center,
                         width: 428,
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         child: ElevatedButtonWidget(
                           onClick: () {
                             Navigator.pop(context);
@@ -169,7 +170,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                       ),
                       Container(
                         width: 428,
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         child: ElevatedButtonWidget(
                           onClick: () async {
                             var placeOrderBody = {
@@ -180,7 +181,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                   radioState ? "" : "Cash On Delivery",
                               "address_id": widget.addressID,
                               "coupon_code": "2222",
-                              "time_slot": "1",
+                              "time_slot": ((deliverySlot % 2) + 1).toString(),
                               "schedule": DateFormat("yyyy-MM-dd")
                                   .format(DateTime.now()),
                               "orders": productProvider.cart
@@ -190,6 +191,9 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                             log(placeOrderBody.toString());
                             Navigator.of(context).pop();
                             if (!profileProvider.shouldShowLoader) {
+                              profileProvider.fetchingDataType =
+                                  "place your order";
+
                               profileProvider.showLoader();
                               var response = await post(
                                 Uri.parse(
@@ -200,23 +204,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                   "Accept": "application/json",
                                 },
                               );
-                              if (response == null) {
-                                profileProvider.hideLoader();
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => OrderSuccessfulScreen(
-                                          name: profileProvider.firstName,
-                                          deliverySlot:
-                                              "${DateFormat('dd EEE, MMM').format(
-                                                    DateTime.now().add(
-                                                      Duration(
-                                                        days: deliverySlot ~/ 2,
-                                                      ),
-                                                    ),
-                                                  ).toUpperCase()} ${deliverySlot % 2 == 0 ? '7 AM - 11 AM' : '11 AM - 3 PM'}",
-                                          orderNumber: "XXXXXXXXXXX",
-                                        )));
-                                return;
-                              }
+
                               log(response.statusCode.toString());
                               if (response.statusCode == 200) {
                                 log(response.body.toString());
@@ -245,6 +233,11 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                             )),
                                   );
                                   profileProvider.hideLoader();
+                                } else {
+                                  snackbar(context,
+                                      jsonDecode(response.body)["message"]);
+                                  profileProvider.hideLoader();
+                                  Navigator.of(context).pop();
                                 }
                               } else if (response.statusCode == 400) {
                                 snackbar(context,
@@ -287,9 +280,11 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                             'Order Total',
                           ),
                           TextWidget(
-                            'Rs. ${(productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                            'Rs. ${(productProvider.appliedCoupon["type"] == "P" ? ((1 - ((double.tryParse(productProvider.appliedCoupon["discount"] ?? "0.0") ?? 0) / 100)) * (productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                   (value, element) => value + element,
-                                ) + 100).toStringAsFixed(2)}',
+                                ) + 100.00)) : (((double.tryParse(productProvider.appliedCoupon["discount"] ?? "0.0") ?? 0) * -1) + (productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                  (value, element) => value + element,
+                                ) + 100.00))).toStringAsFixed(2)}',
                             size: Theme.of(context)
                                 .textTheme
                                 .titleMedium
@@ -331,7 +326,9 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
         return Stack(
           children: [
             Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.background,
               appBar: AppBar(
+                backgroundColor: Theme.of(context).colorScheme.background,
                 toolbarHeight: kToolbarHeight,
                 elevation: 0,
                 leading: IconButton(
@@ -366,8 +363,12 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                           coupons(context);
                         },
                         height: 56,
-                        buttonName: "Apply Coupon",
-                        textStyle: FontWeight.w600,
+                        buttonName: productProvider.appliedCoupon.isEmpty
+                            ? "Apply Coupon"
+                            : "Coupon Applied: ${productProvider.appliedCoupon["code"]}",
+                        textStyle: productProvider.appliedCoupon.isEmpty
+                            ? null
+                            : FontWeight.w600,
                         trailingIcon: Icons.chevron_right_rounded,
                       ),
                       Container(
@@ -499,6 +500,9 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                   ?.fontSize,
                               weight: FontWeight.bold,
                             ),
+                            const SizedBox(
+                              height: 16,
+                            ),
                             const Divider(),
                             const SizedBox(
                               height: 12,
@@ -515,9 +519,11 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                       ?.fontSize,
                                 ),
                                 TextWidget(
-                                  'Rs. ${(productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                  'Rs. ${(productProvider.appliedCoupon["type"] == "P" ? ((1 - ((double.tryParse(productProvider.appliedCoupon["discount"] ?? "0.0") ?? 0) / 100)) * (productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                         (value, element) => value + element,
-                                      ) + 100.00).toStringAsFixed(2)}',
+                                      ) + 100.00)) : (((double.tryParse(productProvider.appliedCoupon["discount"] ?? "0.0") ?? 0) * -1) + (productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                        (value, element) => value + element,
+                                      ) + 100.00))).toStringAsFixed(2)}',
                                   weight: FontWeight.w700,
                                   size: Theme.of(context)
                                       .textTheme
@@ -530,6 +536,9 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                               height: 12,
                             ),
                             const Divider(),
+                            const SizedBox(
+                              height: 24,
+                            ),
                             TextWidget(
                               'Payment Method',
                               weight: FontWeight.w800,
@@ -564,6 +573,9 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                     });
                                   }),
                             ),
+                            const SizedBox(
+                              height: 24,
+                            ),
                             ElevatedButtonWidget(
                               leadingIcon: Icons.arrow_forward_rounded,
                               buttonName:
@@ -574,7 +586,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                               borderRadius: 12,
                               innerPadding: 0.03,
                               onClick: () {
-                                _displayDialog(context);
+                                displayDialog(context);
                               },
                             ),
                             const SizedBox(
@@ -589,7 +601,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
               ),
             ),
             profileProvider.shouldShowLoader
-                ? const LoaderScreen()
+                ? LoaderScreen(profileProvider)
                 : const SizedBox()
           ],
         );
@@ -613,7 +625,8 @@ class _DeliverySlotChooserState extends State<DeliverySlotChooser> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
+          .copyWith(right: 0),
       margin: const EdgeInsets.only(bottom: 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,

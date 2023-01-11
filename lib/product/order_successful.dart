@@ -98,7 +98,7 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
 
                           productProvider.changeScreen(0);
 
-                          //TODO: Update later to use dynamic uid that is fetched from repository
+                          //TODO: Update to not call get methods from navhost
                           Navigator.push(
                             context,
                             MaterialPageRoute(

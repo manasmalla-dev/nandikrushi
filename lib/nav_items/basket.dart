@@ -19,7 +19,9 @@ class _BasketScreenState extends State<BasketScreen> {
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(builder: (context, productProvider, _) {
       return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.background,
           toolbarHeight: kToolbarHeight,
           elevation: 0,
           leading: IconButton(
@@ -241,7 +243,8 @@ class _BasketScreenState extends State<BasketScreen> {
                           borderRadius: 8,
                           innerPadding: 0.03,
                           onClick: () {
-                            productProvider.changeScreen(1);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const BasketScreen()));
                           },
                         ),
                       )

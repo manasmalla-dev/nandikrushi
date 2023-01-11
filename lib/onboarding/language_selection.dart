@@ -103,7 +103,7 @@ Widget languageSelection(
                   ? Theme.of(context).colorScheme.onPrimary
                   : Theme.of(context).colorScheme.primary,
               buttonName:
-                  languages.values.toList()[index].toString().toUpperCase(),
+                  languages.keys.toList()[index].toString().toUpperCase(),
               center: true,
               borderRadius:
                   getProportionateHeight(isLargeScreen ? 32 : 32, constraints),

@@ -92,7 +92,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                   // textStyle: FontWeight.bold,
                   leadingIcon: Icons.arrow_back_rounded,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 ElevatedButtonWidget(

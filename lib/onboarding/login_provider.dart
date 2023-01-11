@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -22,13 +23,13 @@ class LoginProvider extends ChangeNotifier {
   bool get isStore => userAppTheme.key.contains("Stores");
   bool get isRestaurant => userAppTheme.key.contains("Restaurant");
 
-  Map<String, String> languages = {
-    "english": "english".toUpperCase(),
-    "telugu": "తెలుగు",
-    "hindi": "हिन्दी",
-    "kannada": "ಕನ್ನಡ",
+  Map<String, int> languages = {
+    "english".toUpperCase(): 1,
+    "తెలుగు": 3,
+    "हिन्दी": 2,
+    "ಕನ್ನಡ": 4,
   };
-  MapEntry<String, String> usersLanguage = const MapEntry("", "");
+  MapEntry<String, int> usersLanguage = MapEntry("english".toUpperCase(), 1);
 
   List<String> get certificationList => isFarmer
       ? [
@@ -64,7 +65,7 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateLanguages(MapEntry<String, String> _) {
+  updateLanguages(MapEntry<String, int> _) {
     usersLanguage = _;
     setUserLanguage(_);
     notifyListeners();
@@ -217,14 +218,12 @@ class LoginProvider extends ChangeNotifier {
           hideLoader();
         } else {
           log("Successful login");
-          print(
-              "User ID: ${decodedResponse["message"].toString().contains("user_id") ? decodedResponse["message"]["user_id"] : decodedResponse["customer_details"]["user_id"]}, Seller ID: ${decodedResponse["message"].toString().contains("customer_id") ? (decodedResponse["message"]?["customer_id"] ?? decodedResponse["customer_id"]) : decodedResponse["customer_details"]["customer_id"]}");
           var customerGroupID = (decodedResponse["message"]
                   .toString()
                   .contains("customer_group_id")
               ? decodedResponse["message"]["customer_group_id"]
               : decodedResponse["customer_details"]["customer_group_id"]);
-          print("$customerGroupID - > GRP DATA");
+
           var customerGroupTitle = availableUserTypes.entries
               .where((element) =>
                   element.key.toLowerCase().contains(customerGroupID == "2"
@@ -349,12 +348,15 @@ class LoginProvider extends ChangeNotifier {
         //    "seller_image": sellerImageURL.toString(),
         //  "additional_comments": "Farmer is the backbone of India",
         "additional_documents": loginPageController.userCertification,
-        "upload_document": certificatesURLs
-            .toString(), //TODO: Check with backend on how to parse data
+        "upload_document": certificatesURLs.toString(),
         "store_address": userAddress.toString(),
         // "store_status": 1.toString(),
-        "language":
-            (languages.entries.toList().indexOf(usersLanguage) + 1).toString(),
+        "language": (languages.entries
+                .toList()
+                .where((e) => e.key == usersLanguage.key)
+                .first
+                .value)
+            .toString(),
         "store_name": loginPageController
                 .registrationPageFormControllers["storeName"]?.text
                 .toString() ??
@@ -401,8 +403,7 @@ class LoginProvider extends ChangeNotifier {
         //    "seller_image": sellerImageURL.toString(),
         //  "additional_comments": "Farmer is the backbone of India",
         "additional_documents": loginPageController.userCertification,
-        "upload_document": certificatesURLs
-            .toString(), //TODO: Check with backend on how to parse data
+        "upload_document": certificatesURLs.toString(),
         "store_address": userAddress.toString(),
         // "store_status": 1.toString(),
         "language":
@@ -460,8 +461,7 @@ class LoginProvider extends ChangeNotifier {
         "seller_image": sellerImageURL.toString(),
         "additional_comments": "Farmer is the backbone of India",
         "additional_documents": loginPageController.userCertification,
-        "upload_document": certificatesURLs
-            .toString(), //TODO: Check with backend on how to parse data
+        "upload_document": certificatesURLs.toString(),
         "store_address": userAddress.toString(),
         "store_status": 1.toString(),
         "language":

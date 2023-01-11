@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
@@ -7,7 +8,8 @@ import 'package:nandikrushi_farmer/utils/size_config.dart';
 import 'package:provider/provider.dart';
 
 class LoaderScreen extends StatelessWidget {
-  const LoaderScreen({Key? key}) : super(key: key);
+  final ChangeNotifier provider;
+  const LoaderScreen(this.provider, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,8 @@ class LoaderScreen extends StatelessWidget {
                     width: getProportionateHeight(300, constraints),
                   ),
                   TextWidget(
-                    "Please Wait Until We\nLoad Your Data...".toUpperCase(),
+                    "Please Wait Until We\n${provider is ProfileProvider ? (provider as ProfileProvider).fetchingDataType : "Load Your Data"}..."
+                        .toUpperCase(),
                     size: Theme.of(context).textTheme.titleSmall?.fontSize,
                     weight: FontWeight.w500,
                     align: TextAlign.center,

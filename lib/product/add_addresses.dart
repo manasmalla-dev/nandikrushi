@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:google_maps_webservice/places.dart' as gmw;
 import 'package:http/http.dart';
 import 'package:location/location.dart' as location;
-import 'package:google_maps_webservice/places.dart' as gmw;
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
@@ -85,6 +85,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
             keyword: searchController.text)
         .timeout(const Duration(seconds: 10));
     addresses = [];
+    // ignore: avoid_function_literals_in_foreach_calls
     results.results.forEach((e) async {
       final sessionToken = const Uuid().v4();
       final request =
@@ -188,7 +189,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.location_searching_rounded,
                   )),
               title: TextWidget(
@@ -754,7 +755,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                         LoginProvider loginProvider =
                                             Provider.of<LoginProvider>(context,
                                                 listen: false);
-                                        //TODO: widget.onSaveAddress(addressList);
+
                                         profileProvider.createAddress(
                                             Navigator.of(context),
                                             addressList,
@@ -781,7 +782,7 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                 }),
           ),
           profileProvider.shouldShowLoader
-              ? const LoaderScreen()
+              ? LoaderScreen(profileProvider)
               : const SizedBox(),
         ],
       );

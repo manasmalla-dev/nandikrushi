@@ -168,7 +168,7 @@ class LoginBG extends StatelessWidget {
         }),
         Consumer<LoginProvider>(builder: (context, loginProvider, _) {
           return loginProvider.shouldShowLoader
-              ? const LoaderScreen()
+              ? LoaderScreen(loginProvider)
               : const SizedBox();
         })
       ],

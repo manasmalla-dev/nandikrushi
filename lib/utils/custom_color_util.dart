@@ -37,7 +37,7 @@ Future<void> setAppTheme(MapEntry<String, Color> _) async {
   );
 }
 
-Future<void> setUserLanguage(MapEntry<String, String> _) async {
+Future<void> setUserLanguage(MapEntry<String, int> _) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   await sharedPreferences.setString(
     "user_app_language",

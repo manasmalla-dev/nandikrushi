@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nandikrushi_farmer/nav_host.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/product/product_controller.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
@@ -16,7 +17,6 @@ import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
 import 'package:nandikrushi_farmer/utils/firebase_storage_utils.dart';
 import 'package:nandikrushi_farmer/utils/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:nandikrushi_farmer/product/product_controller.dart';
 
 import '../reusable_widgets/loader_screen.dart';
 
@@ -40,7 +40,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 builder: (context, profileProvider, _) {
               return WillPopScope(
                 onWillPop: () {
-                  print("123");
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => NandikrushiNavHost(
@@ -197,7 +196,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                 3,
                                                                             child:
                                                                                 ElevatedButton(
-                                                                              style: ElevatedButton.styleFrom(primary: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), onPrimary: Colors.white),
+                                                                              style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                                                                               onPressed: () async {
                                                                                 var image = await ImagePicker().pickImage(source: ImageSource.gallery);
                                                                                 if (image != null) {
@@ -220,7 +219,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                 3,
                                                                             child:
                                                                                 ElevatedButton(
-                                                                              style: ElevatedButton.styleFrom(primary: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), onPrimary: Colors.white),
+                                                                              style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                                                                               onPressed: () async {
                                                                                 var image = await ImagePicker().pickImage(source: ImageSource.camera);
                                                                                 if (image != null) {
@@ -354,7 +353,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                                       Expanded(
                                                                                                         flex: 3,
                                                                                                         child: ElevatedButton(
-                                                                                                          style: ElevatedButton.styleFrom(primary: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), onPrimary: Colors.white),
+                                                                                                          style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                                                                                                           onPressed: () async {
                                                                                                             var image = await ImagePicker().pickImage(source: ImageSource.gallery);
                                                                                                             if (image != null) {
@@ -375,7 +374,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                                       Expanded(
                                                                                                         flex: 3,
                                                                                                         child: ElevatedButton(
-                                                                                                          style: ElevatedButton.styleFrom(primary: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), onPrimary: Colors.white),
+                                                                                                          style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                                                                                                           onPressed: () async {
                                                                                                             var image = await ImagePicker().pickImage(source: ImageSource.camera);
                                                                                                             if (image != null) {
@@ -458,7 +457,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                 Expanded(
                                                                                   flex: 3,
                                                                                   child: ElevatedButton(
-                                                                                    style: ElevatedButton.styleFrom(primary: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), onPrimary: Colors.white),
+                                                                                    style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                                                                                     onPressed: () async {
                                                                                       var image = await ImagePicker().pickImage(source: ImageSource.gallery);
                                                                                       if (image != null) {
@@ -479,7 +478,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                                                 Expanded(
                                                                                   flex: 3,
                                                                                   child: ElevatedButton(
-                                                                                    style: ElevatedButton.styleFrom(primary: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), onPrimary: Colors.white),
+                                                                                    style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Theme.of(context).colorScheme.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                                                                                     onPressed: () async {
                                                                                       var image = await ImagePicker().pickImage(source: ImageSource.camera);
                                                                                       if (image != null) {
@@ -898,7 +897,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ]),
                     ),
                     profileProvider.shouldShowLoader
-                        ? const LoaderScreen()
+                        ? LoaderScreen(profileProvider)
                         : const SizedBox(),
                   ],
                 ),

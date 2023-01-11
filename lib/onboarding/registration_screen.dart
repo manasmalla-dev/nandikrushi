@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -125,7 +126,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Consumer<LoginProvider>(
                         builder: (context, loginProvider, _) {
                       return loginProvider.shouldShowLoader
-                          ? const LoaderScreen()
+                          ? LoaderScreen(loginProvider)
                           : const SizedBox();
                     }),
                   ],
@@ -266,10 +267,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       flex: 3,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).colorScheme.primary,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            onPrimary: Theme.of(context).colorScheme.onPrimary),
+                                borderRadius: BorderRadius.circular(8))),
                         onPressed: () async {
                           var pickedImage = await ImagePicker()
                               .pickImage(source: ImageSource.gallery);
@@ -296,10 +299,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       flex: 3,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).colorScheme.primary,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            onPrimary: Theme.of(context).colorScheme.onPrimary),
+                                borderRadius: BorderRadius.circular(8))),
                         onPressed: () async {
                           var pickedImage = await ImagePicker()
                               .pickImage(source: ImageSource.camera);
@@ -1082,8 +1087,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                         .registrationPageFormControllers[
                                                             "reg_number"]
                                                         ?.text
-                                                        ?.toString()
-                                                        ?.isNotEmpty ??
+                                                        .toString()
+                                                        .isNotEmpty ??
                                                     false) {
                                                   showImagePickerSheet(
                                                     constraints: constraints,
@@ -1092,9 +1097,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                                       if (loginPageController
                                                           .userCertificates
                                                           .isEmpty) {
-                                                        for (var element
-                                                            in loginProvider
-                                                                .certificationList) {
+                                                        for (var _ in loginProvider
+                                                            .certificationList) {
                                                           loginPageController
                                                               .userCertificates
                                                               .add([]);
@@ -1253,8 +1257,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   false;
 
               if (formValidatedState) {
-                print(loginPageController.profileImage == null &&
-                    loginProvider.isFarmer);
+                log((loginPageController.profileImage == null &&
+                        loginProvider.isFarmer)
+                    .toString());
                 if (loginPageController.profileImage == null &&
                     loginProvider.isFarmer) {
                   formValidatedState = false;

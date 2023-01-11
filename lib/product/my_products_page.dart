@@ -11,9 +11,31 @@ import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
+import 'package:nandikrushi_farmer/utils/sort_filter.dart';
 import 'package:provider/provider.dart';
 
 import '../reusable_widgets/loader_screen.dart';
+
+String getDayOfMonthSuffix(int dayNum) {
+  if (!(dayNum >= 1 && dayNum <= 31)) {
+    throw Exception('Invalid day of month');
+  }
+
+  if (dayNum >= 11 && dayNum <= 13) {
+    return 'th';
+  }
+
+  switch (dayNum % 10) {
+    case 1:
+      return 'st';
+    case 2:
+      return 'nd';
+    case 3:
+      return 'rd';
+    default:
+      return 'th';
+  }
+}
 
 class MyProductsPage extends StatelessWidget {
   const MyProductsPage({Key? key}) : super(key: key);
@@ -21,17 +43,122 @@ class MyProductsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
         toolbarHeight: kToolbarHeight,
         elevation: 0,
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+          PopupMenuButton(
+              offset: Offset(-5, 0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
               icon: const Icon(
                 Icons.sort_rounded,
-              ))
+              ),
+              itemBuilder: (context) {
+                Sort sort = Sort.name;
+                Filter filter = Filter.inStock;
+                return [
+                  PopupMenuItem(child: StatefulBuilder(
+                    builder: (context, setMenuState) {
+                      return Column(
+                        children: [
+                          PopupMenuItem(child: Text("Sort by")),
+                          PopupMenuItem(
+                              child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                children: [
+                                  Radio<Sort>(
+                                      activeColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      value: Sort.name,
+                                      groupValue: sort,
+                                      onChanged: (_) {
+                                        setMenuState(() {
+                                          sort = _ ?? sort;
+                                        });
+                                      }),
+                                  SizedBox(width: 16),
+                                  Icon(Icons.abc_rounded),
+                                  SizedBox(width: 8),
+                                  Text("Name")
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Radio<Sort>(
+                                      activeColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      value: Sort.date,
+                                      groupValue: sort,
+                                      onChanged: (_) {
+                                        setMenuState(() {
+                                          sort = _ ?? sort;
+                                        });
+                                      }),
+                                  SizedBox(width: 16),
+                                  Icon(Icons.calendar_month_rounded),
+                                  SizedBox(width: 8),
+                                  Text("Date")
+                                ],
+                              ),
+                            ],
+                          )),
+                          PopupMenuItem(child: Text("Filter by")),
+                          PopupMenuItem(
+                              child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                children: [
+                                  Radio<Filter>(
+                                      activeColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      value: Filter.inStock,
+                                      groupValue: filter,
+                                      onChanged: (_) {
+                                        setMenuState(() {
+                                          filter = _ ?? filter;
+                                        });
+                                      }),
+                                  SizedBox(width: 16),
+                                  Icon(Icons.inventory_2_rounded),
+                                  SizedBox(width: 8),
+                                  Text("In Stock")
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Radio<Filter>(
+                                      activeColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      value: Filter.outOfStock,
+                                      groupValue: filter,
+                                      onChanged: (_) {
+                                        setMenuState(() {
+                                          filter = _ ?? filter;
+                                        });
+                                      }),
+                                  SizedBox(width: 16),
+                                  Icon(Icons.cancel_outlined),
+                                  SizedBox(width: 8),
+                                  Text("Out Of Stock")
+                                ],
+                              ),
+                            ],
+                          )),
+                        ],
+                      );
+                    },
+                  ))
+                ];
+              },
+              onSelected: (value) {
+                //
+              }),
         ],
         title: TextWidget(
           'My Products',
@@ -40,6 +167,7 @@ class MyProductsPage extends StatelessWidget {
         ),
       ),
       body: Stack(
+        //TODO: Handle the sort and filter logic
         children: [
           Consumer<ProductProvider>(builder: (context, productProvider, _) {
             return productProvider.myProducts.isEmpty
@@ -274,12 +402,8 @@ class MyProductsPage extends StatelessWidget {
                               "${product["quantity"] ?? "1"} ${product["units"] ?? "unit"}",
                           location: product["place"] ?? "Visakhapatnam",
                           additionalInformation: {
-                            "date": DateFormat('dd-MM-yyyy, hh:mm a').format(
-                                DateTime.fromMillisecondsSinceEpoch((int
-                                            .tryParse(
-                                                product["date_added"] ?? "0") ??
-                                        0) *
-                                    1000)), //productProvider.orders[itemIndex]["date"],
+                            "date":
+                                "${DateFormat('MMM').format(DateTime.fromMillisecondsSinceEpoch((int.tryParse(product["date_added"] ?? "0") ?? 0) * 1000))} ${int.tryParse(DateFormat('dd').format(DateTime.fromMillisecondsSinceEpoch((int.tryParse(product["date_added"] ?? "0") ?? 0) * 1000)))}${getDayOfMonthSuffix(DateTime.fromMillisecondsSinceEpoch((int.tryParse(product["date_added"] ?? "0") ?? 0) * 1000).day)} ${DateFormat('yyyy').format(DateTime.fromMillisecondsSinceEpoch((int.tryParse(product["date_added"] ?? "0") ?? 0) * 1000))}", //productProvider.orders[itemIndex]["date"],
                             "in_stock": product["in_stock"],
                           },
                         ),
@@ -292,7 +416,7 @@ class MyProductsPage extends StatelessWidget {
           }),
           Consumer<ProfileProvider>(builder: (context, profileProvider, child) {
             return profileProvider.shouldShowLoader
-                ? const LoaderScreen()
+                ? LoaderScreen(profileProvider)
                 : const SizedBox();
           })
         ],

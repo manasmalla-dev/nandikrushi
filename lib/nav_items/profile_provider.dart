@@ -7,12 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
-import 'package:provider/provider.dart';
 
 import '../onboarding/login_provider.dart';
 
 class ProfileProvider extends ChangeNotifier {
   bool shouldShowLoader = false;
+  String fetchingDataType = "fetch your data";
 
   //DataStates
   String sellerID = "";
@@ -35,6 +35,7 @@ class ProfileProvider extends ChangeNotifier {
   List<Map<String, String>> userAddresses = [];
   String userIdForAddress = "";
 
+  List<Map<String, String>> notifications = [];
   bool isDataFetched = false;
   showLoader() {
     shouldShowLoader = true;
@@ -51,7 +52,8 @@ class ProfileProvider extends ChangeNotifier {
       required String userID,
       required Function(String) showMessage}) async {
     userIdForAddress = userID;
-
+    fetchingDataType = "fetch your profile";
+    notifyListeners();
     var url = loginProvider.isFarmer
         ? "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/getparticularuser"
         : loginProvider.isStore
@@ -72,7 +74,7 @@ class ProfileProvider extends ChangeNotifier {
       return;
     }
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && jsonDecode(response.body)["status"]) {
       log(response.body.toString());
       Map<String, dynamic> profileJSON = jsonDecode(response.body)["message"];
       log(profileJSON.toString());
@@ -102,6 +104,9 @@ class ProfileProvider extends ChangeNotifier {
       var userAddressResponse = await Server().postFormData(body: {
         "customer_id": sellerID.toString()
       }, url: "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/getallAddress");
+
+      fetchingDataType = "fetch your addresses";
+      notifyListeners();
       if (userAddressResponse == null) {
         showMessage("Failed to get a response from the server!");
         hideLoader();
@@ -155,6 +160,7 @@ class ProfileProvider extends ChangeNotifier {
           exit(0);
         }
       }
+      notifications = await getNotifications(showMessage);
       notifyListeners();
     } else if (response.statusCode == 400) {
       showMessage("Undefined parameter when calling API");
@@ -173,7 +179,6 @@ class ProfileProvider extends ChangeNotifier {
         exit(0);
       }
     } else {
-      print(response.statusCode);
       showMessage("Failed to get data!");
       hideLoader();
       if (Platform.isAndroid) {
@@ -261,5 +266,62 @@ class ProfileProvider extends ChangeNotifier {
     }
 
     navigatorState.pop();
+  }
+
+  Future<List<Map<String, String>>> getNotifications(
+      Function(String) showError) async {
+    var isTimedOut = false;
+    var url =
+        "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/savednotifications/getsavednotifications";
+
+    var response = await Server()
+        .getMethodParams(
+      url,
+    )
+        .timeout(const Duration(seconds: 5), onTimeout: () {
+      isTimedOut = true;
+      return [];
+    });
+
+    if (!isTimedOut) {
+      if (response.statusCode == 200 && jsonDecode(response.body)["status"]) {
+        log("sucess");
+        log(response.body);
+        List<dynamic> values = jsonDecode(response.body)["message"];
+
+        var iterables = values
+            .where((element) =>
+                element["user_id"] == null ||
+                element["user_id"] == userIdForAddress ||
+                element["user_id"] == "")
+            .map(
+              (e) => {
+                "title": e["title"].toString(),
+                "description": e["description"].toString(),
+                "image": e["image"].toString(),
+                "data": e["data"].toString(),
+                "type": e["notification_type"].toString()
+              },
+            )
+            .toList();
+        return iterables;
+      } else if (response.statusCode == 400) {
+        showError("Undefined Parameter when calling API");
+        log("Undefined Parameter");
+        return [];
+      } else if (response.statusCode == 404) {
+        showError("API Not found");
+        log("Not found");
+        return [];
+      } else {
+        showError("Failed to get data!");
+        log("failure ${response.statusCode}");
+        return [];
+      }
+    } else {
+      showError("Failed to get data!");
+      log("failure");
+      return [];
+    }
   }
 }

@@ -4,20 +4,18 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_host.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/onboarding.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
-
 import 'package:nandikrushi_farmer/utils/server.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -127,7 +125,7 @@ class LoginController extends ControllerMVC {
       required Function(Function) onNewUser,
       required LoginProvider loginProvider}) async {
     var isReturningUser = await isReturningUserFuture;
-    log("123->${isReturningUser}");
+    log("123->$isReturningUser");
     if (FirebaseAuth.instance.currentUser != null && isReturningUser) {
       var appTheme = await getAppTheme();
       loginProvider.updateUserAppType(appTheme);
@@ -198,7 +196,6 @@ class LoginController extends ControllerMVC {
         var iterables = values.map(
           (e) => MapEntry(
             e["name"].toString(),
-            //TODO: Use dynamic color instead of this logic
             e["name"].toString().contains("Farmer")
                 ? const Color(0xFF006838)
                 : e["name"].toString().contains("Store")
@@ -278,7 +275,7 @@ class LoginController extends ControllerMVC {
     log(profileProvider.landInAcres.toString());
     landInAcres = profileProvider.landInAcres.toDouble();
     userCertification = profileProvider.certificationType;
-    log(profileProvider.sellerImage + " =123");
+
     notifyListeners();
     //TODO: Add Certificates
   }
