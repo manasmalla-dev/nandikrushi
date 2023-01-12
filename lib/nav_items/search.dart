@@ -60,6 +60,7 @@ class _SearchScreenState extends State<SearchScreen>
     );
     return Consumer<ProductProvider>(builder: (context, productProvider, _) {
       return SafeArea(
+        top: false,
         bottom: false,
         child: Material(
           child: Scaffold(
@@ -89,7 +90,7 @@ class _SearchScreenState extends State<SearchScreen>
                 ])),
                 SliverAppBar(
                   leading: const SizedBox(),
-                  toolbarHeight: 30,
+                  toolbarHeight: 5,
                   flexibleSpace: Center(
                     child: TabBar(
                       indicatorColor: Theme.of(context).colorScheme.primary,

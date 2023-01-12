@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -729,30 +728,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     },
                                   )
                                 : const SizedBox(),
-                            !loginProvider.isFarmer
-                                ? const SizedBox(
-                                    height: 8,
-                                  )
-                                : const SizedBox(),
-                            FirebaseAuth.instance.currentUser?.phoneNumber ==
-                                        null ||
-                                    (FirebaseAuth.instance.currentUser
-                                            ?.phoneNumber?.isEmpty ??
-                                        false)
-                                ? TextFieldWidget(
-                                    controller: phoneNumberController,
-                                    label: 'Phone Number',
-                                    validator: (value) {
-                                      if (value == null ||
-                                          value.isEmpty ||
-                                          value.length != 10) {
-                                        return snackbar(context,
-                                            "Please enter a valid phone number");
-                                      }
-                                      return null;
-                                    },
-                                  )
-                                : const SizedBox(),
+
                             const SizedBox(
                               height: 8,
                             ),
@@ -1181,10 +1157,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ?.text
                                                 .toString() ??
                                             "",
-                                        "telephone": FirebaseAuth.instance
-                                                .currentUser?.phoneNumber
-                                                ?.replaceFirst("+91", "") ??
-                                            phoneNumberController.text,
 
                                         "seller_type": loginProvider
                                             .userAppTheme.key

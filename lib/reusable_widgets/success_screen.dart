@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_host.dart';
+import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/product/add_product.dart';
+import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class SuccessScreen extends StatefulWidget {
   final Map<String, String> body;
@@ -98,13 +101,23 @@ class _SuccessScreenState extends State<SuccessScreen> {
                 ElevatedButtonWidget(
                   onClick: () async {
                     var navigator = Navigator.of(context);
-                    SharedPreferences sharedPreferences =
-                        await SharedPreferences.getInstance();
-                    var uID = sharedPreferences.getString('userID')!;
+
+                    ProductProvider productProvider =
+                        Provider.of<ProductProvider>(context, listen: false);
+
+                    ProfileProvider profileProvider =
+                        Provider.of<ProfileProvider>(context, listen: false);
+                    productProvider.getAllProducts(
+                        showMessage: (_) {
+                          snackbar(context, _);
+                        },
+                        profileProvider: profileProvider);
                     navigator.pushAndRemoveUntil(
                         MaterialPageRoute(
-                            builder: (context) =>
-                                NandikrushiNavHost(userId: uID)),
+                            builder: (context) => NandikrushiNavHost(
+                                  userId: profileProvider.userIdForAddress,
+                                  shouldUpdateField: false,
+                                )),
                         (route) => false);
                   },
                   height: 56,

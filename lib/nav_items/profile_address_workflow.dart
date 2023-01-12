@@ -21,13 +21,20 @@ class ProfileAddressWorkflow extends StatefulWidget {
 
 class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     LoginController loginPageController = widget.controller;
     loginPageController
         .checkLocationPermissionAndGetLocation(context)
         .then((_) {
       setState(() {});
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    LoginController loginPageController = widget.controller;
     return Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
       return Scaffold(
         appBar: AppBar(

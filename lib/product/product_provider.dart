@@ -664,7 +664,28 @@ class ProductProvider extends ChangeNotifier {
                           e["product_id"] == productOrderDetails["product_id"])
                       .first["units"]
                       .toString(),
+                  "payment_method": element["payment_details"][0]
+                      ["payment_method"],
                   "place": element["shipping_details"][0]["shipping_city"],
+                  "shipping_firstname": element["shipping_details"][0]
+                      ["shipping_firstname"],
+                  "shipping_lastname": element["shipping_details"][0]
+                      ["shipping_lastname"],
+                  "shipping_address_1": element["shipping_details"][0]
+                      ["shipping_address_1"],
+                  "shipping_house_number": element["shipping_details"][0]
+                      ["house_no"],
+                  "shipping_address_2": element["shipping_details"][0]
+                      ["shipping_address_2"],
+                  "shipping_city": element["shipping_details"][0]
+                      ["shipping_city"],
+                  "shipping_postcode": element["shipping_details"][0]
+                      ["shipping_postcode"],
+                  "shipping_country": element["shipping_details"][0]
+                      ["shipping_country"],
+                  "shipping_zone": element["shipping_details"][0]
+                      ["shipping_zone"],
+                  "telephone": element["customer_details"][0]["telephone"],
                   "rating": products
                           .where((e) =>
                               e["product_id"] ==
@@ -762,7 +783,13 @@ class ProductProvider extends ChangeNotifier {
         if (jsonDecode(cartData.body)["status"]) {
           List<dynamic> cartJSONResponse =
               jsonDecode(cartData.body)["cart_products"];
-          cart = cartJSONResponse.map((cartItem) {
+          cart = cartJSONResponse.where((cartItem) {
+            return products
+                .where((element) =>
+                    element["product_id"] ==
+                    (cartItem["product_id"].toString()))
+                .isNotEmpty;
+          }).map((cartItem) {
             var productCartItem = products
                 .where((element) =>
                     element["product_id"] ==

@@ -98,14 +98,15 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
 
                           productProvider.changeScreen(0);
 
-                          //TODO: Update to not call get methods from navhost
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: ((context) => NandikrushiNavHost(
-                                  userId:
-                                      FirebaseAuth.instance.currentUser?.uid ??
-                                          "")),
+                                    userId: FirebaseAuth
+                                            .instance.currentUser?.uid ??
+                                        "",
+                                    shouldUpdateField: false,
+                                  )),
                             ),
                           );
                         },

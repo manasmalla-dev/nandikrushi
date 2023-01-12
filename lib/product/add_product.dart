@@ -40,10 +40,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 builder: (context, profileProvider, _) {
               return WillPopScope(
                 onWillPop: () {
+                  productProvider.getAllProducts(
+                      showMessage: (_) {
+                        snackbar(context, _);
+                      },
+                      profileProvider: profileProvider);
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => NandikrushiNavHost(
-                          userId: profileProvider.userIdForAddress),
+                        userId: profileProvider.userIdForAddress,
+                        shouldUpdateField: false,
+                      ),
                     ),
                   );
 

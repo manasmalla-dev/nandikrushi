@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:nandikrushi_farmer/firebase_options.dart';
@@ -22,14 +20,14 @@ Future<void> main() async {
   }
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  if (!kIsWeb) {
-    if (Platform.isAndroid) {
-      // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      //   systemNavigationBarColor: Colors.white,
-      // ));
-      //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    }
-  }
+  // if (!kIsWeb) {
+  //   if (Platform.isAndroid) {
+  //     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  //       systemNavigationBarColor: Colors.transparent,
+  //     ));
+  //     //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  //   }
+  // }
   var data = await getAppTheme();
   //FirebaseAuth.instance.signOut();
   runApp(MultiProvider(providers: [
