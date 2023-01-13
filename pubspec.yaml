@@ -57,6 +57,8 @@ dependencies:
   google_maps_flutter_platform_interface: ^2.2.4
   google_maps_flutter_android: ^2.3.3
   firebase_messaging: ^13.1.0
+  firebase_core_desktop: ^1.0.2
+  firebase_auth_desktop: ^1.0.2
 
 dev_dependencies:
   flutter_test:

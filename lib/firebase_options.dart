@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return web;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -67,8 +64,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '250225425929',
     projectId: 'nandikrushi-35ddb',
     storageBucket: 'nandikrushi-35ddb.appspot.com',
-    androidClientId: '250225425929-9vrr2p1m92k6cuoukbcohq9npikcq75l.apps.googleusercontent.com',
-    iosClientId: '250225425929-s33c48667cku8oasct7rfk3df1p97mod.apps.googleusercontent.com',
+    androidClientId:
+        '250225425929-9vrr2p1m92k6cuoukbcohq9npikcq75l.apps.googleusercontent.com',
+    iosClientId:
+        '250225425929-s33c48667cku8oasct7rfk3df1p97mod.apps.googleusercontent.com',
     iosBundleId: 'farm.nandikrushi',
   );
 
@@ -78,8 +77,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '250225425929',
     projectId: 'nandikrushi-35ddb',
     storageBucket: 'nandikrushi-35ddb.appspot.com',
-    androidClientId: '250225425929-9vrr2p1m92k6cuoukbcohq9npikcq75l.apps.googleusercontent.com',
-    iosClientId: '250225425929-k51dp3b2imdk4dbc8qse5t5o1pna4gnm.apps.googleusercontent.com',
+    androidClientId:
+        '250225425929-9vrr2p1m92k6cuoukbcohq9npikcq75l.apps.googleusercontent.com',
+    iosClientId:
+        '250225425929-k51dp3b2imdk4dbc8qse5t5o1pna4gnm.apps.googleusercontent.com',
     iosBundleId: 'farm.nandikrushiFarmer',
   );
 }

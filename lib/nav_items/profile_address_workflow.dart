@@ -260,7 +260,9 @@ class _ProfileAddressWorkflowState extends State<ProfileAddressWorkflow> {
                             vertical: 16,
                           ),
                           child: ElevatedButtonWidget(
-                              onClick: () async {},
+                              onClick: () async {
+                                Navigator.of(context).pop();
+                              },
                               height: getProportionateHeight(
                                   64, widget.constraints),
                               borderRadius: 12,

@@ -143,7 +143,8 @@ class LoginController extends ControllerMVC {
         );
       });
     } else {
-      if ((Platform.isAndroid || Platform.isIOS) && !isReturningUser) {
+      //Removed (Platform.isAndroid || Platform.isIOS) &&
+      if (!isReturningUser) {
         onNewUser(() {
           Timer(const Duration(milliseconds: 1000), () async {
             navigator.pushAndRemoveUntil(

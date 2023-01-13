@@ -1,9 +1,15 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/product/add_addresses.dart';
 import 'package:nandikrushi_farmer/product/confirm_order_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
+import 'package:nandikrushi_farmer/utils/server.dart';
 import 'package:provider/provider.dart';
 
 showAddressesBottomSheet(
@@ -162,19 +168,97 @@ showAddressesBottomSheet(
                                         itemCount: 5,
                                       ),
                                     ),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.symmetric(
+                                    //       vertical: 12),
+                                    //   child: IconButton(
+                                    //     onPressed: () {},
+                                    //     icon: const Icon(Icons.edit_rounded),
+                                    //   ),
+                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 12),
                                       child: IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(Icons.edit_rounded),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
-                                      child: IconButton(
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          profileProvider.showLoader();
+                                          profileProvider.fetchingDataType =
+                                              "delete your address";
+
+                                          // Navigator.of(context).pop();
+                                          var response = await Server()
+                                              .postFormData(body: {
+                                            "customer_id":
+                                                profileProvider.sellerID,
+                                            "address_id": profileProvider
+                                                        .userAddresses[item]
+                                                    ["address_id"] ??
+                                                "",
+                                          }, url: "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/address/delete").catchError(
+                                                  (e) {
+                                            log("64$e");
+                                          });
+
+                                          log("response - $response");
+                                          if (response?.statusCode == 200) {
+                                            log(response?.body ?? "");
+                                            var decodedResponse = jsonDecode(response
+                                                    ?.body
+                                                    .replaceFirst(
+                                                        '<b>Notice</b>: Undefined index: customer_group_id in\n<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>',
+                                                        '')
+                                                    .replaceFirst(
+                                                        "<b>Notice</b>: Undefined index: customer_group_id in<b>/home4/swekenco/public_html/nkweb/catalog/controller/extension/account/purpletree_multivendor/api/updateparticularuser.php</b>",
+                                                        "") ??
+                                                '{"message": {},"success": false}');
+                                            log(response?.body ?? "");
+                                            var statusCodeBody = false;
+                                            if (decodedResponse["success"] !=
+                                                null) {
+                                              statusCodeBody =
+                                                  decodedResponse["success"];
+                                            } else {
+                                              statusCodeBody =
+                                                  decodedResponse["status"];
+                                            }
+                                            if (statusCodeBody) {
+                                              log("Successful update");
+                                              snackbar(context,
+                                                  "Successfully deleted the address!",
+                                                  isError: false);
+                                              LoginProvider loginProvider =
+                                                  Provider.of(context,
+                                                      listen: false);
+
+                                              Navigator.of(context).pop();
+                                              profileProvider
+                                                  .getProfile(
+                                                      loginProvider:
+                                                          loginProvider,
+                                                      userID: profileProvider
+                                                          .userIdForAddress,
+                                                      showMessage: (_) {
+                                                        snackbar(context, _);
+                                                      },
+                                                      navigator:
+                                                          Navigator.of(context))
+                                                  .then((value) =>
+                                                      profileProvider
+                                                          .hideLoader());
+                                            } else {
+                                              snackbar(context,
+                                                  "Failed to delete address, error: ${decodedResponse["message"]}");
+                                              profileProvider.hideLoader();
+                                              Navigator.of(context).pop();
+                                            }
+                                          } else {
+                                            log(response?.body ?? "");
+                                            snackbar(context,
+                                                "Oops! Couldn't delete your address: ${response?.statusCode}");
+                                            profileProvider.hideLoader();
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
                                         color:
                                             Theme.of(context).colorScheme.error,
                                         icon: const Icon(Icons.delete_rounded),

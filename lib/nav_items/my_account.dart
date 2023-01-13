@@ -8,6 +8,7 @@ import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_screen.dart';
 import 'package:nandikrushi_farmer/product/address_bottom_sheet.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/loader_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/material_you_clipper.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/splash_screen.dart';
@@ -29,267 +30,279 @@ class MyAccountScreen extends StatelessWidget {
       return Consumer<LoginProvider>(builder: (context, loginProvider, _) {
         return Consumer<ProfileProvider>(
             builder: (context, profileProvider, _) {
-          return !profileProvider.isDataFetched
-              ? Scaffold(
-                  appBar: profileScreenAppBar(
-                    context,
-                    userName: "Nandikrushi Farmer",
-                    userPhoneNumber: " ",
-                    userEmail: " ",
-                    userRole: loginProvider.userAppTheme.key,
-                    themeData: Theme.of(context),
-                  ),
-                  body: SafeArea(
-                    bottom: false,
-                    child: Column(
-                      children: [
-                        listTileWithouTI(context,
-                            title: "Logout",
-                            leading: Icons.power_settings_new, ontap: () {
-                          signOut(context);
-                        }),
-                        const Spacer(),
-                        Opacity(
-                          opacity: 0.5,
-                          child: SizedBox(
-                              height: 56,
-                              child: Image.asset('assets/images/logo.png')),
-                        ),
-                        Opacity(
-                          opacity: 0.5,
-                          child: Text(
-                            'Nandikrushi',
-                            style: TextStyle(
-                              fontFamily: 'Samarkan',
-                              fontSize: 48,
-                              fontWeight: FontWeight.w500,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        TextWidget(
-                          "an aggregator of natural farmers",
-                          size: 12,
-                          weight: FontWeight.w600,
-                          color: Colors.grey[500],
-                          align: TextAlign.center,
-                        ),
-                        TextWidget(
-                          "v1.2.0+60",
-                          size: 12,
-                          weight: FontWeight.w600,
-                          color: Colors.grey[500],
-                          align: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ))
-              : LayoutBuilder(builder: (context, constraints) {
-                  return Scaffold(
-                    appBar: profileScreenAppBar(
-                      context,
-                      userName: loginProvider.isFarmer
-                          ? "${profileProvider.firstName} ${profileProvider.lastName}"
-                          : profileProvider.storeName,
-                      userPhoneNumber: profileProvider.telephone,
-                      userEmail: profileProvider.email,
-                      userImage: loginProvider.isFarmer
-                          ? profileProvider.sellerImage
-                          : profileProvider.storeLogo,
-                      userRole: loginProvider.userAppTheme.key,
-                      themeData: Theme.of(context),
-                    ),
-                    body: SafeArea(
-                      bottom: false,
-                      child: SingleChildScrollView(
+          return Stack(
+            children: [
+              !profileProvider.isDataFetched
+                  ? Scaffold(
+                      appBar: profileScreenAppBar(
+                        context,
+                        userName: "Nandikrushi Farmer",
+                        userPhoneNumber: " ",
+                        userEmail: " ",
+                        userRole: loginProvider.userAppTheme.key,
+                        themeData: Theme.of(context),
+                      ),
+                      body: SafeArea(
+                        bottom: false,
                         child: Column(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  listTileWithouST(context,
-                                      title: "Profile",
-                                      leading: Icons.person, ontap: () {
-                                    Navigator.maybeOf(context)?.push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ProfileScreen()));
-                                  }),
-                                  listTileWithouST(context,
-                                      title: "Address",
-                                      leading: Icons.location_on, ontap: () {
-                                    showAddressesBottomSheet(context,
-                                        profileProvider, Theme.of(context),
-                                        isOrderWorkflow: false);
-                                  }),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: Divider(
-                                      thickness: 0.5,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  ),
-                                  Theme(
-                                    data: Theme.of(context).copyWith(
-                                        dividerColor: Colors.transparent),
-                                    child: Column(
-                                      children: [
-                                        ExpansionTile(
-                                          collapsedIconColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary
-                                              .withOpacity(0.6),
-                                          iconColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          title: Text(
-                                            "Support",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium,
-                                          ),
-                                          leading: SizedBox(
-                                            height: double.infinity,
-                                            child: Icon(
-                                              Icons.support_agent,
-                                              size: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium
-                                                  ?.fontSize,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                            ),
-                                          ),
-                                          children: [
-                                            listTileWithouST(context,
-                                                title: "Contact Us",
-                                                leading: Icons.call, ontap: () {
-                                              dialCall();
-                                            }),
-                                            listTileWithouST(context,
-                                                title: "Email",
-                                                leading: Icons.email,
-                                                ontap: () {
-                                              launchEmail();
-                                            }),
-                                            listTileWithouST(context,
-                                                title: "Terms & Conditions",
-                                                leading: Icons.description,
-                                                ontap: () {
-                                              log('Terms & Conditions');
-                                            }),
-                                            listTileWithouST(context,
-                                                title: "Privacy Policy",
-                                                leading: Icons.security,
-                                                ontap: () {
-                                              log('Privacy Policy');
-                                            }),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: Divider(
-                                      thickness: 0.5,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  ),
-                                  listTileWithouTI(context,
-                                      title: "Share App",
-                                      leading: Icons.share, ontap: () {
-                                    Share.share(
-                                        "Install and explore the Nandikrushi Farmer app to shop your edibles",
-                                        subject: 'Nandikrushi Farmer');
-                                  }),
-                                  listTileWithouTI(context,
-                                      title: "Logout",
-                                      leading: Icons.power_settings_new,
-                                      ontap: () async {
-                                    signOut(context);
-                                  }),
-                                ],
+                            listTileWithouTI(context,
+                                title: "Logout",
+                                leading: Icons.power_settings_new, ontap: () {
+                              signOut(context);
+                            }),
+                            const Spacer(),
+                            Opacity(
+                              opacity: 0.5,
+                              child: SizedBox(
+                                  height: 56,
+                                  child: Image.asset('assets/images/logo.png')),
+                            ),
+                            Opacity(
+                              opacity: 0.5,
+                              child: Text(
+                                'Nandikrushi',
+                                style: TextStyle(
+                                  fontFamily: 'Samarkan',
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            const SizedBox(height: 120),
-                            Column(
+                            TextWidget(
+                              "an aggregator of natural farmers",
+                              size: 12,
+                              weight: FontWeight.w600,
+                              color: Colors.grey[500],
+                              align: TextAlign.center,
+                            ),
+                            TextWidget(
+                              "v1.2.0+60",
+                              size: 12,
+                              weight: FontWeight.w600,
+                              color: Colors.grey[500],
+                              align: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ))
+                  : LayoutBuilder(builder: (context, constraints) {
+                      return Scaffold(
+                        appBar: profileScreenAppBar(
+                          context,
+                          userName: loginProvider.isFarmer
+                              ? "${profileProvider.firstName} ${profileProvider.lastName}"
+                              : profileProvider.storeName,
+                          userPhoneNumber: profileProvider.telephone,
+                          userEmail: profileProvider.email,
+                          userImage: loginProvider.isFarmer
+                              ? profileProvider.sellerImage
+                              : profileProvider.storeLogo,
+                          userRole: loginProvider.userAppTheme.key,
+                          themeData: Theme.of(context),
+                        ),
+                        body: SafeArea(
+                          bottom: false,
+                          child: SingleChildScrollView(
+                            child: Column(
                               children: [
-                                Opacity(
-                                  opacity: 0.5,
-                                  child: SizedBox(
-                                      height: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium
-                                          ?.fontSize,
-                                      child: Image.asset(
-                                          'assets/images/logo.png')),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      listTileWithouST(context,
+                                          title: "Profile",
+                                          leading: Icons.person, ontap: () {
+                                        Navigator.maybeOf(context)?.push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const ProfileScreen()));
+                                      }),
+                                      listTileWithouST(context,
+                                          title: "Address",
+                                          leading: Icons.location_on,
+                                          ontap: () {
+                                        showAddressesBottomSheet(context,
+                                            profileProvider, Theme.of(context),
+                                            isOrderWorkflow: false);
+                                      }),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8),
+                                        child: Divider(
+                                          thickness: 0.5,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
+                                      Theme(
+                                        data: Theme.of(context).copyWith(
+                                            dividerColor: Colors.transparent),
+                                        child: Column(
+                                          children: [
+                                            ExpansionTile(
+                                              collapsedIconColor:
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                      .withOpacity(0.6),
+                                              iconColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              title: Text(
+                                                "Support",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium,
+                                              ),
+                                              leading: SizedBox(
+                                                height: double.infinity,
+                                                child: Icon(
+                                                  Icons.support_agent,
+                                                  size: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium
+                                                      ?.fontSize,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                              ),
+                                              children: [
+                                                listTileWithouST(context,
+                                                    title: "Contact Us",
+                                                    leading: Icons.call,
+                                                    ontap: () {
+                                                  dialCall();
+                                                }),
+                                                listTileWithouST(context,
+                                                    title: "Email",
+                                                    leading: Icons.email,
+                                                    ontap: () {
+                                                  launchEmail();
+                                                }),
+                                                listTileWithouST(context,
+                                                    title: "Terms & Conditions",
+                                                    leading: Icons.description,
+                                                    ontap: () {
+                                                  log('Terms & Conditions');
+                                                }),
+                                                listTileWithouST(context,
+                                                    title: "Privacy Policy",
+                                                    leading: Icons.security,
+                                                    ontap: () {
+                                                  log('Privacy Policy');
+                                                }),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8),
+                                        child: Divider(
+                                          thickness: 0.5,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
+                                      listTileWithouTI(context,
+                                          title: "Share App",
+                                          leading: Icons.share, ontap: () {
+                                        Share.share(
+                                            "Install and explore the Nandikrushi Farmer app to shop your edibles",
+                                            subject: 'Nandikrushi Farmer');
+                                      }),
+                                      listTileWithouTI(context,
+                                          title: "Logout",
+                                          leading: Icons.power_settings_new,
+                                          ontap: () async {
+                                        signOut(context);
+                                      }),
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  "Nandikrushi",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(
-                                        fontFamily: "Samarkan",
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary
-                                            .withOpacity(
-                                                Theme.of(context).brightness ==
+                                const SizedBox(height: 120),
+                                Column(
+                                  children: [
+                                    Opacity(
+                                      opacity: 0.5,
+                                      child: SizedBox(
+                                          height: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.fontSize,
+                                          child: Image.asset(
+                                              'assets/images/logo.png')),
+                                    ),
+                                    Text(
+                                      "Nandikrushi",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium
+                                          ?.copyWith(
+                                            fontFamily: "Samarkan",
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(Theme.of(context)
+                                                            .brightness ==
                                                         Brightness.dark
                                                     ? 0.5
                                                     : 1),
-                                      ),
-                                ),
-                                Text(
-                                  "an aggregator of natural farms",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary
-                                              .withOpacity(Theme.of(context)
-                                                          .brightness ==
-                                                      Brightness.dark
-                                                  ? 0.1
-                                                  : 0.55),
-                                          fontSize: getProportionateHeight(
-                                              11, constraints)),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                TextWidget(
-                                  "v1.2.0+60",
-                                  size: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall
-                                      ?.fontSize,
-                                  weight: FontWeight.w600,
-                                  color: Colors.lightGreen.shade200,
-                                  align: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                  height: 24,
+                                          ),
+                                    ),
+                                    Text(
+                                      "an aggregator of natural farms",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withOpacity(Theme.of(context)
+                                                              .brightness ==
+                                                          Brightness.dark
+                                                      ? 0.1
+                                                      : 0.55),
+                                              fontSize: getProportionateHeight(
+                                                  11, constraints)),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    TextWidget(
+                                      "v1.2.0+60",
+                                      size: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.fontSize,
+                                      weight: FontWeight.w600,
+                                      color: Colors.lightGreen.shade200,
+                                      align: TextAlign.center,
+                                    ),
+                                    const SizedBox(
+                                      height: 24,
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                });
+                      );
+                    }),
+              profileProvider.shouldShowLoader
+                  ? LoaderScreen(profileProvider)
+                  : const SizedBox(),
+            ],
+          );
         });
       });
     });

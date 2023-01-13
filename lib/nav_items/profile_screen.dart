@@ -1158,10 +1158,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 .toString() ??
                                             "",
 
-                                        "seller_type": loginProvider
-                                            .userAppTheme.key
-                                            .toString(),
-
                                         "additional_documents":
                                             loginPageController
                                                 .userCertification,
@@ -1224,6 +1220,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   ?.text
                                                   .toString() ??
                                               "",
+                                          "seller_type": loginProvider
+                                              .userAppTheme.key
+                                              .toString(),
                                           "land": loginPageController
                                               .landInAcres
                                               .toString(),
@@ -1276,13 +1275,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           profileProvider.showLoader();
                                           profileProvider
                                               .getProfile(
-                                                loginProvider: loginProvider,
-                                                userID: profileProvider
-                                                    .userIdForAddress,
-                                                showMessage: (_) {
-                                                  snackbar(context, _);
-                                                },
-                                              )
+                                                  loginProvider: loginProvider,
+                                                  userID: profileProvider
+                                                      .userIdForAddress,
+                                                  showMessage: (_) {
+                                                    snackbar(context, _);
+                                                  },
+                                                  navigator:
+                                                      Navigator.of(context))
                                               .then((value) =>
                                                   profileProvider.hideLoader());
                                         } else {

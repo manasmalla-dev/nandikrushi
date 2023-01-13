@@ -483,51 +483,64 @@ class ProductProvider extends ChangeNotifier {
             orderData["products"] = [];
             for (var productOrderDetails
                 in (element["product_details"] as List<dynamic>)) {
-              if (products
-                  .where((e) =>
-                      e["product_id"] == productOrderDetails["product_id"])
-                  .isNotEmpty) {
-                (orderData["products"]).add({
-                  "product_name": productOrderDetails["product_name"],
-                  "description": products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .isNotEmpty
-                      ? products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .first["description"]
-                          .toString()
-                      : productOrderDetails["description"],
-                  "url": (Uri.tryParse(products
-                                  .where((e) =>
-                                      e["product_id"] ==
-                                      productOrderDetails["product_id"])
-                                  .first["url"]
-                                  .toString())
-                              ?.host
-                              .isNotEmpty ??
-                          false)
-                      ? products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .first["url"]
-                          .toString()
-                      : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
-                  "price": productOrderDetails["price"],
-                  "product_id": productOrderDetails["product_id"],
-                  "quantity": productOrderDetails["quantity"],
-                  "units": products
-                      .where((e) =>
-                          e["product_id"] == productOrderDetails["product_id"])
-                      .first["units"]
-                      .toString(),
-                  "place": element["shipping_details"][0]["shipping_city"],
-                });
-              }
+              // if (products
+              //     .where((e) =>
+              //         e["product_id"] == productOrderDetails["product_id"])
+              //     .isNotEmpty) {
+              (orderData["products"]).add({
+                "product_name": productOrderDetails["product_name"],
+                "description": products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .isNotEmpty
+                    ? products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .first["description"]
+                        .toString()
+                    : (productOrderDetails["description"] ??
+                        "Nandikrushi products are organic and fresh"),
+                "url": products
+                            .where((e) =>
+                                e["product_id"] ==
+                                productOrderDetails["product_id"])
+                            .isNotEmpty &&
+                        (Uri.tryParse(products
+                                    .where((e) =>
+                                        e["product_id"] ==
+                                        productOrderDetails["product_id"])
+                                    .first["url"]
+                                    .toString())
+                                ?.host
+                                .isNotEmpty ??
+                            false)
+                    ? products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .first["url"]
+                        .toString()
+                    : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
+                "price": productOrderDetails["price"],
+                "product_id": productOrderDetails["product_id"],
+                "quantity": productOrderDetails["quantity"],
+                "units": products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .isNotEmpty
+                    ? products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .first["units"]
+                        .toString()
+                    : "units",
+                "place": element["shipping_details"][0]["shipping_city"],
+              });
+              // }
             }
             orderData.addAll({
               "customer_name":
@@ -622,84 +635,97 @@ class ProductProvider extends ChangeNotifier {
                 in (element["product_details"] as List<dynamic>)) {
               // print(
               //     "The rating of the product you've purchased: ${}");
-              if (products
-                  .where((e) =>
-                      e["product_id"] == productOrderDetails["product_id"])
-                  .isNotEmpty) {
-                (myPurchasesData["products"]).add({
-                  "product_name": productOrderDetails["product_name"],
-                  "description": products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .isNotEmpty
-                      ? products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .first["description"]
-                          .toString()
-                      : productOrderDetails["description"],
-                  "url": (Uri.tryParse(products
-                                  .where((e) =>
-                                      e["product_id"] ==
-                                      productOrderDetails["product_id"])
-                                  .first["url"]
-                                  .toString())
-                              ?.host
-                              .isNotEmpty ??
-                          false)
-                      ? products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .first["url"]
-                          .toString()
-                      : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
-                  "price": productOrderDetails["price"],
-                  "product_id": productOrderDetails["product_id"],
-                  "quantity": productOrderDetails["quantity"],
-                  "units": products
-                      .where((e) =>
-                          e["product_id"] == productOrderDetails["product_id"])
-                      .first["units"]
-                      .toString(),
-                  "payment_method": element["payment_details"][0]
-                      ["payment_method"],
-                  "place": element["shipping_details"][0]["shipping_city"],
-                  "shipping_firstname": element["shipping_details"][0]
-                      ["shipping_firstname"],
-                  "shipping_lastname": element["shipping_details"][0]
-                      ["shipping_lastname"],
-                  "shipping_address_1": element["shipping_details"][0]
-                      ["shipping_address_1"],
-                  "shipping_house_number": element["shipping_details"][0]
-                      ["house_no"],
-                  "shipping_address_2": element["shipping_details"][0]
-                      ["shipping_address_2"],
-                  "shipping_city": element["shipping_details"][0]
-                      ["shipping_city"],
-                  "shipping_postcode": element["shipping_details"][0]
-                      ["shipping_postcode"],
-                  "shipping_country": element["shipping_details"][0]
-                      ["shipping_country"],
-                  "shipping_zone": element["shipping_details"][0]
-                      ["shipping_zone"],
-                  "telephone": element["customer_details"][0]["telephone"],
-                  "rating": products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .isNotEmpty
-                      ? products
-                          .where((e) =>
-                              e["product_id"] ==
-                              productOrderDetails["product_id"])
-                          .first["rating"]
-                          .toString()
-                      : "3.5"
-                });
-              }
+              // if (products
+              //     .where((e) =>
+              //         e["product_id"] == productOrderDetails["product_id"])
+              //     .isNotEmpty) {
+              (myPurchasesData["products"]).add({
+                "product_name": productOrderDetails["product_name"],
+                "description": products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .isNotEmpty
+                    ? products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .first["description"]
+                        .toString()
+                    : (productOrderDetails["description"] ??
+                        "Nandikrushi products are organic and fresh"),
+                "url": products
+                            .where((e) =>
+                                e["product_id"] ==
+                                productOrderDetails["product_id"])
+                            .isNotEmpty &&
+                        (Uri.tryParse(products
+                                    .where((e) =>
+                                        e["product_id"] ==
+                                        productOrderDetails["product_id"])
+                                    .first["url"]
+                                    .toString())
+                                ?.host
+                                .isNotEmpty ??
+                            false)
+                    ? products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .first["url"]
+                        .toString()
+                    : "http://images.jdmagicbox.com/comp/visakhapatnam/q2/0891px891.x891.180329082226.k1q2/catalogue/nandi-krushi-visakhapatnam-e-commerce-service-providers-aomg9cai5i-250.jpg",
+                "price": productOrderDetails["price"],
+                "product_id": productOrderDetails["product_id"],
+                "quantity": productOrderDetails["quantity"],
+                "units": products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .isNotEmpty
+                    ? products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .first["units"]
+                        .toString()
+                    : "units",
+                "payment_method": element["payment_details"][0]
+                    ["payment_method"],
+                "place": element["shipping_details"][0]["shipping_city"],
+                "shipping_firstname": element["shipping_details"][0]
+                    ["shipping_firstname"],
+                "shipping_lastname": element["shipping_details"][0]
+                    ["shipping_lastname"],
+                "shipping_address_1": element["shipping_details"][0]
+                    ["shipping_address_1"],
+                "shipping_house_number": element["shipping_details"][0]
+                    ["house_no"],
+                "shipping_address_2": element["shipping_details"][0]
+                    ["shipping_address_2"],
+                "shipping_city": element["shipping_details"][0]
+                    ["shipping_city"],
+                "shipping_postcode": element["shipping_details"][0]
+                    ["shipping_postcode"],
+                "shipping_country": element["shipping_details"][0]
+                    ["shipping_country"],
+                "shipping_zone": element["shipping_details"][0]
+                    ["shipping_zone"],
+                "telephone": element["customer_details"][0]["telephone"],
+                "rating": products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .isNotEmpty
+                    ? products
+                        .where((e) =>
+                            e["product_id"] ==
+                            productOrderDetails["product_id"])
+                        .first["rating"]
+                        .toString()
+                    : "3.5"
+              });
+              // }
             }
             myPurchasesData.addAll({
               "store_name": "${element["store_details"][0]["store_name"]}",

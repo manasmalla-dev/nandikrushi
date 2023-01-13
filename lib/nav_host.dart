@@ -41,12 +41,12 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
         profileProvider.showLoader();
         profileProvider
             .getProfile(
-          loginProvider: loginProvider,
-          userID: widget.userId,
-          showMessage: (_) {
-            snackbar(context, _);
-          },
-        )
+                loginProvider: loginProvider,
+                userID: widget.userId,
+                showMessage: (_) {
+                  snackbar(context, _);
+                },
+                navigator: Navigator.of(context))
             .then((value) {
           productProvider.getData(
               profileProvider: profileProvider,

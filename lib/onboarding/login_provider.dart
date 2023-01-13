@@ -17,7 +17,9 @@ class LoginProvider extends ChangeNotifier {
   bool shouldShowLoader = false;
   bool isEmail = false;
   bool get isEmailLogin =>
-      Platform.isAndroid || Platform.isIOS ? isEmail : true;
+      Platform.isAndroid || Platform.isIOS || Platform.isWindows
+          ? isEmail
+          : true;
   Map<String, Color> availableUserTypes = {};
   MapEntry<String, Color> userAppTheme = const MapEntry("", Color(0xFF006838));
   bool get isFarmer => userAppTheme.key.contains("Farmer");
@@ -89,6 +91,7 @@ class LoginProvider extends ChangeNotifier {
 
   void changeLoginMethod() {
     isEmail = !isEmail;
+
     notifyListeners();
   }
 
@@ -129,40 +132,58 @@ class LoginProvider extends ChangeNotifier {
         phoneNumber = loginController.phoneTextEditController.text;
         log("Trying to login user");
         try {
-          await FirebaseAuth.instance.verifyPhoneNumber(
-            phoneNumber: "+91${loginController.phoneTextEditController.text}",
-            verificationCompleted:
-                (PhoneAuthCredential phoneAuthCredential) async {
-              onLoginWithCredential(phoneAuthCredential, loginController,
-                  onSuccessfulLogin, onError, onRegisterUser);
-            },
-            verificationFailed: (FirebaseAuthException exception) {
-              onError(
-                  "Couldn't verify your phone number, Error: ${exception.message}");
-              hideLoader();
-            },
-            codeSent: (String verificationId, int? resendToken) {
-              firebaseVerificationID = verificationId;
-              _resendToken = resendToken;
-              showMessage("OTP sent successfully");
-              //Navigate to OTP page
-              navigateToOTPScreen((String otp) async {
-                PhoneAuthCredential phoneAuthCredential =
-                    PhoneAuthProvider.credential(
-                        verificationId: verificationId, smsCode: otp);
-                onLoginWithCredential(phoneAuthCredential, loginController,
+          if (Platform.isAndroid || Platform.isIOS) {
+            await FirebaseAuth.instance.verifyPhoneNumber(
+              phoneNumber: "+91${loginController.phoneTextEditController.text}",
+              verificationCompleted:
+                  (PhoneAuthCredential phoneAuthCredential) async {
+                var firebaseUser = await FirebaseAuth.instance
+                    .signInWithCredential(phoneAuthCredential);
+                onLoginWithCredential(firebaseUser, loginController,
                     onSuccessfulLogin, onError, onRegisterUser);
-              });
-            },
-            codeAutoRetrievalTimeout: (String verificationId) {
-              firebaseVerificationID = verificationId;
-              showMessage("OTP sent successfully");
-            },
-            forceResendingToken: _resendToken,
-            timeout: const Duration(
-              seconds: 60,
-            ),
-          );
+              },
+              verificationFailed: (FirebaseAuthException exception) {
+                onError(
+                    "Couldn't verify your phone number, Error: ${exception.message}");
+                hideLoader();
+              },
+              codeSent: (String verificationId, int? resendToken) {
+                firebaseVerificationID = verificationId;
+                _resendToken = resendToken;
+                showMessage("OTP sent successfully");
+                //Navigate to OTP page
+                navigateToOTPScreen((String otp) async {
+                  PhoneAuthCredential phoneAuthCredential =
+                      PhoneAuthProvider.credential(
+                          verificationId: verificationId, smsCode: otp);
+                  var firebaseUser = await FirebaseAuth.instance
+                      .signInWithCredential(phoneAuthCredential);
+                  onLoginWithCredential(firebaseUser, loginController,
+                      onSuccessfulLogin, onError, onRegisterUser);
+                });
+              },
+              codeAutoRetrievalTimeout: (String verificationId) {
+                firebaseVerificationID = verificationId;
+                showMessage("OTP sent successfully");
+              },
+              forceResendingToken: _resendToken,
+              timeout: const Duration(
+                seconds: 60,
+              ),
+            );
+          } else {
+            ConfirmationResult confirmationResult = await FirebaseAuth.instance
+                .signInWithPhoneNumber(
+                    "+91${loginController.phoneTextEditController.text}");
+            showMessage("OTP sent successfully");
+            //Navigate to OTP page
+            navigateToOTPScreen((String otp) async {
+              UserCredential userCredential =
+                  await confirmationResult.confirm(otp);
+              onLoginWithCredential(userCredential, loginController,
+                  onSuccessfulLogin, onError, onRegisterUser);
+            });
+          }
         } catch (exception) {
           log("Verification Completed");
           onError("Couldn't verify your phone number, Error: $exception");
@@ -175,26 +196,28 @@ class LoginProvider extends ChangeNotifier {
   }
 
   onLoginWithCredential(
-      PhoneAuthCredential phoneAuthCredential,
+      UserCredential firebaseUser,
       LoginController loginController,
       Function(String, bool, String, String) onSuccessfulLogin,
       Function(String) onError,
       Function onRegisterUser) async {
     log("Verification Completed");
-    var firebaseUser =
-        await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+
     if (firebaseUser.user != null) {
       //User is signed in with Firebase, checking with API
       var response = await Server().postFormData(
         body: {
           'telephone': loginController.phoneTextEditController.text.toString(),
-          'device_token': await FirebaseMessaging.instance.getToken() ?? ""
+          'device_token': Platform.isAndroid || Platform.isIOS
+              ? await FirebaseMessaging.instance.getToken() ?? ""
+              : "",
         },
         url:
             "https://nkweb.sweken.com/index.php?route=extension/account/purpletree_multivendor/api/sellerlogin/verify_mobile",
       );
       onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
-          onSuccessfulLogin, onError, onRegisterUser);
+          onSuccessfulLogin, onError, onRegisterUser,
+          shouldValidateUserStatus: true);
     }
   }
 
@@ -203,22 +226,23 @@ class LoginProvider extends ChangeNotifier {
       String? uid,
       Function(String, bool, String, String) onSuccessfulLogin,
       Function(String) onError,
-      Function onRegisterUser) {
+      Function onRegisterUser,
+      {bool shouldValidateUserStatus = false}) {
     if (response?.statusCode == 200) {
       var decodedResponse =
           jsonDecode(response?.body ?? '{"message": {},"success": false}');
       log(response?.body ?? "");
-      var statusCodeBody = false;
-      if (decodedResponse["success"] != null) {
-        statusCodeBody = decodedResponse["success"].toString().contains("true");
-      } else {
-        statusCodeBody = decodedResponse["status"].toString().contains("true");
-      }
-      if (statusCodeBody) {
-        if (decodedResponse["message"].toString().contains("No Data Found")) {
+
+      if (decodedResponse["status"]) {
+        print("Status is true");
+        if (decodedResponse["user_status"] == 2) {
           onRegisterUser();
           hideLoader();
-        } else {
+        } else if ((decodedResponse["user_status"] == 2 ||
+                !shouldValidateUserStatus) &&
+            !decodedResponse["message"]
+                .toString()
+                .contains("Seller is Under Verification")) {
           log("Successful login");
           var customerGroupID = (decodedResponse["message"]
                   .toString()
@@ -248,12 +272,18 @@ class LoginProvider extends ChangeNotifier {
                   ? (decodedResponse["message"]?["customer_id"] ??
                       decodedResponse["customer_id"])
                   : decodedResponse["customer_details"]["customer_id"]);
+        } else {
+          //TODO: Navigate to alert screen
+          hideLoader();
+          print(decodedResponse["message"]);
         }
       } else {
-        if (decodedResponse["message"].toString().contains("No Data Found")) {
+        if (decodedResponse["user_status"] == 2) {
           onRegisterUser();
           hideLoader();
         } else {
+          //TODO: Navigate to alert screen
+          print(decodedResponse["message"]);
           onError("Failed to login, error: ${decodedResponse["message"]}");
           hideLoader();
         }

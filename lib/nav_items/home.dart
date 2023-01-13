@@ -617,14 +617,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         vertical: 8.0),
                                                     child: Row(
                                                       children: [
-                                                        ClipOval(
-                                                          child: Image.network(
-                                                            product["url"] ??
-                                                                "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
-                                                            height: 48,
-                                                            width: 48,
-                                                            fit: BoxFit.cover,
-                                                          ),
+                                                        Image.network(
+                                                          product["image"] ??
+                                                              "https://img.etimg.com/thumb/msid-64411656,width-640,resizemode-4,imgsize-226493/cow-milk.jpg",
+                                                          height: 48,
+                                                          width: 48,
+                                                          fit: BoxFit.cover,
                                                         ),
                                                         const SizedBox(
                                                           width: 16,
@@ -676,7 +674,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   );
                                                 },
                                                 separatorBuilder: (context, _) {
-                                                  return const Divider();
+                                                  return SizedBox(
+                                                    width: 12,
+                                                  );
                                                 },
                                                 itemCount: productProvider
                                                     .myProducts.length),

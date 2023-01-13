@@ -363,7 +363,7 @@ class _LoginWidgetCompactScreensState extends State<LoginWidgetCompactScreens> {
         SizedBox(
           height: getProportionateHeight(8, widget.constraints),
         ),
-        Platform.isAndroid || Platform.isIOS
+        Platform.isAndroid || Platform.isIOS || Platform.isWindows
             ? TextButton(
                 style: TextButton.styleFrom(
                     foregroundColor: Theme.of(context).colorScheme.primary),
@@ -604,6 +604,7 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
   var shouldObscureText = true;
   @override
   Widget build(BuildContext context) {
+    print(widget.isEmail);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -810,12 +811,12 @@ class _LoginWidgetLargeScreensState extends State<LoginWidgetLargeScreens> {
                 buttonName: widget.isEmail ? "Login" : "Get OTP".toUpperCase(),
                 trailingIcon: Icons.arrow_forward,
               ),
-              Platform.isAndroid || Platform.isIOS
+              Platform.isAndroid || Platform.isIOS || Platform.isWindows
                   ? SizedBox(
                       height: getProportionateHeight(10, widget.constraints),
                     )
                   : const SizedBox(),
-              Platform.isAndroid || Platform.isIOS
+              Platform.isAndroid || Platform.isIOS || Platform.isWindows
                   ? TextButton(
                       style: TextButton.styleFrom(
                           foregroundColor:

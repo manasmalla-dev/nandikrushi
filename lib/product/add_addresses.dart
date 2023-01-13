@@ -761,7 +761,8 @@ class _AddAddressesScreenState extends State<AddAddressesScreen> {
                                             addressList,
                                             userLocation, (_) {
                                           snackbar(context, _);
-                                        }, loginProvider);
+                                        }, loginProvider,
+                                            Navigator.of(context));
                                       } else {
                                         profileProvider.hideLoader();
                                       }

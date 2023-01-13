@@ -9,6 +9,7 @@ import 'package:http/http.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
 
 import '../onboarding/login_provider.dart';
+import '../reusable_widgets/application_pending.dart';
 
 class ProfileProvider extends ChangeNotifier {
   bool shouldShowLoader = false;
@@ -50,7 +51,8 @@ class ProfileProvider extends ChangeNotifier {
   Future<void> getProfile(
       {required LoginProvider loginProvider,
       required String userID,
-      required Function(String) showMessage}) async {
+      required Function(String) showMessage,
+      required NavigatorState navigator}) async {
     userIdForAddress = userID;
     fetchingDataType = "fetch your profile";
     notifyListeners();
@@ -160,6 +162,8 @@ class ProfileProvider extends ChangeNotifier {
           exit(0);
         }
       }
+      fetchingDataType = "fetching your notifications";
+      notifyListeners();
       notifications = await getNotifications(showMessage);
       notifyListeners();
     } else if (response.statusCode == 400) {
@@ -179,12 +183,21 @@ class ProfileProvider extends ChangeNotifier {
         exit(0);
       }
     } else {
-      showMessage("Failed to get data!");
-      hideLoader();
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
+      if (jsonDecode(response.body)["message"]
+          .toString()
+          .contains("Seller is Under Verification")) {
+        hideLoader();
+        showMessage("Verification");
+        navigator.pushReplacement(
+            MaterialPageRoute(builder: (context) => ApplicationStatusScreen()));
+      } else {
+        hideLoader();
+        showMessage("Failed to get data!");
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else if (Platform.isIOS) {
+          exit(0);
+        }
       }
     }
   }
@@ -210,7 +223,8 @@ class ProfileProvider extends ChangeNotifier {
       Map<String, String> addressList,
       Position? location,
       Function(String) showMessage,
-      LoginProvider loginProvider) async {
+      LoginProvider loginProvider,
+      NavigatorState navigator) async {
     //Send this data to the server
     var response = await post(
       Uri.parse(
@@ -251,7 +265,8 @@ class ProfileProvider extends ChangeNotifier {
       getProfile(
           userID: userIdForAddress,
           showMessage: showMessage,
-          loginProvider: loginProvider);
+          loginProvider: loginProvider,
+          navigator: navigator);
       hideLoader();
       notifyListeners();
     } else if (response.statusCode == 400) {
