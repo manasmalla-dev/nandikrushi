@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 
 class ConfirmOrderScreen extends StatefulWidget {
   final String addressID;
+
   const ConfirmOrderScreen({Key? key, required this.addressID})
       : super(key: key);
 
@@ -83,7 +84,7 @@ coupons(BuildContext context) {
                                 productProvider.updateCoupon(list);
                               } else if (productProvider.appliedCoupon ==
                                   list) {
-                                productProvider.updateCoupon({});
+                                productProvider.updateCoupon(list);
                               } else {
                                 snackbar(context,
                                     "Only one coupon can be applied per order!");
@@ -128,6 +129,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
 
   dynamic selected;
   int deliverySlot = 0;
+  bool expandedItemState = false;
 
   @override
   Widget build(BuildContext context) {
@@ -409,59 +411,71 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                             Row(
                               children: [
                                 TextWidget(
-                                  '${productProvider.cart.map((e) => int.tryParse(e['quantity'] ?? "0") ?? 0).reduce((value, element) => value + element)} items',
+                                  '${productProvider.cart.length} items',
                                   size: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
                                       ?.fontSize,
                                 ),
-                                const Icon(Icons.expand_more_rounded)
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      expandedItemState = !expandedItemState;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.expand_more_rounded),
+                                ),
                               ],
                             ),
-                            ListView.builder(
-                                shrinkWrap: true,
-                                primary: false,
-                                itemCount: productProvider.cart.length,
-                                itemBuilder: (context, index) {
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextWidget(
-                                            productProvider.cart[index]['name'],
-                                            weight: FontWeight.w500,
-                                            size: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall
-                                                ?.fontSize,
-                                          ),
-                                          Opacity(
-                                            opacity: 0.7,
-                                            child: TextWidget(
-                                              productProvider.cart[index]
-                                                  ['unit'],
+                            AnimatedSwitcher(
+                              duration: Duration(milliseconds: 500),
+                              child: expandedItemState
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      itemCount: productProvider.cart.length,
+                                      itemBuilder: (context, index) {
+                                        return Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextWidget(
+                                                  productProvider.cart[index]
+                                                      ['name'],
+                                                  weight: FontWeight.w500,
+                                                  size: Theme.of(context)
+                                                      .textTheme
+                                                      .titleSmall
+                                                      ?.fontSize,
+                                                ),
+                                                Opacity(
+                                                  opacity: 0.7,
+                                                  child: TextWidget(
+                                                    "${productProvider.cart[index]["quantity"]} ${productProvider.cart[index]['unit']?.split(" ").last.replaceAll((int.tryParse(productProvider.cart[index]["quantity"] ?? "") ?? 0) > 1 ? "" : "s", "")}",
+                                                    size: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.fontSize,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            TextWidget(
+                                              "Rs. ${(double.tryParse(productProvider.cart[index]["price"] ?? "") ?? 0) * (int.tryParse(productProvider.cart[index]["quantity"] ?? "") ?? 0)}",
                                               size: Theme.of(context)
                                                   .textTheme
-                                                  .bodyMedium
+                                                  .titleSmall
                                                   ?.fontSize,
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TextWidget(
-                                        "Rs. ${(double.tryParse(productProvider.cart[index]["price"] ?? "") ?? 0) * (int.tryParse(productProvider.cart[index]["quantity"] ?? "") ?? 0)}",
-                                        size: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall
-                                            ?.fontSize,
-                                      ),
-                                    ],
-                                  );
-                                }),
+                                          ],
+                                        );
+                                      })
+                                  : SizedBox(),
+                            ),
                             const SizedBox(
                               height: 16,
                             ),
@@ -503,6 +517,35 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                             const SizedBox(
                               height: 16,
                             ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextWidget(
+                                  'Discount',
+                                  weight: FontWeight.w700,
+                                  size: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.fontSize,
+                                ),
+                                TextWidget(
+                                  "- Rs. ${(productProvider.appliedCoupon["type"] == "P" ? (((double.tryParse(productProvider.appliedCoupon["discount"] ?? "0.0") ?? 0) / 100) * (productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                        (value, element) => value + element,
+                                      ) + (((productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                        (value, element) => value + element,
+                                      ) + 100.00)) > 4000 ? 0 : 100.00))) : (((double.tryParse(productProvider.appliedCoupon["discount"] ?? "0.0") ?? 0) * -1))).toStringAsFixed(2)}",
+                                  weight: FontWeight.w700,
+                                  size: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.fontSize,
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
                             const Divider(),
                             const SizedBox(
                               height: 12,
@@ -521,9 +564,13 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                                 TextWidget(
                                   'Rs. ${(productProvider.appliedCoupon["type"] == "P" ? ((1 - ((double.tryParse(productProvider.appliedCoupon["discount"] ?? "0.0") ?? 0) / 100)) * (productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                         (value, element) => value + element,
-                                      ) + 100.00)) : (((double.tryParse(productProvider.appliedCoupon["discount"] ?? "0.0") ?? 0) * -1) + (productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                      ) + (((productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
                                         (value, element) => value + element,
-                                      ) + 100.00))).toStringAsFixed(2)}',
+                                      ) + 100.00)) > 4000 ? 0 : 100.00))) : (((double.tryParse(productProvider.appliedCoupon["discount"] ?? "0.0") ?? 0) * -1) + (productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                        (value, element) => value + element,
+                                      ) + (((productProvider.cart.map((e) => (double.tryParse(e['price'] ?? "0") ?? 0) * (double.tryParse(e['quantity'] ?? "0") ?? 0)).reduce(
+                                        (value, element) => value + element,
+                                      ) + 100.00)) > 4000 ? 0 : 100.00)))).toStringAsFixed(2)}',
                                   weight: FontWeight.w700,
                                   size: Theme.of(context)
                                       .textTheme
@@ -613,6 +660,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
 class DeliverySlotChooser extends StatefulWidget {
   final int deliverySlot;
   final Function(int) setDeliverySlot;
+
   const DeliverySlotChooser(
       {Key? key, required this.deliverySlot, required this.setDeliverySlot})
       : super(key: key);
