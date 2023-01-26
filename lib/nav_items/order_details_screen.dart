@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nandikrushi_farmer/product/product_page.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final Map<String, dynamic> order;
+
   const OrderDetailScreen({super.key, required this.order});
 
   @override
@@ -22,9 +24,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         return constraints.maxHeight;
       }
 
-      width(context) {
-        return constraints.maxWidth;
-      }
 
       return Consumer<ProductProvider>(builder: (context, productProvider, _) {
         return Scaffold(
@@ -158,32 +157,51 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           itemCount: widget.order["products"].length,
                           itemBuilder: (context, index) {
                             var item = widget.order["products"][index];
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextWidget(
-                                      '${item['product_name']} x ${item['quantity']}',
-                                      weight: FontWeight.w500,
-                                      size: height(context) * 0.02,
-                                    ),
-                                    TextWidget(
-                                      "${item["quantity"]} ${item["units"]?.toString().replaceFirst("1", "") ?? " unit"}${(int.tryParse(item["quantity"]) ?? 1) > 1 ? "s" : ""}",
-                                      size: height(context) * 0.017,
-                                    ),
-                                  ],
-                                ),
-                                TextWidget(
-                                  "Rs. ${((double.tryParse(item['price'] ?? "0") ?? 0) * (double.tryParse(item['quantity'] ?? "0") ?? 0)).toStringAsFixed(2)}",
-                                  size: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.fontSize,
-                                  weight: FontWeight.w500,
-                                ),
-                              ],
+                            return InkWell(
+                              onTap: () {
+                                if (productProvider.products
+                                    .where((element) =>
+                                        element["product_id"] ==
+                                        item["product_id"])
+                                    .isNotEmpty) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => ProductPage(
+                                          productDetails: productProvider
+                                              .products
+                                              .firstWhere((element) =>
+                                                  element["product_id"] ==
+                                                  item["product_id"]))));
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextWidget(
+                                        '${item['product_name']} x ${item['quantity']}',
+                                        weight: FontWeight.w500,
+                                        size: height(context) * 0.02,
+                                      ),
+                                      TextWidget(
+                                        "${item["quantity"]} ${item["units"]?.toString().replaceFirst("1", "") ?? " unit"}${(int.tryParse(item["quantity"]) ?? 1) > 1 ? "s" : ""}",
+                                        size: height(context) * 0.017,
+                                      ),
+                                    ],
+                                  ),
+                                  TextWidget(
+                                    "Rs. ${((double.tryParse(item['price'] ?? "0") ?? 0) * (double.tryParse(item['quantity'] ?? "0") ?? 0)).toStringAsFixed(2)}",
+                                    size: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.fontSize,
+                                    weight: FontWeight.w500,
+                                  ),
+                                ],
+                              ),
                             );
                           }),
                     ),

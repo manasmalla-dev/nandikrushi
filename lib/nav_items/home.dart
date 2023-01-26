@@ -11,6 +11,7 @@ import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
 import 'package:nandikrushi_farmer/product/add_product.dart';
 import 'package:nandikrushi_farmer/product/my_products_page.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/material_you_clipper.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/textfield_widget.dart';
 import 'package:nandikrushi_farmer/utils/size_config.dart';
 import 'package:nandikrushi_farmer/utils/youtube_util.dart';
@@ -138,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                     ),
                     Text(
-                      "an aggregator of natural farms",
+                      "truly food is medicine",
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context)
                               .colorScheme
@@ -148,7 +149,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ? 0.1
                                   : 0.55),
                           fontSize:
-                              getProportionateHeight(11, widget.constraints)),
+                              getProportionateHeight(11, widget.constraints), letterSpacing: 2.4),
+
                     ),
                   ],
                 ),
@@ -185,19 +187,55 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? 0.5
                             : 1),
                   ),
-                  IconButton(
-                    iconSize:
-                        Theme.of(context).textTheme.headlineMedium?.fontSize,
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const MyAccountScreen()));
-                    },
-                    icon: const Icon(Icons.account_circle_outlined),
-                    color: Theme.of(context).colorScheme.primary.withOpacity(
-                        Theme.of(context).brightness == Brightness.dark
-                            ? 0.5
-                            : 1),
-                  )
+                  SizedBox(width: 8,),
+                  Consumer<ProfileProvider>(
+                      builder: (context, profileProvider, _) {
+                    return profileProvider.sellerImage.isNotEmpty
+                        ? InkWell(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                            const MyAccountScreen()));
+                      },
+                          child: Center(
+                            child: ClipPath(
+                              clipper: MaterialClipper(),
+                      child: Image.network(
+                                  profileProvider.sellerImage,
+                                  height: (Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.fontSize ?? 20) + 16,
+                                  width: (Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.fontSize ?? 20) + 16,
+                            fit: BoxFit.cover,
+                                ),
+                            ),
+                          ),
+                        )
+                        : IconButton(
+                            iconSize: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.fontSize,
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MyAccountScreen()));
+                            },
+                            icon: const Icon(Icons.account_circle_outlined),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? 0.5
+                                    : 1),
+                          );
+                  }),
+                  SizedBox(width: 16,),
                 ],
               ),
               body: SingleChildScrollView(
@@ -567,7 +605,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Row(
                                             children: [
                                               Text(
-                                                "Your Products",
+                                                "My Products",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .titleLarge,

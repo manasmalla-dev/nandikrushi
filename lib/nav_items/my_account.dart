@@ -72,11 +72,12 @@ class MyAccountScreen extends StatelessWidget {
                               ),
                             ),
                             TextWidget(
-                              "an aggregator of natural farmers",
+                              "truly food is medicine",
                               size: 12,
                               weight: FontWeight.w600,
                               color: Colors.grey[500],
                               align: TextAlign.center,
+                              lSpace: 2.4,
                             ),
                             TextWidget(
                               "v1.2.0+60",
@@ -258,21 +259,18 @@ class MyAccountScreen extends StatelessWidget {
                                           ),
                                     ),
                                     Text(
-                                      "an aggregator of natural farms",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary
-                                                  .withOpacity(Theme.of(context)
-                                                              .brightness ==
-                                                          Brightness.dark
-                                                      ? 0.1
-                                                      : 0.55),
-                                              fontSize: getProportionateHeight(
-                                                  11, constraints)),
+                                      "truly food is medicine",
+                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(Theme.of(context).brightness ==
+                                              Brightness.dark
+                                              ? 0.1
+                                              : 0.55),
+                                          fontSize:
+                                          getProportionateHeight(11, constraints), letterSpacing: 2.4),
+
                                     ),
                                     const SizedBox(
                                       height: 8,

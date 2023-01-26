@@ -185,7 +185,7 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
                   Icons.home_rounded,
                 ],
                 'Products': [
-                  Icons.fastfood_outlined,
+                  Icons.search_rounded,
                   Icons.search_rounded,
                 ],
                 'Orders': [

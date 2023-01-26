@@ -403,7 +403,7 @@ class _ProductPageState extends State<ProductPage> {
                                           ? 0.5
                                           : 1),
                               const SizedBox(width: 8,),
-                              Text((jsonDecode(widget.productDetails["customer_ratings"] ?? "{}") as Map<String, dynamic>).length.toString(), style: Theme.of(context).textTheme.titleMedium,)
+                              ((jsonDecode(widget.productDetails["customer_ratings"] ?? "{}") as Map<String, dynamic>?)?.length ?? 0) == 0 ? SizedBox() : Text(((jsonDecode(widget.productDetails["customer_ratings"] ?? "{}") as Map<String, dynamic>?)?.length ?? 0).toString(), style: Theme.of(context).textTheme.titleMedium,)
                             ],
                           ),
                           const SizedBox(

@@ -18,6 +18,7 @@ import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:location/location.dart' as LocationPackage;
 
 class LoginController extends ControllerMVC {
   GlobalKey<FormState> mobileFormKey = GlobalKey();
@@ -86,7 +87,7 @@ class LoginController extends ControllerMVC {
         await geocodeLocation(context, location!.latitude, location!.longitude);
       } else {
         log("open settings");
-        if (await Geolocator.openLocationSettings()) {
+        if (await LocationPackage.Location().requestService()) {
           await checkLocationPermissionAndGetLocation(context);
         }
       }
