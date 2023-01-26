@@ -188,8 +188,10 @@ class ProfileProvider extends ChangeNotifier {
           .contains("Seller is Under Verification")) {
         hideLoader();
         showMessage("Verification");
-        navigator.pushReplacement(
-            MaterialPageRoute(builder: (context) => ApplicationStatusScreen()));
+        navigator.pushReplacement(MaterialPageRoute(
+            builder: (context) => ApplicationStatusScreen(
+                  uID: userIdForAddress,
+                )));
       } else {
         hideLoader();
         showMessage("Failed to get data!");

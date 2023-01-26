@@ -90,6 +90,11 @@ class ProductController extends ControllerMVC {
           .toString(),
       //"category_id": product.category.toString(),
       "category_id": productProvider.categories[category].toString(),
+      "sub_category_id": productProvider
+              .subcategories[productProvider.categories[category]]
+              ?.where((element) => element.keys.first == selectedSubCategory)
+              .toString() ??
+          "",
       "seller_id": profileProvider.sellerID,
     };
     if (!loginProvider.isFarmer) {

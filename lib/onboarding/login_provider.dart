@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
+import 'package:nandikrushi_farmer/reusable_widgets/application_pending.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
 import 'package:nandikrushi_farmer/utils/firebase_storage_utils.dart';
 import 'package:nandikrushi_farmer/utils/login_utils.dart';
@@ -96,14 +97,13 @@ class LoginProvider extends ChangeNotifier {
   }
 
   Future<void> onLoginUser(
-    bool isEmailProvider,
-    LoginController loginController, {
-    required Function(String, bool, String, String) onSuccessfulLogin,
-    required Function(String) onError,
-    required Function(String) showMessage,
-    required Function(Function(String)) navigateToOTPScreen,
-    required Function onRegisterUser,
-  }) async {
+      bool isEmailProvider, LoginController loginController,
+      {required Function(String, bool, String, String) onSuccessfulLogin,
+      required Function(String) onError,
+      required Function(String) showMessage,
+      required Function(Function(String)) navigateToOTPScreen,
+      required Function onRegisterUser,
+      required NavigatorState navigator}) async {
     if (isEmailProvider) {
       var isFormReady =
           loginController.emailFormKey.currentState?.validate() ?? false;
@@ -121,7 +121,7 @@ class LoginProvider extends ChangeNotifier {
         onLoginWithServer(response, null, onSuccessfulLogin, onError, () {
           onError(
               "Oops! Can't register on this device. Please try on a mobile.");
-        });
+        }, navigator: navigator);
       } else {
         hideLoader();
       }
@@ -140,7 +140,7 @@ class LoginProvider extends ChangeNotifier {
                 var firebaseUser = await FirebaseAuth.instance
                     .signInWithCredential(phoneAuthCredential);
                 onLoginWithCredential(firebaseUser, loginController,
-                    onSuccessfulLogin, onError, onRegisterUser);
+                    onSuccessfulLogin, onError, onRegisterUser, navigator);
               },
               verificationFailed: (FirebaseAuthException exception) {
                 onError(
@@ -159,7 +159,7 @@ class LoginProvider extends ChangeNotifier {
                   var firebaseUser = await FirebaseAuth.instance
                       .signInWithCredential(phoneAuthCredential);
                   onLoginWithCredential(firebaseUser, loginController,
-                      onSuccessfulLogin, onError, onRegisterUser);
+                      onSuccessfulLogin, onError, onRegisterUser, navigator);
                 });
               },
               codeAutoRetrievalTimeout: (String verificationId) {
@@ -181,7 +181,7 @@ class LoginProvider extends ChangeNotifier {
               UserCredential userCredential =
                   await confirmationResult.confirm(otp);
               onLoginWithCredential(userCredential, loginController,
-                  onSuccessfulLogin, onError, onRegisterUser);
+                  onSuccessfulLogin, onError, onRegisterUser, navigator);
             });
           }
         } catch (exception) {
@@ -200,7 +200,8 @@ class LoginProvider extends ChangeNotifier {
       LoginController loginController,
       Function(String, bool, String, String) onSuccessfulLogin,
       Function(String) onError,
-      Function onRegisterUser) async {
+      Function onRegisterUser,
+      NavigatorState navigator) async {
     log("Verification Completed");
 
     if (firebaseUser.user != null) {
@@ -217,7 +218,7 @@ class LoginProvider extends ChangeNotifier {
       );
       onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
           onSuccessfulLogin, onError, onRegisterUser,
-          shouldValidateUserStatus: true);
+          shouldValidateUserStatus: true, navigator: navigator);
     }
   }
 
@@ -227,7 +228,8 @@ class LoginProvider extends ChangeNotifier {
       Function(String, bool, String, String) onSuccessfulLogin,
       Function(String) onError,
       Function onRegisterUser,
-      {bool shouldValidateUserStatus = false}) {
+      {bool shouldValidateUserStatus = false,
+      required NavigatorState navigator}) {
     if (response?.statusCode == 200) {
       var decodedResponse =
           jsonDecode(response?.body ?? '{"message": {},"success": false}');
@@ -238,7 +240,7 @@ class LoginProvider extends ChangeNotifier {
         if (decodedResponse["user_status"] == 2) {
           onRegisterUser();
           hideLoader();
-        } else if ((decodedResponse["user_status"] == 2 ||
+        } else if (((decodedResponse["user_status"] ?? false) == 1 ||
                 !shouldValidateUserStatus) &&
             !decodedResponse["message"]
                 .toString()
@@ -273,7 +275,10 @@ class LoginProvider extends ChangeNotifier {
                       decodedResponse["customer_id"])
                   : decodedResponse["customer_details"]["customer_id"]);
         } else {
-          //TODO: Navigate to alert screen
+          navigator.pushReplacement(MaterialPageRoute(
+              builder: (context) => ApplicationStatusScreen(
+                    uID: uid ?? "",
+                  )));
           hideLoader();
           print(decodedResponse["message"]);
         }
@@ -282,7 +287,11 @@ class LoginProvider extends ChangeNotifier {
           onRegisterUser();
           hideLoader();
         } else {
-          //TODO: Navigate to alert screen
+          navigator.pushReplacement(MaterialPageRoute(
+              builder: (context) => ApplicationStatusScreen(
+                    uID: uid ?? "",
+                  )));
+
           print(decodedResponse["message"]);
           onError("Failed to login, error: ${decodedResponse["message"]}");
           hideLoader();
@@ -294,11 +303,11 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> registerUser({
-    required LoginController loginPageController,
-    required Function(String, bool, String, String) onSuccess,
-    required Function(String) onError,
-  }) async {
+  Future<void> registerUser(
+      {required LoginController loginPageController,
+      required Function(String, bool, String, String) onSuccess,
+      required Function(String) onError,
+      required NavigatorState navigator}) async {
     showLoader();
 
     Map<String, String> userAddress = {
@@ -411,7 +420,8 @@ class LoginProvider extends ChangeNotifier {
         log("64$e");
       });
       onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
-          onSuccess, onError, () {});
+          onSuccess, onError, () {},
+          navigator: navigator);
     } else if (!isFarmer && isRestaurant && !isStore) {
       //Store/Restaurant
       Map<String, String> body = {
@@ -464,7 +474,8 @@ class LoginProvider extends ChangeNotifier {
         log("64$e");
       });
       onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
-          onSuccess, onError, () {});
+          onSuccess, onError, () {},
+          navigator: navigator);
     } else {
       //Farmer
       Map<String, String> body = {
@@ -527,7 +538,8 @@ class LoginProvider extends ChangeNotifier {
         log("64$e");
       });
       onLoginWithServer(response, FirebaseAuth.instance.currentUser?.uid,
-          onSuccess, onError, () {});
+          onSuccess, onError, () {},
+          navigator: navigator);
     }
   }
 }

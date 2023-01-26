@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
               builder: (context) => const UserTypeScreen(),
             ),
           );
-        });
+        }, navigator: Navigator.of(context));
       }
 
       return Scaffold(

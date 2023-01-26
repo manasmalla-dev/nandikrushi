@@ -853,6 +853,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     margin: const EdgeInsets.only(bottom: 16),
                                     child: ElevatedButtonWidget(
                                       onClick: () async {
+                                        profileProvider.fetchingDataType =
+                                            "add your product";
                                         profileProvider.showLoader();
                                         List<String> urls = [];
                                         await Future.forEach(

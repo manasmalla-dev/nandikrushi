@@ -1239,7 +1239,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ),
                             ),
                           );
-                        });
+                        },
+                        navigator: Navigator.of(context));
                   } else {
                     snackbar(context, "Please upload a valid certificate");
                   }
@@ -1308,7 +1309,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   ),
                                 ),
                               );
-                            });
+                            },
+                            navigator: Navigator.of(context));
                       } else {
                         snackbar(context, "Please upload a valid certificate");
                       }
