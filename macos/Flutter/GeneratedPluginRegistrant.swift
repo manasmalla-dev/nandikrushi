@@ -12,8 +12,8 @@ import firebase_messaging
 import firebase_storage
 import geolocator_apple
 import location
-import package_info_plus
-import shared_preferences_foundation
+import package_info_plus_macos
+import shared_preferences_macos
 import smart_auth
 import url_launcher_macos
 

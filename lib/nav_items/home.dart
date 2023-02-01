@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(width: 8,),
                   Consumer<ProfileProvider>(
                       builder: (context, profileProvider, _) {
-                    return profileProvider.sellerImage.isNotEmpty
+                    return profileProvider.sellerImage.isNotEmpty || profileProvider.storeLogo.isNotEmpty
                         ? InkWell(
                       onTap: (){
                         Navigator.of(context).push(MaterialPageRoute(
@@ -201,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: ClipPath(
                               clipper: MaterialClipper(),
                       child: Image.network(
-                                  profileProvider.sellerImage,
+                                  profileProvider.sellerImage.isEmpty ? profileProvider.storeLogo : profileProvider.sellerImage,
                                   height: (Theme.of(context)
                                       .textTheme
                                       .headlineMedium

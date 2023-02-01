@@ -190,11 +190,11 @@ class _NandikrushiNavHostState extends State<NandikrushiNavHost> {
                 ],
                 'Orders': [
                   Icons.assignment_outlined,
-                  Icons.person_rounded,
+                  Icons.assignment_rounded,
                 ],
                 'Purchases': [
-                  Icons.shopping_basket_outlined,
-                  Icons.shopping_basket_rounded,
+                  Icons.inventory_2_outlined,
+                  Icons.inventory_2_rounded,
                 ]
               };
               return Stack(
