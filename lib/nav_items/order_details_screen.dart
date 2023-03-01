@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:nandikrushi_farmer/product/product_page.dart';
+import 'package:nandikrushi_farmer/product/product_page/product_page.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:provider/provider.dart';

@@ -14,7 +14,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
 import 'package:nandikrushi_farmer/utils/server.dart';
 
-import '../onboarding/login_provider.dart';
+import '../onboarding/login/login_provider.dart';
 import '../reusable_widgets/application_pending.dart';
 
 class ProfileProvider extends ChangeNotifier {

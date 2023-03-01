@@ -7,7 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/my_account.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
-import 'package:nandikrushi_farmer/product/product_page.dart';
+import 'package:nandikrushi_farmer/product/product_page/product_page.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/rating_widget.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';

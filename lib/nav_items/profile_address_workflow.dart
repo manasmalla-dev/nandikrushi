@@ -7,7 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
-import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_controller.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';

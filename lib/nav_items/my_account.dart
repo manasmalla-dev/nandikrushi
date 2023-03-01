@@ -22,7 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../onboarding/login_provider.dart';
+import '../onboarding/login/login_provider.dart';
 import '../utils/size_config.dart';
 
 class MyAccountScreen extends StatelessWidget {

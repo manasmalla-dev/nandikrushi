@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nandikrushi_farmer/nav_host.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
-import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_provider.dart';
 import 'package:nandikrushi_farmer/product/product_controller.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';

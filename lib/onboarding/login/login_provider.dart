@@ -13,7 +13,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_controller.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/application_pending.dart';
 import 'package:nandikrushi_farmer/utils/custom_color_util.dart';
 import 'package:nandikrushi_farmer/utils/firebase_storage_utils.dart';

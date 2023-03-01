@@ -8,11 +8,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nandikrushi_farmer/nav_items/home.dart';
+import 'package:nandikrushi_farmer/nav_items/home/home.dart';
 import 'package:nandikrushi_farmer/nav_items/my_purchases.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/nav_items/search.dart';
-import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_provider.dart';
 import 'package:nandikrushi_farmer/product/orders_page.dart';
 import 'package:nandikrushi_farmer/product/product_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';

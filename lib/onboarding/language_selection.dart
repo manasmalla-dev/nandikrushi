@@ -5,8 +5,8 @@
 /// The dart file that includes the code for the Language Selection screen
 
 import 'package:flutter/material.dart';
-import 'package:nandikrushi_farmer/onboarding/login_bg.dart';
-import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_bg.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_provider.dart';
 import 'package:nandikrushi_farmer/onboarding/registration_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';

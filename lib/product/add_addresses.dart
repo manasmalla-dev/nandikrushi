@@ -15,7 +15,7 @@ import 'package:google_maps_webservice/places.dart' as gmw;
 import 'package:http/http.dart';
 import 'package:location/location.dart' as location;
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
-import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/loader_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/snackbar.dart';

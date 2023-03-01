@@ -5,19 +5,22 @@
 /// The dart file that includes the code for the OTP Screen
 
 import 'package:flutter/material.dart';
-import 'package:nandikrushi_farmer/onboarding/login_bg.dart';
-import 'package:nandikrushi_farmer/onboarding/login_controller.dart';
-import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_bg.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_controller.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/utils/size_config.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
+import 'otp_screen_large.dart';
+
 class OTPScreen extends StatefulWidget {
   final String phoneNumber;
   final Function(String) onValidateOTP;
   final Function() onResendOTP;
+
   const OTPScreen(
       {Key? key,
       required this.phoneNumber,
@@ -32,6 +35,7 @@ class OTPScreen extends StatefulWidget {
 class _OTPScreenState extends State<OTPScreen> {
   bool canResendSMS = false;
   LoginController loginPageController = LoginController();
+
   @override
   void initState() {
     super.initState();
@@ -228,219 +232,10 @@ class _OTPScreenState extends State<OTPScreen> {
                   ),
                 ),
               )
-            : Scaffold(
-                appBar: PreferredSize(
-                  preferredSize: const Size.fromHeight(80),
-                  child: Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.only(top: 32),
-                    child: AppBar(
-                      backgroundColor: Colors.white,
-                      elevation: 0,
-                      leading: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(
-                          Icons.arrow_back_rounded,
-                          color: Colors.grey[900],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                body: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-                  child: Row(children: [
-                    const Image(
-                      image: AssetImage("assets/images/otp_image.png"),
-                    ),
-                    SizedBox(
-                      width: getProportionateWidth(32, constraints),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          WelcomeToNandikrushi(
-                            constraints: constraints,
-                            bottomSpacing: 128,
-                          ),
-                          TextWidget(
-                            "Please enter the OTP sent to your mobile number",
-                            color: Colors.grey.shade900,
-                            weight: FontWeight.w500,
-                            size: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.fontSize,
-                            align: TextAlign.start,
-                            height:
-                                Theme.of(context).textTheme.bodyLarge?.height,
-                            flow: TextOverflow.visible,
-                          ),
-                          SizedBox(
-                            height: getProportionateHeight(12, constraints),
-                          ),
-                          TextWidget(
-                            "+91 ${widget.phoneNumber.substring(0, 5)} ${widget.phoneNumber.substring(5, 10)}",
-                            color: Colors.black,
-                            weight: FontWeight.w800,
-                            size: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.fontSize,
-                            align: TextAlign.start,
-                            flow: TextOverflow.visible,
-                          ),
-                          SizedBox(
-                            height: getProportionateHeight(48, constraints),
-                          ),
-                          Form(
-                            key: loginPageController.otpFormKey,
-                            child: Pinput(
-                              length: 6,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              followingPinTheme: PinTheme(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8)),
-                                ),
-                              ),
-                              submittedPinTheme: PinTheme(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8)),
-                                ),
-                              ),
-                              focusedPinTheme: PinTheme(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8)),
-                                ),
-                              ),
-                              defaultPinTheme: PinTheme(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 2, color: Colors.grey.shade600),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8)),
-                                ),
-                              ),
-                              controller:
-                                  loginPageController.otpTextEditController,
-                              forceErrorState: true,
-                              pinputAutovalidateMode:
-                                  PinputAutovalidateMode.onSubmit,
-                              onChanged: (pin) {
-                                setState(() {});
-                                //data.setOtp(pin.toString());
-                              },
-                              onSubmitted: (pin) {
-                                var isFormReadyForSubmission =
-                                    loginPageController.otpFormKey.currentState
-                                            ?.validate() ??
-                                        false;
-                                if (isFormReadyForSubmission) {
-                                  widget.onValidateOTP(loginPageController
-                                      .otpTextEditController.text
-                                      .toString());
-                                }
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: getProportionateHeight(48, constraints),
-                          ),
-                          ElevatedButtonWidget(
-                            onClick: () {
-                              var isFormReadyForSubmission = loginPageController
-                                      .otpFormKey.currentState
-                                      ?.validate() ??
-                                  false;
-                              if (isFormReadyForSubmission) {
-                                widget.onValidateOTP(loginPageController
-                                    .otpTextEditController.text
-                                    .toString());
-                              }
-                            },
-                            height: getProportionateHeight(64, constraints),
-                            bgColor: loginPageController
-                                        .otpTextEditController.text.length ==
-                                    6
-                                ? Theme.of(context).colorScheme.primary
-                                : Colors.grey.shade400,
-                            borderSideColor: loginPageController
-                                        .otpTextEditController.text.length ==
-                                    6
-                                ? Theme.of(context).colorScheme.primary
-                                : Colors.grey.shade500,
-                            textColor: Colors.white,
-                            buttonName: "VERIFY OTP",
-                            borderRadius: 12,
-                            trailingIcon: Icons.arrow_forward,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextWidget(
-                                "Didn't Recieve OTP?",
-                                size: Theme.of(context)
-                                    .textTheme
-                                    .button
-                                    ?.fontSize,
-                                weight: FontWeight.w500,
-                                color: Colors.grey,
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  if (canResendSMS) {
-                                    canResendSMS = false;
-                                    //RESEND OTP
-                                    widget.onResendOTP();
-                                  }
-                                },
-                                child: TextWidget(
-                                  "Resend".toUpperCase(),
-                                  weight: FontWeight.w700,
-                                  color: canResendSMS
-                                      ? Colors.grey.shade900
-                                      : Colors.grey,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ]),
-                ),
-              );
+            : OTPScreenLarge(constraints, loginPageController,
+                phoneNumber: widget.phoneNumber,
+                onValidateOTP: widget.onValidateOTP,
+                onResendOTP: widget.onResendOTP);
       });
     });
   }

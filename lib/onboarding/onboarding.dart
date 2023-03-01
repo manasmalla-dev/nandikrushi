@@ -5,7 +5,7 @@
 /// The dart file that includes the code for the Onbarding PageView
 
 import 'package:flutter/material.dart';
-import 'package:nandikrushi_farmer/onboarding/login_screen.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/utils/size_config.dart';

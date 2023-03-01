@@ -5,7 +5,7 @@
 /// The dart file that includes the code for the background widget for the screens in the login workflow
 
 import 'package:flutter/material.dart';
-import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/loader_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';
 import 'package:nandikrushi_farmer/utils/size_config.dart';

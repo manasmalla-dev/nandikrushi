@@ -9,7 +9,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
-import 'package:nandikrushi_farmer/onboarding/login_provider.dart';
+import 'package:nandikrushi_farmer/onboarding/login/login_provider.dart';
 import 'package:nandikrushi_farmer/product/add_addresses.dart';
 import 'package:nandikrushi_farmer/product/confirm_order_screen.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/elevated_button.dart';
@@ -312,35 +312,9 @@ showAddressesBottomSheet(
 }
 
 Widget addressRow(String addres, double size) {
-  // var title = '';
-  // switch (index) {
-  //   case 0:
-  //     title = 'House/Flat No.';
-  //     break;
-  //   case 1:
-  //     title = 'Landmark';
-  //     break;
-  //   case 2:
-  //     title = 'Address';
-  //     break;
-  //   case 3:
-  //     title = 'Pincode';
-  //     break;
-  //   case 4:
-  //     title = 'Contact';
-  //     break;
-  //   case 5:
-  //     title = 'A. Contact';
-  //     break;
-  //   default:
-  // }
+
   return Row(
     children: [
-      // TextWidget(
-      //   '$title:',
-      //   weight: FontWeight.bold,
-      //   size: size,
-      // ),
       Expanded(
         child: TextWidget(
           addres,
