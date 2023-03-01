@@ -1,4 +1,8 @@
-// ignore_for_file: must_be_immutable
+// Copyright 2022 Manas Malla ©. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+/// The dart file that includes the code for the background widget for the screens in the login workflow
 
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/onboarding/login_provider.dart';

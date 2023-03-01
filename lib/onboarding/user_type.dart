@@ -1,3 +1,9 @@
+// Copyright 2022 Manas Malla ©. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+/// The dart file that includes the code for the UserType Screen
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/onboarding/language_selection.dart';
 import 'package:nandikrushi_farmer/onboarding/login_bg.dart';
@@ -86,10 +92,8 @@ Widget userTypesSelection(
           itemBuilder: (context, index) {
             return ElevatedButtonWidget(
               onClick: () {
-
-                  loginProvider
-                      .updateUserAppType(userTypeData.entries.elementAt(index));
-
+                loginProvider
+                    .updateUserAppType(userTypeData.entries.elementAt(index));
               },
               minWidth: getProportionateWidth(345, constraints),
               height: getProportionateHeight(100, constraints),

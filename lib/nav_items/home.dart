@@ -1,3 +1,9 @@
+// Copyright 2022 Manas Malla ©. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+/// The dart file that includes the code for the Home Screen of the NavHost for the Nandikrushi
+
 import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -149,8 +155,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ? 0.1
                                   : 0.55),
                           fontSize:
-                              getProportionateHeight(11, widget.constraints), letterSpacing: 2.4),
-
+                              getProportionateHeight(11, widget.constraints),
+                          letterSpacing: 2.4),
                     ),
                   ],
                 ),
@@ -187,34 +193,43 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? 0.5
                             : 1),
                   ),
-                  SizedBox(width: 8,),
+                  SizedBox(
+                    width: 8,
+                  ),
                   Consumer<ProfileProvider>(
                       builder: (context, profileProvider, _) {
-                    return profileProvider.sellerImage.isNotEmpty || profileProvider.storeLogo.isNotEmpty
+                    return profileProvider.sellerImage.isNotEmpty ||
+                            profileProvider.storeLogo.isNotEmpty
                         ? InkWell(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                            const MyAccountScreen()));
-                      },
-                          child: Center(
-                            child: ClipPath(
-                              clipper: MaterialClipper(),
-                      child: Image.network(
-                                  profileProvider.sellerImage.isEmpty ? profileProvider.storeLogo : profileProvider.sellerImage,
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MyAccountScreen()));
+                            },
+                            child: Center(
+                              child: ClipPath(
+                                clipper: MaterialClipper(),
+                                child: Image.network(
+                                  profileProvider.sellerImage.isEmpty
+                                      ? profileProvider.storeLogo
+                                      : profileProvider.sellerImage,
                                   height: (Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.fontSize ?? 20) + 16,
+                                              .textTheme
+                                              .headlineMedium
+                                              ?.fontSize ??
+                                          20) +
+                                      16,
                                   width: (Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.fontSize ?? 20) + 16,
-                            fit: BoxFit.cover,
+                                              .textTheme
+                                              .headlineMedium
+                                              ?.fontSize ??
+                                          20) +
+                                      16,
+                                  fit: BoxFit.cover,
                                 ),
+                              ),
                             ),
-                          ),
-                        )
+                          )
                         : IconButton(
                             iconSize: Theme.of(context)
                                 .textTheme
@@ -235,7 +250,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     : 1),
                           );
                   }),
-                  SizedBox(width: 16,),
+                  SizedBox(
+                    width: 16,
+                  ),
                 ],
               ),
               body: SingleChildScrollView(

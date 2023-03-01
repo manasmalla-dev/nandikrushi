@@ -1,3 +1,9 @@
+// Copyright 2022 Manas Malla ©. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+/// The dart file that includes the code for the Videos Screen
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
 import 'package:nandikrushi_farmer/reusable_widgets/text_widget.dart';

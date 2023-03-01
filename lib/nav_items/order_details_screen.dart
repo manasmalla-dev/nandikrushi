@@ -1,3 +1,9 @@
+// Copyright 2022 Manas Malla ©. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+/// The dart file that includes the code for the Order Details Screen which is displayed an order is tapped in Orders Screen
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nandikrushi_farmer/product/product_page.dart';
@@ -23,7 +29,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       height(context) {
         return constraints.maxHeight;
       }
-
 
       return Consumer<ProductProvider>(builder: (context, productProvider, _) {
         return Scaffold(

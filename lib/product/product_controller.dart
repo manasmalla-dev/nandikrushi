@@ -1,3 +1,9 @@
+// Copyright 2022 Manas Malla ©. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+/// The dart file that includes the code for a simple MVC controller that handles every product related workflow
+
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';

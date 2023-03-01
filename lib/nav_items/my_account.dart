@@ -1,4 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
+// Copyright 2022 Manas Malla ©. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+/// The dart file that includes the code for the My Account Screen
 
 import 'dart:developer';
 
@@ -260,17 +264,21 @@ class MyAccountScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       "truly food is medicine",
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary
-                                              .withOpacity(Theme.of(context).brightness ==
-                                              Brightness.dark
-                                              ? 0.1
-                                              : 0.55),
-                                          fontSize:
-                                          getProportionateHeight(11, constraints), letterSpacing: 2.4),
-
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withOpacity(Theme.of(context)
+                                                              .brightness ==
+                                                          Brightness.dark
+                                                      ? 0.1
+                                                      : 0.55),
+                                              fontSize: getProportionateHeight(
+                                                  11, constraints),
+                                              letterSpacing: 2.4),
                                     ),
                                     const SizedBox(
                                       height: 8,

@@ -1,3 +1,9 @@
+// Copyright 2022 Manas Malla ©. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+/// The dart file that includes the code for the Product Card, refer to CardType enum for more information
+
 import 'package:flutter/material.dart';
 import 'package:nandikrushi_farmer/nav_items/my_account.dart';
 import 'package:nandikrushi_farmer/nav_items/profile_provider.dart';
