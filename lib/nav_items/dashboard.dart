@@ -354,7 +354,8 @@ class _DashboardState extends State<Dashboard> {
                                         var e = productProvider.products
                                             .where(
                                               (element) =>
-                                                  element["product_id"] ==
+                                                  element.productId
+                                                      .toString() ==
                                                   e1.toString(),
                                             )
                                             .first;
@@ -363,7 +364,7 @@ class _DashboardState extends State<Dashboard> {
                                             Column(
                                               children: [
                                                 Image.network(
-                                                  e['url']!,
+                                                  e.image,
                                                   height: 48,
                                                   width: 48,
                                                   fit: BoxFit.cover,
@@ -372,13 +373,13 @@ class _DashboardState extends State<Dashboard> {
                                                   height: 8,
                                                 ),
                                                 TextWidget(
-                                                  e['name'],
+                                                  e.name,
                                                   weight: FontWeight.bold,
                                                   size: 18,
                                                 ),
                                                 const Spacer(),
                                                 TextWidget(
-                                                  e['units'],
+                                                  e.units,
                                                   weight: FontWeight.bold,
                                                   size: 14,
                                                   color: Colors.black
@@ -388,7 +389,7 @@ class _DashboardState extends State<Dashboard> {
                                                   height: 8,
                                                 ),
                                                 TextWidget(
-                                                  'Rs. ${e['price']}',
+                                                  'Rs. ${e.price}',
                                                   weight: FontWeight.bold,
                                                   size: 18,
                                                 ),
@@ -455,7 +456,7 @@ class _DashboardState extends State<Dashboard> {
                                                   },
                                                   child: Padding(
                                                     padding: const EdgeInsets
-                                                            .symmetric(
+                                                        .symmetric(
                                                         horizontal: 8.0,
                                                         vertical: 2),
                                                     child: Row(
@@ -596,7 +597,8 @@ class _DashboardState extends State<Dashboard> {
                                         var e = productProvider.products
                                             .where(
                                               (element) =>
-                                                  element["product_id"] ==
+                                                  element.productId
+                                                      .toString() ==
                                                   e1.toString(),
                                             )
                                             .first;
@@ -605,7 +607,7 @@ class _DashboardState extends State<Dashboard> {
                                             Column(
                                               children: [
                                                 Image.network(
-                                                  e['url']!,
+                                                  e.image,
                                                   height: 48,
                                                   width: 48,
                                                   fit: BoxFit.cover,
@@ -614,7 +616,7 @@ class _DashboardState extends State<Dashboard> {
                                                   height: 8,
                                                 ),
                                                 TextWidget(
-                                                  e['name'],
+                                                  e.name,
                                                   weight: FontWeight.bold,
                                                   size: 18,
                                                 ),
@@ -625,7 +627,7 @@ class _DashboardState extends State<Dashboard> {
                                                 ),
                                                 const Spacer(),
                                                 TextWidget(
-                                                  e['units'],
+                                                  e.units,
                                                   weight: FontWeight.bold,
                                                   size: 14,
                                                   color: Colors.black
@@ -635,7 +637,7 @@ class _DashboardState extends State<Dashboard> {
                                                   height: 8,
                                                 ),
                                                 TextWidget(
-                                                  'Rs. ${e['price']}',
+                                                  'Rs. ${e.price}',
                                                   weight: FontWeight.bold,
                                                   size: 18,
                                                 ),
@@ -667,7 +669,7 @@ class _DashboardState extends State<Dashboard> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .symmetric(
+                                                                .symmetric(
                                                                 horizontal: 8.0,
                                                                 vertical: 2),
                                                         child: Row(

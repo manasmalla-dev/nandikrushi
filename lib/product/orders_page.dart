@@ -111,6 +111,8 @@ class OrdersPage extends StatelessWidget {
                           var product = productProvider.orders[itemIndex]
                               ["products"][productOrderIndex];
                           return ProductCard(
+                            disabled: false,
+                            verify: product?["verify_seller"] ?? "0",
                             type: CardType.orders,
                             productId: product["product_id"] ?? "XYZ",
                             productName: product["product_name"] ?? "Name",

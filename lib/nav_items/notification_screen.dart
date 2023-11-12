@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nandikrushi/nav_items/order_details_screen.dart';
 import 'package:nandikrushi/nav_items/profile_provider.dart';
 import 'package:nandikrushi/nav_items/search.dart';
+import 'package:nandikrushi/product/orders_page.dart';
 import 'package:nandikrushi/product/product_provider.dart';
 import 'package:nandikrushi/reusable_widgets/elevated_button.dart';
 import 'package:provider/provider.dart';
@@ -108,20 +109,19 @@ class NotificationScreen extends StatelessWidget {
                                                                         "") ??
                                                                 0) ==
                                                             1) {
-                                                          var order = productProvider
-                                                              .myPurchases
-                                                              .where((element) =>
-                                                                  element["order_id"]
-                                                                      .toString() ==
-                                                                  notification[
-                                                                      "data"])
-                                                              .first;
+                                                          // var order = productProvider
+                                                          //     .myPurchases
+                                                          //     .where((element) =>
+                                                          //         element["order_id"]
+                                                          //             .toString() ==
+                                                          //         notification[
+                                                          //             "data"])
+                                                          //     .first;
                                                           Navigator.of(context).push(
                                                               MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      OrderDetailScreen(
-                                                                          order:
-                                                                              order)));
+                                                                  builder:
+                                                                      (context) =>
+                                                                          OrdersPage()));
                                                         } else {
                                                           Navigator.of(context).push(
                                                               MaterialPageRoute(

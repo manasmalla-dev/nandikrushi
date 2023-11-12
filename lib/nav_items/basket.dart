@@ -62,6 +62,11 @@ class _BasketScreenState extends State<BasketScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: ((context, index) {
                         return ProductCard(
+                            disabled: false,
+                            // verify: productProvider.cart[index]
+                            //         ["verify_seller"] ??
+                            //     "0",
+                            verify: true,
                             type: CardType.product,
                             productId:
                                 productProvider.cart[index]["product_id"] ?? "",
